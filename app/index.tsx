@@ -1,42 +1,28 @@
-import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
-import cards from "../src/data/cards";
+import { Image, StatusBar, StyleSheet, View } from "react-native";
 
 export default function Index() {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Tarot App</Text>
+    <View style={styles.container}>
+      {/* StatusBar komplett aus */}
+      <StatusBar hidden />
 
-      {cards.map((card) => (
-        <Pressable
-          key={card.id}
-          style={styles.card}
-          onPress={() => console.log("Karte:", card.id, card.name)}
-        >
-          <Text style={styles.cardText}>
-            {card.id} – {card.name}
-          </Text>
-        </Pressable>
-      ))}
-    </ScrollView>
+      <Image
+        source={require("../assets/cards/5.jpg")}
+        style={styles.image}
+        resizeMode="contain"
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
+    flex: 1,
+    backgroundColor: "black",
+    paddingBottom: 176, // dein perfekt eingestellter Wert
   },
-  title: {
-    fontSize: 26,
-    marginBottom: 24,
-    textAlign: "center",
-  },
-  card: {
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderColor: "#ccc",
-  },
-  cardText: {
-    fontSize: 18,
+  image: {
+    width: "100%",
+    height: "100%",
   },
 });
-
