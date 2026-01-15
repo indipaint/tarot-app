@@ -1,25 +1,22 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
+import cards from "../src/data/cards";
 
 export default function Index() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Tarot App – stabiler Start</Text>
+      <Text style={styles.title}>Tarot App</Text>
 
-      <View style={styles.card}>
-        <Text style={styles.cardText}>0 – Der Narr</Text>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.cardText}>1 – Der Magier</Text>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.cardText}>2 – Die Hohepriesterin</Text>
-      </View>
-
-      <Text style={styles.note}>
-        (Statische Liste – keine Imports, keine Assets, kein Router-Stress)
-      </Text>
+      {cards.map((card) => (
+        <Pressable
+          key={card.id}
+          style={styles.card}
+          onPress={() => console.log("Karte gedrückt:", card.id)}
+        >
+          <Text style={styles.cardText}>
+            {card.id} – {card.name}
+          </Text>
+        </Pressable>
+      ))}
     </ScrollView>
   );
 }
@@ -34,17 +31,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   card: {
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderBottomWidth: 1,
     borderColor: "#ccc",
   },
   cardText: {
     fontSize: 18,
-  },
-  note: {
-    marginTop: 24,
-    fontSize: 14,
-    color: "#666",
-    textAlign: "center",
   },
 });
