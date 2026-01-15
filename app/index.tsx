@@ -10,7 +10,7 @@ export default function Index() {
         <Pressable
           key={card.id}
           style={styles.card}
-          onPress={() => console.log("Karte gedrückt:", card.id)}
+          onPress={() => console.log("Karte:", card.id, card.name)}
         >
           <Text style={styles.cardText}>
             {card.id} – {card.name}
@@ -39,3 +39,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+
