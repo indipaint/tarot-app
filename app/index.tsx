@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import React, { useMemo, useRef, useState } from "react";
 import type { ImageSourcePropType } from "react-native";
@@ -6,6 +7,8 @@ import {
   Dimensions,
   Image,
   PanResponder,
+  Pressable,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -19,14 +22,25 @@ type Card = {
   image: ImageSourcePropType;
 };
 
-const { width: SCREEN_W } = Dimensions.get("window");
+const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
-// Android Back-Geste geht oft links ODER rechts am Rand:
+// Android Back-Geste: links und rechts Rand freilassen
 const EDGE_WIDTH = 48;
 
-// Swipe-Feeling:
+// Swipe
 const SWIPE_DISTANCE = Math.min(110, SCREEN_W * 0.22);
 const SWIPE_VELOCITY = 0.35;
+
+// Layout: Bild oben, UI unten
+const IMAGE_AREA_FRACTION = 0.80; // kleiner = mehr Platz unten
+
+// Bildposition im oberen Bereich
+const IMAGE_TOP_PULL = -90; // stärker hochziehen: -70 / -90 / -110
+
+// Punch-hole / Kamera: wir reservieren oben zuverlässig Platz
+// (StatusbarHeight ist oft zu klein für Punch-hole, daher MIN_TOP_SAFE)
+const MIN_TOP_SAFE = 40; // <<< zuverlässig "Kamera raus" (bei Bedarf 48)
+const EXTRA_GAP = 6;     // "knapp darunter"
 
 export default function Index() {
   const router = useRouter();
@@ -51,7 +65,6 @@ export default function Index() {
 
   const panResponder = useRef(
     PanResponder.create({
-      // NICHT sofort übernehmen (sonst blockierst du System-Back-Gesten am Rand)
       onStartShouldSetPanResponder: () => false,
 
       onMoveShouldSetPanResponder: (evt, gs) => {
@@ -59,14 +72,11 @@ export default function Index() {
         if (list.length <= 1) return false;
 
         const x0 = evt?.nativeEvent?.pageX ?? 9999;
-
-        // Links UND rechts am Rand frei lassen -> Android System-Back-Geste funktioniert
         if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
 
         const absDx = Math.abs(gs.dx);
         const absDy = Math.abs(gs.dy);
 
-        // Nur klar horizontal
         return absDx > 6 && absDx > absDy + 4;
       },
 
@@ -111,10 +121,7 @@ export default function Index() {
             useNativeDriver: true,
           }).start(() => {
             translateX.setValue(0);
-
-            // WICHTIG: funktionales Update -> kein "stale index" mehr
             setIndex((prev) => clamp(prev + 1));
-
             locked.current = false;
           });
           return;
@@ -130,9 +137,7 @@ export default function Index() {
             useNativeDriver: true,
           }).start(() => {
             translateX.setValue(0);
-
             setIndex((prev) => clamp(prev - 1));
-
             locked.current = false;
           });
           return;
@@ -161,21 +166,35 @@ export default function Index() {
     );
   }
 
+  // Top-Safe: garantiert genug Abstand für Punch-hole/Kamera
+  const statusH = Math.round(Constants.statusBarHeight || 0);
+  const topSafe = Math.max(MIN_TOP_SAFE, statusH + EXTRA_GAP);
+
+  const imageAreaHeight = Math.round(SCREEN_H * IMAGE_AREA_FRACTION);
+
   return (
     <View style={styles.root}>
-      <Animated.View style={[styles.flex, { transform: [{ translateX }] }]} {...panResponder.panHandlers}>
-        <Image source={current.image} style={styles.image} resizeMode="contain" />
+      {/* Statusbar weg */}
+      <StatusBar hidden />
 
-        {/* Overlay blockiert keine Gesten */}
-        <View pointerEvents="none" style={styles.overlay}>
-          <Text style={styles.title}>{current.name}</Text>
-          <Text style={styles.subtitle}>
-            {index + 1} / {list.length} • Tippen: Details • Wischen: nächste/vorige
-          </Text>
+      <Animated.View style={[styles.flex, { transform: [{ translateX }] }]} {...panResponder.panHandlers}>
+        {/* Bildbereich oben, aber mit "Kamera-Schutz" */}
+        <View style={[styles.imageArea, { height: imageAreaHeight, paddingTop: topSafe }]}>
+          <Image source={current.image} style={styles.image} resizeMode="contain" />
         </View>
 
-        {/* Tap-Fläche, ohne Pressable-Layer der Swipes klaut */}
-        <Text onPress={openCurrentCard} style={styles.tapArea} />
+        {/* UI unten */}
+        <View style={styles.infoArea}>
+          <Text style={styles.name}>{current.name}</Text>
+
+          <Pressable onPress={openCurrentCard} style={styles.button}>
+            <Text style={styles.buttonText}>Deutung öffnen</Text>
+          </Pressable>
+
+          <Text style={styles.counter}>
+            {index + 1} / {list.length} • Wischen: nächste/vorige
+          </Text>
+        </View>
       </Animated.View>
     </View>
   );
@@ -184,28 +203,62 @@ export default function Index() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: "black" },
   flex: { flex: 1 },
-  image: { flex: 1, width: "100%", height: "100%" },
-  overlay: {
-    position: "absolute",
-    left: 12,
-    right: 12,
-    bottom: 18,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    backgroundColor: "rgba(0,0,0,0.45)",
+
+  imageArea: {
+    overflow: "hidden",
+    backgroundColor: "black",
+  },
+
+  // Bild wird "hochgezogen", aber erst NACH dem Top-Safe Padding
+  image: {
+    width: "100%",
+    height: "120%",
+    marginTop: IMAGE_TOP_PULL,
+  },
+
+  infoArea: {
+    flex: 1,
+    paddingHorizontal: 18,
+    paddingTop: 12,
+    paddingBottom: 18,
+    alignItems: "center",
+  },
+
+  name: {
+    color: "white",
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: 12,
+    textAlign: "center",
+  },
+
+  button: {
+    paddingVertical: 12,
+    paddingHorizontal: 18,
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.35)",
+    marginBottom: 10,
   },
-  title: { color: "white", fontSize: 18, fontWeight: "600", marginBottom: 4 },
-  subtitle: { color: "rgba(255,255,255,0.8)", fontSize: 12 },
-  tapArea: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    // unsichtbar, aber tappbar:
-    color: "transparent",
+
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
   },
-  fallback: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "black", padding: 24 },
+
+  counter: {
+    color: "rgba(255,255,255,0.75)",
+    fontSize: 12,
+    marginTop: 2,
+  },
+
+  fallback: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "black",
+    padding: 24,
+  },
   fallbackText: { color: "white", opacity: 0.8 },
 });
