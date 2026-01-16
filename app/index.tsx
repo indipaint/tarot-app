@@ -152,9 +152,6 @@ export default function Index() {
             <Text style={styles.buttonText}>Deutung öffnen</Text>
           </Pressable>
 
-          <Text style={styles.counter}>
-            {index + 1} / {list.length}
-          </Text>
         </View>
       </Animated.View>
     </View>
@@ -209,8 +206,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
-  counter: {
-    color: "rgba(255,255,255,0.7)",
-    fontSize: 12,
-  },
+
 });
