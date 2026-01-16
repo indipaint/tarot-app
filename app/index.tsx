@@ -1,4 +1,3 @@
-import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import React, { useMemo, useRef, useState } from "react";
 import type { ImageSourcePropType } from "react-native";
@@ -13,6 +12,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import cardsData from "../src/data/cards";
 
@@ -24,26 +24,28 @@ type Card = {
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
-// Android Back-Geste: links und rechts Rand freilassen
+/* ---- Gesten ---- */
 const EDGE_WIDTH = 48;
-
-// Swipe
 const SWIPE_DISTANCE = Math.min(110, SCREEN_W * 0.22);
 const SWIPE_VELOCITY = 0.35;
 
-// Layout: Bild oben, UI unten
-const IMAGE_AREA_FRACTION = 0.80; // kleiner = mehr Platz unten
-
-// Bildposition im oberen Bereich
-const IMAGE_TOP_PULL = -90; // stärker hochziehen: -70 / -90 / -110
-
-// Punch-hole / Kamera: wir reservieren oben zuverlässig Platz
-// (StatusbarHeight ist oft zu klein für Punch-hole, daher MIN_TOP_SAFE)
-const MIN_TOP_SAFE = 40; // <<< zuverlässig "Kamera raus" (bei Bedarf 48)
+/* ---- Layout Tuning (nur hier drehen) ---- */
+// 1) Kamera raus: garantiert Platz oben (Punch-hole ist NICHT immer safe-area!)
+const MIN_TOP_SAFE = 105; // <<< wenn Kamera noch im Bild: 72 / 80
 const EXTRA_GAP = 6;     // "knapp darunter"
+
+// 2) Titel näher ans Bild:
+const TITLE_PULL_UP = 8; // <<< größer = Titel höher / näher ans Bild (z.B. 10..24)
+
+// 3) Bildbereich (höher = Titel automatisch höher)
+const IMAGE_AREA_FRACTION = 0.74;
+
+// Bild nach oben ziehen (im Bildbereich)
+const IMAGE_TOP_PULL = -90;
 
 export default function Index() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const list = useMemo<Card[]>(() => {
     return Array.isArray(cardsData) ? (cardsData as Card[]) : [];
@@ -56,143 +58,102 @@ export default function Index() {
   const translateX = useRef(new Animated.Value(0)).current;
   const locked = useRef(false);
 
-  const clamp = (i: number) => {
-    if (list.length === 0) return 0;
-    return Math.max(0, Math.min(list.length - 1, i));
-  };
-
+  const clamp = (i: number) => Math.max(0, Math.min(list.length - 1, i));
   const current = list[index];
 
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => false,
-
       onMoveShouldSetPanResponder: (evt, gs) => {
-        if (locked.current) return false;
-        if (list.length <= 1) return false;
+        if (locked.current || list.length <= 1) return false;
 
-        const x0 = evt?.nativeEvent?.pageX ?? 9999;
+        const x0 = evt.nativeEvent.pageX;
         if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
 
         const absDx = Math.abs(gs.dx);
         const absDy = Math.abs(gs.dy);
-
         return absDx > 6 && absDx > absDy + 4;
       },
+      onPanResponderMove: (_e, gs) => translateX.setValue(gs.dx * 0.9),
+      onPanResponderRelease: (_e, gs) => {
+        const swipeLeft = gs.dx < -SWIPE_DISTANCE || gs.vx < -SWIPE_VELOCITY;
+        const swipeRight = gs.dx > SWIPE_DISTANCE || gs.vx > SWIPE_VELOCITY;
 
-      onPanResponderGrant: () => {
-        locked.current = false;
-        translateX.stopAnimation();
-        translateX.setValue(0);
-      },
+        const canNext = indexRef.current < list.length - 1;
+        const canPrev = indexRef.current > 0;
 
-      onPanResponderMove: (_evt, gs) => {
-        translateX.setValue(gs.dx * 0.92);
-      },
-
-      onPanResponderTerminationRequest: () => true,
-
-      onPanResponderTerminate: () => {
-        Animated.spring(translateX, {
-          toValue: 0,
-          useNativeDriver: true,
-          speed: 18,
-          bounciness: 0,
-        }).start();
-      },
-
-      onPanResponderRelease: (_evt, gs) => {
-        const dx = gs.dx;
-        const vx = gs.vx;
-
-        const swipeLeft = dx < -SWIPE_DISTANCE || vx < -SWIPE_VELOCITY;
-        const swipeRight = dx > SWIPE_DISTANCE || vx > SWIPE_VELOCITY;
-
-        const canGoNext = indexRef.current < list.length - 1;
-        const canGoPrev = indexRef.current > 0;
-
-        if (swipeLeft && canGoNext) {
-          if (locked.current) return;
+        if (swipeLeft && canNext) {
           locked.current = true;
-
           Animated.timing(translateX, {
             toValue: -SCREEN_W,
             duration: 160,
             useNativeDriver: true,
           }).start(() => {
             translateX.setValue(0);
-            setIndex((prev) => clamp(prev + 1));
+            setIndex((p) => clamp(p + 1));
             locked.current = false;
           });
           return;
         }
 
-        if (swipeRight && canGoPrev) {
-          if (locked.current) return;
+        if (swipeRight && canPrev) {
           locked.current = true;
-
           Animated.timing(translateX, {
             toValue: SCREEN_W,
             duration: 160,
             useNativeDriver: true,
           }).start(() => {
             translateX.setValue(0);
-            setIndex((prev) => clamp(prev - 1));
+            setIndex((p) => clamp(p - 1));
             locked.current = false;
           });
           return;
         }
 
-        Animated.spring(translateX, {
-          toValue: 0,
-          useNativeDriver: true,
-          speed: 18,
-          bounciness: 0,
-        }).start();
+        Animated.spring(translateX, { toValue: 0, useNativeDriver: true }).start();
       },
     })
   ).current;
 
-  const openCurrentCard = () => {
-    if (!current) return;
-    router.push(`/card/${String(current.id)}`);
-  };
+  if (!current) return null;
 
-  if (!current) {
-    return (
-      <View style={styles.fallback}>
-        <Text style={styles.fallbackText}>Keine Karten gefunden.</Text>
-      </View>
-    );
-  }
-
-  // Top-Safe: garantiert genug Abstand für Punch-hole/Kamera
-  const statusH = Math.round(Constants.statusBarHeight || 0);
-  const topSafe = Math.max(MIN_TOP_SAFE, statusH + EXTRA_GAP);
+  // Top-Safe: Punch-hole zuverlässig rausnehmen
+  const topSafe = Math.max(MIN_TOP_SAFE, Math.round(insets.top) + EXTRA_GAP);
 
   const imageAreaHeight = Math.round(SCREEN_H * IMAGE_AREA_FRACTION);
 
+  const idText = String(current.id).padStart(2, "0");
+  const title = `${idText} – ${current.name}`;
+
   return (
     <View style={styles.root}>
-      {/* Statusbar weg */}
       <StatusBar hidden />
 
-      <Animated.View style={[styles.flex, { transform: [{ translateX }] }]} {...panResponder.panHandlers}>
-        {/* Bildbereich oben, aber mit "Kamera-Schutz" */}
+      <Animated.View
+        style={[styles.flex, { transform: [{ translateX }] }]}
+        {...panResponder.panHandlers}
+      >
+        {/* Bildbereich: oben abgesichert gegen Kamera */}
         <View style={[styles.imageArea, { height: imageAreaHeight, paddingTop: topSafe }]}>
           <Image source={current.image} style={styles.image} resizeMode="contain" />
         </View>
 
-        {/* UI unten */}
-        <View style={styles.infoArea}>
-          <Text style={styles.name}>{current.name}</Text>
+        {/* Titel: extrem nah unter dem Bild */}
+        <View style={[styles.titleWrap, { marginTop: -TITLE_PULL_UP }]}>
+          <Text style={styles.cardTitle}>{title}</Text>
+        </View>
 
-          <Pressable onPress={openCurrentCard} style={styles.button}>
+        {/* Unten: Button + Counter */}
+        <View style={styles.infoArea}>
+          <Pressable
+            onPress={() => router.push(`/card/${String(current.id)}`)}
+            style={styles.button}
+          >
             <Text style={styles.buttonText}>Deutung öffnen</Text>
           </Pressable>
 
           <Text style={styles.counter}>
-            {index + 1} / {list.length} • Wischen: nächste/vorige
+            {index + 1} / {list.length}
           </Text>
         </View>
       </Animated.View>
@@ -208,39 +169,40 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: "black",
   },
-
-  // Bild wird "hochgezogen", aber erst NACH dem Top-Safe Padding
   image: {
     width: "100%",
     height: "120%",
     marginTop: IMAGE_TOP_PULL,
   },
 
-  infoArea: {
-    flex: 1,
-    paddingHorizontal: 18,
-    paddingTop: 12,
-    paddingBottom: 18,
+  titleWrap: {
+    paddingTop: 0,
+    paddingBottom: 6,
     alignItems: "center",
   },
-
-  name: {
-    color: "white",
-    fontSize: 22,
-    fontWeight: "700",
-    marginBottom: 12,
+  cardTitle: {
+    color: "rgba(255,255,255,0.55)",
+    fontSize: 15,
+    fontWeight: "600",
     textAlign: "center",
   },
 
-  button: {
-    paddingVertical: 12,
+  infoArea: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 6,
     paddingHorizontal: 18,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.35)",
-    marginBottom: 10,
+    paddingBottom: 18,
   },
 
+  button: {
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.35)",
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
   buttonText: {
     color: "white",
     fontSize: 16,
@@ -248,17 +210,7 @@ const styles = StyleSheet.create({
   },
 
   counter: {
-    color: "rgba(255,255,255,0.75)",
+    color: "rgba(255,255,255,0.7)",
     fontSize: 12,
-    marginTop: 2,
   },
-
-  fallback: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "black",
-    padding: 24,
-  },
-  fallbackText: { color: "white", opacity: 0.8 },
 });
