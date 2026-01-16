@@ -1,15 +1,26 @@
-export type TarotCard = {
-  id: number;
-  name: string;
-};
-
-const cards: TarotCard[] = [
-  { id: 0, name: "Der Narr" },
-  { id: 1, name: "Der Magier" },
-  { id: 2, name: "Die Hohepriesterin" },
-  { id: 3, name: "Die Herrscherin" },
-  { id: 4, name: "Der Herrscher" },
-  { id: 5, name: "Der Hohepriester" },
+const cards = [
+  { id: "01", name: "01", image: require("../../assets/cards/01.jpg") },
+  { id: "02", name: "02", image: require("../../assets/cards/02.jpg") },
+  { id: "03", name: "03", image: require("../../assets/cards/03.jpg") },
+  { id: "04", name: "04", image: require("../../assets/cards/04.jpg") },
+  { id: "05", name: "05", image: require("../../assets/cards/05.jpg") },
+  { id: "06", name: "06", image: require("../../assets/cards/06.jpg") },
+  { id: "07", name: "07", image: require("../../assets/cards/07.jpg") },
+  { id: "08", name: "08", image: require("../../assets/cards/08.jpg") },
+  { id: "09", name: "09", image: require("../../assets/cards/09.jpg") },
+  { id: "10", name: "10", image: require("../../assets/cards/10.jpg") },
+  { id: "11", name: "11", image: require("../../assets/cards/11.jpg") },
+  { id: "12", name: "12", image: require("../../assets/cards/12.jpg") },
+  { id: "13", name: "13", image: require("../../assets/cards/13.jpg") },
+  { id: "14", name: "14", image: require("../../assets/cards/14.jpg") },
+  { id: "15", name: "15", image: require("../../assets/cards/15.jpg") },
+  { id: "16", name: "16", image: require("../../assets/cards/16.jpg") },
+  { id: "17", name: "17", image: require("../../assets/cards/17.jpg") },
+  { id: "18", name: "18", image: require("../../assets/cards/18.jpg") },
+  { id: "19", name: "19", image: require("../../assets/cards/19.jpg") },
+  { id: "20", name: "20", image: require("../../assets/cards/20.jpg") },
+  { id: "21", name: "21", image: require("../../assets/cards/21.jpg") },
+  { id: "22", name: "22", image: require("../../assets/cards/22.jpg") },
 ];
 
 export default cards;
