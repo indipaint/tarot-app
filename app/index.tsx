@@ -1,11 +1,21 @@
-import { useRouter } from "expo-router";
 import React, { useMemo, useRef, useState } from "react";
+
 function toRoman(n: number) {
   if (!Number.isFinite(n) || n <= 0) return "";
   const map: Array<[number, string]> = [
-    [1000, "M"], [900, "CM"], [500, "D"], [400, "CD"],
-    [100, "C"], [90, "XC"], [50, "L"], [40, "XL"],
-    [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"],
+    [1000, "M"],
+    [900, "CM"],
+    [500, "D"],
+    [400, "CD"],
+    [100, "C"],
+    [90, "XC"],
+    [50, "L"],
+    [40, "XL"],
+    [10, "X"],
+    [9, "IX"],
+    [5, "V"],
+    [4, "IV"],
+    [1, "I"],
   ];
   let x = Math.floor(n);
   let out = "";
@@ -23,8 +33,10 @@ import {
   Animated,
   Dimensions,
   Image,
+  Modal,
   PanResponder,
   Pressable,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -38,6 +50,11 @@ type Card = {
   id: string | number;
   name: string;
   image: ImageSourcePropType;
+
+  // optional – falls vorhanden in deiner cards.ts
+  meaningShort?: string;
+  meaning?: string;
+  keywords?: string[];
 };
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
@@ -48,21 +65,13 @@ const SWIPE_DISTANCE = Math.min(110, SCREEN_W * 0.22);
 const SWIPE_VELOCITY = 0.35;
 
 /* ---- Layout Tuning (nur hier drehen) ---- */
-// 1) Kamera raus: garantiert Platz oben (Punch-hole ist NICHT immer safe-area!)
-const MIN_TOP_SAFE = 105; // <<< wenn Kamera noch im Bild: 72 / 80
-const EXTRA_GAP = 6;     // "knapp darunter"
-
-// 2) Titel näher ans Bild:
-const TITLE_PULL_UP = 8; // <<< größer = Titel höher / näher ans Bild (z.B. 10..24)
-
-// 3) Bildbereich (höher = Titel automatisch höher)
+const MIN_TOP_SAFE = 105;
+const EXTRA_GAP = 6;
+const TITLE_PULL_UP = 8;
 const IMAGE_AREA_FRACTION = 0.74;
-
-// Bild nach oben ziehen (im Bildbereich)
 const IMAGE_TOP_PULL = -90;
 
 export default function Index() {
-  const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const list = useMemo<Card[]>(() => {
@@ -70,8 +79,15 @@ export default function Index() {
   }, []);
 
   const [index, setIndex] = useState(0);
+  const [showMeaning, setShowMeaning] = useState(false);
+
+  // Zieh-Stapel
   const [pile, setPile] = useState<number[]>([]);
-const [pilePos, setPilePos] = useState(0);
+  const [pilePos, setPilePos] = useState(0);
+
+  // Modal
+  const [meaningOpen, setMeaningOpen] = useState(false);
+
   const indexRef = useRef(0);
   indexRef.current = index;
 
@@ -80,37 +96,37 @@ const [pilePos, setPilePos] = useState(0);
 
   const clamp = (i: number) => Math.max(0, Math.min(list.length - 1, i));
   const current = list[index];
+
   const makeShuffled = (n: number) => {
-  const a = Array.from({ length: n }, (_, i) => i);
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-};
+    const a = Array.from({ length: n }, (_, i) => i);
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
 
-const drawNext = () => {
-  if (list.length < 2) return;
+  const drawNext = () => {
+    if (list.length < 2) return;
 
-  // neuer Stapel, wenn leer oder verbraucht
-  if (pile.length !== list.length || pilePos >= pile.length) {
-    const fresh = makeShuffled(list.length);
+    // neuer Stapel, wenn leer oder verbraucht
+    if (pile.length !== list.length || pilePos >= pile.length) {
+      const fresh = makeShuffled(list.length);
 
-    // nicht direkt dieselbe Karte als erste
-    if (fresh[0] === index && fresh.length > 1) {
-      [fresh[0], fresh[1]] = [fresh[1], fresh[0]];
+      // nicht direkt dieselbe Karte als erste
+      if (fresh[0] === index && fresh.length > 1) {
+        [fresh[0], fresh[1]] = [fresh[1], fresh[0]];
+      }
+
+      setPile(fresh);
+      setPilePos(1);
+      setIndex(fresh[0]);
+      return;
     }
 
-    setPile(fresh);
-    setPilePos(1);
-    setIndex(fresh[0]);
-    return;
-  }
-
-  setIndex(pile[pilePos]);
-  setPilePos(pilePos + 1);
-};
-
+    setIndex(pile[pilePos]);
+    setPilePos((p) => p + 1);
+  };
 
   const panResponder = useRef(
     PanResponder.create({
@@ -168,64 +184,112 @@ const drawNext = () => {
 
   if (!current) return null;
 
-  // Top-Safe: Punch-hole zuverlässig rausnehmen
   const topSafe = Math.max(MIN_TOP_SAFE, Math.round(insets.top) + EXTRA_GAP);
-
   const imageAreaHeight = Math.round(SCREEN_H * IMAGE_AREA_FRACTION);
 
   const num = Number(current.id);
-const idText = num === 1 ? "0" : toRoman(num - 1);
+  const idText = num === 1 ? "0" : toRoman(num - 1);
   const title = `${idText} – ${current.name}`;
 
+  // Text-Fallbacks: egal wie dein cards.ts heißt – es zeigt irgendwas Sinnvolles
+  const shortText =
+    current.meaningShort ??
+    (Array.isArray(current.keywords) ? current.keywords.join(" · ") : "");
+  const longText = current.meaning ?? "";
+
   return (
-    <View style={styles.root}>
+    <View style={styles.root}><Text style={{ position: "absolute", top: 40, left: 12, color: "lime", zIndex: 999 }}>
+  INDEX SCREEN
+</Text>
+<Text style={{ position: "absolute", top: 40, left: 12, color: "lime", zIndex: 999 }}>
+  INDEX SCREEN
+</Text>
+
       <StatusBar hidden />
 
       <Animated.View
         style={[styles.flex, { transform: [{ translateX }] }]}
-        {...panResponder.panHandlers}
+      
       >
-        {/* Bildbereich: oben abgesichert gegen Kamera */}
+        {/* Bildbereich */}
         <View style={[styles.imageArea, { height: imageAreaHeight, paddingTop: topSafe }]}>
           <Image source={current.image} style={styles.image} resizeMode="contain" />
         </View>
 
-        {/* Titel: extrem nah unter dem Bild */}
+        {/* Titel */}
         <View style={[styles.titleWrap, { marginTop: -TITLE_PULL_UP }]}>
           <Text style={styles.cardTitle}>{title}</Text>
         </View>
 
-        {/* Unten: Button + Counter */}
+        {/* Buttons (NICHT doppelt rendern!) */}
         <View style={styles.buttonRow}>
-<View style={styles.buttonRow}>
-  <Pressable
-    onPress={() => router.push(`/card/${String(current.id)}`)}
-    style={styles.button}
-  >
-    <Text style={styles.buttonText}>Deutung</Text>
-  </Pressable>
+          <Pressable onPress={() => setShowMeaning(v => !v)}
+style={styles.button}>
+            <Text style={styles.buttonText}>Deutung</Text>
+          </Pressable>
 
-  <Pressable style={styles.button} onPress={drawNext}>
-    <Text style={styles.buttonText}>zieh</Text>
-  </Pressable>
-</View>
-
-
-
-
+          <Pressable style={styles.button} onPress={drawNext}>
+            <Text style={styles.buttonText}>zieh</Text>
+          </Pressable>
         </View>
+        {showMeaning && (
+  <Text style={{ color: "white", textAlign: "center", marginTop: 12 }}>
+    Platzhalter
+  </Text>
+)}
+
       </Animated.View>
+
+      {/* MODAL: Deutung als Overlay (ohne Router) */}
+      <Modal
+        visible={meaningOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setMeaningOpen(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          {/* Klick auf Hintergrund schließt */}
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={() => setMeaningOpen(false)}
+          />
+
+          <View style={styles.modalCard}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle} numberOfLines={2}>
+                {title}
+              </Text>
+
+              <Pressable onPress={() => setMeaningOpen(false)} style={styles.closeBtn}>
+                <Text style={styles.closeText}>✕</Text>
+              </Pressable>
+            </View>
+
+            <ScrollView
+              style={styles.modalScroll}
+              contentContainerStyle={styles.modalContent}
+              showsVerticalScrollIndicator={false}
+            >
+              {!!shortText && <Text style={styles.meaningShort}>{shortText}</Text>}
+
+              <Text style={styles.meaningLong}>
+                {longText ? longText : "(Noch kein Deutungstext hinterlegt.)"}
+              </Text>
+            </ScrollView>
+
+            <View style={styles.modalFooter}>
+              <Pressable onPress={() => setMeaningOpen(false)} style={styles.footerBtn}>
+                <Text style={styles.footerBtnText}>Schließen</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
 
-const styles = StyleSheet.create(
-  {buttonRow: {
-  flexDirection: "row",
-  justifyContent: "space-evenly",
-  marginTop: 18,
-},
-
+const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: "black" },
   flex: { flex: 1 },
 
@@ -251,12 +315,11 @@ const styles = StyleSheet.create(
     textAlign: "center",
   },
 
-  infoArea: {
-    flex: 1,
-    alignItems: "center",
-    paddingTop: 6,
-    paddingHorizontal: 18,
-    paddingBottom: 18,
+  buttonRow: {
+    
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 18,
   },
 
   button: {
@@ -273,5 +336,89 @@ const styles = StyleSheet.create(
     fontWeight: "600",
   },
 
+  // Modal Styles
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.58)",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+  },
+  modalCard: {
+    maxHeight: "82%",
+    backgroundColor: "rgba(20,20,24,0.98)",
+    borderRadius: 18,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.14)",
+  },
+  modalHeader: {
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    paddingBottom: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.10)",
+  },
+  modalTitle: {
+    flex: 1,
+    color: "rgba(255,255,255,0.95)",
+    fontSize: 18,
+    fontWeight: "600",
+    marginRight: 12,
+  },
+  closeBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.10)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.14)",
+  },
+  closeText: {
+    color: "rgba(255,255,255,0.9)",
+    fontSize: 16,
+    fontWeight: "700",
+  },
 
+  modalScroll: { flexGrow: 0 },
+  modalContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    paddingBottom: 18,
+  },
+  meaningShort: {
+    color: "rgba(255,255,255,0.85)",
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  meaningLong: {
+    color: "rgba(255,255,255,0.92)",
+    fontSize: 16,
+    lineHeight: 22,
+  },
+
+  modalFooter: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(255,255,255,0.10)",
+  },
+  footerBtn: {
+    height: 44,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.14)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.18)",
+  },
+  footerBtnText: {
+    color: "rgba(255,255,255,0.95)",
+    fontSize: 15,
+    fontWeight: "600",
+  },
 });
