@@ -70,6 +70,8 @@ export default function Index() {
   }, []);
 
   const [index, setIndex] = useState(0);
+  const [pile, setPile] = useState<number[]>([]);
+const [pilePos, setPilePos] = useState(0);
   const indexRef = useRef(0);
   indexRef.current = index;
 
@@ -78,6 +80,37 @@ export default function Index() {
 
   const clamp = (i: number) => Math.max(0, Math.min(list.length - 1, i));
   const current = list[index];
+  const makeShuffled = (n: number) => {
+  const a = Array.from({ length: n }, (_, i) => i);
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+const drawNext = () => {
+  if (list.length < 2) return;
+
+  // neuer Stapel, wenn leer oder verbraucht
+  if (pile.length !== list.length || pilePos >= pile.length) {
+    const fresh = makeShuffled(list.length);
+
+    // nicht direkt dieselbe Karte als erste
+    if (fresh[0] === index && fresh.length > 1) {
+      [fresh[0], fresh[1]] = [fresh[1], fresh[0]];
+    }
+
+    setPile(fresh);
+    setPilePos(1);
+    setIndex(fresh[0]);
+    return;
+  }
+
+  setIndex(pile[pilePos]);
+  setPilePos(pilePos + 1);
+};
+
 
   const panResponder = useRef(
     PanResponder.create({
@@ -172,7 +205,7 @@ const idText = num === 1 ? "0" : toRoman(num - 1);
     <Text style={styles.buttonText}>Deutung</Text>
   </Pressable>
 
-  <Pressable style={styles.button}>
+  <Pressable style={styles.button} onPress={drawNext}>
     <Text style={styles.buttonText}>zieh</Text>
   </Pressable>
 </View>
