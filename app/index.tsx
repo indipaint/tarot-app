@@ -140,7 +140,8 @@ export default function Index() {
 
   const imageAreaHeight = Math.round(SCREEN_H * IMAGE_AREA_FRACTION);
 
-  const idText = toRoman(Number(current.id));
+  const num = Number(current.id);
+const idText = num === 1 ? "0" : toRoman(num - 1);
   const title = `${idText} – ${current.name}`;
 
   return (
@@ -162,13 +163,22 @@ export default function Index() {
         </View>
 
         {/* Unten: Button + Counter */}
-        <View style={styles.infoArea}>
-          <Pressable
-            onPress={() => router.push(`/card/${String(current.id)}`)}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Deutung öffnen</Text>
-          </Pressable>
+        <View style={styles.buttonRow}>
+<View style={styles.buttonRow}>
+  <Pressable
+    onPress={() => router.push(`/card/${String(current.id)}`)}
+    style={styles.button}
+  >
+    <Text style={styles.buttonText}>Deutung</Text>
+  </Pressable>
+
+  <Pressable style={styles.button}>
+    <Text style={styles.buttonText}>zieh</Text>
+  </Pressable>
+</View>
+
+
+
 
         </View>
       </Animated.View>
@@ -176,7 +186,13 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create(
+  {buttonRow: {
+  flexDirection: "row",
+  justifyContent: "space-evenly",
+  marginTop: 18,
+},
+
   root: { flex: 1, backgroundColor: "black" },
   flex: { flex: 1 },
 
@@ -219,7 +235,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
-    color: "white",
+    color: "#888",
     fontSize: 16,
     fontWeight: "600",
   },
