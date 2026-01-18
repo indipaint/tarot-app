@@ -1,5 +1,23 @@
 import { useRouter } from "expo-router";
 import React, { useMemo, useRef, useState } from "react";
+function toRoman(n: number) {
+  if (!Number.isFinite(n) || n <= 0) return "";
+  const map: Array<[number, string]> = [
+    [1000, "M"], [900, "CM"], [500, "D"], [400, "CD"],
+    [100, "C"], [90, "XC"], [50, "L"], [40, "XL"],
+    [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"],
+  ];
+  let x = Math.floor(n);
+  let out = "";
+  for (const [v, s] of map) {
+    while (x >= v) {
+      out += s;
+      x -= v;
+    }
+  }
+  return out;
+}
+
 import type { ImageSourcePropType } from "react-native";
 import {
   Animated,
@@ -122,7 +140,7 @@ export default function Index() {
 
   const imageAreaHeight = Math.round(SCREEN_H * IMAGE_AREA_FRACTION);
 
-  const idText = String(current.id).padStart(2, "0");
+  const idText = toRoman(Number(current.id));
   const title = `${idText} – ${current.name}`;
 
   return (
