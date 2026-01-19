@@ -80,6 +80,7 @@ export default function Index() {
 
   const [index, setIndex] = useState(0);
   const [showMeaning, setShowMeaning] = useState(false);
+  
 
   // Zieh-Stapel
   const [pile, setPile] = useState<number[]>([]);
@@ -198,22 +199,21 @@ export default function Index() {
   const longText = current.meaning ?? "";
 
   return (
-    <View style={styles.root}><Text style={{ position: "absolute", top: 40, left: 12, color: "lime", zIndex: 999 }}>
-  INDEX SCREEN
-</Text>
-<Text style={{ position: "absolute", top: 40, left: 12, color: "lime", zIndex: 999 }}>
-  INDEX SCREEN
-</Text>
+    <View style={styles.root}>
+
+
 
       <StatusBar hidden />
 
       <Animated.View
-        style={[styles.flex, { transform: [{ translateX }] }]}
-      
-      >
+  style={[styles.flex, { transform: [{ translateX }] }]}
+  {...panResponder.panHandlers}
+>
         {/* Bildbereich */}
-        <View style={[styles.imageArea, { height: imageAreaHeight, paddingTop: topSafe }]}>
-          <Image source={current.image} style={styles.image} resizeMode="contain" />
+        <View   style={[styles.imageArea, { height: imageAreaHeight, paddingTop: topSafe }]}
+  
+>
+  <Image source={current.image} style={styles.image} resizeMode="contain" />
         </View>
 
         {/* Titel */}
