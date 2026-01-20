@@ -1,424 +1,218 @@
+import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useMemo, useRef, useState } from "react";
-
-function toRoman(n: number) {
-  if (!Number.isFinite(n) || n <= 0) return "";
-  const map: Array<[number, string]> = [
-    [1000, "M"],
-    [900, "CM"],
-    [500, "D"],
-    [400, "CD"],
-    [100, "C"],
-    [90, "XC"],
-    [50, "L"],
-    [40, "XL"],
-    [10, "X"],
-    [9, "IX"],
-    [5, "V"],
-    [4, "IV"],
-    [1, "I"],
-  ];
-  let x = Math.floor(n);
-  let out = "";
-  for (const [v, s] of map) {
-    while (x >= v) {
-      out += s;
-      x -= v;
-    }
-  }
-  return out;
-}
-
-import type { ImageSourcePropType } from "react-native";
 import {
   Animated,
   Dimensions,
   Image,
-  Modal,
   PanResponder,
   Pressable,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import cardsData from "../src/data/cards";
-
-type Card = {
-  id: string | number;
-  name: string;
-  image: ImageSourcePropType;
-
-  // optional – falls vorhanden in deiner cards.ts
-  meaningShort?: string;
-  meaning?: string;
-  keywords?: string[];
-};
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
-/* ---- Gesten ---- */
-const EDGE_WIDTH = 48;
-const SWIPE_DISTANCE = Math.min(110, SCREEN_W * 0.22);
+// Swipe-Tuning
+const EDGE_WIDTH = 18;
+const SWIPE_DISTANCE = 70;
 const SWIPE_VELOCITY = 0.35;
 
-/* ---- Layout Tuning (nur hier drehen) ---- */
-const MIN_TOP_SAFE = 105;
-const EXTRA_GAP = 6;
-const TITLE_PULL_UP = 8;
-const IMAGE_AREA_FRACTION = 0.74;
-const IMAGE_TOP_PULL = -90;
+// Robust: default oder named export
+function getCards(): any[] {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const mod = require("../src/data/cards");
+  const data = mod?.default ?? mod?.cards ?? mod;
+  return Array.isArray(data) ? data : [];
+}
 
 export default function Index() {
-  const insets = useSafeAreaInsets();
+  const router = useRouter();
 
-  const list = useMemo<Card[]>(() => {
-    return Array.isArray(cardsData) ? (cardsData as Card[]) : [];
-  }, []);
-
+  const cards = useMemo(() => getCards(), []);
   const [index, setIndex] = useState(0);
-  const [showMeaning, setShowMeaning] = useState(false);
-  
-
-  // Zieh-Stapel
-  const [pile, setPile] = useState<number[]>([]);
-  const [pilePos, setPilePos] = useState(0);
-
-  // Modal
-  const [meaningOpen, setMeaningOpen] = useState(false);
-
-  const indexRef = useRef(0);
-  indexRef.current = index;
+  const card = cards[index];
 
   const translateX = useRef(new Animated.Value(0)).current;
   const locked = useRef(false);
 
-  const clamp = (i: number) => Math.max(0, Math.min(list.length - 1, i));
-  const current = list[index];
+  const next = () =>
+    setIndex((i) => (cards.length ? Math.min(i + 1, cards.length - 1) : 0));
+  const prev = () => setIndex((i) => Math.max(i - 1, 0));
 
-  const makeShuffled = (n: number) => {
-    const a = Array.from({ length: n }, (_, i) => i);
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
+  const springBack = () => {
+    Animated.spring(translateX, {
+      toValue: 0,
+      useNativeDriver: true,
+      bounciness: 0,
+      speed: 18,
+    }).start();
   };
 
-  const drawNext = () => {
-    if (list.length < 2) return;
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => false,
+        onStartShouldSetPanResponderCapture: () => false,
 
-    // neuer Stapel, wenn leer oder verbraucht
-    if (pile.length !== list.length || pilePos >= pile.length) {
-      const fresh = makeShuffled(list.length);
+        onMoveShouldSetPanResponder: (evt, gs) => {
+          if (locked.current) return false;
 
-      // nicht direkt dieselbe Karte als erste
-      if (fresh[0] === index && fresh.length > 1) {
-        [fresh[0], fresh[1]] = [fresh[1], fresh[0]];
-      }
+          const x0 = evt.nativeEvent.pageX;
+          if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
 
-      setPile(fresh);
-      setPilePos(1);
-      setIndex(fresh[0]);
-      return;
-    }
+          const absDx = Math.abs(gs.dx);
+          const absDy = Math.abs(gs.dy);
+          return absDx > 8 && absDx > absDy + 6;
+        },
 
-    setIndex(pile[pilePos]);
-    setPilePos((p) => p + 1);
-  };
+        onMoveShouldSetPanResponderCapture: (evt, gs) => {
+          if (locked.current) return false;
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => false,
-      onMoveShouldSetPanResponder: (evt, gs) => {
-        if (locked.current || list.length <= 1) return false;
+          const x0 = evt.nativeEvent.pageX;
+          if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
 
-        const x0 = evt.nativeEvent.pageX;
-        if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
+          const absDx = Math.abs(gs.dx);
+          const absDy = Math.abs(gs.dy);
+          return absDx > 8 && absDx > absDy + 6;
+        },
 
-        const absDx = Math.abs(gs.dx);
-        const absDy = Math.abs(gs.dy);
-        return absDx > 6 && absDx > absDy + 4;
-      },
-      onPanResponderMove: (_e, gs) => translateX.setValue(gs.dx * 0.9),
-      onPanResponderRelease: (_e, gs) => {
-        const swipeLeft = gs.dx < -SWIPE_DISTANCE || gs.vx < -SWIPE_VELOCITY;
-        const swipeRight = gs.dx > SWIPE_DISTANCE || gs.vx > SWIPE_VELOCITY;
-
-        const canNext = indexRef.current < list.length - 1;
-        const canPrev = indexRef.current > 0;
-
-        if (swipeLeft && canNext) {
+        onPanResponderGrant: () => {
           locked.current = true;
-          Animated.timing(translateX, {
-            toValue: -SCREEN_W,
-            duration: 160,
-            useNativeDriver: true,
-          }).start(() => {
-            translateX.setValue(0);
-            setIndex((p) => clamp(p + 1));
-            locked.current = false;
-          });
-          return;
-        }
+        },
 
-        if (swipeRight && canPrev) {
-          locked.current = true;
-          Animated.timing(translateX, {
-            toValue: SCREEN_W,
-            duration: 160,
-            useNativeDriver: true,
-          }).start(() => {
-            translateX.setValue(0);
-            setIndex((p) => clamp(p - 1));
-            locked.current = false;
-          });
-          return;
-        }
+        onPanResponderMove: (_e, gs) => {
+          translateX.setValue(gs.dx * 0.9);
+        },
 
-        Animated.spring(translateX, { toValue: 0, useNativeDriver: true }).start();
-      },
-    })
-  ).current;
+        onPanResponderTerminationRequest: () => true,
 
-  if (!current) return null;
+        onPanResponderRelease: (_e, gs) => {
+          const swipeLeft = gs.dx < -SWIPE_DISTANCE || gs.vx < -SWIPE_VELOCITY;
+          const swipeRight = gs.dx > SWIPE_DISTANCE || gs.vx > SWIPE_VELOCITY;
 
-  const topSafe = Math.max(MIN_TOP_SAFE, Math.round(insets.top) + EXTRA_GAP);
-  const imageAreaHeight = Math.round(SCREEN_H * IMAGE_AREA_FRACTION);
+          if (swipeLeft) next();
+          else if (swipeRight) prev();
 
-  const num = Number(current.id);
-  const idText = num === 1 ? "0" : toRoman(num - 1);
-  const title = `${idText} – ${current.name}`;
+          locked.current = false;
+          springBack();
+        },
 
-  // Text-Fallbacks: egal wie dein cards.ts heißt – es zeigt irgendwas Sinnvolles
-  const shortText =
-    current.meaningShort ??
-    (Array.isArray(current.keywords) ? current.keywords.join(" · ") : "");
-  const longText = current.meaning ?? "";
+        onPanResponderTerminate: () => {
+          locked.current = false;
+          springBack();
+        },
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [cards.length]
+  );
+
+  if (!cards.length || !card) {
+    return (
+      <SafeAreaView style={styles.safe} edges={["top"]}>
+        <StatusBar hidden />
+        <View style={styles.container}>
+          <Text style={styles.errorTitle}>Cards fehlen / Import stimmt nicht</Text>
+          <Text style={styles.errorText}>
+            Prüfe: src/data/cards.ts export (default oder named)
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const roman = (card as any).roman ?? (card as any).number ?? "";
+  const name = (card as any).name ?? (card as any).title ?? "Unbenannt";
+  const id = (card as any).id ?? index;
 
   return (
-    <View style={styles.root}>
-
-
-
+    <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
 
-      <Animated.View
-  style={[styles.flex, { transform: [{ translateX }] }]}
-  {...panResponder.panHandlers}
->
-        {/* Bildbereich */}
-        <View   style={[styles.imageArea, { height: imageAreaHeight, paddingTop: topSafe }]}
-  
->
-  <Image source={current.image} style={styles.image} resizeMode="contain" />
-        </View>
+      <View style={styles.container}>
+        {/* Swipe-Bereich: bekommt NICHT mehr die Button-Touches, weil Buttons absolut oben liegen */}
+        <Animated.View
+          style={[styles.swipeArea, { transform: [{ translateX }] }]}
+          {...panResponder.panHandlers}
+        >
+          <Image source={(card as any).image} style={styles.image} resizeMode="contain" />
+          <Text style={styles.title}>
+            {roman ? `${roman} · ` : ""}{name}
+          </Text>
+        </Animated.View>
 
-        {/* Titel */}
-        <View style={[styles.titleWrap, { marginTop: -TITLE_PULL_UP }]}>
-          <Text style={styles.cardTitle}>{title}</Text>
-        </View>
-
-        {/* Buttons (NICHT doppelt rendern!) */}
-        <View style={styles.buttonRow}>
-          <Pressable onPress={() => setShowMeaning(v => !v)}
-style={styles.button}>
-            <Text style={styles.buttonText}>Deutung</Text>
+        {/* Buttons: absolut + hoher zIndex/elevation => immer klickbar */}
+        <View style={styles.buttonRow} pointerEvents="auto">
+          <Pressable style={styles.btn} onPress={() => router.push(`/card/${id}`)}>
+            <Text style={styles.btnText}>Deutung</Text>
           </Pressable>
 
-          <Pressable style={styles.button} onPress={drawNext}>
-            <Text style={styles.buttonText}>zieh</Text>
+          <Pressable style={styles.btn} onPress={next}>
+            <Text style={styles.btnText}>Zieh</Text>
           </Pressable>
         </View>
-        {showMeaning && (
-  <Text style={{ color: "white", textAlign: "center", marginTop: 12 }}>
-    Platzhalter
-  </Text>
-)}
-
-      </Animated.View>
-
-      {/* MODAL: Deutung als Overlay (ohne Router) */}
-      <Modal
-        visible={meaningOpen}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setMeaningOpen(false)}
-      >
-        <View style={styles.modalBackdrop}>
-          {/* Klick auf Hintergrund schließt */}
-          <Pressable
-            style={StyleSheet.absoluteFill}
-            onPress={() => setMeaningOpen(false)}
-          />
-
-          <View style={styles.modalCard}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle} numberOfLines={2}>
-                {title}
-              </Text>
-
-              <Pressable onPress={() => setMeaningOpen(false)} style={styles.closeBtn}>
-                <Text style={styles.closeText}>✕</Text>
-              </Pressable>
-            </View>
-
-            <ScrollView
-              style={styles.modalScroll}
-              contentContainerStyle={styles.modalContent}
-              showsVerticalScrollIndicator={false}
-            >
-              {!!shortText && <Text style={styles.meaningShort}>{shortText}</Text>}
-
-              <Text style={styles.meaningLong}>
-                {longText ? longText : "(Noch kein Deutungstext hinterlegt.)"}
-              </Text>
-            </ScrollView>
-
-            <View style={styles.modalFooter}>
-              <Pressable onPress={() => setMeaningOpen(false)} style={styles.footerBtn}>
-                <Text style={styles.footerBtnText}>Schließen</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: "black" },
-  flex: { flex: 1 },
+const BUTTON_BAR_H = 76;
 
-  imageArea: {
-    overflow: "hidden",
-    backgroundColor: "black",
+const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: "#000" },
+  container: { flex: 1 },
+
+  swipeArea: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    paddingTop: 8,
+    paddingBottom: BUTTON_BAR_H + 10, // Platz für die Buttons
   },
+
   image: {
     width: "100%",
-    height: "120%",
-    marginTop: IMAGE_TOP_PULL,
+    height: SCREEN_H * 0.68,
   },
 
-  titleWrap: {
-    paddingTop: 0,
-    paddingBottom: 6,
-    alignItems: "center",
-  },
-  cardTitle: {
-    color: "rgba(255,255,255,0.55)",
-    fontSize: 15,
-    fontWeight: "600",
+  title: {
+    marginTop: 10,
+    fontSize: 18,
+    color: "#bbb",
+    letterSpacing: 1,
     textAlign: "center",
   },
 
   buttonRow: {
-    
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 16,
+    height: BUTTON_BAR_H,
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginTop: 18,
+    justifyContent: "space-around",
+    alignItems: "center",
+    paddingHorizontal: 18,
+
+    // über allem
+    zIndex: 999,
+    elevation: 999,
   },
 
-  button: {
+  btn: {
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.35)",
-    borderRadius: 12,
+    borderColor: "#666",
     paddingVertical: 12,
-    paddingHorizontal: 20,
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: "#888",
-    fontSize: 16,
-    fontWeight: "600",
+    paddingHorizontal: 26,
+    borderRadius: 10,
+    backgroundColor: "#000",
   },
 
-  // Modal Styles
-  modalBackdrop: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.58)",
-    justifyContent: "center",
-    paddingHorizontal: 16,
-  },
-  modalCard: {
-    maxHeight: "82%",
-    backgroundColor: "rgba(20,20,24,0.98)",
-    borderRadius: 18,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.14)",
-  },
-  modalHeader: {
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(255,255,255,0.10)",
-  },
-  modalTitle: {
-    flex: 1,
-    color: "rgba(255,255,255,0.95)",
-    fontSize: 18,
-    fontWeight: "600",
-    marginRight: 12,
-  },
-  closeBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(255,255,255,0.10)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.14)",
-  },
-  closeText: {
-    color: "rgba(255,255,255,0.9)",
-    fontSize: 16,
-    fontWeight: "700",
-  },
+  btnText: { color: "#ddd", fontSize: 16, letterSpacing: 1 },
 
-  modalScroll: { flexGrow: 0 },
-  modalContent: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    paddingBottom: 18,
-  },
-  meaningShort: {
-    color: "rgba(255,255,255,0.85)",
-    fontSize: 14,
-    marginBottom: 10,
-  },
-  meaningLong: {
-    color: "rgba(255,255,255,0.92)",
-    fontSize: 16,
-    lineHeight: 22,
-  },
-
-  modalFooter: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.10)",
-  },
-  footerBtn: {
-    height: 44,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(255,255,255,0.14)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.18)",
-  },
-  footerBtnText: {
-    color: "rgba(255,255,255,0.95)",
-    fontSize: 15,
-    fontWeight: "600",
-  },
+  errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
+  errorText: { color: "#bbb", fontSize: 13, paddingHorizontal: 20, textAlign: "center" },
 });
