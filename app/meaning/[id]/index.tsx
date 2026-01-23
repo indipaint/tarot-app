@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { getMeaningById } from "../../data/meanings";
 
 export default function MeaningScreen() {
@@ -7,7 +7,7 @@ export default function MeaningScreen() {
   const meaning = getMeaningById(id as any);
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <ScrollView contentContainerStyle={{ padding: 16 }}>
       <Text style={{ fontSize: 20, marginBottom: 8 }}>Deutung</Text>
 
       {!meaning ? (
@@ -15,6 +15,6 @@ export default function MeaningScreen() {
       ) : (
         <Text>{meaning.general}</Text>
       )}
-    </View>
+    </ScrollView>
   );
 }
