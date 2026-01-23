@@ -204,7 +204,7 @@ export default function Index() {
 
         {/* BUTTONS: AUßERHALB vom PanResponder => werden nicht geschluckt */}
         <View style={styles.buttonRow}>
-          <Pressable style={styles.btn} onPress={() => router.push(`/card/${id}`)}>
+          <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${id}` as any)}>
             <Text style={styles.btnText}>Deutung</Text>
           </Pressable>
 
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     paddingTop: 0, // 👈 hier feinjustieren (0 / 1 / 2)
-    paddingHorizontal: 8,
+    paddingHorizontal: 0,
     paddingBottom: BUTTON_BAR_H + 10,
   },
 
