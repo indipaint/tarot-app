@@ -71,27 +71,9 @@ export default function Index() {
   const card = cards[index];
 
   const translateX = useRef(new Animated.Value(0)).current;
+
+  // Lock gegen Doppel-Swipes / Doppel-Anim
   const locked = useRef(false);
-
-  const next = () =>
-    setIndex((i) => (cards.length ? Math.min(i + 1, cards.length - 1) : 0));
-  const prev = () => setIndex((i) => Math.max(i - 1, 0));
-
-  // ✅ Random draw (nicht dieselbe Karte zweimal hintereinander)
-  const randomDraw = () => {
-    if (!cards.length) return;
-
-    let r = index;
-    if (cards.length === 1) {
-      setIndex(0);
-      return;
-    }
-
-    while (r === index) {
-      r = Math.floor(Math.random() * cards.length);
-    }
-    setIndex(r);
-  };
 
   const springBack = () => {
     Animated.spring(translateX, {
@@ -100,6 +82,77 @@ export default function Index() {
       bounciness: 0,
       speed: 18,
     }).start();
+  };
+
+  // ✅ Smooth Slide-Out / Slide-In
+  // outDir: -1 => Karte raus nach links, +1 => raus nach rechts
+  const slideTo = (targetIndex: number, outDir: -1 | 1) => {
+    if (locked.current) return;
+    locked.current = true;
+
+    if (!cards.length) {
+      locked.current = false;
+      return;
+    }
+
+    const nextIndex = Math.max(0, Math.min(targetIndex, cards.length - 1));
+
+    // am Rand: einfach zurück
+    if (nextIndex === index) {
+      Animated.spring(translateX, {
+        toValue: 0,
+        useNativeDriver: true,
+        bounciness: 0,
+        speed: 18,
+      }).start(() => {
+        locked.current = false;
+      });
+      return;
+    }
+
+    // 1) aktuelle Karte raus
+    Animated.timing(translateX, {
+      toValue: outDir * SCREEN_W,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => {
+      // 2) erst danach index wechseln (kein Ruck / kein Overlay)
+      setIndex(nextIndex);
+
+      // 3) neue Karte von Gegenseite starten
+      translateX.setValue(-outDir * SCREEN_W);
+
+      // 4) rein sliden
+      Animated.timing(translateX, {
+        toValue: 0,
+        duration: 260,
+        useNativeDriver: true,
+      }).start(() => {
+        locked.current = false;
+      });
+    });
+  };
+
+  const next = () => slideTo(index + 1, -1); // swipe links => raus nach links
+  const prev = () => slideTo(index - 1, 1);  // swipe rechts => raus nach rechts
+
+  // ✅ Random draw (nicht dieselbe Karte zweimal hintereinander)
+  const randomDraw = () => {
+    if (!cards.length) return;
+
+    if (cards.length === 1) {
+      setIndex(0);
+      return;
+    }
+
+    let r = index;
+    while (r === index) {
+      r = Math.floor(Math.random() * cards.length);
+    }
+
+    // Richtung grob nach Position (nur fürs Gefühl)
+    const outDir: -1 | 1 = r > index ? -1 : 1;
+    slideTo(r, outDir);
   };
 
   const panResponder = useMemo(
@@ -133,33 +186,33 @@ export default function Index() {
         },
 
         onPanResponderGrant: () => {
-          locked.current = true;
+          translateX.stopAnimation();
         },
 
         onPanResponderMove: (_e, gs) => {
+          if (locked.current) return;
           translateX.setValue(gs.dx * 0.9);
         },
 
-        // Termination erlauben (Android/OS)
         onPanResponderTerminationRequest: () => true,
 
         onPanResponderRelease: (_e, gs) => {
+          if (locked.current) return;
+
           const swipeLeft = gs.dx < -SWIPE_DISTANCE || gs.vx < -SWIPE_VELOCITY;
           const swipeRight = gs.dx > SWIPE_DISTANCE || gs.vx > SWIPE_VELOCITY;
 
           if (swipeLeft) next();
           else if (swipeRight) prev();
-
-          locked.current = false;
-          springBack();
+          else springBack();
         },
 
         onPanResponderTerminate: () => {
-          locked.current = false;
+          if (locked.current) return;
           springBack();
         },
       }),
-    [cards.length]
+    [cards.length, index]
   );
 
   if (!cards.length || !card) {
@@ -179,7 +232,7 @@ export default function Index() {
   const num = typeof (card as any).id === "number" ? (card as any).id : index;
   const roman = toRoman(num);
   const name = (card as any).name ?? (card as any).title ?? "Unbenannt";
-  const id = (card as any).id ?? index;
+  const id = String((card as any).id ?? index); // ✅ Route-Param als string
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -191,11 +244,7 @@ export default function Index() {
           style={[styles.swipeArea, { transform: [{ translateX }] }]}
           {...panResponder.panHandlers}
         >
-          <Image
-            source={(card as any).image}
-            style={styles.image}
-            resizeMode="contain"
-          />
+          <Image source={(card as any).image} style={styles.image} resizeMode="contain" />
 
           <Text style={styles.title} numberOfLines={2}>
             {roman} · {name}
@@ -208,7 +257,6 @@ export default function Index() {
             <Text style={styles.btnText}>Deutung</Text>
           </Pressable>
 
-          {/* ✅ Random statt next */}
           <Pressable style={styles.btn} onPress={randomDraw}>
             <Text style={styles.btnText}>Zieh</Text>
           </Pressable>
@@ -222,12 +270,11 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#000" },
   container: { flex: 1 },
 
-  // Bild ganz oben (knapp unter Notch)
   swipeArea: {
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 0, // 👈 hier feinjustieren (0 / 1 / 2)
+    paddingTop: 0,
     paddingHorizontal: 0,
     paddingBottom: BUTTON_BAR_H + 120,
   },
