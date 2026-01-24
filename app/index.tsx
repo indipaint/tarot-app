@@ -197,7 +197,7 @@ export default function Index() {
             resizeMode="contain"
           />
 
-          <Text style={styles.title}>
+          <Text style={styles.title} numberOfLines={2}>
             {roman} · {name}
           </Text>
         </Animated.View>
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     paddingTop: 0, // 👈 hier feinjustieren (0 / 1 / 2)
     paddingHorizontal: 0,
-    paddingBottom: BUTTON_BAR_H + 10,
+    paddingBottom: BUTTON_BAR_H + 120,
   },
 
   image: {
@@ -239,8 +239,9 @@ const styles = StyleSheet.create({
 
   title: {
     marginTop: 8,
-    fontSize: 18,
-    color: "#bbb",
+    fontSize: 17,
+    lineHeight: 20,
+    color: "#888",
     letterSpacing: 1,
     textAlign: "center",
   },
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    bottom: 16,
+    bottom: 60,
     height: BUTTON_BAR_H,
     flexDirection: "row",
     justifyContent: "space-around",
@@ -262,13 +263,13 @@ const styles = StyleSheet.create({
   btn: {
     borderWidth: 1,
     borderColor: "#666",
-    paddingVertical: 12,
-    paddingHorizontal: 26,
-    borderRadius: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 15,
+    borderRadius: 6,
     backgroundColor: "#000",
   },
 
-  btnText: { color: "#ddd", fontSize: 16, letterSpacing: 1 },
+  btnText: { color: "#888", fontSize: 13, letterSpacing: 1 },
 
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
   errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
