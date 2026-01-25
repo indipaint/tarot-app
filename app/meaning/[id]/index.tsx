@@ -1,11 +1,11 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { getMeaningById } from "../../data/meanings";
+import { getMeaningById } from "../../../src/data/meanings";
 
 export default function MeaningScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const meaning = getMeaningById(id as any);
+  const meaning = getMeaningById(String(id));
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
