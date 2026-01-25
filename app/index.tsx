@@ -1,10 +1,9 @@
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
-  Image,
   PanResponder,
   Pressable,
   StyleSheet,
@@ -75,6 +74,12 @@ export default function Index() {
   // Lock gegen Doppel-Swipes / Doppel-Anim
   const locked = useRef(false);
 
+  // ===== Crossfade (Image only) =====
+  const fade = useRef(new Animated.Value(1)).current;
+  const [prevSource, setPrevSource] = useState<any | null>(null);
+  const lastSourceRef = useRef<any | null>(null);
+  const didMountRef = useRef(false);
+
   const springBack = () => {
     Animated.spring(translateX, {
       toValue: 0,
@@ -134,7 +139,7 @@ export default function Index() {
   };
 
   const next = () => slideTo(index + 1, -1); // swipe links => raus nach links
-  const prev = () => slideTo(index - 1, 1);  // swipe rechts => raus nach rechts
+  const prev = () => slideTo(index - 1, 1); // swipe rechts => raus nach rechts
 
   // ✅ Random draw (nicht dieselbe Karte zweimal hintereinander)
   const randomDraw = () => {
@@ -234,6 +239,36 @@ export default function Index() {
   const name = (card as any).name ?? (card as any).title ?? "Unbenannt";
   const id = String((card as any).id ?? index); // ✅ Route-Param als string
 
+  const currentSource = (card as any).image;
+
+  // Crossfade starten, wenn sich die Image-Source wirklich ändert
+  useEffect(() => {
+    if (!currentSource) return;
+
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      lastSourceRef.current = currentSource;
+      fade.setValue(1);
+      setPrevSource(null);
+      return;
+    }
+
+    const prev = lastSourceRef.current;
+    lastSourceRef.current = currentSource;
+
+    if (prev && prev !== currentSource) {
+      setPrevSource(prev);
+      fade.stopAnimation();
+      fade.setValue(0);
+      Animated.timing(fade, {
+        toValue: 1,
+        duration: 2000,
+        useNativeDriver: true,
+      }).start(() => setPrevSource(null));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
@@ -244,7 +279,22 @@ export default function Index() {
           style={[styles.swipeArea, { transform: [{ translateX }] }]}
           {...panResponder.panHandlers}
         >
-          <Image source={(card as any).image} style={styles.image} resizeMode="contain" />
+          {/* IMAGE CROSSFADE (2 Layer) */}
+          <View style={styles.imageBox}>
+            {prevSource ? (
+              <Animated.Image
+                source={prevSource}
+                style={styles.imageAbs}
+                resizeMode="contain"
+              />
+            ) : null}
+
+            <Animated.Image
+              source={currentSource}
+              style={[styles.imageAbs, { opacity: fade }]}
+              resizeMode="contain"
+            />
+          </View>
 
           <Text style={styles.title} numberOfLines={2}>
             {roman} · {name}
@@ -279,9 +329,15 @@ const styles = StyleSheet.create({
     paddingBottom: BUTTON_BAR_H + 120,
   },
 
-  image: {
+  // Container für 2 Image-Layer
+  imageBox: {
     width: "100%",
     height: SCREEN_H * 0.72,
+  },
+  imageAbs: {
+    ...StyleSheet.absoluteFillObject,
+    width: "100%",
+    height: "100%",
   },
 
   title: {
