@@ -70,15 +70,7 @@ export default function Index() {
   const card = cards[index];
 
   const translateX = useRef(new Animated.Value(0)).current;
-
-  // Lock gegen Doppel-Swipes / Doppel-Anim
   const locked = useRef(false);
-
-  // ===== Crossfade (Image only) =====
-  const fade = useRef(new Animated.Value(1)).current;
-  const [prevSource, setPrevSource] = useState<any | null>(null);
-  const lastSourceRef = useRef<any | null>(null);
-  const didMountRef = useRef(false);
 
   const springBack = () => {
     Animated.spring(translateX, {
@@ -89,8 +81,7 @@ export default function Index() {
     }).start();
   };
 
-  // ✅ Smooth Slide-Out / Slide-In
-  // outDir: -1 => Karte raus nach links, +1 => raus nach rechts
+  // ✅ Slide mit korrekter Reihenfolge (gegen "taucht nochmal auf")
   const slideTo = (targetIndex: number, outDir: -1 | 1) => {
     if (locked.current) return;
     locked.current = true;
@@ -101,8 +92,9 @@ export default function Index() {
     }
 
     const nextIndex = Math.max(0, Math.min(targetIndex, cards.length - 1));
+    const OUT = SCREEN_W;
 
-    // am Rand: einfach zurück
+    // am Rand: zurück
     if (nextIndex === index) {
       Animated.spring(translateX, {
         toValue: 0,
@@ -117,31 +109,32 @@ export default function Index() {
 
     // 1) aktuelle Karte raus
     Animated.timing(translateX, {
-      toValue: outDir * SCREEN_W,
+      toValue: outDir * OUT,
       duration: 200,
       useNativeDriver: true,
     }).start(() => {
-      // 2) erst danach index wechseln (kein Ruck / kein Overlay)
+      // 🔧 WICHTIG: erst neue Startposition setzen ...
+      translateX.setValue(-outDir * OUT);
+
+      // ... dann Index wechseln (verhindert "alte Karte kommt nochmal")
       setIndex(nextIndex);
 
-      // 3) neue Karte von Gegenseite starten
-      translateX.setValue(-outDir * SCREEN_W);
-
-      // 4) rein sliden
-      Animated.timing(translateX, {
-        toValue: 0,
-        duration: 260,
-        useNativeDriver: true,
-      }).start(() => {
-        locked.current = false;
+      // ... dann im nächsten Frame rein sliden
+      requestAnimationFrame(() => {
+        Animated.timing(translateX, {
+          toValue: 0,
+          duration: 260,
+          useNativeDriver: true,
+        }).start(() => {
+          locked.current = false;
+        });
       });
     });
   };
 
-  const next = () => slideTo(index + 1, -1); // swipe links => raus nach links
-  const prev = () => slideTo(index - 1, 1); // swipe rechts => raus nach rechts
+  const next = () => slideTo(index + 1, -1);
+  const prev = () => slideTo(index - 1, 1);
 
-  // ✅ Random draw (nicht dieselbe Karte zweimal hintereinander)
   const randomDraw = () => {
     if (!cards.length) return;
 
@@ -151,11 +144,8 @@ export default function Index() {
     }
 
     let r = index;
-    while (r === index) {
-      r = Math.floor(Math.random() * cards.length);
-    }
+    while (r === index) r = Math.floor(Math.random() * cards.length);
 
-    // Richtung grob nach Position (nur fürs Gefühl)
     const outDir: -1 | 1 = r > index ? -1 : 1;
     slideTo(r, outDir);
   };
@@ -163,11 +153,9 @@ export default function Index() {
   const panResponder = useMemo(
     () =>
       PanResponder.create({
-        // Tap soll NIE den Responder claimen (sonst Buttons kaputt)
         onStartShouldSetPanResponder: () => false,
         onStartShouldSetPanResponderCapture: () => false,
 
-        // Nur bei echter horizontaler Bewegung
         onMoveShouldSetPanResponder: (evt, gs) => {
           if (locked.current) return false;
 
@@ -237,11 +225,16 @@ export default function Index() {
   const num = typeof (card as any).id === "number" ? (card as any).id : index;
   const roman = toRoman(num);
   const name = (card as any).name ?? (card as any).title ?? "Unbenannt";
-  const id = String((card as any).id ?? index); // ✅ Route-Param als string
+  const id = String((card as any).id ?? index);
+
+  // ===== Crossfade (NUR FRONT) =====
+  const fade = useRef(new Animated.Value(1)).current;
+  const [prevSource, setPrevSource] = useState<any | null>(null);
+  const lastSourceRef = useRef<any | null>(null);
+  const didMountRef = useRef(false);
 
   const currentSource = (card as any).image;
 
-  // Crossfade starten, wenn sich die Image-Source wirklich ändert
   useEffect(() => {
     if (!currentSource) return;
 
@@ -253,57 +246,94 @@ export default function Index() {
       return;
     }
 
-    const prev = lastSourceRef.current;
+    const prevImg = lastSourceRef.current;
     lastSourceRef.current = currentSource;
 
-    if (prev && prev !== currentSource) {
-      setPrevSource(prev);
+    if (prevImg && prevImg !== currentSource) {
+      // prev drunter liegen lassen
+      setPrevSource(prevImg);
+
+      // ✅ neues Bild startet unsichtbar (damit es nicht erst "aufploppt")
       fade.stopAnimation();
       fade.setValue(0);
-      Animated.timing(fade, {
-        toValue: 1,
-        duration: 2000,
-        useNativeDriver: true,
-      }).start(() => setPrevSource(null));
+
+      requestAnimationFrame(() => {
+        Animated.timing(fade, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: true,
+        }).start(() => setPrevSource(null));
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
+
+  // ✅ BACK-LAYER: füllt den Hintergrund (gegen schwarzes Loch), ohne Crossfade
+  const BackVisual = () => (
+    <>
+      <View style={styles.imageBox}>
+        <Animated.Image
+          source={currentSource}
+          style={styles.imageAbs}
+          resizeMode="contain"
+        />
+      </View>
+
+      <Text style={styles.title} numberOfLines={2}>
+        {roman} · {name}
+      </Text>
+    </>
+  );
+
+  // ✅ FRONT-LAYER: Crossfade
+  const FrontVisual = () => (
+    <>
+      <View style={styles.imageBox}>
+        {prevSource ? (
+          <Animated.Image
+            source={prevSource}
+            style={styles.imageAbs}
+            resizeMode="contain"
+          />
+        ) : null}
+
+        <Animated.Image
+          source={currentSource}
+          style={[styles.imageAbs, { opacity: fade }]}
+          resizeMode="contain"
+        />
+      </View>
+
+      <Text style={styles.title} numberOfLines={2}>
+        {roman} · {name}
+      </Text>
+    </>
+  );
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
 
       <View style={styles.container}>
-        {/* SWIPE NUR AUF DEM BILD-BLOCK */}
+        {/* BACK-LAYER: verhindert Schwarz */}
+        <View pointerEvents="none" style={[styles.swipeArea, styles.backLayer]}>
+          <BackVisual />
+        </View>
+
+        {/* FRONT-LAYER: swipe + slide + crossfade */}
         <Animated.View
           style={[styles.swipeArea, { transform: [{ translateX }] }]}
           {...panResponder.panHandlers}
         >
-          {/* IMAGE CROSSFADE (2 Layer) */}
-          <View style={styles.imageBox}>
-            {prevSource ? (
-              <Animated.Image
-                source={prevSource}
-                style={styles.imageAbs}
-                resizeMode="contain"
-              />
-            ) : null}
-
-            <Animated.Image
-              source={currentSource}
-              style={[styles.imageAbs, { opacity: fade }]}
-              resizeMode="contain"
-            />
-          </View>
-
-          <Text style={styles.title} numberOfLines={2}>
-            {roman} · {name}
-          </Text>
+          <FrontVisual />
         </Animated.View>
 
-        {/* BUTTONS: AUßERHALB vom PanResponder => werden nicht geschluckt */}
+        {/* BUTTONS */}
         <View style={styles.buttonRow}>
-          <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${id}` as any)}>
+          <Pressable
+            style={styles.btn}
+            onPress={() => router.push(`/meaning/${id}` as any)}
+          >
             <Text style={styles.btnText}>Deutung</Text>
           </Pressable>
 
@@ -329,7 +359,14 @@ const styles = StyleSheet.create({
     paddingBottom: BUTTON_BAR_H + 120,
   },
 
-  // Container für 2 Image-Layer
+  backLayer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
+
   imageBox: {
     width: "100%",
     height: SCREEN_H * 0.72,
