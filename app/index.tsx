@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -20,6 +20,9 @@ const SWIPE_DISTANCE = 70;
 const SWIPE_VELOCITY = 0.35;
 
 const BUTTON_BAR_H = 76;
+
+// Ritual-Fade-Dauer
+const RITUAL_FADE_MS = 4000;
 
 // Karten laden (robust: default oder named export)
 function getCards(): any[] {
@@ -67,77 +70,58 @@ export default function Index() {
 
   const cards = useMemo(() => getCards(), []);
   const [index, setIndex] = useState(0);
-  const card = cards[index];
 
-  const translateX = useRef(new Animated.Value(0)).current;
+  // Während der Transition liegt die Zielkarte "hinten" und wird sichtbar
+  const [incomingIndex, setIncomingIndex] = useState<number | null>(null);
+
+  // progress: 0 = nur alte Karte sichtbar, 1 = nur neue Karte sichtbar
+  const progress = useRef(new Animated.Value(0)).current;
+
   const locked = useRef(false);
 
-  const springBack = () => {
-    Animated.spring(translateX, {
-      toValue: 0,
-      useNativeDriver: true,
-      bounciness: 0,
-      speed: 18,
-    }).start();
-  };
+  const clampIndex = (i: number) => Math.max(0, Math.min(i, cards.length - 1));
 
-  // ✅ Slide mit korrekter Reihenfolge (gegen "taucht nochmal auf")
-  const slideTo = (targetIndex: number, outDir: -1 | 1) => {
+  const startRitualTo = (targetIndex: number) => {
     if (locked.current) return;
+    if (!cards.length) return;
+
+    const nextIndex = clampIndex(targetIndex);
+    if (nextIndex === index) return; // am Rand: nix
+
     locked.current = true;
+    setIncomingIndex(nextIndex);
 
-    if (!cards.length) {
-      locked.current = false;
-      return;
-    }
+    progress.stopAnimation();
+    progress.setValue(0);
 
-    const nextIndex = Math.max(0, Math.min(targetIndex, cards.length - 1));
-    const OUT = SCREEN_W;
-
-    // am Rand: zurück
-    if (nextIndex === index) {
-      Animated.spring(translateX, {
-        toValue: 0,
-        useNativeDriver: true,
-        bounciness: 0,
-        speed: 18,
-      }).start(() => {
-        locked.current = false;
-      });
-      return;
-    }
-
-    // 1) aktuelle Karte raus
-    Animated.timing(translateX, {
-      toValue: outDir * OUT,
-      duration: 200,
+    Animated.timing(progress, {
+      toValue: 1,
+      duration: RITUAL_FADE_MS,
       useNativeDriver: true,
-    }).start(() => {
-      // 🔧 WICHTIG: erst neue Startposition setzen ...
-      translateX.setValue(-outDir * OUT);
+    }).start(({ finished }) => {
+      if (!finished) {
+        // Abbruch -> sauber zurück
+        progress.setValue(0);
+        setIncomingIndex(null);
+        locked.current = false;
+        return;
+      }
 
-      // ... dann Index wechseln (verhindert "alte Karte kommt nochmal")
+      // Jetzt erst "wirklich" umschalten, dann Reset
       setIndex(nextIndex);
-
-      // ... dann im nächsten Frame rein sliden
       requestAnimationFrame(() => {
-        Animated.timing(translateX, {
-          toValue: 0,
-          duration: 260,
-          useNativeDriver: true,
-        }).start(() => {
-          locked.current = false;
-        });
-      });
+  setIncomingIndex(null);
+  progress.setValue(0);
+  locked.current = false;
+});
     });
   };
 
-  const next = () => slideTo(index + 1, -1);
-  const prev = () => slideTo(index - 1, 1);
+  const next = () => startRitualTo(index + 1);
+  const prev = () => startRitualTo(index - 1);
 
   const randomDraw = () => {
     if (!cards.length) return;
-
     if (cards.length === 1) {
       setIndex(0);
       return;
@@ -146,8 +130,7 @@ export default function Index() {
     let r = index;
     while (r === index) r = Math.floor(Math.random() * cards.length);
 
-    const outDir: -1 | 1 = r > index ? -1 : 1;
-    slideTo(r, outDir);
+    startRitualTo(r);
   };
 
   const panResponder = useMemo(
@@ -179,12 +162,13 @@ export default function Index() {
         },
 
         onPanResponderGrant: () => {
-          translateX.stopAnimation();
+          // Falls gerade irgendwas läuft, Finger “nimmt Kontrolle” -> wir lassen aber NICHT ziehen,
+          // weil du "einmal wischen -> dann Ritual" willst.
+          // (Optional: hier könnte man progress abbrechen, mache ich bewusst NICHT automatisch.)
         },
 
-        onPanResponderMove: (_e, gs) => {
-          if (locked.current) return;
-          translateX.setValue(gs.dx * 0.9);
+        onPanResponderMove: () => {
+          // absichtlich keine Bewegung / kein Drag-Preview
         },
 
         onPanResponderTerminationRequest: () => true,
@@ -197,18 +181,19 @@ export default function Index() {
 
           if (swipeLeft) next();
           else if (swipeRight) prev();
-          else springBack();
         },
 
         onPanResponderTerminate: () => {
-          if (locked.current) return;
-          springBack();
+          // nix
         },
       }),
     [cards.length, index]
   );
 
-  if (!cards.length || !card) {
+  const currentCard = cards[index];
+  const nextCard = incomingIndex != null ? cards[incomingIndex] : null;
+
+  if (!cards.length || !currentCard) {
     return (
       <SafeAreaView style={styles.safe} edges={["top"]}>
         <StatusBar hidden />
@@ -222,118 +207,69 @@ export default function Index() {
     );
   }
 
-  const num = typeof (card as any).id === "number" ? (card as any).id : index;
-  const roman = toRoman(num);
-  const name = (card as any).name ?? (card as any).title ?? "Unbenannt";
-  const id = String((card as any).id ?? index);
+  const outgoingOpacity = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+  });
 
-  // ===== Crossfade (NUR FRONT) =====
-  const fade = useRef(new Animated.Value(1)).current;
-  const [prevSource, setPrevSource] = useState<any | null>(null);
-  const lastSourceRef = useRef<any | null>(null);
-  const didMountRef = useRef(false);
+  const incomingOpacity = progress; // 0..1
 
-  const currentSource = (card as any).image;
+  const currentNum =
+    typeof (currentCard as any).id === "number" ? (currentCard as any).id : index;
+  const currentRoman = toRoman(currentNum);
+  const currentName = (currentCard as any).name ?? (currentCard as any).title ?? "Unbenannt";
+  const currentId = String((currentCard as any).id ?? index);
 
-  useEffect(() => {
-    if (!currentSource) return;
+  const nextNum =
+    nextCard && typeof (nextCard as any).id === "number"
+      ? (nextCard as any).id
+      : incomingIndex ?? index;
+  const nextRoman = toRoman(nextNum);
+  const nextName = nextCard ? ((nextCard as any).name ?? (nextCard as any).title ?? "Unbenannt") : "";
 
-    if (!didMountRef.current) {
-      didMountRef.current = true;
-      lastSourceRef.current = currentSource;
-      fade.setValue(1);
-      setPrevSource(null);
-      return;
-    }
-
-    const prevImg = lastSourceRef.current;
-    lastSourceRef.current = currentSource;
-
-    if (prevImg && prevImg !== currentSource) {
-      // prev drunter liegen lassen
-      setPrevSource(prevImg);
-
-      // ✅ neues Bild startet unsichtbar (damit es nicht erst "aufploppt")
-      fade.stopAnimation();
-      fade.setValue(0);
-
-      requestAnimationFrame(() => {
-        Animated.timing(fade, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }).start(() => setPrevSource(null));
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index]);
-
-  // ✅ BACK-LAYER: füllt den Hintergrund (gegen schwarzes Loch), ohne Crossfade
-  const BackVisual = () => (
-    <>
-      <View style={styles.imageBox}>
-        <Animated.Image
-          source={currentSource}
-          style={styles.imageAbs}
-          resizeMode="contain"
-        />
-      </View>
-
-      <Text style={styles.title} numberOfLines={2}>
-        {roman} · {name}
-      </Text>
-    </>
-  );
-
-  // ✅ FRONT-LAYER: Crossfade
-  const FrontVisual = () => (
-    <>
-      <View style={styles.imageBox}>
-        {prevSource ? (
-          <Animated.Image
-            source={prevSource}
-            style={styles.imageAbs}
-            resizeMode="contain"
-          />
-        ) : null}
-
-        <Animated.Image
-          source={currentSource}
-          style={[styles.imageAbs, { opacity: fade }]}
-          resizeMode="contain"
-        />
-      </View>
-
-      <Text style={styles.title} numberOfLines={2}>
-        {roman} · {name}
-      </Text>
-    </>
-  );
+  const currentSource = (currentCard as any).image;
+  const nextSource = nextCard ? (nextCard as any).image : null;
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
 
       <View style={styles.container}>
-        {/* BACK-LAYER: verhindert Schwarz */}
-        <View pointerEvents="none" style={[styles.swipeArea, styles.backLayer]}>
-          <BackVisual />
-        </View>
+        {/* SWIPE AREA */}
+        <View style={styles.swipeArea} {...panResponder.panHandlers}>
+          <View style={styles.imageBox}>
+            {/* INCOMING (hinten) */}
+            {nextSource ? (
+              <Animated.Image
+                source={nextSource}
+                style={[styles.imageAbs, { opacity: incomingOpacity }]}
+                resizeMode="contain"
+              />
+            ) : null}
 
-        {/* FRONT-LAYER: swipe + slide + crossfade */}
-        <Animated.View
-          style={[styles.swipeArea, { transform: [{ translateX }] }]}
-          {...panResponder.panHandlers}
-        >
-          <FrontVisual />
-        </Animated.View>
+            {/* OUTGOING (oben) */}
+            <Animated.Image
+              source={currentSource}
+              style={[styles.imageAbs, { opacity: outgoingOpacity }]}
+              resizeMode="contain"
+            />
+          </View>
+
+          {/* TITLES (gleiches Prinzip) */}
+          {nextCard ? (
+            <Animated.Text style={[styles.title, { opacity: incomingOpacity }]} numberOfLines={2}>
+              {nextRoman} · {nextName}
+            </Animated.Text>
+          ) : null}
+
+          <Animated.Text style={[styles.title, { opacity: outgoingOpacity }]} numberOfLines={2}>
+            {currentRoman} · {currentName}
+          </Animated.Text>
+        </View>
 
         {/* BUTTONS */}
         <View style={styles.buttonRow}>
-          <Pressable
-            style={styles.btn}
-            onPress={() => router.push(`/meaning/${id}` as any)}
-          >
+          <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${currentId}` as any)}>
             <Text style={styles.btnText}>Deutung</Text>
           </Pressable>
 
@@ -357,14 +293,6 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingHorizontal: 0,
     paddingBottom: BUTTON_BAR_H + 120,
-  },
-
-  backLayer: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
   },
 
   imageBox: {
