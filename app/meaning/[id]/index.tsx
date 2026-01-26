@@ -40,17 +40,25 @@ export default function MeaningByIdScreen() {
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <Pressable style={styles.backBtn} onPress={() => router.back()}>
-            <Text style={styles.backText} numberOfLines={1}>
-              Zurück
+          <View style={styles.headerTitleWrap}>
+            <Text style={styles.headerTitle} numberOfLines={1}>
+              {title}
             </Text>
-          </Pressable>
+          </View>
 
-          <Text style={styles.headerTitle} numberOfLines={1}>
-            {title}
-          </Text>
+          {/* Separate Linie – NUR diese mit bottom verschieben */}
+          <View
+            style={{
+              position: "absolute",
+              left: 14,
+              right: 14,
+              bottom: 22,        // <<< NUR HIER ändern, um die Linie hoch/runter zu ziehen
+              height: 1,
+              backgroundColor: "#000",
+            }}
+          />
 
-          {/* Spacer für symmetrisches Centering */}
+          {/* Spacer */}
           <View style={styles.headerRightSpacer} />
         </View>
 
@@ -68,7 +76,10 @@ export default function MeaningByIdScreen() {
 
         {/* Bottom Bar */}
         <View style={[styles.bottomBar, { paddingBottom: insets.bottom - 40 }]}>
-          <Pressable style={styles.bottomBtn} onPress={() => router.back()}>
+          <Pressable
+            style={[styles.bottomBtn, { backgroundColor: "#eedecc" }]}
+            onPress={() => router.back()}
+          >
             <Text
               style={[styles.bottomBtnText, { color: "#777" }]}
               numberOfLines={1}
@@ -83,44 +94,29 @@ export default function MeaningByIdScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#000" },
-  container: { flex: 1, backgroundColor: "#000" },
+  safe: { flex: 1, backgroundColor: "#f4fbd1" },
+  container: { flex: 1, backgroundColor: "#f4fbd1" },
 
   header: {
     height: 56,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "#111",
-    backgroundColor: "#000",
+    backgroundColor: "#f4fbd1",
   },
 
-  backBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderWidth: 1,
-    borderColor: "#333",
-    borderRadius: 6,
-    backgroundColor: "#000",
-    minWidth: 86,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  backText: {
-    color: "#888",
-    fontSize: 13,
-    letterSpacing: 1,
-    flexShrink: 0,
+  headerTitleWrap: {
+    flex: 1,
+    alignItems: "flex-end",
   },
 
   headerTitle: {
-    flex: 1,
-    textAlign: "center",
-    color: "#aaa",   // <<< gültige Farbe
+    textAlign: "right",
+    color: "#aaaaaa",
     fontSize: 14,
     letterSpacing: 1,
-    paddingHorizontal: 10,
+    paddingRight: 10,
+    marginTop: -29,
   },
 
   headerRightSpacer: {
@@ -132,9 +128,10 @@ const styles = StyleSheet.create({
     padding: 16,
     flexGrow: 1,
   },
+
   body: {
-    color: "#ddd",
-    fontSize: 16,
+    color: "#201a01",
+    fontSize: 19,
     lineHeight: 24,
   },
 
@@ -143,9 +140,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    borderTopWidth: 1,
-    borderTopColor: "#111",
-    backgroundColor: "#000",
+    backgroundColor: "#f4fbd1",
     paddingTop: 10,
     alignItems: "center",
   },
@@ -153,15 +148,15 @@ const styles = StyleSheet.create({
   bottomBtn: {
     borderWidth: 1,
     borderColor: "#333",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    backgroundColor: "#000",
+    borderRadius: 3,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
+    backgroundColor: "#eedecc",
   },
 
   bottomBtnText: {
-    color: "#aaa", // Basis, wird inline zu #777 überschrieben
-    fontSize: 14,
+    color: "#777",
+    fontSize: 10,
     letterSpacing: 1,
   },
 });
