@@ -28,7 +28,7 @@ export default function MeaningByIdScreen() {
   const title =
     meaning?.title ??
     meaning?.name ??
-    (meaning?.id ? `Deutung ${meaning.id}` : "Deutung");
+    (meaning?.id ? `Deutung ${meaning.id - 1}` : "Deutung");
 
   const text =
     meaning?.general ??
