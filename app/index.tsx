@@ -4,6 +4,7 @@ import React, { useMemo, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
+  Image,
   PanResponder,
   Pressable,
   StyleSheet,
@@ -11,6 +12,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+const _keepImage = Image; // verhindert Auto-Remove von Image
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
@@ -24,7 +27,7 @@ const BUTTON_BAR_H = 76;
 // Ritual-Fade-Dauer
 const RITUAL_FADE_MS = 4000;
 
-// Karten laden (robust: default oder named export)
+// Karten laden
 function getCards(): any[] {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const mod = require("../src/data/cards");
@@ -71,12 +74,12 @@ export default function Index() {
   const cards = useMemo(() => getCards(), []);
   const [index, setIndex] = useState(0);
 
-  // Während der Transition liegt die Zielkarte "hinten" und wird sichtbar
+  // Begrüßungs-Overlay
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  // Transition
   const [incomingIndex, setIncomingIndex] = useState<number | null>(null);
-
-  // progress: 0 = nur alte Karte sichtbar, 1 = nur neue Karte sichtbar
   const progress = useRef(new Animated.Value(0)).current;
-
   const locked = useRef(false);
 
   const clampIndex = (i: number) => Math.max(0, Math.min(i, cards.length - 1));
@@ -86,7 +89,7 @@ export default function Index() {
     if (!cards.length) return;
 
     const nextIndex = clampIndex(targetIndex);
-    if (nextIndex === index) return; // am Rand: nix
+    if (nextIndex === index) return;
 
     locked.current = true;
     setIncomingIndex(nextIndex);
@@ -100,20 +103,18 @@ export default function Index() {
       useNativeDriver: true,
     }).start(({ finished }) => {
       if (!finished) {
-        // Abbruch -> sauber zurück
         progress.setValue(0);
         setIncomingIndex(null);
         locked.current = false;
         return;
       }
 
-      // Jetzt erst "wirklich" umschalten, dann Reset
       setIndex(nextIndex);
       requestAnimationFrame(() => {
-  setIncomingIndex(null);
-  progress.setValue(0);
-  locked.current = false;
-});
+        setIncomingIndex(null);
+        progress.setValue(0);
+        locked.current = false;
+      });
     });
   };
 
@@ -129,19 +130,14 @@ export default function Index() {
 
     let r = index;
     while (r === index) r = Math.floor(Math.random() * cards.length);
-
     startRitualTo(r);
   };
 
   const panResponder = useMemo(
     () =>
       PanResponder.create({
-        onStartShouldSetPanResponder: () => false,
-        onStartShouldSetPanResponderCapture: () => false,
-
         onMoveShouldSetPanResponder: (evt, gs) => {
           if (locked.current) return false;
-
           const x0 = evt.nativeEvent.pageX;
           if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
 
@@ -152,7 +148,6 @@ export default function Index() {
 
         onMoveShouldSetPanResponderCapture: (evt, gs) => {
           if (locked.current) return false;
-
           const x0 = evt.nativeEvent.pageX;
           if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
 
@@ -160,18 +155,6 @@ export default function Index() {
           const absDy = Math.abs(gs.dy);
           return absDx > 8 && absDx > absDy + 6;
         },
-
-        onPanResponderGrant: () => {
-          // Falls gerade irgendwas läuft, Finger “nimmt Kontrolle” -> wir lassen aber NICHT ziehen,
-          // weil du "einmal wischen -> dann Ritual" willst.
-          // (Optional: hier könnte man progress abbrechen, mache ich bewusst NICHT automatisch.)
-        },
-
-        onPanResponderMove: () => {
-          // absichtlich keine Bewegung / kein Drag-Preview
-        },
-
-        onPanResponderTerminationRequest: () => true,
 
         onPanResponderRelease: (_e, gs) => {
           if (locked.current) return;
@@ -181,10 +164,6 @@ export default function Index() {
 
           if (swipeLeft) next();
           else if (swipeRight) prev();
-        },
-
-        onPanResponderTerminate: () => {
-          // nix
         },
       }),
     [cards.length, index]
@@ -212,20 +191,29 @@ export default function Index() {
     outputRange: [1, 0],
   });
 
-  const incomingOpacity = progress; // 0..1
+  const incomingOpacity = progress;
 
   const currentNum =
-    typeof (currentCard as any).id === "number" ? (currentCard as any).id : index;
+    typeof (currentCard as any).id === "number"
+      ? (currentCard as any).id
+      : index;
+
   const currentRoman = toRoman(currentNum);
-  const currentName = (currentCard as any).name ?? (currentCard as any).title ?? "Unbenannt";
+  const currentName =
+    (currentCard as any).name ?? (currentCard as any).title ?? "Unbenannt";
   const currentId = String((currentCard as any).id ?? index);
 
   const nextNum =
     nextCard && typeof (nextCard as any).id === "number"
       ? (nextCard as any).id
       : incomingIndex ?? index;
+
   const nextRoman = toRoman(nextNum);
-  const nextName = nextCard ? ((nextCard as any).name ?? (nextCard as any).title ?? "Unbenannt") : "";
+  const nextName = nextCard
+    ? ((nextCard as any).name ??
+        (nextCard as any).title ??
+        "Unbenannt")
+    : "";
 
   const currentSource = (currentCard as any).image;
   const nextSource = nextCard ? (nextCard as any).image : null;
@@ -235,10 +223,35 @@ export default function Index() {
       <StatusBar hidden />
 
       <View style={styles.container}>
+        {/* WELCOME OVERLAY */}
+        {showWelcome ? (
+          <View style={styles.welcomeOverlay}>
+            <Image
+              source={require("../assets/images/cards/Rueckseite.jpg")}
+              style={styles.welcomeImg}
+              resizeMode="contain"
+            />
+            <Pressable
+              style={styles.welcomeBtn}
+              onPress={() => {
+  if (cards.length > 1) {
+    let r = index;
+    while (r === index) r = Math.floor(Math.random() * cards.length);
+    setIndex(r);
+  }
+  setShowWelcome(false);
+}}
+            >
+              <Text style={styles.welcomeBtnText}>
+                ZIEH EINE KARTE
+              </Text>
+            </Pressable>
+          </View>
+        ) : null}
+
         {/* SWIPE AREA */}
         <View style={styles.swipeArea} {...panResponder.panHandlers}>
           <View style={styles.imageBox}>
-            {/* INCOMING (hinten) */}
             {nextSource ? (
               <Animated.Image
                 source={nextSource}
@@ -247,7 +260,6 @@ export default function Index() {
               />
             ) : null}
 
-            {/* OUTGOING (oben) */}
             <Animated.Image
               source={currentSource}
               style={[styles.imageAbs, { opacity: outgoingOpacity }]}
@@ -255,21 +267,29 @@ export default function Index() {
             />
           </View>
 
-          {/* TITLES (gleiches Prinzip) */}
           {nextCard ? (
-            <Animated.Text style={[styles.title, { opacity: incomingOpacity }]} numberOfLines={2}>
+            <Animated.Text
+              style={[styles.title, { opacity: incomingOpacity }]}
+              numberOfLines={2}
+            >
               {nextRoman} · {nextName}
             </Animated.Text>
           ) : null}
 
-          <Animated.Text style={[styles.title, { opacity: outgoingOpacity }]} numberOfLines={2}>
+          <Animated.Text
+            style={[styles.title, { opacity: outgoingOpacity }]}
+            numberOfLines={2}
+          >
             {currentRoman} · {currentName}
           </Animated.Text>
         </View>
 
         {/* BUTTONS */}
         <View style={styles.buttonRow}>
-          <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${currentId}` as any)}>
+          <Pressable
+            style={styles.btn}
+            onPress={() => router.push(`/meaning/${currentId}` as any)}
+          >
             <Text style={styles.btnText}>Deutung</Text>
           </Pressable>
 
@@ -290,8 +310,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 0,
-    paddingHorizontal: 0,
     paddingBottom: BUTTON_BAR_H + 120,
   },
 
@@ -299,6 +317,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: SCREEN_H * 0.72,
   },
+
   imageAbs: {
     ...StyleSheet.absoluteFillObject,
     width: "100%",
@@ -342,4 +361,25 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
   errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
   errorText: { color: "#bbb", fontSize: 13, paddingHorizontal: 20, textAlign: "center" },
+
+  /* WELCOME STYLES */
+  welcomeOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "#05050A",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 18,
+    zIndex: 9999,
+    elevation: 9999,
+  },
+  welcomeImg: { width: "92%", height: "70%" },
+  welcomeBtn: {
+    marginTop: 18,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.25)",
+  },
+  welcomeBtnText: { color: "white", letterSpacing: 1.2 },
 });
