@@ -174,7 +174,7 @@ export default function Index() {
 
   if (!cards.length || !currentCard) {
     return (
-      <SafeAreaView style={styles.safe} edges={["top"]}>
+      <SafeAreaView style={styles.safe}>
         <StatusBar hidden />
         <View style={styles.center}>
           <Text style={styles.errorTitle}>Cards fehlen / Import stimmt nicht</Text>
@@ -227,9 +227,19 @@ export default function Index() {
         {showWelcome ? (
           <View style={styles.welcomeOverlay}>
             <Image
-              source={require("../assets/images/cards/Rueckseite.jpg")}
-              style={styles.welcomeImg}
-              resizeMode="contain"
+  source={require("../assets/images/cards/Rueckseite.jpg")}
+  style={{
+  width: "100%",
+  height: "100%",
+  transform: [
+    { scale: 1.10 },
+    { translateY: -110
+
+    },],
+  }}
+  resizeMode="contain"
+
+
             />
             <Pressable
               style={styles.welcomeBtn}
@@ -358,7 +368,9 @@ const styles = StyleSheet.create({
 
   btnText: { color: "#888", fontSize: 13, letterSpacing: 1 },
 
-  center: { flex: 1, alignItems: "center", justifyContent: "center" },
+  center: { flex: 1, alignItems: "center", justifyContent: "flex-start",
+    paddingTop: 40,
+ },
   errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
   errorText: { color: "#bbb", fontSize: 13, paddingHorizontal: 20, textAlign: "center" },
 
@@ -367,19 +379,20 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "#05050A",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     paddingHorizontal: 18,
+    paddingTop: -40,
     zIndex: 9999,
     elevation: 9999,
   },
-  welcomeImg: { width: "92%", height: "70%" },
+  welcomeImg: { width: "100%", height: "78%" },
   welcomeBtn: {
-    marginTop: 18,
+    marginTop: -288,
     paddingHorizontal: 18,
-    paddingVertical: 12,
-    borderRadius: 10,
+    paddingVertical: 8,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.25)",
   },
-  welcomeBtnText: { color: "white", letterSpacing: 1.2 },
+  welcomeBtnText: { color: "grey", letterSpacing: 1.2 },
 });
