@@ -27,8 +27,8 @@ const RITUAL_FADE_MS = 4000;
 
 // ===== WELCOME FEINTUNING (HIER DREHST DU NUR ZAHLEN) =====
 const WELCOME_SCALE = 1.12; // höher = weniger Rand, aber mehr „Zoom“
-const WELCOME_TRANSLATE_Y = -110; // negativer = höher Richtung Selfiekamera
-const WELCOME_BTN_MARGIN_TOP = -180; // negativer = Button höher ins Bild
+const WELCOME_TRANSLATE_Y = -177; // negativer = höher Richtung Selfiekamera
+const WELCOME_BTN_MARGIN_TOP = -266; // negativer = Button höher ins Bild
 
 // Karten laden
 function getCards(): any[] {
@@ -286,9 +286,9 @@ export default function Index() {
             {/* INCOMING (hinten) */}
             {nextSource ? (
               <Animated.Image
-                source={nextSource}
-                style={[styles.imageAbs, { opacity: incomingOpacity }]}
-                resizeMode="contain"
+  source={nextSource}
+  style={[styles.imageAbs, { opacity: incomingOpacity }]}
+  resizeMode="contain"
               />
             ) : null}
 
