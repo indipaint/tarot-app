@@ -13,8 +13,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const _keepImage = Image; // verhindert Auto-Remove von Image
-
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
 // Swipe-Tuning
@@ -26,6 +24,11 @@ const BUTTON_BAR_H = 76;
 
 // Ritual-Fade-Dauer
 const RITUAL_FADE_MS = 4000;
+
+// ===== WELCOME FEINTUNING (HIER DREHST DU NUR ZAHLEN) =====
+const WELCOME_SCALE = 1.12; // höher = weniger Rand, aber mehr „Zoom“
+const WELCOME_TRANSLATE_Y = -110; // negativer = höher Richtung Selfiekamera
+const WELCOME_BTN_MARGIN_TOP = -180; // negativer = Button höher ins Bild
 
 // Karten laden
 function getCards(): any[] {
@@ -110,6 +113,8 @@ export default function Index() {
       }
 
       setIndex(nextIndex);
+
+      // wichtig: erst im nächsten Frame resetten -> stabil, kein Flicker
       requestAnimationFrame(() => {
         setIncomingIndex(null);
         progress.setValue(0);
@@ -121,16 +126,36 @@ export default function Index() {
   const next = () => startRitualTo(index + 1);
   const prev = () => startRitualTo(index - 1);
 
-  const randomDraw = () => {
+  // ===== Deck ohne Dopplung (für Zieh-Button) =====
+  const deckRef = useRef<number[]>([]);
+  const deckPosRef = useRef(0);
+
+  const shuffleInPlace = (arr: number[]) => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  };
+
+  const rebuildDeck = (excludeIndex?: number) => {
+    const arr = Array.from({ length: cards.length }, (_, i) => i);
+    const filtered =
+      typeof excludeIndex === "number" ? arr.filter((i) => i !== excludeIndex) : arr;
+    shuffleInPlace(filtered);
+    deckRef.current = filtered;
+    deckPosRef.current = 0;
+  };
+
+  const drawUnique = () => {
     if (!cards.length) return;
-    if (cards.length === 1) {
-      setIndex(0);
-      return;
+
+    // Deck leer/aufgebraucht -> neu mischen (ohne aktuelle Karte)
+    if (deckRef.current.length === 0 || deckPosRef.current >= deckRef.current.length) {
+      rebuildDeck(index);
     }
 
-    let r = index;
-    while (r === index) r = Math.floor(Math.random() * cards.length);
-    startRitualTo(r);
+    const nextIdx = deckRef.current[deckPosRef.current++];
+    startRitualTo(nextIdx);
   };
 
   const panResponder = useMemo(
@@ -138,6 +163,7 @@ export default function Index() {
       PanResponder.create({
         onMoveShouldSetPanResponder: (evt, gs) => {
           if (locked.current) return false;
+
           const x0 = evt.nativeEvent.pageX;
           if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
 
@@ -148,6 +174,7 @@ export default function Index() {
 
         onMoveShouldSetPanResponderCapture: (evt, gs) => {
           if (locked.current) return false;
+
           const x0 = evt.nativeEvent.pageX;
           if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
 
@@ -174,7 +201,7 @@ export default function Index() {
 
   if (!cards.length || !currentCard) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={["top"]}>
         <StatusBar hidden />
         <View style={styles.center}>
           <Text style={styles.errorTitle}>Cards fehlen / Import stimmt nicht</Text>
@@ -190,14 +217,10 @@ export default function Index() {
     inputRange: [0, 1],
     outputRange: [1, 0],
   });
-
   const incomingOpacity = progress;
 
   const currentNum =
-    typeof (currentCard as any).id === "number"
-      ? (currentCard as any).id
-      : index;
-
+    typeof (currentCard as any).id === "number" ? (currentCard as any).id : index;
   const currentRoman = toRoman(currentNum);
   const currentName =
     (currentCard as any).name ?? (currentCard as any).title ?? "Unbenannt";
@@ -207,16 +230,15 @@ export default function Index() {
     nextCard && typeof (nextCard as any).id === "number"
       ? (nextCard as any).id
       : incomingIndex ?? index;
-
   const nextRoman = toRoman(nextNum);
   const nextName = nextCard
-    ? ((nextCard as any).name ??
-        (nextCard as any).title ??
-        "Unbenannt")
+    ? ((nextCard as any).name ?? (nextCard as any).title ?? "Unbenannt")
     : "";
 
   const currentSource = (currentCard as any).image;
   const nextSource = nextCard ? (nextCard as any).image : null;
+
+  const isTransitioning = incomingIndex !== null;
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -227,34 +249,33 @@ export default function Index() {
         {showWelcome ? (
           <View style={styles.welcomeOverlay}>
             <Image
-  source={require("../assets/images/cards/Rueckseite.jpg")}
-  style={{
-  width: "100%",
-  height: "100%",
-  transform: [
-    { scale: 1.10 },
-    { translateY: -110
-
-    },],
-  }}
-  resizeMode="contain"
-
-
+              source={require("../assets/images/cards/Rueckseite.jpg")}
+              style={{
+                width: "100%",
+                height: "100%",
+                transform: [
+                  { scale: WELCOME_SCALE },
+                  { translateY: WELCOME_TRANSLATE_Y },
+                ],
+              }}
+              resizeMode="contain"
             />
+
             <Pressable
-              style={styles.welcomeBtn}
+              style={[styles.welcomeBtn, { marginTop: WELCOME_BTN_MARGIN_TOP }]}
               onPress={() => {
-  if (cards.length > 1) {
-    let r = index;
-    while (r === index) r = Math.floor(Math.random() * cards.length);
-    setIndex(r);
-  }
-  setShowWelcome(false);
-}}
+                if (cards.length > 1) {
+                  let r = index;
+                  while (r === index) r = Math.floor(Math.random() * cards.length);
+                  setIndex(r);
+                  rebuildDeck(r); // verhindert Sofort-Repeat bei "Zieh"
+                } else {
+                  rebuildDeck(index);
+                }
+                setShowWelcome(false);
+              }}
             >
-              <Text style={styles.welcomeBtnText}>
-                ZIEH EINE KARTE
-              </Text>
+              <Text style={styles.welcomeBtnText}>ZIEH EINE KARTE</Text>
             </Pressable>
           </View>
         ) : null}
@@ -262,6 +283,7 @@ export default function Index() {
         {/* SWIPE AREA */}
         <View style={styles.swipeArea} {...panResponder.panHandlers}>
           <View style={styles.imageBox}>
+            {/* INCOMING (hinten) */}
             {nextSource ? (
               <Animated.Image
                 source={nextSource}
@@ -270,6 +292,7 @@ export default function Index() {
               />
             ) : null}
 
+            {/* OUTGOING (oben) */}
             <Animated.Image
               source={currentSource}
               style={[styles.imageAbs, { opacity: outgoingOpacity }]}
@@ -277,33 +300,25 @@ export default function Index() {
             />
           </View>
 
-          {nextCard ? (
-            <Animated.Text
-              style={[styles.title, { opacity: incomingOpacity }]}
-              numberOfLines={2}
-            >
+          {/* TITEL-FIX: nur 1 Text-Layer (kein Flash) */}
+          {isTransitioning ? (
+            <Animated.Text style={[styles.title, { opacity: incomingOpacity }]} numberOfLines={2}>
               {nextRoman} · {nextName}
             </Animated.Text>
-          ) : null}
-
-          <Animated.Text
-            style={[styles.title, { opacity: outgoingOpacity }]}
-            numberOfLines={2}
-          >
-            {currentRoman} · {currentName}
-          </Animated.Text>
+          ) : (
+            <Text style={styles.title} numberOfLines={2}>
+              {currentRoman} · {currentName}
+            </Text>
+          )}
         </View>
 
         {/* BUTTONS */}
         <View style={styles.buttonRow}>
-          <Pressable
-            style={styles.btn}
-            onPress={() => router.push(`/meaning/${currentId}` as any)}
-          >
+          <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${currentId}` as any)}>
             <Text style={styles.btnText}>Deutung</Text>
           </Pressable>
 
-          <Pressable style={styles.btn} onPress={randomDraw}>
+          <Pressable style={styles.btn} onPress={drawUnique}>
             <Text style={styles.btnText}>Zieh</Text>
           </Pressable>
         </View>
@@ -368,9 +383,7 @@ const styles = StyleSheet.create({
 
   btnText: { color: "#888", fontSize: 13, letterSpacing: 1 },
 
-  center: { flex: 1, alignItems: "center", justifyContent: "flex-start",
-    paddingTop: 40,
- },
+  center: { flex: 1, alignItems: "center", justifyContent: "center" },
   errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
   errorText: { color: "#bbb", fontSize: 13, paddingHorizontal: 20, textAlign: "center" },
 
@@ -379,20 +392,20 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "#05050A",
     alignItems: "center",
-    justifyContent: "flex-start",
-    paddingHorizontal: 18,
-    paddingTop: -40,
+    justifyContent: "center",
+    paddingHorizontal: 0,
     zIndex: 9999,
     elevation: 9999,
   },
-  welcomeImg: { width: "100%", height: "78%" },
+
   welcomeBtn: {
-    marginTop: -288,
     paddingHorizontal: 18,
-    paddingVertical: 8,
-    borderRadius: 5,
+    paddingVertical: 10,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.25)",
+    borderColor: "rgba(180,180,255,0.6)",
+    backgroundColor: "rgba(40,40,80,0.6)",
   },
-  welcomeBtnText: { color: "grey", letterSpacing: 1.2 },
+
+  welcomeBtnText: { color: "#eaeaff", letterSpacing: 1.4, fontWeight: "700" },
 });
