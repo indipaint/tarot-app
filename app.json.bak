@@ -1,8 +1,5 @@
 {
   "expo": {
-    "name": "Tarot App",
-    "slug": "tarot-app",
-    "icon": "./assets/icon.png",
     "android": {
       "backgroundColor": "#000000",
       "package": "com.indipaint.tarotapp"

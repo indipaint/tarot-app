@@ -74,7 +74,20 @@ function toRoman(n: number) {
 export default function Index() {
   const router = useRouter();
 
-  const cards = useMemo(() => getCards(), []);
+  const cards = useMemo(() => {
+  const all = getCards();
+
+  // Welcome/Rückseite darf NICHT Teil des Decks sein
+  return all.filter((c: any) => {
+    const img = c?.image;
+    // wenn image ein require ist, ist es eine Zahl; dann lassen wir es drin
+    if (typeof img !== "string") return true;
+
+    const s = img.toLowerCase();
+    return !s.includes("rueckseite");
+  });
+}, []);
+
   const [index, setIndex] = useState(0);
 
   // Begrüßungs-Overlay

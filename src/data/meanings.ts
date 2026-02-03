@@ -71,7 +71,7 @@ Wahrheit entfaltet sich zur richtigen Zeit.`,
 
   {
     id: 4,
-    general: `DIE KÖNIGIN (DIE HERRSCHERIN)
+    general: `DIE KÖNIGIN 
 Die Herrscherin steht für innere Fülle, Selbstwert und nährende Präsenz. Psychologisch verkörpert sie die Fähigkeit, sich selbst und andere zu halten, ohne sich dabei zu verlieren. Sie kennt ihren Wert – nicht durch Leistung, sondern durch Sein. Diese Karte erscheint oft, wenn Themen wie Selbstfürsorge, Kreativität, Beziehung oder Körperlichkeit in den Vordergrund treten. Sie lädt dazu ein, das Leben nicht zu kontrollieren, sondern zu empfangen und zu gestalten – mit Vertrauen, Geduld und innerer Ruhe. Die Löwen an ihrer Seite zeigen: Sanftheit und Stärke schließen sich nicht aus. Wahre Autorität entsteht aus innerer Sicherheit.
 
 Spirituell ist die Herrscherin der Ausdruck der schöpferischen Urkraft des Lebens. Sie ist Mutter, Erde, Quelle. Alles, was wächst, gedeiht durch ihre nährende Energie. Sie regiert nicht durch Macht, sondern durch Verbundenheit. Ihr Reich ist das Reich des Herzens. Die Krone steht für spirituelle Souveränität – das Wissen um die eigene Würde und den eigenen Platz im großen Ganzen. Diese Karte erinnert daran, dass wahres Wachstum aus Liebe entsteht – nicht aus Zwang.
@@ -91,7 +91,7 @@ Würde, Liebe und Vertrauen sind gegenwärtig.`,
 
   {
     id: 5,
-    general: `DER KAISER (DER KÖNIG)
+    general: `DER KÖNIG
 Psychologisch steht diese Karte für innere Ordnung, Verantwortung und Selbstführung. Der Kaiser verkörpert die Fähigkeit, Struktur ins eigene Leben zu bringen und Entscheidungen aus Klarheit statt aus Reaktion zu treffen. Er zeigt den Moment, in dem innere Reife entsteht. Grenzen werden gesetzt – nicht aus Härte, sondern aus Selbstachtung. Verantwortung wird übernommen, ohne sich zu verhärten. Die beiden Figuren im Hintergrund können als innere Stimmen gelesen werden: Erfahrung und Gewissen, die den Herrscher flankieren. Sie erinnern daran, dass wahre Autorität nicht isoliert ist, sondern aus reflektierter Weisheit entsteht.
 
 Spirituell repräsentiert der Kaiser das Prinzip der Verkörperung: Geistige Erkenntnis wird in der materiellen Welt verankert. Er steht für göttliche Ordnung im Irdischen – für Stabilität, Schutz und Führung. Die Krone symbolisiert Bewusstsein, das Zepter den Willen, der Thron die innere Mitte. Diese Karte lädt ein, die eigene Macht nicht zu fürchten, sondern bewusst, ruhig und dienend zu leben. Der Herrscher fragt nicht: Was will ich kontrollieren? Sondern: Was darf durch mich in Ordnung kommen?
@@ -179,7 +179,7 @@ nicht als Schwäche, sondern als Orientierung.`,
 Diese Karte zeigt dir eine Form von Stärke, die nicht laut ist.
 Sie entsteht nicht durch Durchsetzung, sondern durch innere Übereinstimmung.
 
-Psychologisch steht diese Karte für die Fähigkeit, die eigenen Instinkte anzunehmen, ohne von ihnen beherrscht zu werden. Der Löwe verkörpert Trieb, Leidenschaft, Angst und Vitalität. Die Frau begegnet ihm nicht mit Zwang, sondern mit Nähe. Das weist auf eine reife Persönlichkeit hin, die ihre inneren Impulse kennt und ihnen mit Bewusstheit begegnet.
+Psychologisch steht diese Karte für die Fähigkeit, die eigenen Instinkte anzunehmen, ohne von ihnen beherrscht zu werden. Der Löwe verkörpert Trieb, Leidenschaft und Vitalität. Die Frau begegnet ihm nicht mit Zwang, sondern mit Nähe. Das weist auf eine reife Persönlichkeit hin, die ihre inneren Impulse kennt und ihnen mit Bewusstheit begegnet.
 
 Hier wird die Kraft durch eine Frau dargestellt, die einen Löwen zähmt – ein Symbol für die Beherrschung der eigenen Instinkte und Leidenschaften durch Willenskraft, nicht durch rohe Gewalt.
 
