@@ -74,19 +74,13 @@ function toRoman(n: number) {
 export default function Index() {
   const router = useRouter();
 
-  const cards = useMemo(() => {
+const cards = useMemo(() => {
   const all = getCards();
 
-  // Welcome/Rückseite darf NICHT Teil des Decks sein
-  return all.filter((c: any) => {
-    const img = c?.image;
-    // wenn image ein require ist, ist es eine Zahl; dann lassen wir es drin
-    if (typeof img !== "string") return true;
-
-    const s = img.toLowerCase();
-    return !s.includes("rueckseite");
-  });
+  // Rückseite / Welcome-Karte darf NIE im Spieldeck sein
+  return all.filter((c: any) => String(c?.id) !== "BACK");
 }, []);
+
 
   const [index, setIndex] = useState(0);
 
@@ -232,18 +226,26 @@ export default function Index() {
   });
   const incomingOpacity = progress;
 
-  const currentNum =
-    typeof (currentCard as any).id === "number" ? (currentCard as any).id : index;
-  const currentRoman = toRoman(currentNum);
+  // Prefix (Arkana: römisch, Stäbe: 01..14) – NUR aus der Karten-ID, nie aus Index
+  const displayPrefix = (card: any) => {
+    const id = String(card?.id ?? "");
+
+    // Arkana: "01".."22" => römisch
+    if (/^\d+$/.test(id)) return toRoman(Number(id));
+
+    // Stäbe: "W01".."W14" => "01".."14"
+    if (id.startsWith("W")) return id.slice(1);
+
+    return "";
+  };
+
+  const currentPrefix = displayPrefix(currentCard);
+  const nextPrefix = nextCard ? displayPrefix(nextCard) : "";
+
   const currentName =
     (currentCard as any).name ?? (currentCard as any).title ?? "Unbenannt";
   const currentId = String((currentCard as any).id ?? index);
 
-  const nextNum =
-    nextCard && typeof (nextCard as any).id === "number"
-      ? (nextCard as any).id
-      : incomingIndex ?? index;
-  const nextRoman = toRoman(nextNum);
   const nextName = nextCard
     ? ((nextCard as any).name ?? (nextCard as any).title ?? "Unbenannt")
     : "";
@@ -299,9 +301,9 @@ export default function Index() {
             {/* INCOMING (hinten) */}
             {nextSource ? (
               <Animated.Image
-  source={nextSource}
-  style={[styles.imageAbs, { opacity: incomingOpacity }]}
-  resizeMode="contain"
+                source={nextSource}
+                style={[styles.imageAbs, { opacity: incomingOpacity }]}
+                resizeMode="contain"
               />
             ) : null}
 
@@ -313,16 +315,23 @@ export default function Index() {
             />
           </View>
 
-          {/* TITEL-FIX: nur 1 Text-Layer (kein Flash) */}
-          {isTransitioning ? (
-            <Animated.Text style={[styles.title, { opacity: incomingOpacity }]} numberOfLines={2}>
-              {nextRoman} · {nextName}
+          {/* TITEL: exakt wie Bilder überblenden -> kein "1 weiter" Gefühl */}
+          <View style={styles.titleWrap}>
+            {/* INCOMING Titel */}
+            {nextCard ? (
+              <Animated.Text style={[styles.title, { opacity: incomingOpacity }]} numberOfLines={2}>
+                {nextPrefix} · {nextName}
+              </Animated.Text>
+            ) : null}
+
+            {/* OUTGOING Titel */}
+            <Animated.Text
+              style={[styles.title, { opacity: outgoingOpacity, position: "absolute" }]}
+              numberOfLines={2}
+            >
+              {currentPrefix} · {currentName}
             </Animated.Text>
-          ) : (
-            <Text style={styles.title} numberOfLines={2}>
-              {currentRoman} · {currentName}
-            </Text>
-          )}
+          </View>
         </View>
 
         {/* BUTTONS */}
@@ -362,8 +371,17 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 
+titleWrap: {
+  marginTop: 8,
+  height: 44,          // <-- statt 24 (2 Zeilen à ~20 + Luft)
+  alignItems: "center",
+  justifyContent: "center",
+  overflow: "hidden",
+  width: "100%",
+  },
+
   title: {
-    marginTop: 8,
+    marginTop: 0,
     fontSize: 17,
     lineHeight: 20,
     color: "#888",

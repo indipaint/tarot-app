@@ -21,6 +21,24 @@ const cards = [
   { id: "20", name: "Die Sonne", image: require("../../assets/images/cards/20.jpg") },
   { id: "21", name: "Das Gericht", image: require("../../assets/images/cards/21.jpg") },
   { id: "22", name: "Die Welt", image: require("../../assets/images/cards/22.jpg") },
+    // Stäbe (Wands)
+  // Stäbe (Wands)
+{ id: "W01", name: "Ass der Stäbe", image: require("../../assets/images/cards/W01.jpg") },
+{ id: "W02", name: "Zwei der Stäbe", image: require("../../assets/images/cards/W02.jpg") },
+{ id: "W03", name: "Drei der Stäbe", image: require("../../assets/images/cards/W03.jpg") },
+{ id: "W04", name: "Vier der Stäbe", image: require("../../assets/images/cards/W04.jpg") },
+{ id: "W05", name: "Fünf der Stäbe", image: require("../../assets/images/cards/W05.jpg") },
+{ id: "W06", name: "Sechs der Stäbe", image: require("../../assets/images/cards/W06.jpg") },
+{ id: "W07", name: "Sieben der Stäbe", image: require("../../assets/images/cards/W07.jpg") },
+{ id: "W08", name: "Acht der Stäbe", image: require("../../assets/images/cards/W08.jpg") },
+{ id: "W09", name: "Neun der Stäbe", image: require("../../assets/images/cards/W09.jpg") },
+{ id: "W10", name: "Zehn der Stäbe", image: require("../../assets/images/cards/W10.jpg") },
+{ id: "W11", name: "Bube der Stäbe", image: require("../../assets/images/cards/W11.jpg") },
+{ id: "W12", name: "Ritter der Stäbe", image: require("../../assets/images/cards/W12.jpg") },
+{ id: "W13", name: "Königin der Stäbe", image: require("../../assets/images/cards/W13.jpg") },
+{ id: "W14", name: "König der Stäbe", image: require("../../assets/images/cards/W14.jpg") },
+
+
   { id: "BACK", name: "Rückseite", image: require("../../assets/images/cards/Rueckseite.jpg") },
 ];
 
