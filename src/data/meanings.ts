@@ -4,6 +4,7 @@ export const MEANINGS = [
     general: `DER NARR
 Psychologisch steht der Narr für den Anfang aller Wege –
 für den Moment, in dem etwas Neues ruft, ohne dass der Ausgang bereits bekannt ist.
+
 Psychologisch symbolisiert er den Mut, dem inneren Impuls zu folgen, auch wenn
 noch kein Plan existiert. Er verkörpert Spontaneität, Offenheit und Vertrauen in
 das Leben. Der Narr denkt nicht in Grenzen oder Sicherheiten – er folgt seiner
@@ -12,6 +13,7 @@ oder wenn es darum geht, alte Muster loszulassen, um Raum für Wachstum zu schaf
 Der Narr erinnert daran, dass Entwicklung nicht immer aus Kontrolle entsteht,
 sondern aus der Bereitschaft, sich dem Unbekannten zu öffnen.
 
+
 Spirituell steht der Narr für den reinen Seelenzustand vor jeder Erfahrung. Er ist
 frei von Erwartungen, frei von Angst, frei von Vergangenheit. Er vertraut dem
 Leben vollständig – nicht aus Naivität, sondern aus tiefer Verbundenheit mit dem
@@ -19,6 +21,7 @@ Fluss des Lebens. Der Abgrund vor ihm ist kein Abgrund, sondern ein Übergang.
 Die Blume in seiner Hand steht für Unschuld und Vertrauen, der kleine weiße Hund
 für die begleitende Intuition, die ihn führt. Der Narr weiß: Jeder Schritt ist
 Teil eines größeren Plans, auch wenn er ihn noch nicht erkennt.
+
 
 Essenz der Karte
 „Ich vertraue dem Leben und gehe meinen Weg mit offenem Herzen.“
@@ -36,11 +39,13 @@ Gestalter meines Lebens. Der Magier zeigt, dass innere Klarheit und Konzentratio
 notwendig sind, um Ziele zu erreichen. Er steht für Selbstvertrauen, mentale Stärke
 und die bewusste Nutzung der eigenen Talente.
 
+
 Spirituell verkörpert der Magier die Verbindung zwischen Himmel und Erde. Eine Hand
 zeigt nach oben, die andere nach unten – „wie oben, so unten“. Er ist der Kanal, durch
 den geistige Impulse in die materielle Welt fließen. Der Magier erinnert daran, dass
 du bereits alles in dir trägst, was du brauchst, um deine Realität zu erschaffen.
 Seine Werkzeuge stehen für die Elemente und für die vollständige Ausstattung deiner Seele.
+
 
 Essenz der Karte
 „Ich erkenne meine Schöpferkraft.“
@@ -53,7 +58,9 @@ Essenz der Karte
     general: `DIE HOHEPRIESTERIN
 Die Hohepriesterin steht psychologisch für das innere Wissen, das jenseits von Logik und Analyse wirkt. Sie symbolisiert die Fähigkeit, nach innen zu lauschen und den leisen Impulsen zu vertrauen. Sie erscheint oft, wenn äußere Antworten nicht weiterführen – wenn Stille, Geduld und Selbstbeobachtung notwendig sind. Diese Karte fordert nicht zum Handeln auf, sondern zum Innehalten. Die Hohepriesterin zeigt, dass nicht alles verstanden werden muss, um wahr zu sein. Manche Erkenntnisse entfalten sich erst, wenn Kontrolle losgelassen wird.
 
+
 Spirituell ist die Hohepriesterin die Hüterin der Mysterien. Sie sitzt zwischen den Welten – zwischen Bewusstsein und Unterbewusstsein, zwischen Sichtbarem und Unsichtbarem. Der Mond über ihrem Haupt weist auf zyklisches Wissen, Intuition und weibliche Weisheit hin. Das Buch in ihren Händen ist kein Buch des Lernens, sondern des Erinnerns. Alles, was gesucht wird, ist bereits vorhanden. Diese Karte lädt dazu ein, der eigenen inneren Stimme zu vertrauen und den Zugang zu tieferen Ebenen des Seins zu öffnen – still, empfänglich, urteilsfrei.
+
 
 Essenz der Karte
 Stille ist Weisheit.
@@ -61,6 +68,7 @@ Intuition ist Führung.
 Nichtwissen ist Raum für Erkenntnis.
 Die Hohepriesterin erinnert daran, dass Wahrheit nicht immer laut ist –
 sie offenbart sich im Lauschen.
+
 
 Affirmation zur Hohepriesterin
 Innere Weisheit ist jederzeit zugänglich.
@@ -74,13 +82,16 @@ Wahrheit entfaltet sich zur richtigen Zeit.`,
     general: `DIE KÖNIGIN 
 Die Herrscherin steht für innere Fülle, Selbstwert und nährende Präsenz. Psychologisch verkörpert sie die Fähigkeit, sich selbst und andere zu halten, ohne sich dabei zu verlieren. Sie kennt ihren Wert – nicht durch Leistung, sondern durch Sein. Diese Karte erscheint oft, wenn Themen wie Selbstfürsorge, Kreativität, Beziehung oder Körperlichkeit in den Vordergrund treten. Sie lädt dazu ein, das Leben nicht zu kontrollieren, sondern zu empfangen und zu gestalten – mit Vertrauen, Geduld und innerer Ruhe. Die Löwen an ihrer Seite zeigen: Sanftheit und Stärke schließen sich nicht aus. Wahre Autorität entsteht aus innerer Sicherheit.
 
+
 Spirituell ist die Herrscherin der Ausdruck der schöpferischen Urkraft des Lebens. Sie ist Mutter, Erde, Quelle. Alles, was wächst, gedeiht durch ihre nährende Energie. Sie regiert nicht durch Macht, sondern durch Verbundenheit. Ihr Reich ist das Reich des Herzens. Die Krone steht für spirituelle Souveränität – das Wissen um die eigene Würde und den eigenen Platz im großen Ganzen. Diese Karte erinnert daran, dass wahres Wachstum aus Liebe entsteht – nicht aus Zwang.
+
 
 Essenz der Karte
 Fülle entsteht durch Annahme.
 Liebe ist schöpferische Kraft.
 Sanftheit ist Stärke.
 Die Herrscherin lädt ein, das Leben zu umarmen, so wie es ist.
+
 
 Affirmation zur Herrscherin
 Fülle entfaltet sich mühelos.
@@ -94,13 +105,16 @@ Würde, Liebe und Vertrauen sind gegenwärtig.`,
     general: `DER KÖNIG
 Psychologisch steht diese Karte für innere Ordnung, Verantwortung und Selbstführung. Der Kaiser verkörpert die Fähigkeit, Struktur ins eigene Leben zu bringen und Entscheidungen aus Klarheit statt aus Reaktion zu treffen. Er zeigt den Moment, in dem innere Reife entsteht. Grenzen werden gesetzt – nicht aus Härte, sondern aus Selbstachtung. Verantwortung wird übernommen, ohne sich zu verhärten. Die beiden Figuren im Hintergrund können als innere Stimmen gelesen werden: Erfahrung und Gewissen, die den Herrscher flankieren. Sie erinnern daran, dass wahre Autorität nicht isoliert ist, sondern aus reflektierter Weisheit entsteht.
 
+
 Spirituell repräsentiert der Kaiser das Prinzip der Verkörperung: Geistige Erkenntnis wird in der materiellen Welt verankert. Er steht für göttliche Ordnung im Irdischen – für Stabilität, Schutz und Führung. Die Krone symbolisiert Bewusstsein, das Zepter den Willen, der Thron die innere Mitte. Diese Karte lädt ein, die eigene Macht nicht zu fürchten, sondern bewusst, ruhig und dienend zu leben. Der Herrscher fragt nicht: Was will ich kontrollieren? Sondern: Was darf durch mich in Ordnung kommen?
+
 
 Essenz der Karte
 Stärke durch Klarheit.
 Autorität durch Verantwortung.
 Führung aus innerer Ruhe.
 Der König erinnert daran: Wahre Macht ist leise, stabil und verlässlich.
+
 
 Affirmation zum Herrscher
 Innere Klarheit schafft äußere Ordnung.
@@ -121,11 +135,13 @@ Im Schatten kann er auf starre Glaubenssätze, Dogmatismus oder die Angst hinwei
 Spirituelle Ebene
 Spirituell ist der Hohepriester die Brücke zwischen Himmel und Erde. Er erinnert dich daran, dass Wahrheit nicht nur individuell, sondern auch überpersönlich ist. Du bist bereit, tiefer zu verstehen – nicht durch neue Informationen, sondern durch Hingabe und innere Ausrichtung. Seine Haltung ist empfangend und segnend zugleich: Was durch dich wirkt, kommt nicht nur aus dir. Er lädt dich ein, deinem inneren Lehrer zu vertrauen – jener stillen Stimme, die nicht laut überzeugt, sondern ruhig weiß.
 
+
 Essenz der Karte
 Der Hohepriester fragt dich:
 Woran glaubst du wirklich – jenseits von Meinungen und Ansichten?
 Welche innere Ordnung trägt dich, wenn alles Äußere schwankt?
 Bist du bereit, zu deiner Wahrheit zu stehen und sie vielleicht weiterzugeben?
+
 
 Affirmation
 „Ich vertraue meiner inneren Weisheit.
@@ -137,12 +153,14 @@ Meine Werte tragen mich, und aus meiner inneren Ordnung heraus treffe ich klare,
     general: `DIE LIEBENDEN
 Diese Karte spricht nicht von Romantik, sondern von Ausrichtung. Von der stillen Frage, ob das, was sich verbindet, auch dem Innersten dient. Über den Liebenden schwebt der Engel Raphael – kaum greifbar, nicht dominierend, eher wie ein atmender Raum. Er erinnert: Diese Verbindung steht unter Schutz, wenn sie aus Wahrheit entsteht.
 
+
 Psychologisch zeigt sich hier ein fein abgestimmtes Dreieck:
 Der Mann blickt zur Frau – das wache Bewusstsein schafft Beziehung, Erdung, Fürsorge.
 Die Frau blickt zum Engel – das Unbewusste richtet sich nach oben, lauscht einer tieferen Ordnung.
 Zwischen ihnen entsteht Spannung – nicht als Konflikt, sondern als lebendige Polarität.
 
 Raphael wirkt als vermittelnde Kraft. Er heilt nicht durch Eingreifen, sondern durch Erinnerung: Dass Gegensätze sich nicht bekämpfen müssen, um sich zu vereinen. Dass Nähe nicht Verschmelzung bedeutet, sondern Verbindung.
+
 
 Spirituell steht der Engel für das Element Luft – für Atem, Geist, Sprache. Er flüstert keine Antworten, sondern klärt den inneren Raum, in dem Entscheidung möglich wird. Hier wird nicht aus Trieb gewählt, nicht aus Angst, nicht aus Mangel.
 
@@ -158,6 +176,7 @@ Der Engel erinnert daran, dass jede echte Verbindung heilend wirkt – nicht wei
 Diese Karte spricht von gerichteter Bewegung.
 Nicht von Hast, sondern von innerer Bündelung.
 Der Wagen fährt schneller, weil Gegensätze gehalten werden: die weißen und dunklen Kräfte ziehen zugleich, doch der Lenker bleibt zentriert.
+
 
 Psychologisch zeigt sich hier die Fähigkeit, widersprüchliche Impulse nicht zu unterdrücken, sondern bewusst zu führen.
 
@@ -179,11 +198,14 @@ nicht als Schwäche, sondern als Orientierung.`,
 Diese Karte zeigt dir eine Form von Stärke, die nicht laut ist.
 Sie entsteht nicht durch Durchsetzung, sondern durch innere Übereinstimmung.
 
+
 Psychologisch steht diese Karte für die Fähigkeit, die eigenen Instinkte anzunehmen, ohne von ihnen beherrscht zu werden. Der Löwe verkörpert Trieb, Leidenschaft und Vitalität. Die Frau begegnet ihm nicht mit Zwang, sondern mit Nähe. Das weist auf eine reife Persönlichkeit hin, die ihre inneren Impulse kennt und ihnen mit Bewusstheit begegnet.
 
 Hier wird die Kraft durch eine Frau dargestellt, die einen Löwen zähmt – ein Symbol für die Beherrschung der eigenen Instinkte und Leidenschaften durch Willenskraft, nicht durch rohe Gewalt.
 
+
 Spirituell erinnert diese Karte daran, dass wahre Macht leise ist. Sie beruht auf Liebe, Geduld und Präsenz. Die Frau zwingt den Löwen nicht – sie hält ihn. In diesem Halten liegt Vertrauen, in diesem Vertrauen Frieden.
+
 
 Essenz:
 Sei stark, ohne hart zu werden.
@@ -195,10 +217,13 @@ Wenn Herz und Instinkt zusammenwirken, entsteht eine Kraft, die trägt – nicht
     general: `DER EREMIT
 Der Eremit ist der Archetyp des inneren Rückzugs, nicht der Flucht.
 Er erscheint, wenn äußere Antworten nicht mehr tragen und die Orientierung nach innen verlegt werden muss.
+
 Psychologisch steht der Eremit für eine Phase bewusster Vereinfachung. Reize werden reduziert, Rollen abgelegt, Erwartungen leiser. Nicht aus Ablehnung des Lebens, sondern aus dem Bedürfnis nach Klarheit. Der Mensch, den diese Karte berührt, ist bereit, allein mit sich selbst zu sein – und darin Wahrheit zu finden.
 Die Einsamkeit des Eremiten ist keine Leere. Sie ist ein Raum, in dem das Wesentliche hörbar wird. Alte Muster lösen sich, weil sie nicht mehr genährt werden. Erkenntnis entsteht nicht durch Analyse, sondern durch Aufmerksamkeit.
+
 Spirituell verkörpert der Eremit die innere Führung. Das Licht, das er trägt, erhellt nicht die Welt, sondern den nächsten Schritt. Es geht nicht darum, alles zu wissen, sondern das Richtige zur richtigen Zeit zu erkennen. Weisheit wächst hier aus Erfahrung, Stille und Demut.
 Als innerer Archetyp lädt der Eremit dazu ein, Vertrauen in den eigenen inneren Kompass zu entwickeln. Antworten kommen nicht von außen – sie steigen auf, wenn du bereit bist zuzuhören.
+
 Essenz:
 Ziehe dich zurück, ohne dich zu verlieren.
 Wähle Stille, nicht Abbruch.
@@ -209,15 +234,18 @@ Im bewussten Alleinsein zeigt sich, was wirklich trägt.`,
     id: 11,
     general: `DAS RAD DES SCHICKSALS
 Steht für Wandel, Bewegung und zyklische Entwicklung.
+
 Psychologisch zeigt diese Karte, dass das Leben nicht statisch ist – alles befindet sich in stetigem Fluss. Situationen verändern sich, manchmal unerwartet, oft außerhalb unserer Kontrolle. Sie weist darauf hin, dass äußere Umstände sich gerade verschieben: Alte Muster lösen sich, neue Möglichkeiten entstehen. Wichtig ist dabei nicht der Versuch, alles zu kontrollieren, sondern die Fähigkeit, mit dem Wandel zu gehen, statt gegen ihn anzukämpfen.
 Diese Karte erscheint häufig in Zeiten, in denen das Leben eine Wendung nimmt – manchmal überraschend, manchmal befreiend. Sie erinnert daran, dass jede Phase Teil eines größeren Zyklus ist.
 Spirituelle Bedeutung
 Spirituell symbolisiert das Rad die kosmische Ordnung und das Wirken höherer Gesetzmäßigkeiten. Nichts geschieht zufällig – alles folgt einem tieferen Rhythmus. Die Mitte des Rades steht für den inneren Ruhepunkt: Wer dort ruht, wird von äußeren Veränderungen nicht mehr aus der Balance gebracht.
 Das Rad lehrt:
 Nicht das Festhalten bringt Sicherheit, sondern das Vertrauen in den Wandel.
+
 Essenz der Karte:
 „Ich vertraue dem Fluss des Lebens.“
 Diese Karte lädt dazu ein, Veränderungen nicht als Verlust, sondern als Tor zu neuer Erkenntnis und Möglichkeiten zu begreifen. Wer sich dem Rhythmus des Lebens öffnet, erkennt: Jeder Zyklus trägt seine eigene Weisheit in sich.
+
 Affirmation:
 Ich vertraue dem Fluss des Lebens.
 Alles, was sich wandelt, führt mich näher zu mir.
@@ -230,10 +258,13 @@ Ich bin im Einklang mit dem Rhythmus des Lebens und des Universums.`,
     id: 12,
     general: `XI · DIE GERECHTIGKEIT
 Diese Karte steht für innere Ausgewogenheit, nicht als starres Urteil, sondern als lebendiges Prinzip. Die Waage misst nicht Schuld, sondern Stimmigkeit.
+
 Psychologisch zeigt sich hier ein Moment der Klarheit:
 Du wirst eingeladen, ehrlich hinzusehen – auf Motive, Entscheidungen und deren Folgen. Nicht mit Härte, sondern mit Reife. Gerechtigkeit entsteht nicht durch Perfektion, sondern durch Fürsorge.
 Die Bibliothek im Hintergrund verweist auf Wissen, Erinnerung und Ordnung. Alles, was entschieden wird, steht in einem größeren Zusammenhang. Nichts geschieht isoliert. Du urteilst nicht aus dem Augenblick, sondern aus einem inneren Archiv von Einsicht.
+
 Spirituell erinnert diese Karte daran, dass Wahrheit leise ist. Sie braucht keine Verteidigung. Wenn Herz, Verstand und Handlung im Gleichgewicht sind, stellt sich Gerechtigkeit von selbst ein.
+
 Essenz:
 Handle klar, aber nicht hart.
 Erkenne die Folgen – und wähle bewusst.
@@ -244,10 +275,13 @@ Wahre Gerechtigkeit beginnt dort, wo du dir selbst gegenüber aufrichtig wirst.`
     general: `DER GEHÄNGTE
 Diese Karte steht für einen freiwilligen Stillstand.
 Nicht, weil nichts mehr möglich wäre, sondern weil etwas Wesentliches reifen will.
+
 Psychologisch zeigt der Gehängte einen Moment, in dem gewohnte Denk- und Handlungsmuster nicht weiterführen. Das Festhalten an Kontrolle würde nur Spannung erzeugen. Erst durch das Loslassen des gewohnten Blickwinkels entsteht innere Beweglichkeit. Der Gehängte hängt nicht aus Zwang – er bleibt, weil er erkennt, dass ein anderes Verstehen näher ist als ein schneller Schritt.
 Das leichte Lächeln weist auf Zustimmung hin. Es ist kein Leiden, sondern Einverständnis mit dem Prozess. Wer hier innehält, beginnt, aus der Tiefe zu sehen. Opfer wird zu Hingabe, Stillstand zu Sammlung.
+
 Spirituell spricht diese Karte von Umkehr.
 Die Welt steht nicht falsch – du siehst sie nur von einer neuen Seite. Das Henkreuz erinnert daran, dass im Innehalten Leben liegt. Erkenntnis wächst nicht aus Aktion, sondern aus Bewusstsein.
+
 Essenz:
 Halte inne, ohne dich zu verlieren.
 Verzichte auf Eile, nicht auf Vertrauen.
@@ -286,11 +320,13 @@ Zu viel Kühle erstarrt.
 Erst im Ausgleich entsteht Leben.
 Psychologische Bedeutung:
 Die Mäßigkeit steht für innere Ausgeglichenheit und emotionale Reife. Sie zeigt einen Menschen, der gelernt hat, Extreme zu regulieren – nicht durch Kontrolle, sondern durch Bewusstsein. In ihr begegnen sich Gegensätze, ohne einander zu bekämpfen: Gefühl und Vernunft, Wunsch und Maß, Bewegung und Ruhe.
+
 Psychologisch verweist diese Karte auf die Fähigkeit, innere Spannungen zu integrieren. Sie erscheint oft dann, wenn eine Phase des inneren Ausgleichs notwendig ist – nicht durch Verzicht, sondern durch bewusste Wahl. Die Mäßigkeit lädt dazu ein, das eigene Tempo zu achten, Grenzen wahrzunehmen und sich selbst mit Milde zu begegnen.
 Spirituelle Bedeutung:
 Auf spiritueller Ebene verkörpert die Mäßigkeit den Zustand innerer Harmonie. Sie steht für das stille Wirken einer Kraft, die Gegensätze verbindet und Gegensätzliches versöhnt. Hier geschieht Transformation nicht durch Kampf, sondern durch Hingabe an den natürlichen Rhythmus des Lebens.
 Das Mischen der Elemente – Wasser und Feuer, Licht und Schatten – symbolisiert die Alchemie des Seins: die Fähigkeit, Gegensätze zu einem neuen Ganzen zu verweben.
 Die Mäßigkeit erinnert daran, dass wahres Wachstum aus Balance entsteht, nicht aus Übermaß.
+
 Essenz der Karte:
 Die Mäßigkeit lehrt: Wahre Stärke liegt im Maß.
 Wer den eigenen Rhythmus erkennt, muss nichts erzwingen.
@@ -325,6 +361,7 @@ Der Turm steht für jenen Moment,
 in dem etwas zusammenbricht,
 was lange getragen hat – nicht aus Bosheit, sondern weil es innerlich nicht mehr wahr ist.
 Er ist kein Symbol für Zerstörung um der Zerstörung willen, sondern für Erkenntnis, die nicht länger aufgeschoben werden kann. In dieser Darstellung ist der Turm kein Ort des Schreckens, sondern ein Ort der Offenbarung. Das, was zerfällt, ist nicht das Wesentliche – es ist die Hülle, die Schutz versprach, aber Enge brachte.
+
 Psychologisch gesehen zeigt diese Karte den Moment, in dem innere Konstrukte – Überzeugungen, Rollen, Selbstbilder – nicht mehr tragen. Das kann sich wie ein Bruch anfühlen, ist aber in Wahrheit ein Akt der Befreiung. Der Mensch erkennt: Das, was ich für Sicherheit hielt, hat mich begrenzt.
 Der Einsturz ist kein Angriff von außen, sondern eine innere Wahrheit, die sich nicht länger zurückhalten lässt.
 Die spirituelle Ebene:
@@ -352,6 +389,7 @@ Die spirituelle Bedeutung
 Der Stern steht für Hoffnung nach der Dunkelheit. Nicht als Hoffnung auf Rettung von außen, sondern als leises inneres Wissen:
 Ich bin verbunden. Ich bin getragen. Ich darf mir selbst vertrauen.
 Diese Karte zeigt den Moment, in dem Heilung beginnt – nicht durch Aktion, sondern durch Annahme.
+
 Essenz der Karte
 Der Stern erinnert dich daran:
 – Sanftheit ist Stärke
@@ -363,6 +401,7 @@ Der Stern erinnert dich daran:
     id: 19,
     general: `DER MOND
 Der Mond ist die Karte der inneren Welten, der Zwischenreiche, des Unbewussten und der seelischen Tiefe. Er erscheint dort, wo Klarheit schwindet und Intuition beginnt. Wo das Licht der Sonne nicht mehr ausreicht, um Orientierung zu geben, beginnt die Reise nach innen.
+
 Psychologisch steht der Mond für jene Anteile in uns, die nicht rational kontrollierbar sind: Gefühle, Ängste, alte Prägungen, Träume, verdrängte Erinnerungen und Instinkte.
 Er weist auf eine Phase hin, in der:
 – Unsicherheit, Zweifel oder innere Verwirrung auftreten
@@ -370,7 +409,9 @@ Er weist auf eine Phase hin, in der:
 – Ängste größer erscheinen, als sie tatsächlich sind
 – das Bewusstsein zwischen Realität und Projektion schwankt
 Der Mond konfrontiert uns mit unserem Schatten – nicht um uns zu erschrecken, sondern um ihn anzunehmen. Oft zeigt er an, dass wir uns selbst oder einer Situation noch nicht vollständig trauen oder dass etwas im Verborgenen wirkt, das gesehen werden möchte.
+
 Psychologisch fordert diese Karte dazu auf, nicht alles rational erklären zu wollen, sondern den inneren Bildern, Träumen und Gefühlen zuzuhören.
+
 Spirituell ist der Mond ein Tor zur Seele, zum kollektiven Unbewussten und zu den zyklischen Rhythmen des Lebens. Er symbolisiert die Reise durch die Nacht der Seele – jene Phase, in der das Alte stirbt, bevor das Neue geboren wird.
 Der Mond lehrt:
 – Vertrauen in die eigene Intuition
@@ -380,6 +421,7 @@ Der Mond lehrt:
 Spirituell gesehen ist der Mond kein Zeichen von Irrtum, sondern von Einweihung. Wer durch seine Nacht geht, gewinnt eine tiefere Weisheit, die nicht aus Logik, sondern aus Erfahrung entsteht.
 Der Mond fragt:
 Was in mir will gesehen werden, obwohl ich es fürchte?
+
 Essenz der Karte
 Der Mond lädt ein, den Weg durch die Dunkelheit nicht zu meiden, sondern ihm zu vertrauen. Er erinnert daran, dass Klarheit nicht immer im Licht geboren wird – manchmal entsteht sie erst im stillen, geheimnisvollen Leuchten der Nacht.`,
   },
@@ -389,11 +431,13 @@ Der Mond lädt ein, den Weg durch die Dunkelheit nicht zu meiden, sondern ihm zu
 Psychologisch zeigt die Sonne den Zustand der Unversehrtheit. Die beiden Kinder verkörpern Anteile des Selbst, die nicht getrennt oder verletzt sind: Spiel, Vertrauen, Lebendigkeit – ein Ich, das nicht mehr gegen sich arbeitet.
 Die Sonne beleuchtet nichts Bedrohliches – sie entlarvt, ohne zu verletzen. Alles darf gesehen werden, ohne bewertet zu werden. In diesem Licht entsteht Selbstvertrauen nicht aus Leistung, sondern aus dem Gefühl: Ich darf (so) sein.
 Die Kinder halten sich an den Händen – ein Bild für die Versöhnung innerer Gegensätze: Verstand und Gefühl, Ernst und Freude, Erwachsensein und kindliche Offenheit. Hier ist keine Abhängigkeit, sondern gemeinsames Sein.
+
 Spirituell ist die Sonne das unverhüllte Bewusstsein. Kein Mond, kein Schleier, kein Zwischenraum. Wahrheit zeigt sich direkt, warm und lebensspendend.
 Die Sonne fragt nicht, ob man bereit ist – sie scheint einfach. Sie ist die Kraft, die alles wachsen lässt, ohne zu unterscheiden. In dieser Karte zeigt sich das Einssein mit dem Leben und sich selbst.
 Die Kinder stehen barfuß auf der Erde: Geist ist hier vollständig verkörpert. Freude wird nicht gesucht – sie entsteht natürlich, wenn nichts mehr blockiert.
 Diese Karte erinnert daran:
 Erleuchtung ist kein fernes Ziel. Sie ist ein Zustand von Einfachheit, Klarheit und Gegenwärtigkeit.
+
 
 Essenz der Karte – Heilung & inneres Kind
 Diese Karte zeigt den Moment, in dem das innere Kind wieder sicher ist. Nicht, weil alles perfekt wurde, sondern weil Licht dorthin gefallen ist, wo früher Schutz nötig war.
@@ -410,16 +454,19 @@ Heilung geschieht, wenn Vertrauen zurückkehrt.`,
     id: 21,
     general: `DAS GERICHT
 Das Gericht steht für einen tiefgreifenden Moment des Erwachens. Sie zeigt den Augenblick, in dem etwas in uns erkannt, erlöst oder neu geboren wird. Es ist kein äußeres Urteil, sondern ein inneres Erwachen – das Erkennen der eigenen Wahrheit.
+
 Psychologisch symbolisiert diese Karte den Moment der Selbsterkenntnis. Etwas, das lange unbewusst war, tritt nun ins Licht. Alte Schuldgefühle, Selbstverurteilungen oder vergangene Identitäten dürfen losgelassen werden.
 Das Gericht lädt dazu ein, ehrlich hinzusehen:
 Wer bin ich geworden?
 Was darf gehen?
 Was will durch mich neu gelebt werden?
 Es ist ein Akt innerer Befreiung – nicht durch Bewertung, sondern durch Annahme. Die Vergangenheit verliert ihre Macht, wenn sie erkannt und integriert wird.
+
 Spirituell steht diese Karte für Erwachen, Auferstehung und seelische Erneuerung. Der Engel ruft – nicht zum Gericht im menschlichen Sinn, sondern zum Erwachen des Bewusstseins.
 Die Figuren, die dem Licht entgegensteigen, symbolisieren Seelen, die sich erinnern, wer sie in Wahrheit sind und ihrer Quelle. Dies ist der Moment, in dem die Seele ihr wahres Lied hört. Ein Ruf aus höheren Ebenen, der sagt:
 Jetzt ist die Zeit. Erinnere dich.
 Das Licht steht für Erkenntnis, Wahrheit und Gnade.
+
 
 Essenz der Karte
 Ich öffne mich dem Ruf meiner Seele.
@@ -431,6 +478,7 @@ Vergangenes darf gehen.`,
     id: 22,
     general: `DIE WELT
 Die Welt steht für Vollendung, Ganzheit und das bewusste Einswerden mit sich selbst und dem Leben.
+
 Psychologisch steht die Welt für Integration: Alles, was zuvor fragmentiert, verletzt oder unerkannt war, findet nun seinen Platz. Schatten und Licht sind versöhnt. Das Ich ist nicht mehr im Kampf, sondern im Einklang.
 Diese Karte zeigt oft einen Moment tiefen inneren Friedens – das Gefühl, „richtig“ zu sein, genau dort, wo man ist. Sie spricht von Selbstannahme, Reife und innerer Freiheit.
 
@@ -442,6 +490,7 @@ Die Essenz der Karte
 Du bist angekommen.
 Alles, was du gesucht hast, war bereits in dir.
 
+
 Affirmation
 Ich bin ganz.
 Ich bin im Einklang mit mir selbst und dem Leben.
@@ -451,7 +500,232 @@ Diese Karte erinnert dich daran, dass du nichts mehr beweisen musst.
 Du darfst empfangen, genießen und anerkennen, wie weit du gekommen bist.
 Deine Energie ist rund, klar und vollständig –
 ein stilles Leuchten, das aus dir selbst kommt.`,
+  },  {
+    id: "W01",
+    title: "Ass der Stäbe",
+    general: `Ass der Staebe 
+Diese Karte zeigt den Moment des reinen Anfangs.
+Der schwebende Stab steht für den ersten schöpferischen Impuls – eine Kraft, die noch nicht in Handlung übergegangen ist, sondern als Möglichkeit im Raum existiert. Aus den Wolken kommend, verweist der Stab auf eine Inspiration aus höheren Ebenen. Das kleine Blatt am Holz macht sichtbar, dass dieser Impuls bereits Leben in sich trägt: Dein Wachstum ist angelegt, auch wenn es noch unsichtbar bleibt ist dieser Impuls bereits angelegt.
+Der Maler auf dem Bild verkörpert das bewusste Selbst. Er greift den Stab nicht, sondern betrachtet ihn und übersetzt ihn achtsam auf die Leinwand. Dies zeigt, dass deine schöpferische Kraft nicht aus Hast entsteht, sondern aus Wahrnehmung, Klarheit und innerer Ausrichtung. Die Leinwand steht für die Welt der Form – für die Realität, die sich erst durch deine Gestaltung manifestiert.
+Pinsel und Farbpalette symbolisieren dein Gefühl zur Wahl: Durch dich entscheidet sich, wie und wann du den inneren Funken in die Welt bringst. Dein Koffer am Boden verweist auf Erfahrungen und gelebtes Wissen – dein neuer Anfang entsteht nicht aus dem Nichts, sondern baut auf deinem bereits Erlebten auf.
+Die offene Landschaft und das weite Licht schaffen einen Raum indem sich Widerstand reduziert. Sie zeigen, dass der Weg frei ist für deine Entfaltung. Alles in diesem Bild spricht von Potenzial, Bewusstheit und schöpferischer Ruhe.
+Dieses Bild spricht vom Moment, in dem sich dein Herz öffnet, noch bevor Worte oder Handlungen entstehen. Psychologisch zeigt das Ass der Staebe den Beginn eines neuen emotionalen Erlebens – deine innere Bewegung, die nicht erzwungen werden kann, sondern sich von selbst zeigt. Wie der Maler, der aufmerksam beobachtet und behutsam formt, wird hier ein Gefühl wahrgenommen, das gerade erst geboren wird. Es ist Sensibilität, Empfänglichkeit und die Bereitschaft, sich berühren zu lassen. Dein Bewusstsein richtet sich nach innen, lauscht und erkennt, dass wahre emotionale Erneuerung aus Achtsamkeit entsteht, nicht aus Kontrolle.
+
+Spirituell steht das Ass der Stäbe für den ersten Fluss der Liebe aus einer höheren Quelle. Es ist das Öffnen von Mitgefühl, Vertrauen und Verbundenheit. Die Wolken verweisen auf den Ursprung jenseits des Sichtbaren. Noch ist es nicht in eine Beziehung, ein Versprechen oder eine konkrete Handlung gegossen. Das Bild erinnert dich daran, dass Liebe nicht gemacht wird, sondern empfangen werden will. Wer still wird, kann spüren, wie sich das Herz von selbst füllt.
+So trägt das Ass der Staebe die Botschaft deines sanften Neubeginns auf seelischer Ebene: dein offenes Herz, das bereit ist, zu fühlen, zu vergeben und dich zu verbinden – zuerst mit dir selbst, dann mit der Welt.
+
+Essenz, Ass der Staebe – Ein neuer innerer Raum öffnet sich.
+Gefühl entsteht, noch ungeformt, still und wahr.
+Liebe, Mitgefühl und Verbundenheit fließen als Geschenk – nicht als Leistung.
+
+Affirmation:
+„Ich öffne mein Herz und erlaube der Liebe, frei durch mich zu fließen“`,
   },
+
+  {
+    id: "W02",
+    title: "Zwei der Stäbe",
+    general: `Zwei der Stäbe. 
+Du stehst zwischen zwei aufrechten Stäben und blickst in die Weite. Die beiden Stäbe stehen um dich wie ein Tor und markieren eine Schwelle. Sie sind fest im Boden verankert und tragen Blätter – Zeichen dafür, dass das, was hier begrenzt, zugleich lebendig ist. Zwischen ihnen öffnet sich der Blick auf das Wasser und den Horizont. Das Meer symbolisiert deinen emotionalen und geistigen Raum der Möglichkeiten, der Ferne, der Weite und steht für das Noch-Nicht-Erreichte. In den Händen hältst du eine Kugel, die Welt selbst, als Ausdruck von Übersicht, Fürsorge und Bewusstsein. Der Standort auf der erhöhten Mauer zeigt Distanz zum Alltag und einen Moment des Innehaltens vor der nächsten Bewegung.
+
+Psychologisch spricht diese Karte von einem inneren Wendepunkt. Du hast bereits einen festen Standpunkt gefunden und erkennst nun, dass vor dir mehr als nur ein Weg liegt. Es geht um Entscheidungskraft, aber nicht im Sinne von Hast, sondern von reifer Abwägung. Du handelst noch nicht, du schaust. Du weißt, dass die nächste Richtung gewählt werden kann, und nimmst dir die Zeit, deine Möglichkeiten zu erfassen. Das Bild zeigt Selbstvertrauen, gepaart mit der Erkenntnis, dass Wachstum auch bedeutet, das Bekannte hinter dir zu lassen.
+
+Spirituell steht die Zwei der Stäbe für das bewusste Erkennen der eigenen schöpferischen Macht. Der Blick über das Wasser ist der Blick der Seele auf ihr zukünftiges Feld. Die Weltkugel in den Händen macht deutlich, dass der nächste Schritt nicht vom Außen diktiert wird, sondern aus innerer Ausrichtung entsteht. Die Karte lädt dazu ein, die eigene Vision ernst zu nehmen und Fürsorge für den eigenen Weg zu übernehmen, ohne sich von Angst oder äußeren Erwartungen begrenzen zu lassen.
+Die Essenz dieser Karte ist der Moment zwischen Sicherheit und Aufbruch. Es ist die Kraft, das eigene Potenzial zu erkennen und mutig den Raum der Möglichkeiten zu betreten.
+
+Affirmation:
+„Ich erkenne meine Möglichkeiten und wähle meinen Weg mit Vertrauen.“`,
+  },
+
+  {
+    id: "W03",
+    title: "Drei der Stäbe",
+    general: `Drei der Stäbe
+Diese Karte zeigt dir eine zarte, aufrechte Gestalt auf einer Klippe über dem Meer. Drei Stäbe sind im Raum verteilt: Einen Stab hält sie in der Hand, zwei stehen leicht versetzt im Boden. Sie bilden für dich keine Begrenzung mehr wie bei Zwei der Stäbe, sondern öffnen den Raum nach vorne. Das Meer liegt weit und ruhig vor dir, der Horizont ist klar sichtbar. In der Ferne bewegen sich Schiffe, klein, aber deutlich – Zeichen dafür, dass Bewegung bereits stattfindet. Das Gewand ist licht und vom Wind erfasst, als wäre es ein Teil der Luft und des offenen Raums. Alles wirkt im Fluss, nichts hält fest.
+
+Psychologisch beschreibt die Drei der Stäbe für dich den Moment, in dem eine Entscheidung innerlich gefallen ist. Die Phase des Abwägens ist vorbei. Du stehst nicht mehr zwischen Möglichkeiten, sondern hinter einer gewählten Richtung. Du blickst nicht mehr nur hinaus – du stehst bereits in Beziehung zu dem, was kommt. Die Schiffe zeigen dir, dass erste Ergebnisse sichtbar werden, auch wenn sie noch fern sind. Diese Karte spricht zu dir von Vertrauen in deinen eigenen Weg, von innerer Ausrichtung und von deiner Fähigkeit, Geduld zu haben. Du weißt, wohin du gehst, auch wenn der Weg noch nicht vollständig sichtbar ist.
+
+Spirituell ist die Drei der Stäbe für dich ein Bild der Ausdehnung. Du entscheidest dich, deinen Raum zu vergrößern. Dein Blick über das Meer ist dein Blick in ein größeres Feld des Seins. Deine Augen füllen sich mit Weite. Die gehaltene Stabenergie zeigt deine bewusste Führung, die beiden stehenden Stäbe symbolisieren deine Stabilität und Unterstützung. Das Fließen deines Gewandes und des Wassers macht deutlich, dass Wachstum nicht erzwungen wird, sondern sich organisch entfaltet. Die Karte spricht von deinem Vertrauen in das Zusammenspiel zwischen deiner eigenen Willenskraft und dem größeren Strom des Lebens.
+Die Essenz der Drei der Stäbe ist für dich das ruhige Wissen, dass das, was du begonnen hast, nun seinen Weg nimmt. Es ist die Gelassenheit nach der Entscheidung, das Vertrauen in deine Vision und die Bereitschaft, dem Leben Raum zur Entfaltung zu geben.
+
+Affirmation:
+Du vertraust deinem Weg und lässt deine Vision sich frei entfalten.`,
+  },
+
+  {
+    id: "W04",
+    title: "Vier der Stäbe",
+    general: `Vier der Stäbe
+Diese Karte zeigt dir einen Raum der Freude und Verbundenheit. Vier aufrechte Stäbe bilden für dich ein offenes Tor, geschmückt mit Blumen, die für Lebendigkeit, Wachstum und Feiern stehen. Zwischen Sonne und Mond spannt sich für dich ein harmonischer Himmel, der Tag und Nacht, Bewusstsein und Unterbewusstsein in dir vereint. Im Zentrum tanzt ein Paar, eng verbunden, in einer kreisenden Bewegung. Der schwingende Rock und die zirkulierenden Linien um die Tanzenden machen dir sichtbar, dass hier Energie fließt und sich vervielfältigt. Unter ihren Füßen liegen gekreuzte Schwerter, ein Kelch und eine Rose – Zeichen dafür, dass Konflikt, Gefühl und Liebe in dir nicht verdrängt, sondern integriert und befriedet sind. Das umstehende Volk klatscht und bezeugt diesen Moment: Gemeinschaft, Anerkennung und geteilte Freude tragen auch dich in diesem Augenblick.
+
+
+Psychologisch steht die Vier der Stäbe für deine innere Stabilität, die aus deiner Verbundenheit 
+entsteht. Der Tanz zeigt dir, dass Sicherheit für dich nicht Stillstand bedeutet, sondern 
+lebendige Bewegung innerhalb eines geschützten Rahmens. Du hast einen Punkt erreicht, an dem du dir 
+erlauben kannst, loszulassen, zu feiern und dich zu zeigen. Es ist ein Moment des Ankommens, in dem du das Erreichte würdigen darfst. Diese Karte spricht zu dir von Zugehörigkeit, von einem inneren Zuhause, das in dir nicht durch Kontrolle, sondern durch Vertrauen entsteht.
+
+
+Spirituell öffnet die Vier der Stäbe für dich einen lebendigen wunderbaren Raum. Das Tor aus Stäben ist dein Übergang in einen Zustand von Harmonie, in dem Gegensätze in dir nicht mehr kämpfen, sondern miteinander tanzen. Sonne und Mond segnen diesen Augenblick als Ausdruck kosmischer Ordnung in deinem Leben. Die kreisende Bewegung um das Paar erinnert dich daran, dass Freude eine hohe Schwingung ist, die sich ausdehnt, wenn du sie teilst. Diese Karte zeigt dir einen Moment, in dem das Leben zu dir sagt: Jetzt darfst du ruhen, feiern und danken, bevor der nächste Schritt beginnt.
+
+Die Essenz der Vier der Stäbe ist für dich das bewusste Feiern des Lebens. Sie steht für ein stabiles Fundament in dir, auf dem Freude, Gemeinschaft und Liebe frei fließen können. Es ist die Erkenntnis, dass wahre Sicherheit dort entsteht, wo du dich angenommen fühlst – von anderen und vor allem von dir selbst.
+
+
+Affirmation:
+„Ich erlaube mir, anzukommen, zu feiern und die Freude des Lebens voll zu empfangen.“`,
+  },  {
+    id: "W05",
+    title: "Fünf der Stäbe",
+    general: `Fünf der Stäbe
+Die Fünf der Stäbe zeigt dir eine lebendige Szene voller Bewegung und Spannung. Fünf junge Menschen stehen sich gegenüber und kreuzen ihre Stäbe in der Mitte. Die Stäbe berühren sich, ohne zu verletzen – es ist für dich kein Kampf sondern ein Kräftemessen. Die herbstlichen Blätter wirbeln durch die Luft und verstärken für dich den Eindruck von bewegender Dynamik. Im Hintergrund stehen Zuschauer, die klatschen und aufmerksam verfolgen, was geschieht. Die Burg im Hintergrund deutet für dich auf Ordnung, Struktur und gesellschaftliche Regeln hin, während der offene Platz davor dir Raum für Ausdruck und Auseinandersetzung bietet. Die Szene wirkt ehrlich und voller Energie, ohne klare Sieger oder Verlierer.
+
+Psychologisch zeigt dir die Fünf der Stäbe den inneren und äußeren Konflikt, der entsteht, wenn unterschiedliche Impulse, Meinungen oder Bedürfnisse gleichzeitig in dir Raum verlangen. Jeder Beteiligte bringt seine eigene Kraft ein, will gesehen und gehört werden – ebenso wie die Anteile in dir. Es geht nicht um Zerstörung, sondern um Reibung. Diese Karte verweist für dich auf Meinungsverschiedenheiten oder innere Zerrissenheit, die Wachstum anstoßen können, wenn du sie bewusst erlebst. Der Applaus der Zuschauer macht dir deutlich, dass Konflikt auch eine soziale Funktion hat: Er klärt Positionen, schärft Identität und fördert Entwicklung.
+
+Spirituell betrachtet symbolisiert die Fünf der Stäbe für dich eine Phase, in der Energie ungeordnet ist und sich neu ausrichten möchte. Die kreuzenden Stäbe stehen für Lebenskräfte in dir, die noch keinen gemeinsamen Rhythmus gefunden haben. Der Wirbel der Blätter zeigt dir den Wandel, der durch diese Reibung ausgelöst wird. Die Karte lehrt dich, dass Harmonie nicht durch das Vermeiden von Konflikten entsteht, sondern durch das mutige Durchleben von Spannungen. Aus dem Chaos kann für dich Klarheit geboren werden, wenn jede Kraft ihren Platz findet.
+Die Essenz der Fünf der Stäbe liegt für dich in der bewussten Auseinandersetzung. Sie erinnert dich daran, dass Widerstand und innere Konflikte Teil deines Wachstumsprozesses sind und wertvolle Energie freisetzen können, wenn du ihnen bewusst begegnest.
+
+Affirmation:
+„Ich bleibe in meiner Mitte, auch wenn es um mich herum lebendig wird, und vertraue darauf, dass jede Herausforderung mich stärker und klarer macht.“`,
+  },
+
+  {
+    id: "W06",
+    title: "Sechs der Stäbe",
+    general: `Sechs der Stäbe
+Dieses Bild zeigt dir einen Reiter auf einem weißen Pferd, erhoben über einer Gruppe von Menschen, die ihn begleiten. Du siehst, wie er einen leuchtenden Stab hochhält, dessen Licht sich nach oben öffnet wie ein Tor. Die umgebenden Stäbe bilden für dich einen feierlichen Rahmen und sind mit goldenen Kränzen geschmückt – Zeichen von Anerkennung, Ehre und Erfolg. Das Pferd trägt den Reiter ruhig und stolz, während Licht und Farben den Raum erfüllen. Die Begleiter blicken zu ihm auf, nicht in Neid, sondern in Zustimmung und Respekt. Alles im Bild wirkt für dich erhoben, durchlichtet und getragen von einer gemeinsamen Bewegung nach vorne.
+
+Psychologisch steht die Sechs der Stäbe für dich für das Erleben von Erfolg, der sichtbar geworden ist. Es ist der Moment, in dem deine Anstrengung Anerkennung findet und dein Selbstvertrauen gestärkt wird. Der Reiter verkörpert dein Ich, das sich seiner Leistung bewusst ist, ohne sich von ihr zu trennen. Diese Karte zeigt dir, wie wichtig es ist, Erfolge anzunehmen und dich selbst in einem positiven Licht zu sehen. Sie spricht von innerer Bestätigung und davon, gesehen zu werden – nicht nur von anderen, sondern auch von dir selbst. Was hast du alles schon in deinem Leben erreicht, was sich nicht wie Erfolg darstellt, aber dennoch einer ist?
+
+Spirituell zeigt dir die Sechs der Stäbe den Erfolg nach einer Phase der Auseinandersetzung. Der erhobene Stab ist ein Symbol für deine durchgesetzte Willenskraft, die nun im Einklang mit der Gemeinschaft steht. Erfolg erscheint hier nicht isoliert, sondern als Teil eines größeren Ganzen. Das Tor aus Licht deutet für dich darauf hin, dass dieser Moment des Erfolgs auch ein Übergang ist – ein Zeichen dafür, dass Anerkennung nicht das Ende, sondern ein Schritt auf einem größeren Weg ist.
+Die Essenz der Sechs der Stäbe liegt für dich im bewussten Annehmen von Erfolg. Sie erinnert dich daran, dass es erlaubt ist, stolz zu sein, gesehen zu werden und deinen eigenen Weg mit erhobenem Haupt weiterzugehen, ohne die Verbindung zu anderen zu verlieren.
+
+Affirmation:
+Du erkennst Deinen Erfolg an und erlaubst Dir, dafür gesehen zu werden. Deine innere Stärke trägt Dich sichtbar nach vorne, und Du gehst Deinen Weg mit Selbstvertrauen, Würde und Freude.`,
+  },
+
+  {
+    id: "W07",
+    title: "Sieben der Stäbe",
+    general: `Sieben der Stäbe
+Hier stehst du als zentrale Figur erhöht auf einem Felsen. Dieser Hügel symbolisiert deine errungene Position, einen inneren oder äußeren Standpunkt, den du erreicht hast. Der einzelne Stab in deinen Händen ist nicht nur eine Waffe, sondern die Verlängerung deines Willens – er steht für deine Überzeugung, deine Identität und deine persönliche Wahrheit. Die von unten auftauchenden Stäbe, gehalten von unsichtbaren Gegnern, verkörpern für dich äußeren Druck, Konkurrenz, Erwartungen und innere Zweifel, die gleichzeitig auf dich einwirken. Der aufsteigende Nebel schafft eine Zwischenwelt: Es ist für dich kein klarer Kampf auf offenem Feld, sondern eine psychologische und spirituelle Prüfung. Das Licht hinter dir deutet darauf hin, dass deine Kraft nicht aus Feindseligkeit entsteht, sondern aus innerer Klarheit und Standhaftigkeit.
+
+Psychologisch zeigt dir diese Karte den Moment, in dem du für dich selbst einstehst. Es geht für dich nicht darum, zu gewinnen oder andere zu besiegen, sondern deine eigene Position zu behaupten, obwohl Widerstand entsteht. Oft taucht diese Karte in deinem Leben auf, wenn du dich exponiert fühlst, wenn du für Entscheidungen, Grenzen oder Werte einstehst, die nicht von allen getragen werden.
+
+Spirituell erinnert dich die Sieben der Stäbe daran, dass Wachstum häufig Reibung erzeugt. Wenn du deinem inneren Feuer folgst, wirst du geprüft – nicht um zu scheitern, sondern um deine Ausrichtung zu festigen. Der wahre Kampf findet für dich nicht gegen andere statt, sondern gegen dein eigenes Nachgeben, die Angst vor Ablehnung und den Wunsch, es allen recht zu machen.
+Die Essenz dieser Karte ist für dich mutige Selbstbehauptung. Sie lädt dich dazu ein, deine eigene Wahrheit zu verteidigen, ohne dich zu verhärten, und deinem inneren Feuer treu zu bleiben, auch wenn der Weg einsam erscheint. Es ist die Kraft, „Ja“ zu dir selbst zu sagen, selbst wenn Gegenwind entsteht.
+
+Affirmation:
+Ich stehe fest in meiner Wahrheit. Mein inneres Feuer gibt mir Kraft, Klarheit und Mut, meinen Platz zu behaupten.`,
+  },
+
+  {
+    id: "W08",
+    title: "Acht der Stäbe",
+    general: `Acht der Stäbe
+In diesem Bild der Acht der Stäbe schießen für dich acht leuchtende Holzstäbe mit großer Geschwindigkeit durch die Luft über eine weite, offene Landschaft. Sie sind parallel ausgerichtet, zielgerichtet und von Licht umgeben, als würden sie von einer inneren Kraft getragen. Die Landschaft unter ihnen wirkt für dich ruhig und weit, ein Fluss schlängelt sich durch Hügel und Wälder, während der Himmel klar und offen ist. Diese Verbindung aus Bewegung und Weite vereint für dich Dynamik mit Orientierung. Nichts blockiert den Flug der Stäbe, es gibt kein Hindernis, kein Zögern – alles ist im Fluss.
+
+Psychologisch steht dieses Bild für dich für einen Moment, in dem innere Prozesse, Entscheidungen oder Entwicklungen plötzlich an Fahrt aufnehmen. Nach einer Phase des Wartens oder inneren Sammelns kommt nun Bewegung in dein Leben. Deine Gedanken ordnen sich, Kommunikation wird klar, und deine Absichten finden ihren Weg nach außen.
+
+Spirituell zeigt sich hier für dich der Zustand des Vertrauens in den natürlichen Fluss des Lebens: Wenn dein innerer Impuls klar ist, trägt dich die Energie selbst. Die Acht der Stäbe erinnert dich daran, dass es Zeiten gibt, in denen du nicht mehr kontrollieren oder planen musst, sondern zulassen darfst, dass sich das bereits Entschiedene entfaltet. Es ist für dich die Erfahrung von Synchronizität, von „alles fügt sich“, von Momentum, das aus innerer Klarheit entsteht.
+Die Essenz dieser Karte ist für dich beschleunigter Wandel im Einklang mit deinem eigenen inneren Ja. Wenn Herz, Wille und Handlung in dir in dieselbe Richtung zeigen, entsteht Leichtigkeit selbst in großer Geschwindigkeit.
+
+Affirmation:
+Du vertraust dem Fluss deines Lebens. Alles bewegt sich jetzt mühelos zu deinem höchsten Wohl.`,
+  },
+
+  {
+    id: "W09",
+    title: "Neun der Stäbe",
+    general: `Neun der Stäbe
+In diesem Bild siehst du eine junge Frau aufrecht im Wald, ihr Blick ist ruhig und wach nach vorn gerichtet. Ihr Kopf ist bandagiert, Spuren vergangener Verletzungen sind sichtbar, doch sie steht aufrecht. In ihren Händen hält sie fest einen Stab, der zugleich Stütze und Waffe für sie ist. Hinter ihr ragen acht weitere Stäbe auf wie ein Schutzkreis oder eine letzte Verteidigungslinie. Warmes Licht umgibt sie fast wie eine Aura, während Nebel und Schatten den Raum vor dir unklar machen. Die Natur wirkt für dich dicht und lebendig, aber auch herausfordernd.
+
+Psychologisch erzählt dir diese Karte von Durchhaltevermögen und innerer Wachsamkeit. Sie zeigt dir den Moment, in dem du müde bist, vielleicht verletzt, aber nicht gebrochen. Du weißt, dass du schon viel überstanden hast, und genau daraus erwächst deine Kraft und deine Tapferkeit.
+
+Spirituell spricht das Bild zu dir von der Grenze zwischen Rückzug und Standhaftigkeit. Es ist kein Kämpfen mehr, sondern ein bewusstes Halten deines eigenen Raumes. Dein Inneres hat gelernt, wo deine Grenzen liegen, und schützt das, was dir wichtig ist. Vertrauen entsteht für dich hier nicht aus Leichtigkeit, sondern aus Erfahrung.
+Die Essenz dieser Karte liegt für dich im stillen Mut. Es geht für dich nicht darum, unverwundbar zu sein, sondern darum, dir selbst treu zu bleiben, auch wenn es anstrengend wird.
+
+Affirmation:
+„Ich ehre meine Erfahrungen, vertraue meiner inneren Stärke und bleibe standhaft, auch wenn der Weg mich fordert.“`,
+  },
+
+  {
+    id: "W10",
+    title: "Zehn der Stäbe",
+    general: `Zehn der Stäbe
+In diesem Bild siehst du dich als Mensch, der einen riesigen Stein mit aller Kraft einen steilen Berg hinaufdrückt. Auf deinem Rücken trägst du einen Köcher mit 10 Stäben – sie sind ordentlich gebündelt, aber schwer und deutlich spürbar als zusätzliche Last. Die grelle Sonne steht hoch am Himmel und beleuchtet die Szene erbarmungslos. Es gibt für dich keinen Schatten, keine Pause. Der felsige Untergrund ist uneben, jeder Schritt kostet Mühe, und doch bewegst du dich weiter nach oben. Der Berg symbolisiert dein selbst gewähltes Ziel, der Stein die überwältigende Aufgabe, und die 10 Stäbe auf deinem Rücken stehen für Verpflichtungen, Verantwortungen und Erwartungen, die sich in deinem Leben angesammelt haben.
+
+Psychologisch spricht diese Karte zu dir von Überlastung durch zu viel Anforderung. Dein innerer Antrieb ist stark, fast unerschütterlich, doch er hat sich in Pflichtgefühl verwandelt. Du trägst nicht nur eine Aufgabe, sondern viele gleichzeitig – oft aus dem Wunsch heraus, alles richtig zu machen, niemanden zu enttäuschen oder ein Ziel um jeden Preis zu erreichen.
+
+Spirituell zeigt sich hier für dich ein Lernmoment: Wahre Stärke besteht nicht nur im Durchhalten, sondern auch im Erkennen deiner Grenzen. Du bist kraftvoll, doch die Last droht dich von deinem eigentlichen Lebensfluss zu trennen. Diese Karte lädt dich ein, Ballast bewusst abzulegen, Aufgaben zu delegieren oder neu zu ordnen, bevor Erschöpfung in innere Leere und Ausgebranntheit umschlägt.
+Die Essenz dieser Karte liegt für dich in der Erkenntnis, dass Erfolg ohne Leichtigkeit nicht bestehen kann. Was einst aus Begeisterung begann, kann für dich zur Bürde werden, wenn dein inneres Feuer nicht mehr genährt wird. Dein Weg führt nicht über noch mehr Anstrengung, sondern über Vereinfachung, Klarheit und den Mut, Nein zu sagen.
+
+Affirmation:
+Ich erkenne meine Grenzen, ich lege unnötige Lasten ab und trage nur das, was meiner inneren Wahrheit dient und erfüllbar ist.`,
+  },
+
+  {
+    id: "W11",
+    title: "Page der Stäbe",
+    general: `Page der Stäbe
+In diesem Bild sitzt du als junger Mensch still und konzentriert am Wasserlauf, versunken in das Spiel mit einer Harfe. Auffällig ist für dich, dass der vordere Rahmen der Harfe kein kunstvoller Bogen ist, sondern ein roher, lebendiger Holzstab, aus dem frische grüne Blätter sprießen. Dieser Stab verbindet für dich Musik und Natur, Idee und Materie. Der Bach im Hintergrund fließt sanft und stetig und wird für dich zum Sinnbild von Gefühlen und innerer Bewegung, während die warmen Erdtöne deiner Kleidung Erdung und Natürlichkeit vermitteln. Die rote Feder in deinem Hut weist auf Feuer, Inspiration und jugendlichen Mut hin, doch sie wirkt nicht aufdringlich, sondern verspielt. Alles in diesem Bild spricht zu dir von einem Moment des Lauschens, des ersten bewussten Kontakts mit deiner eigenen inneren Stimme.
+
+Psychologisch zeigt dir der Page der Stäbe den Beginn einer schöpferischen Kreativität mit dem Erleben, dass aus dir etwas ganz Eigenes entstehen darf. Es geht für dich nicht um Tatkraft oder Durchsetzung, sondern um das vorsichtige Erkunden deiner eigenen Begeisterung. Du probierst aus, hörst hin, spielst, ohne zu wissen, wohin es führt.
+
+Spirituell befindest du dich in der Phase, in der dein innerer Funke bewusst wahrgenommen wird. Der rohe Stab mit den frischen Blättern deutet darauf hin, dass dein Potenzial lebendig ist und noch wächst. Inspiration entsteht für dich aus Offenheit, Neugier und dem Mut, dich berühren zu lassen. Der Page der Stäbe lädt dich ein, deine Ideen nicht sofort zu bewerten, sondern ihnen Raum zu geben, damit sie ihre eigene Form finden können.
+Die Essenz dieser Karte liegt für dich im ersten Ja zu deinem inneren Feuer. Es ist der Augenblick, in dem etwas Neues leise anklopft und deine Aufmerksamkeit sucht. Noch ist nichts festgelegt, doch genau darin liegen Freiheit und das Versprechen von Wachstum.
+
+Affirmation:
+Du erlaubst dir, deiner Neugier zu folgen, und vertraust darauf, dass aus deinem inneren Funken etwas Lebendiges entsteht`,
+  },
+
+  {
+    id: "W12",
+    title: "Ritter der Stäbe",
+    general: `Ritter der Stäbe
+In diesem Bild siehst du dich als Reiter in voller Bewegung, getragen von einem kraftvollen Pferd, umgeben von flammenden Farben, Licht und Staub. Du hältst den erhobenen Stab mit brennender Fackel als zentrales Symbol für reines Feuer, Willenskraft und Tatendrang. Dein Pferd wirkt lebendig und ungestüm und steht für deine Instinkte und die Energie in dir, die kaum zu bremsen ist. Die leuchtende Architektur im Hintergrund erinnert dich an ein Tor und deutet darauf hin, dass deine Bewegung nicht ziellos ist, sondern von einer inneren Vision geführt wird. Rauch, Lichtpartikel und Glühen verstärken für dich den Eindruck von Geschwindigkeit, Risiko und leidenschaftlicher Entschlossenheit.
+
+Psychologisch verkörpert der Ritter der Stäbe in dir den Impuls, deinem inneren Feuer zu folgen. Du handelst aus Begeisterung, aus einem starken Gefühl von „Jetzt“. Diese Karte spricht dich an, wenn Mut, Abenteuerlust und der Wunsch nach Grenzüberschreitung und experimenteller Lebendigkeit dich nach vorne führen. Gleichzeitig erinnert sie dich daran, dass Energie kraftvoll, aber auch flüchtig sein kann. Du lebst im Moment, manchmal ohne lange zu planen.
+
+Spirituell bist du der Bote des Feuers, der Bewegung in dein Leben bringt, Stagnation aufbricht und dir den Mut schenkt, deiner Vision zu vertrauen, selbst wenn der Weg unsicher erscheint. Du wirst eingeladen, dich vom inneren Ruf tragen zu lassen, ohne dass Angst vor Fehlern deinen Schwung bremst.
+Die Essenz dieser Karte liegt für dich im entschlossenen Aufbruch. Es ist deine Kraft, einer Idee Leben einzuhauchen, sie in Bewegung zu bringen und den ersten Schritt mit voller Hingabe zu gehen, wissend, dass nicht Perfektion, sondern Leidenschaft dein wahrer Motor ist.
+
+Affirmation:
+Du folgst deinem inneren Feuer mit Mut und Vertrauen und erlaubst dir, voller Leidenschaft deinen eigenen Weg zu gehen.`,
+  },
+
+  {
+    id: "W13",
+    title: "Königin der Stäbe",
+    general: `Königin der Stäbe
+In diesem Bild sitzt du als Königin auf einem reich verzierten Thron, umgeben von warmem, leuchtendem Licht. Du hältst den Stab mit brennender Flamme als Zeichen deiner inneren Lebenskraft, schöpferischen Energie und Führung. Die Sonnenblumen stehen für dein Wachstum, deine Vitalität und dein Vertrauen in den natürlichen Lebenszyklus. Deine Krone betont deine innere Autorität – nicht als Herrschaft über andere, sondern als souveräne Präsenz. Der Löwe an deiner Seite verkörpert deinen Mut, dein Selbstvertrauen und die ungezähmte Kraft deines Herzens, während die schwarze Katze für deine Intuition, Eigenständigkeit und dein magisches Wissen steht. Dein schwangerer Leib verweist auf Fruchtbarkeit auf allen Ebenen: Ideen, Projekte, Visionen und seelische Reife. Das umgebende Feuer und Licht zeigen, dass du aus dir selbst heraus strahlst und andere inspirierst, ohne dich zu verausgaben.
+
+Psychologisch stehst du als Königin der Stäbe für eine Persönlichkeit, die ihre innere Stärke angenommen hat und sich selbst treu bleibt. Du weißt, wer du bist, handelst aus Selbstvertrauen und Begeisterung und erlaubst dir, sichtbar zu sein.
+
+Spirituell verkörperst du die schöpferische Urkraft, die aus deinem Herzen kommt – eine Verbindung aus Intuition, Leidenschaft und Weisheit. Du erinnerst dich daran, dass wahre Führung nicht aus Kontrolle entsteht, sondern aus Echtheit und innerem Feuer.
+
+Essenz der Karte:
+Innere Souveränität, gelebte Leidenschaft und schöpferische Lebensfreude, die aus deinem Herzen heraus wirkt.
+
+Affirmation:
+Du vertraust deiner inneren Kraft, stehst zu dir selbst und lässt dein Licht frei und liebevoll in die Welt strahlen.`,
+  },
+
+  {
+    id: "W14",
+    title: "König der Stäbe",
+    general: `König der Stäbe
+In diesem Bild siehst du dich als reifen König auf einem reich verzierten Thron, umgeben von warmem Feuerlicht. In deiner rechten Hand hältst du den brennenden Stab – Symbol deiner gezähmten, bewusst geführten Feuerkraft. Die Flamme ist ruhig und klar, kein unkontrolliertes Feuer, sondern schöpferische Macht mit Richtung. In deiner linken Hand ruht ein glühendes Zeichen der Lebenskraft, begleitet von einem Salamander, dem uralten Wesen des Feuers, das Transformation, Ausdauer und Regeneration verkörpert. Der Löwe an deiner Seite steht für deinen Mut, deine Herzenskraft und deine natürliche Autorität. Krone und Thron zeigen deine äußere wie innere Souveränität, während der leuchtende, fast kosmische Hintergrund darauf hinweist, dass deine Führung nicht nur weltlich, sondern auch spirituell verankert ist.
+
+Psychologisch verkörperst du als König der Stäbe die voll integrierte Feuerenergie. Es geht für dich nicht mehr um impulsives Handeln oder bloßen Tatendrang, sondern um visionäre Führung aus innerer Klarheit. Diese Karte spricht dich an als jemanden, der seine Leidenschaft kennt und sie bewusst fürsorglich lenkt.
+
+Spirituell zeigt sich in dir, dass du gelernt hast, dein inneres Feuer zu pflegen, statt darin zu verbrennen. Es ist die Reife, Visionen aus deiner Seele nicht nur zu haben, sondern sie mit Beständigkeit und Herz in die Welt zu bringen. Diese Karte lädt dich ein, Fürsorge für deine eigene schöpferische Kraft zu übernehmen und andere durch Vorbild, Wärme und Präsenz zu inspirieren.
+Die Essenz dieser Karte ist für dich gelebte innere Autorität. Der König der Stäbe steht für dein tiefes Wissen: Du darfst leuchten, du darfst führen, und du tust es im Einklang mit deinem Herzen und deiner inneren Wahrheit.
+
+Affirmation:
+Ich stehe fest in meiner Kraft, und vertraue meinem inneren Feuer und führe mein Leben mit Klarheit, Mut und Herz.`,
+  },
+
+
+
 
 ];
 
