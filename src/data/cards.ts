@@ -37,6 +37,22 @@ const cards = [
 { id: "W12", name: "Ritter der Stäbe", image: require("../../assets/images/cards/W12.jpg") },
 { id: "W13", name: "Königin der Stäbe", image: require("../../assets/images/cards/W13.jpg") },
 { id: "W14", name: "König der Stäbe", image: require("../../assets/images/cards/W14.jpg") },
+// Kelche (Cups)
+{ id: "C01", name: "Ass der Kelche", image: require("../../assets/images/cards/C01.jpg") },
+{ id: "C02", name: "Zwei der Kelche", image: require("../../assets/images/cards/C02.jpg") },
+{ id: "C03", name: "Drei der Kelche", image: require("../../assets/images/cards/C03.jpg") },
+{ id: "C04", name: "Vier der Kelche", image: require("../../assets/images/cards/C04.jpg") },
+{ id: "C05", name: "Fünf der Kelche", image: require("../../assets/images/cards/C05.jpg") },
+{ id: "C06", name: "Sechs der Kelche", image: require("../../assets/images/cards/C06.jpg") },
+{ id: "C07", name: "Sieben der Kelche", image: require("../../assets/images/cards/C07.jpg") },
+{ id: "C08", name: "Acht der Kelche", image: require("../../assets/images/cards/C08.jpg") },
+{ id: "C09", name: "Neun der Kelche", image: require("../../assets/images/cards/C09.jpg") },
+{ id: "C10", name: "Zehn der Kelche", image: require("../../assets/images/cards/C10.jpg") },
+{ id: "C11", name: "Bube der Kelche", image: require("../../assets/images/cards/C11.jpg") },
+{ id: "C12", name: "Ritter der Kelche", image: require("../../assets/images/cards/C12.jpg") },
+{ id: "C13", name: "Königin der Kelche", image: require("../../assets/images/cards/C13.jpg") },
+{ id: "C14", name: "König der Kelche", image: require("../../assets/images/cards/C14.jpg") },
+
 
 
   { id: "BACK", name: "Rückseite", image: require("../../assets/images/cards/Rueckseite.jpg") },
