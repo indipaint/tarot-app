@@ -739,15 +739,15 @@ Diese Karte zeigt keinen Menschen.
 Sie zeigt einen Zustand.
 
 Psychologische Ebene
-Psychologisch steht das Ass der Kelche für eine emotionale Öffnung. Es ist der Moment, in dem das Herz sich weitet – nicht aus Bedürftigkeit, sondern aus Bereitschaft. Diese Karte erscheint, wenn ein neuer Gefühlsraum entsteht. Das kann eine beginnende Liebe sein, eine neue Beziehung, aber ebenso eine neue Form von Selbstannahme oder Empathie.
-Es ist kein Höhepunkt – es ist ein Anfang. Ein Impuls, der sagt: Hier beginnt etwas, das wachsen will.
-Oft zeigt das Ass der Kelche an, dass alte emotionale Schutzmechanismen weicher werden. Vielleicht war da lange Zurückhaltung. Vielleicht Skepsis. Vielleicht Angst vor Verletzlichkeit. Und nun entsteht eine leise, aber klare Bereitschaft, wieder zu fühlen.
+Psychologisch steht das Ass der Kelche für deine emotionale Öffnung. Es ist der Moment, in dem dein Herz sich weitet – nicht aus Bedürftigkeit, sondern aus Bereitschaft. Diese Karte erscheint, wenn ein neuer Gefühlsraum entsteht. Das kann eine beginnende Liebe sein, eine neue Beziehung, aber ebenso eine neue Form deiner Selbstannahme oder Empathie.
+Es ist kein Höhepunkt – es ist ein Anfang. Ein Impuls, der dir sagt: Hier beginnt etwas, das wachsen will.
+Oft zeigt das Ass der Kelche an, dass deine alten emotionalen Schutzmechanismen weicher werden. Vielleicht war da lange Zurückhaltung. Vielleicht Skepsis. Vielleicht Angst vor deiner Verletzlichkeit. Und nun entsteht eine leise, aber klare Bereitschaft, wieder zu fühlen.
 
 Spirituelle Ebene
-Spirituell ist das Ass der Kelche eine Gnadenkarte. Es symbolisiert einen Zufluss, der nicht aus dem Ego stammt. Die Taube steht für eine höhere Inspiration – nicht religiös im dogmatischen Sinn, sondern als Erfahrung von Verbindung mit etwas Größerem als der eigenen Kontrolle.
-Die vier Wasserströme können als die vier Ebenen des Seins verstanden werden – Körper, Emotion, Geist und Seele – die von eder selben Quelle gespeist werden. Das Wasser fließt nicht nach außen, um etwas zu erobern. Es fließt, weil Fülle nicht zurückgehalten werden kann.
+Spirituell ist das Ass der Kelche eine Gnadenkarte. Sie symbolisiert einen Zufluss, der nicht aus dem Ego stammt. Die Taube steht für deine höhere Inspiration – nicht religiös im dogmatischen Sinn, sondern als deine Erfahrung von Verbindung mit etwas Größerem als der eigenen Kontrolle.
+Die vier Wasserströme können als die vier Ebenen des Seins verstanden werden – Körper, Emotion, Geist und Seele – die von der selben Quelle gespeist werden. Das Wasser fließt nicht nach außen, um etwas zu erobern. Es fließt, weil deine Fülle nicht zurückgehalten werden kann.
 Der Regenbogen ist ein Zeichen von Versöhnung. Wo zuvor innere Trennung war – zwischen Gefühl und Verstand, zwischen Bedürfnis und Kontrolle – entsteht Einheit.
-Das Ass der Kelche erinnert daran, dass wahre Liebe kein Ziel ist, das man erreicht. Sie ist ein Zustand, in den man eintritt, wenn man aufhört, sich zu verschließen.
+Das Ass der Kelche erinnert dich daran, dass wahre Liebe kein Ziel ist, das du erreichst. Sie ist ein Zustand, in den m eintritt, wenn man aufhört, sich zu verschließen.
 Es ist die Karte des inneren Ja.
 
 Essenz der Karte
@@ -757,12 +757,12 @@ Das Herz tritt in Bewegung.
 
 Affirmation
 Ich öffne mich – bewusst, klar und ohne mich zu verlieren.`,
-  },
+  },
 
-  {
-    id: "C02",
-    title: "Zwei der Kelche",
-    general: `Ein Mann und eine Frau sitzen eng nebeneinander auf einer schlichten Bank am Meer. Ihre Körper sind einander zugewandt, ihre Stirnen berühren sich in ruhiger Selbstverständlichkeit. Es ist kein dramatischer Kuss, keine große Geste – es ist Nähe ohne Inszenierung.
+  {
+    id: "C02",
+    title: "Zwei der Kelche",
+    general: `Ein Mann und eine Frau sitzen eng nebeneinander auf einer schlichten Bank am Meer. Ihre Körper sind einander zugewandt, ihre Stirnen berühren sich in ruhiger Selbstverständlichkeit. Es ist kein dramatischer Kuss, keine große Geste – es ist Nähe ohne Inszenierung.
 Beide halten einen goldenen Kelch in den Händen. Die Kelche sind gleich groß, gleich kunstvoll verziert. Keiner ist größer. Keiner wirkt dominanter. Sie tragen ihre Gefäße aufrecht und stabil – nicht erhoben, nicht anstoßend, sondern schützend.
 Das Meer im Hintergrund ist weit, ruhig, offen. Kein Sturm, keine Bedrohung. Das Licht ist warm, beinahe abendlich – ein Moment der Reife, nicht der Aufregung.
 Die Stirnberührung symbolisiert geistige Übereinstimmung.
@@ -773,9 +773,9 @@ Hier begegnen sich zwei vollständige Menschen.
 Diese Karte zeigt Beziehung ohne Abhängigkeit.
 
 Psychologische Ebene
-Die Zwei der Kelche steht für Resonanz. Für eine Verbindung, die nicht auf Projektion beruht, sondern auf gegenseitigem und eigenem Erkennen.
+Die Zwei der Kelche steht für deine Resonanz. Für eine Verbindung, die nicht auf Projektion beruht, sondern auf gegenseitigem und eigenem Erkennen.
 Psychologisch ist sie der Moment, in dem zwei Menschen sich wirklich sehen – nicht als Wunschbild, nicht als Rolle, sondern als Gegenüber. Diese Karte steht für Gleichwertigkeit. Für das Gefühl: „Ich muss mich hier nicht verbiegen.“
-Diese Karte kann eine neue Liebesbeziehung anzeigen, aber ebenso eine bestehende Partnerschaft, die in ein tieferes Gleichgewicht findet. Sie kann auch auf eine neue Form von Selbstakzeptanz hinweisen – eine innere Versöhnung zwischen zwei Anteilen der eigenen Persönlichkeit.
+Diese Karte kann eine neue Liebesbeziehung anzeigen, aber ebenso eine bestehende Partnerschaft, die in ein tieferes Gleichgewicht findet. Sie kann auch auf deine neue Form von Selbstakzeptanz hinweisen – deine innere Versöhnung zwischen zwei Anteilen der eigenen Persönlichkeit.
 Wichtig ist:
 Hier geht es nicht um Verschmelzung.
 Hier geht es um Balance.
@@ -783,8 +783,8 @@ Wenn diese Karte erscheint, fragt sie:
 Begegnest du – oder klammerst du?
 
 Spirituelle Ebene
-Spirituell ist die Zwei der Kelche die Vereinigung von Polaritäten. Männlich und weiblich, aktiv und empfangend, bewusst und unbewusst. Es ist die Alchemie des Gleichgewichts.
-Der Kelch ist das Gefäß der Seele. Zwei Gefäße stehen nebeneinander – beide gefüllt, beide stabil. Diese Karte spricht von einer Verbindung, die aus innerer Fülle entsteht, nicht aus Mangel.
+Spirituell ist die Zwei der Kelche die Vereinigung deiner Polaritäten. Männlich und weiblich, aktiv und empfangend, bewusst und unbewusst. Es ist deine Alchemie des Gleichgewichts.
+Der Kelch ist das Gefäß der Seele. Zwei Gefäße stehen nebeneinander – beide gefüllt, beide stabil. Diese Karte spricht von deiner Verbindung, die aus innerer Fülle entsteht, nicht aus Mangel.
 Sie erinnert daran, dass spirituelles Wachstum nicht nur im Rückzug geschieht. Manchmal ist Beziehung selbst der Weg. In echter Begegnung werden Schatten sichtbar – und können integriert werden.
 Die Zwei der Kelche ist kein Feuerwerk.
 Sie ist ein stiller Bund.
@@ -793,7 +793,7 @@ Essenz der Karte
 Zwei eigenständige Herzen wählen Verbindung.
 
 Affirmation
-Ich begegne dir klar – und bleibe dabei ganz ich selbst.`,
+Ich begegne dir klar – und bleibe dabei ganz ich selbst.`
   },
 
   {
@@ -1093,20 +1093,21 @@ Sie zeigt Sensibilität als Stärke.
 Psychologische Ebene
 Psychologisch steht der Bube der Kelche für emotionale Offenheit und kreative Wahrnehmung. Er ist nicht der Krieger der Gefühle – er ist ihr Zuhörer.
 Diese Karte erscheint oft, wenn neue Gefühle entstehen. Ein zarter Beginn einer Beziehung. Ein kreativer Impuls. Eine emotionale Botschaft, die zunächst leise kommt.
-Der Fisch im Kelch ist entscheidend: Er taucht unerwartet auf. So wie Gefühle manchmal plötzlich auftauchen – ohne Planung, ohne Strategie. Der Bube erschrickt nicht. Er hält den Kelch ruhig.
+Der Fisch im Kelch ist entscheidend: Er taucht unerwartet auf. So wie deine Gefühle manchmal plötzlich auftauchen – ohne Planung, ohne Strategie. Du erschrickst nicht. Du hält den Kelch ruhig.
 Das ist die Qualität dieser Karte:
 Empfindsamkeit ohne Abwehr.
-Psychologisch kann sie auch bedeuten, dass jemand sensibel reagiert – vielleicht sogar verletzlich. Doch Verletzlichkeit ist hier kein Defizit. Sie ist Zugang.
+Psychologisch kann sie auch bedeuten, dass jdu sensibel reagierst – vielleicht sogar verletzlich. Doch Verletzlichkeit ist hier kein Defizit. Sie ist Zugang.
 
 Spirituelle Ebene
-Spirituell ist der Bube der Kelche ein Bote aus der Tiefe. Der Fisch steht für das Unbewusste, für Träume, Intuition, Eingebungen. Der Kelch ist das Gefäß des Herzens. Wenn aus dem Kelch ein Fisch auftaucht, bedeutet das: Das Unbewusste meldet sich durch das Herz.
-Diese Karte zeigt den Beginn einer inneren Reise. Noch ist nichts ausgereift. Noch ist nichts festgelegt. Aber etwas Lebendiges möchte sich zeigen.
-Das Meer hinter ihm ist ruhig – das heißt: Die Verbindung zur inneren Welt ist nicht bedrohlich, sondern zugänglich.
-Der Bube fragt nicht: „Ist das logisch?“
-Er fragt: „Was fühlt sich wahr an?“
+Spirituell ist der Bube der Kelche ein Bote aus der Tiefe. Der Fisch steht für das Unbewusste in dir, für deine Träume, deine Intuition, deine Eingebungen. Der Kelch ist das Gefäß des deines Herzens. Wenn aus dem Kelch ein Fisch auftaucht, bedeutet das: Das Unbewusste meldet sich durch dein Herz.
+Diese Karte zeigt den Beginn deiner inneren Reise. Noch ist nichts ausgereift. Noch ist nichts festgelegt. Aber etwas Lebendiges möchte sich durch dich zeigen.
+Das Meer hinter dir ist ruhig – das heißt: Die Verbindung zur deiner inneren Welt ist nicht bedrohlich, sondern zugänglich.
+Du fragst nicht: „Ist das logisch?“
+Du fragst: „Was fühlt sich wahr an?“
 
 Essenz der Karte
-Offenheit bringt neue emotionale Erkenntnis.
+Deine Offenheit bringt neue emotionale Erkenntnis.
+
 
 Affirmation
 Ich höre auf mein Gefühl – auch wenn es leise spricht.`,

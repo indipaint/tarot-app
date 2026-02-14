@@ -52,6 +52,22 @@ const cards = [
 { id: "C12", name: "Ritter der Kelche", image: require("../../assets/images/cards/C12.jpg") },
 { id: "C13", name: "Königin der Kelche", image: require("../../assets/images/cards/C13.jpg") },
 { id: "C14", name: "König der Kelche", image: require("../../assets/images/cards/C14.jpg") },
+// Schwerter (Swords)
+{ id: "S01", name: "Ass der Schwerter", image: require("../../assets/images/cards/S01.jpg") },
+{ id: "S02", name: "Zwei der Schwerter", image: require("../../assets/images/cards/S02.jpg") },
+{ id: "S03", name: "Drei der Schwerter", image: require("../../assets/images/cards/S03.jpg") },
+{ id: "S04", name: "Vier der Schwerter", image: require("../../assets/images/cards/S04.jpg") },
+{ id: "S05", name: "Fünf der Schwerter", image: require("../../assets/images/cards/S05.jpg") },
+{ id: "S06", name: "Sechs der Schwerter", image: require("../../assets/images/cards/S06.jpg") },
+{ id: "S07", name: "Sieben der Schwerter", image: require("../../assets/images/cards/S07.jpg") },
+{ id: "S08", name: "Acht der Schwerter", image: require("../../assets/images/cards/S08.jpg") },
+{ id: "S09", name: "Neun der Schwerter", image: require("../../assets/images/cards/S09.jpg") },
+{ id: "S10", name: "Zehn der Schwerter", image: require("../../assets/images/cards/S10.jpg") },
+{ id: "S11", name: "Bube der Schwerter", image: require("../../assets/images/cards/S11.jpg") },
+{ id: "S12", name: "Ritter der Schwerter", image: require("../../assets/images/cards/S12.jpg") },
+{ id: "S13", name: "Königin der Schwerter", image: require("../../assets/images/cards/S13.jpg") },
+{ id: "S14", name: "König der Schwerter", image: require("../../assets/images/cards/S14.jpg") },
+
 
 
 
