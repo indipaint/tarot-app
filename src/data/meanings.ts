@@ -1210,6 +1210,447 @@ Emotionale Stärke zeigt sich in ruhiger Klarheit.
 Affirmation
 Ich bleibe zentriert – auch wenn die Wellen steigen`,
   },
+  {
+  id: "S01",
+  title: "Ass der Schwerter",
+  general: `Ein mächtiges Schwert erhebt sich senkrecht aus einer geöffneten Wolkenformation. Eine Hand erscheint aus dem Himmel und hält den Griff fest und klar. Die Klinge zeigt nach oben, als würde sie Himmel und Erde verbinden.
+Auf der Spitze ruht eine goldene Krone, umwunden von Lorbeerzweigen – Zeichen von Erkenntnis, Wahrheit und geistigem Sieg. Lichtstrahlen durchbrechen die Wolken und erfüllen den Raum mit Klarheit. Unterhalb erstreckt sich eine weite Landschaft mit Wasser und Bergen, ruhig und offen.
+Die Wolken symbolisieren das Reich des Geistes.
+Das Schwert steht für Wahrheit und Erkenntnis.
+Die Krone zeigt Bewusstsein und geistige Autorität.
+Das Licht steht für Klarheit.
+Die Landschaft zeigt den Raum der Möglichkeiten.
+Diese Karte zeigt den Moment reiner geistiger Klarheit.
+
+Psychologische Bedeutung
+Das Ass der Schwerter steht für einen Moment innerer Klarheit. Gedanken ordnen sich, Verwirrung löst sich auf, und eine neue Einsicht entsteht. Du erkennst eine Wahrheit, die zuvor verborgen war.
+Diese Karte erscheint oft, wenn du eine Situation plötzlich klar siehst. Entscheidungen werden möglich, weil Zweifel weichen. Es ist der Beginn einer neuen Denkweise oder eines neuen Verständnisses.
+Du wirst aufgefordert, ehrlich zu dir selbst zu sein. Illusionen lösen sich auf. Klarheit kann befreiend sein, aber auch herausfordernd, weil sie Täuschungen beendet.
+Das Ass der Schwerter fordert dich auf, bewusst zu denken, klar zu sprechen und mutig zu erkennen.
+
+Spirituelle Bedeutung
+Spirituell steht das Ass der Schwerter für das Element Luft in seiner reinsten Form – Bewusstsein, Erkenntnis und Wahrheit. Es ist ein Durchbruch des Geistes durch die Schleier der Illusion.
+Die Hand aus den Wolken symbolisiert eine höhere Einsicht oder ein Geschenk des Bewusstseins. Wahrheit wird nicht erzwungen, sondern offenbart sich.
+Diese Karte zeigt den Moment, in dem Geist und Seele in Klarheit zusammentreffen. Sie erinnert daran, dass wahre Erkenntnis nicht aus äußeren Quellen stammt, sondern aus innerem Erwachen.
+Das Ass der Schwerter ist das Erwachen des Bewusstseins.
+
+Essenz der Karte
+Klarheit entsteht.
+Wahrheit zeigt sich.
+Ein neuer Gedanke durchbricht die Dunkelheit.
+
+Affirmation
+Ich erkenne die Wahrheit klar und handle aus innerer Klarheit.`,
+},
+
+{
+  id: "S02",
+  title: "Zwei der Schwerter",
+  general: `Eine Frau sitzt ruhig auf einem steinernen Sitz am Ufer eines stillen Gewässers. Ihr Körper ist aufrecht, ihre Haltung gesammelt und ruhig. Ihre Augen sind mit einer weißen Binde bedeckt, sodass ihr Blick nach außen verschlossen ist.
+In ihren Händen hält sie zwei Schwerter, die sie vor ihrem Körper gekreuzt hat. Die Klingen bilden ein klares Zeichen der Abgrenzung und des inneren Gleichgewichts. Hinter ihr erstreckt sich das weite Wasser, ruhig und unbewegt. Über dem Horizont steht der Mond am nächtlichen Himmel und beleuchtet die Szene sanft.
+Die Augenbinde steht für inneres Sehen statt äußerer Wahrnehmung.
+Die zwei Schwerter symbolisieren Entscheidung und Polarität.
+Das ruhige Wasser zeigt emotionale Tiefe.
+Der Mond steht für Intuition und das Unbewusste.
+Die stille Haltung zeigt innere Sammlung.
+Diese Karte zeigt den Zustand zwischen zwei Möglichkeiten.
+
+Psychologische Bedeutung
+Die Zwei der Schwerter steht für einen inneren Konflikt oder eine Entscheidung, die du noch nicht treffen möchtest. Zwei Möglichkeiten stehen sich gegenüber.
+Diese Karte erscheint oft, wenn du Informationen ausblendest oder dich vor einer Wahrheit schützt. Die Augenbinde zeigt, dass du bewusst oder unbewusst etwas nicht sehen willst. Es kann ein Schutzmechanismus sein, um emotionale Überforderung zu vermeiden.
+Du wirst eingeladen, nach innen zu lauschen statt nach außen zu reagieren. Die Entscheidung entsteht nicht durch Druck, sondern durch Klarheit.
+Die Zwei der Schwerter fragt dich:
+Was vermeidest du zu sehen?
+
+Spirituelle Bedeutung
+Spirituell steht die Zwei der Schwerter für den Zustand innerer Balance zwischen Gegensätzen. Geist und Gefühl, Handlung und Ruhe, Wissen und Nichtwissen stehen im Gleichgewicht.
+Die Augenbinde symbolisiert Vertrauen in die innere Führung. Wahrheit entsteht hier nicht durch äußere Information, sondern durch innere Erkenntnis. Der Mond zeigt den Weg der Intuition.
+Diese Karte lädt dich ein, Stille zuzulassen. In der inneren Ruhe kann sich zeigen, welcher Weg deiner Wahrheit entspricht.
+Die Zwei der Schwerter ist der Raum vor der Entscheidung.
+
+Essenz der Karte
+Zwischen zwei Wegen entsteht Stille.
+Innere Balance geht der Entscheidung voraus.
+Wahrheit zeigt sich im Innehalten.
+
+Affirmation
+Ich vertraue meiner inneren Klarheit und erkenne den richtigen Weg in mir.`,
+},
+
+{
+  id: "S03",
+  title: "Drei der Schwerter",
+  general: `Eine einzelne Gestalt steht im Zentrum der Karte. Das Gesicht ist nach oben gerichtet, die Augen geschlossen, der Ausdruck angespannt zwischen Schmerz und innerer Sammlung. Der Himmel hinter ihr ist dunkel und aufgewühlt – schwere Wolken, Regen und grelle Blitze durchziehen den Raum.
+Links und rechts neben der Person stehen zwei aufgerichtete Schwerter, fest im Boden verankert. Ein drittes Schwert liegt waagrecht vor ihr auf der Erde, wie eine Grenze oder ein abgeschlossener Moment. Die Landschaft wirkt rau und karg, die Atmosphäre dicht und geladen.
+Die drei Schwerter symbolisieren Erkenntnis durch Schmerz.
+Der Sturm steht für emotionale Krise und innere Spannung.
+Die geschlossenen Augen zeigen inneres Erleben statt äußere Handlung.
+Das liegende Schwert symbolisiert eine Wahrheit, die nicht mehr ignoriert werden kann.
+Diese Karte zeigt Konfrontation mit innerem Schmerz.
+
+Psychologische Bedeutung (Du-Form)
+Diese Karte erscheint, wenn du dich mit einer unangenehmen Wahrheit auseinandersetzen musst. Etwas wird klar, das du vielleicht lange nicht sehen wolltest. Eine Enttäuschung, eine Verletzung oder eine Erkenntnis trifft dein emotionales Zentrum.
+Du erlebst einen Moment der Klarheit, der zunächst schmerzhaft ist. Doch dieser Schmerz ist kein Angriff von außen – er ist ein Prozess innerer Einsicht. Die Drei der Schwerter zeigt, dass Verdrängung nicht mehr möglich ist. Dein Inneres fordert Ehrlichkeit.
+Vielleicht erkennst du eine Illusion. Vielleicht endet eine Erwartung. Vielleicht wird sichtbar, was schon lange nicht mehr stimmig war. 
+Diese Karte fordert dich auf, den Schmerz bewusst zu durchleben, ihn zu integrieren, statt ihn zu vermeiden. Nur durch das Annehmen entsteht Heilung.
+
+Spirituelle Bedeutung
+Spirituell steht die Drei der Schwerter für Reinigung durch Wahrheit. Das Schwert gehört zum Element Luft – es trennt Illusion von Wirklichkeit. Der Sturm symbolisiert einen Prozess der Klärung, in dem falsche Vorstellungen zerbrechen.
+Diese Karte zeigt einen notwendigen Übergang. Was nicht echt oder wirklich war, fällt weg. Was nicht innerlich tragen kann, wird sichtbar. Der Schmerz ist dabei kein Ziel, sondern ein Werkzeug der Bewusstwerdung.
+Spirituell bedeutet diese Karte: Wachstum geschieht nicht nur durch Freude, sondern auch durch Konfrontation mit der Realität. Erkenntnis kann scharf sein – doch sie befreit.
+
+Essenz der Karte
+Wahrheit kann schmerzen – doch sie bringt Klarheit.
+
+Affirmation
+Ich erkenne die Wahrheit meines Herzens und lasse Heilung entstehen.`,
+},
+
+{
+  id: "S04",
+  title: "Vier der Schwerter",
+  general: `Ein Mann liegt auf einem steinernen Lager in einem stillen Raum, der an einen geschützten Rückzugsort erinnert. Seine Hände sind ruhig auf der Brust gefaltet, sein Blick richtet sich nach oben – nicht angespannt, sondern gesammelt und wach nach innen.
+Drei Schwerter hängen senkrecht an der Wand über ihm, still und unbewegt. Ein viertes Schwert liegt unten vor dem Lager auf dem Boden niedergelegt. Durch ein hohes Fenster fällt warmes Licht in den Raum und durchbricht die Schwere der steinernen Umgebung.
+Das steinerne Bett steht für Rückzug Regeneration und Stabilität.
+Die drei Schwerter symbolisieren ruhende Gedanken und Konflikte.
+Das vierte Schwert am Boden zeigt eine Pause von Handlung.
+Das Licht steht für Heilung und innere Regeneration.
+Diese Karte zeigt gewählte bewusste Ruhe.
+
+Psychologische Bedeutung 
+Die Vier der Schwerter erscheint, wenn du eine Pause brauchst. Dein Geist war vielleicht lange aktiv, angespannt oder belastet. Jetzt fordert dein Inneres Rückzug, Stille und Erholung.
+Du bist aufgefordert, dich bewusst zurückzuziehen – nicht aus Flucht, sondern aus Fürsorge für dich selbst. Gedanken dürfen zur Ruhe kommen. Entscheidungen dürfen warten. Du musst nicht handeln.
+Diese Karte zeigt, dass Heilung im Stillstand entsteht. Wenn du dir keine Pause erlaubst, erschöpft sich deine innere Kraft. Ruhe ist hier kein Stillstand des Lebens, sondern notwendige Regeneration.
+Du darfst dich sammeln, bevor du weitergehst.
+
+Spirituelle Bedeutung
+Spirituell steht die Vier der Schwerter für innere Einkehr und geistige Klärung. Der Rückzug in die Stille öffnet einen Raum jenseits von äußeren Einflüssen der ohne Stille kaum entstehen kann. In der Ruhe wird das Wesentliche wieder erfahrbar.
+Die Schwerter ruhen – das bedeutet, der Verstand tritt zurück, damit tiefere Erkenntnis entstehen kann. Das Licht symbolisiert eine stille Führung, die sich nur im Zustand innerer Sammlung zeigt.
+Diese Karte erinnert daran, dass Wachstum nicht nur durch Bewegung entsteht, sondern auch durch bewusste Stille.
+
+Essenz der Karte
+In der Ruhe erneuert sich deine Kraft.
+
+Affirmation
+Ich erlaube mir Stille und finde darin neue Klarheit.`,
+},
+
+{
+  id: "S05",
+  title: "Fünf der Schwerter",
+  general: `Ein Krieger steht im Zentrum der Szene. In seinen Händen hält er Schwerter, während weitere Waffen zu seinen Füßen liegen. Seine Haltung wirkt ruhig, fast selbstzufrieden. Er hat den Kampf gewonnen.
+Im Hintergrund sitzen zwei andere Gestalten – erschöpft, enttäuscht oder innerlich gebrochen. Ihre Körperhaltung zeigt Rückzug und Niederlage. Der Himmel über der Szene ist unruhig, die Landschaft wirkt leer und still, als wäre der Konflikt bereits entschieden.
+Die Schwerter stehen für Macht und Durchsetzung.
+Die besiegten Figuren symbolisieren Verlust und Konsequenz.
+Die ruhige, aber distanzierte Haltung des Siegers zeigt einen zweifelhaften Triumph.
+Die leere Landschaft steht für den Preis des Konflikts.
+Diese Karte zeigt Sieg mit Folgen.
+
+Psychologische Bedeutung (Du-Form)
+Die Fünf der Schwerter erscheint, wenn du dich in einem Konflikt befindest oder kürzlich einen Streit erlebt hast. Vielleicht hast du recht behalten. Vielleicht hast du dich durchgesetzt. Doch diese Karte stellt eine wichtige Frage: Was hat dieser Sieg dich gekostet?
+Du erkennst möglicherweise, dass Durchsetzung nicht immer zu innerer Zufriedenheit führt. Worte können verletzen. Entscheidungen können Distanz schaffen. Diese Karte zeigt, dass Gewinnen und Verlieren oft gleichzeitig stattfinden.
+Sie fordert dich auf zu prüfen, ob ein Konflikt wirklich notwendig ist oder ob dein Bedürfnis nach Recht oder Kontrolle wichtiger geworden ist als Verbindung und Verständnis.
+Manchmal bedeutet Wachstum, nicht jeden Kampf zu führen.
+
+Spirituelle Bedeutung
+Spirituell steht die Fünf der Schwerter für das Verständnis von Ego und Konsequenz. Das Schwert trennt – und nicht jede Trennung führt zu Harmonie. Diese Karte zeigt die Lektion, dass Macht ohne Weisheit Leere erzeugt.
+Der scheinbare Sieg offenbart eine tiefere Erkenntnis: Wahre Stärke liegt nicht im Besiegen anderer, sondern im Überwinden innerer Konflikte. Spirituell fordert diese Karte Bewusstheit über Motivation und Absicht.
+Sie erinnert daran, dass jede Handlung eine energetische Wirkung hat – auf dich selbst und auf andere.
+
+Essenz der Karte
+Ein Sieg ohne Herz hinterlässt Leere.
+
+Affirmation
+Ich handle bewusst und wähle Frieden statt unnötigen Kampf.`,
+},
+
+{
+  id: "S06",
+  title: "Sechs der Schwerter",
+  general: `Ein kleines Boot gleitet ruhig über das Wasser eines breiten Flusses. Eine Frau sitzt still am Rand des Bootes, in ein Tuch gehüllt, ihr Blick nach vorne gerichtet. Neben ihr sitzt ein Kind, ruhig und aufmerksam. Ein Mann am Heck führt das Boot mit gleichmäßigen Ruderschlägen über das Wasser.
+Im Vordergrund lehnen sechs Schwerter im Boot. Sie bewegen sich mit den Reisenden – sie werden nicht zurückgelassen. Das Licht am Horizont wirkt verheissungsvoll weich und hell, während das Ufer neben ihnen dunkler erscheint.
+Das Boot steht für Übergang und Bewegung.
+Das Wasser symbolisiert das emotionale Feld.
+Die sechs Schwerter zeigen Erfahrungen und Gedanken, die mitgenommen werden.
+Der ruhige Fluss steht für einen bewussten Übergang in eine neue Phase.
+Diese Karte zeigt den Weg aus einer schwierigen Situation.
+
+Psychologische Bedeutung 
+Die Sechs der Schwerter erscheint, wenn du dich innerlich oder äußerlich auf einem Übergang befindest. Du befindest dich in einem Transitbereich. Du verlässt eine belastende Situation, eine schwierige Phase oder ein Umfeld, das dich erschöpft hat.
+Du bewegst dich nicht impulsiv, sondern bewusst. Auch wenn noch Unsicherheit besteht, spürst du, dass dieser Schritt notwendig ist. Die Schwerter im Boot zeigen, dass du deine Erfahrungen mitnimmst – du fliehst nicht, du entwickelst dich.
+Diese Karte steht für Heilung durch Distanz. Manchmal brauchst du Abstand, um klar sehen zu können. Du darfst weitergehen, auch wenn noch nicht alles gelöst ist.
+Der Weg führt zu mehr innerer Ruhe.
+
+Spirituelle Bedeutung
+Spirituell symbolisiert die Sechs der Schwerter den Übergang zwischen Bewusstseinszuständen. Sie zeigt die Reise von Unruhe zu Frieden, von Verwirrung zu Klarheit.
+Das Wasser steht für das Unterbewusste, das Boot für die Führung durch diesen inneren Raum. Die Schwerter begleiten den Weg – Erkenntnisse gehen nicht verloren, sondern werden Teil deiner Weisheit.
+Diese Karte erinnert daran, dass Entwicklung ein Prozess ist. Spirituelles Wachstum geschieht oft durch Loslassen alter Räume und durch das Vertrauen in den Weg selbst.
+
+Essenz der Karte
+Du bewegst dich aus der Schwierigkeit in ruhigere Gewässer und lichtere Horizonte
+
+Affirmation
+Ich gehe meinen Weg bewusst weiter und vertraue dem Übergang.`,
+},
+
+{
+  id: "S07",
+  title: "Sieben der Schwerter",
+  general: `Eine verhüllte Gestalt bewegt sich vorsichtig durch eine dunkle Landschaft. In ihren Armen trägt sie mehrere Schwerter, eng an sich gedrückt, während einige weitere Schwerter hinter ihr im Boden zurückbleiben. Ihr Blick ist zur Seite gerichtet – wachsam, prüfend, darauf bedacht, nicht entdeckt zu werden.
+Im Hintergrund brennt ein Feuer bei einem Lager, in dessen Nähe andere Menschen stehen. Die Szene wirkt still, angespannt, von Heimlichkeit geprägt. Die Atmosphäre ist von Schatten durchzogen, das Licht des Feuers beleuchtet nur einen Teil des Geschehens.
+Die getragenen Schwerter stehen für Wissen oder Ressourcen, die entnommen werden.
+Die zurückgelassenen Schwerter zeigen Unvollständigkeit oder Risiko.
+Die heimliche Bewegung symbolisiert Strategie, List oder Vermeidung.
+Das Lager im Hintergrund steht für Gemeinschaft oder Ordnung, von der sich die Gestalt entfernt.
+Diese Karte zeigt Handeln im Verborgenen.
+
+Psychologische Bedeutung 
+Die Sieben der Schwerter erscheint, wenn du eine Situation indirekt angehst oder versucht bist, etwas zu umgehen. Vielleicht möchtest du einen Konflikt vermeiden. Vielleicht handelst du strategisch, statt offen zu sprechen. Vielleicht schützt du etwas in dir, das du nicht zeigen willst.
+Diese Karte fragt dich ehrlich: Bist du klar in deiner Absicht – oder weichst du aus?
+Du könntest versuchen, Kontrolle zu behalten, ohne dich vollständig zu zeigen. Das kann klug sein, wenn Vorsicht notwendig ist. Doch es kann auch Distanz, Misstrauen oder innere Spannung erzeugen.
+Die Karte fordert dich auf zu prüfen, ob dein Handeln aus Weisheit oder aus Angst entsteht. Wahre Klarheit braucht Aufrichtigkeit – auch dir selbst gegenüber.
+
+Spirituelle Bedeutung
+Spirituell steht die Sieben der Schwerter für Bewusstheit über Täuschung und Wahrheit. Sie zeigt den Bereich zwischen Licht und Schatten – den Raum, in dem Absichten verborgen bleiben.
+Diese Karte erinnert dich daran, dass der Geist sehr geschickt darin sein kann, sich selbst zu täuschen. Spirituelles Wachstum bedeutet, sich auch den eigenen Motiven ehrlich zu stellen.
+Gleichzeitig kann sie auch die Fähigkeit symbolisieren, sich bewusst aus alten Mustern zu lösen, sich aus begrenzenden Strukturen zu befreien oder eigene Wege zu gehen – selbst wenn diese zunächst im Verborgenen geschehen.
+Sie fordert innere Wahrhaftigkeit.
+
+Essenz der Karte
+Handle bewusst – und prüfe deine wahren Motive.
+
+Affirmation
+Ich handle klar, ehrlich und im Einklang mit meiner inneren Wahrheit.`,
+},
+
+{
+  id: "S08",
+  title: "Acht der Schwerter",
+  general: `Eine Frau schreitet langsam durch flaches Wasser in einer kargen Landschaft. Ihre Augen sind verbunden, ihr Körper ist mit Seilen umwickelt, die ihre Bewegungen einschränken. Sie geht barfuß über einen schmalen, steinigen Pfad, der sich zwischen mehreren aufrecht stehenden Schwertern hindurchzieht.
+Die Schwerter bilden keinen geschlossenen Kreis, doch aus ihrer Perspektive wirken sie wie eine unüberwindbare käfigartige Begrenzung. Die Klingen stehen still im Boden, unbewegt, wie Wächter einer unsichtbaren Grenze.
+Das Wasser um ihre Füße ist ruhig und flach. Die Fesseln erscheinen fest, doch nicht unlösbar. Ihr Kopf ist gesenkt, ihr Blick verborgen. Die Landschaft wirkt still, beinahe erstarrt.
+Die Augenbinde steht für fehlende Klarheit.
+Die Seile symbolisieren selbst auferlegte Begrenzung.
+Die Schwerter stehen für Gedankenmuster.
+Das Wasser zeigt emotionale Tiefe unter der Oberfläche.
+Diese Karte zeigt keine äußere Gefangenschaft.
+Sie zeigt eine innere.
+
+Psychologische Bedeutung
+Du befindest dich möglicherweise in einer Situation, in der du dich blockiert oder handlungsunfähig fühlst. Gedanken, Zweifel oder Ängste können dein Handeln einschränken. Vielleicht glaubst du, keine Wahl zu haben, keinen Ausweg zu sehen oder nicht weiterzukommen.
+Doch diese Begrenzung entsteht weniger durch äußere Umstände als durch innere Glaubenssätze. Du siehst nicht, was möglich wäre, weil dein Blick auf das Problem gerichtet bleibt. Deine Gedanken erschaffen eine Grenze, die real erscheint.
+Diese Karte fordert dich auf zu erkennen:
+Du bist nicht machtlos.
+Du bist nur überzeugt davon, es zu sein.
+Sobald du deine Perspektive veränderst, entstehen Wege, die zuvor unsichtbar waren.
+
+Spirituelle Bedeutung
+Spirituell zeigt die Acht der Schwerter eine Phase innerer Prüfung. Sie konfrontiert dich mit den Grenzen deines eigenen Bewusstseins. Die Augenbinde steht für Unwissenheit, aber auch für den Zustand vor dem Erwachen.
+Die Schwerter symbolisieren mentale Strukturen — Überzeugungen, Konzepte, Identitäten. Sie sind Werkzeuge des Geistes, doch sie können auch zur Begrenzung werden, wenn man sich mit ihnen identifiziert.
+Diese Karte erinnert daran, dass Freiheit nicht von außen geschenkt wird. Sie entsteht im Inneren, wenn Illusionen erkannt werden. Die Fesseln lösen sich nicht durch Kampf, sondern durch Erkenntnis.
+Die Acht der Schwerter ist der Moment vor dem inneren Erwachen.
+
+Essenz der Karte
+Die größte Begrenzung entsteht im eigenen Denken.
+Klarheit bringt Befreiung.
+
+Affirmation
+Ich erkenne meine inneren Begrenzungen und löse sie mit Klarheit und Bewusstsein.`,
+},
+
+{
+  id: "S09",
+  title: "Neun der Schwerter",
+  general: `Eine Frau sitzt aufrecht auf einem einfachen Bett in einem kargen Raum. Ihr Körper ist nach vorne gebeugt, beide Hände verbergen ihr Gesicht. Ihre Haltung zeigt tiefe innere Belastung, als wäre sie aus einem schweren Traum oder einer quälenden Erkenntnis erwacht.
+Hinter ihr hängen neun Schwerter in einer klaren Reihe an der Wand. Sie wirken unbeweglich, still und doch bedrohlich präsent – wie Gedanken, die nicht zur Ruhe kommen. Neben dem Bett steht ein kleiner Tisch mit einer brennenden Kerze, deren warmes Licht den Raum nur schwach erhellt.
+Der Raum wirkt eng, geschlossen, still.
+Die Schwerter symbolisieren belastende Gedanken.
+Die Dunkelheit steht für innere Angst.
+Die Kerze zeigt ein kleines, aber vorhandenes Licht der Hoffnung.
+Diese Karte zeigt keinen äußeren Angriff.
+Sie zeigt inneres Leiden.
+
+Psychologische Bedeutung
+Du könntest dich in einer Phase befinden, in der Sorgen, Schuldgefühle oder Ängste deinen Geist beherrschen. Gedanken kreisen unaufhörlich, besonders in stillen Momenten oder nachts. Vielleicht machst du dir Vorwürfe, fürchtest Konsequenzen oder leidest unter innerem Druck.
+Die Neun der Schwerter zeigt, wie stark der Verstand Realität formt. Deine Gedanken können größer erscheinen als das tatsächliche Problem. Oft liegt das Leid nicht im Ereignis selbst, sondern in der ständigen Wiederholung von negativen Gedanken.
+Diese Karte lädt dich ein zu erkennen:
+Nicht jeder Gedanke ist Wahrheit.
+Nicht jede Angst ist Realität.
+Gedanken sind Gäste in uns aber nicht die Hausherren, der Hausherr das bist du, nicht deine Gedanken die deine Gefuehle beeinflussen.
+Heilung beginnt, wenn du Mitgefühl für dich selbst entwickelst und deine Gedanken bewusst wahrnimmst, statt ihnen blind zu folgen.
+
+Spirituelle Bedeutung
+Spirituell steht die Neun der Schwerter für die dunkle Nacht des Seele – eine Phase, in der innere Schatten sichtbar werden. Ängste, verdrängte Gefühle oder ungelöste Themen steigen ins Bewusstsein, um erkannt zu werden.
+Die Schwerter an der Wand zeigen Gedanken, mentale Strukturen, die sich verselbstständigt haben. Doch das Licht der Kerze erinnert daran: Bewusstsein ist bereits vorhanden. Selbst im tiefsten inneren Dunkel existiert ein Funke Klarheit.
+Diese Karte zeigt einen Reinigungsprozess.
+Leiden bringt Erkenntnis hervor.
+Durch das Annehmen der eigenen Schatten entsteht innere Befreiung.
+
+Essenz der Karte
+Negative Gedanken können quälende Gäste in uns sein – doch das Bewusstsein darüber, dass sie letztendlich vorübergehend sind birgt die eigentliche Heilung in sich.
+
+Affirmation
+Ich erkenne meine durch Gedanken entstandenen Ängste, nehme sie an und lasse meinen Geist zur Ruhe kommen.`,
+},
+
+{
+  id: "S10",
+  title: "Zehn der Schwerter",
+  general: `Auf einer Bühne steht ein alter Zauberer mit ausgebreiteten Armen vor einer versammelten Menge. Sein Gesicht wirkt konzentriert, beinahe feierlich, als würde er ein Ritual vollziehen. Vor ihm befindet sich ein hölzerner Kasten, in dem ein Mensch liegt. Zehn Schwerter stecken in gleichmäßiger Reihe durch den Deckel des Kastens.
+Die Assistentin im Inneren wirkt ruhig, beinahe schlafend. Die Szene ist von Kerzenlicht erhellt, das Publikum beobachtet gespannt das Geschehen. Die Atmosphäre ist nicht brutal, sondern rituell — wie eine Darstellung eines Übergangs.
+Die Bühne symbolisiert das Leben als Erfahrung.
+Der Zauberer steht für bewusste Transformation.
+Die zehn Schwerter zeigen den vollständigen Abschluss eines Zyklus.
+Der Kasten steht für einen Zustand zwischen Ende und Neubeginn.
+Diese Karte zeigt kein sinnloses Leid.
+Sie zeigt eine endgültige Wandlung. Ein Ende.
+
+Psychologische Bedeutung
+Du stehst möglicherweise an einem Punkt, an dem etwas endgültig zu Ende geht. Eine Überzeugung, eine Beziehung, eine Lebensphase oder ein inneres Selbstbild kann sich auflösen. Dieser Prozess kann sich intensiv oder unumkehrbar anfühlen.
+Die Zehn der Schwerter zeigt den Moment, in dem Widerstand keinen Sinn mehr hat. Das Alte kann nicht zurückgeholt werden. Doch gerade darin liegt Befreiung — wenn du akzeptierst, was endet, entsteht Raum für Neues.
+Du erkennst vielleicht, dass ein innerer Zustand oder ein Denkmodell seine Wirkung verloren hat. Die Karte fordert dich auf, den Abschluss bewusst anzunehmen, statt am Vergangenen festzuhalten.
+Ein Ende ist nicht dein Scheitern.
+Es ist dein Übergang.
+
+Spirituelle Bedeutung
+Spirituell symbolisiert die Zehn der Schwerter die vollständige Auflösung einer alten Identität. Die zehn Schwerter stehen für das Ende eines mentalen Zyklus — Gedanken, Überzeugungen und Illusionen verlieren ihre Macht.
+Der Zauberer auf der Bühne zeigt, dass Transformation ein bewusster Prozess ist. Was wie Zerstörung wirkt, ist in Wahrheit ein Akt der Wandlung. 
+Diese Karte zeigt den Tod alter Muster — nicht als Verlust, sondern als Initiation. Nach der völligen Auflösung entsteht ein neuer Zustand des Seins.
+Das Ende ist zugleich der Anfang.
+
+Essenz der Karte
+Vollständiger Abschluss ermöglicht vollständige Erneuerung.
+
+Affirmation
+Ich lasse das Alte los und öffne mich mutig für meinen Neubeginn.`,
+},
+
+{
+  id: "S11",
+  title: "Bube der Schwerter",
+  general: `Ein junger Mann steht auf einem erhöhten Felsen in einer weiten Landschaft. Der Wind bewegt sein Haar und seinen Umhang, die Atmosphäre wirkt lebendig, fast unruhig. In seiner Hand hält er ein erhobenes Schwert, bereit, aufmerksam und wachsam. Sein Blick ist wach und konzentriert, als würde er seine Umgebung genau beobachten.
+Über ihm ziehen Wolken über den Himmel, Vögel kreisen in der Luft. Die Landschaft öffnet sich weit in die Ferne, doch seine Haltung zeigt Spannung und Bereitschaft.
+Der Felsen symbolisiert Überblick und Perspektive.
+Das Schwert steht für den klaren Geist.
+Der Wind verkörpert Bewegung und Lebendigkeit.
+Die Jugend der Figur steht für Anfang und Lernprozess.
+Diese Karte zeigt Neugier.
+Sie zeigt geistige Wachheit.
+
+Psychologische Bedeutung
+Du befindest dich möglicherweise in einer Phase erhöhter Aufmerksamkeit. Dein Geist ist wach, neugierig und bereit zu lernen. Du beobachtest, analysierst und stellst Fragen. Neue Erkenntnisse entstehen, wenn du bereit bist, genau hinzusehen.
+Der Bube der Schwerter zeigt einen klaren, wachen Verstand — aber auch eine gewisse Unruhe. Du könntest schnell reagieren, vorschnelle Schlüsse ziehen oder ständig nach neuen Eindrücken suchen. Die Herausforderung besteht darin, Wachheit mit innerer Ruhe zu verbinden.
+Diese Karte fordert dich auf, offen zu bleiben und zugleich bewusst zu prüfen, was wirklich wahr ist.
+Deine Gedanken sind deine Werkzeuge — nutze sie bewusst.
+
+Spirituelle Bedeutung
+Spirituell steht der Bube der Schwerter für den Beginn geistiger Erkenntnis. Das Schwert des Bewusstseins wird bewusst geführt. Der Geist erwacht und beginnt, Realität zu hinterfragen.
+Der Wind symbolisiert das Element Luft — Gedanken, Erkenntnis, Kommunikation. Diese Karte zeigt den Beginn eines inneren Lernwegs. Wahrheit wird nicht einfach gegeben, sie wird entdeckt.
+Spirituell erinnert der Bube daran, dass Weisheit mit Neugier beginnt. Fragen öffnen Türen. Bewusstes Beobachten führt zu Klarheit.
+Der Weg der Erkenntnis hat begonnen.
+
+Essenz der Karte
+Wachheit und Neugier öffnen den Weg zur Erkenntnis.
+
+Affirmation
+Ich beobachte klar, denke bewusst und öffne mich für neue Erkenntnis.`,
+},
+
+{
+  id: "S12",
+  title: "Ritter der Schwerter",
+  general: `Ein Ritter stürmt auf einem weißen Pferd mit hoher Geschwindigkeit durch eine raue Landschaft. Sein Schwert ist erhoben, sein Körper nach vorne geneigt, vollständig auf sein Ziel ausgerichtet. Der Wind erfasst seinen Umhang und die Mähne des Pferdes, während dunkle Wolken über den Himmel ziehen.
+Das Pferd galoppiert kraftvoll über den steinigen Boden, ohne zu zögern. Die Bewegung wirkt unaufhaltsam. Die Atmosphäre ist dynamisch, voller Energie und Spannung.
+Das erhobene Schwert symbolisiert entschlossene Handlung.
+Das weiße Pferd steht für reine Willenskraft.
+Der Sturm zeigt geistige Dynamik und Unruhe.
+Die Vorwärtsbewegung verkörpert direkten Antrieb.
+Diese Karte zeigt Geschwindigkeit.
+Sie zeigt entschlossene Bewegung.
+
+Psychologische Bedeutung
+Du befindest dich möglicherweise in einer Phase intensiver Entschlossenheit. Du willst handeln, vorankommen, Klarheit schaffen oder ein Ziel ohne Umwege erreichen. Deine Gedanken sind schnell, dein Wille stark, dein Fokus scharf.
+Der Ritter der Schwerter zeigt Mut und geistige Stärke — aber auch die Gefahr von Überstürzung. Wenn du zu schnell handelst, könntest du wichtige Details übersehen oder andere übergehen. Energie ohne Reflexion kann zu Konflikten führen.
+Diese Karte fordert dich auf, deine geistige Kraft bewusst zu lenken.
+Handle entschlossen — aber nicht unbedacht.
+Nutze Klarheit ohne Härte.
+
+Spirituelle Bedeutung
+Spirituell steht der Ritter der Schwerter für die Kraft des Geistes in Bewegung. Das Element Luft zeigt sich hier als reiner Wille zur Erkenntnis und Veränderung. Wahrheit wird nicht nur gesucht — sie wird aktiv verfolgt.
+Diese Karte zeigt den Impuls des Bewusstseins, Illusionen zu durchbrechen und Klarheit zu schaffen. Doch spirituelle Entwicklung verlangt nicht nur Geschwindigkeit, sondern auch Weisheit. Wahre Erkenntnis entsteht aus Balance zwischen Handlung und Einsicht.
+Der Ritter verkörpert den Weg der entschlossenen Wahrheitssuche.
+
+Essenz der Karte
+Klarheit verlangt Mut zur entschlossenen Handlung.
+
+Affirmation
+Ich handle klar, mutig und bewusst in Übereinstimmung mit meiner Wahrheit.`,
+},
+
+{
+  id: "S13",
+  title: "Königin der Schwerter",
+  general: `Eine Königin sitzt auf einem kunstvoll verzierten Thron in einer offenen Landschaft. Ihr Rücken ist aufrecht, ihre Haltung ruhig und unerschütterlich. In einer Hand hält sie ein aufgerichtetes Schwert, klar und still, als Zeichen ihrer Autorität und inneren Klarheit. Ihr Blick ist wach, durchdringend und zugleich ruhig.
+Ihr Gewand fällt schwer und würdevoll über den Thron, während sich um sie herum Wolken über den Himmel bewegen. Ein Vogel sitzt in ihrer Nähe, weitere kreisen in der Luft — Zeichen geistiger Freiheit und erhöhter Perspektive.
+Der Thron symbolisiert innere Stabilität.
+Das aufrechte Schwert steht für Wahrheit und Klarheit.
+Der offene Himmel verkörpert geistige Weite.
+Die Vögel stehen fuer Überblick und Distanz.
+Diese Karte zeigt keine Härte.
+Sie zeigt klare Erkenntnis.
+
+Psychologische Bedeutung
+Du wirst aufgefordert, klar zu sehen und ehrlich zu urteilen. Die Königin der Schwerter steht für einen wachen, unabhängigen Geist, der Wahrheit erkennt, auch wenn sie unbequem ist. Du kannst Situationen mit Distanz betrachten und Entscheidungen treffen, die auf Klarheit statt auf Emotion beruhen.
+Diese Karte zeigt geistige Reife. Du erkennst Zusammenhänge, durchdringst Täuschungen und lässt dich nicht von äußeren Einflüssen verwirren. Gleichzeitig erinnert sie daran, dass Klarheit nicht zu innerer Kälte werden darf.
+Du darfst klar sein — aber auch mitfühlend.
+Du darfst unterscheiden — ohne dich zu verschließen.
+Wahre Stärke liegt im Gleichgewicht von Verstand und Herz.
+
+Spirituelle Bedeutung
+Spirituell verkörpert die Königin der Schwerter reine Bewusstheit. Sie steht für die Fähigkeit, Illusionen zu durchschneiden und die Wahrheit hinter Erscheinungen zu erkennen. Das Schwert symbolisiert das unterscheidende Bewusstsein — die Kraft, Realität klar wahrzunehmen.
+Die Wolken zeigen, dass Gedanken kommen und gehen, während das Bewusstsein, das Selbst, still bleibt. Die Königin sitzt im Zentrum dieser Klarheit. Sie ist nicht in den Gedanken gefangen, „sondern beobachtet sie“.
+Diese Karte steht für geistige Souveränität, innere Wahrheit und die Weisheit, die aus Erfahrung entsteht. Erkenntnis wird hier zur inneren Führung.
+
+Essenz der Karte
+Klarheit, Wahrheit und innere Unabhängigkeit führen zur Weisheit.
+
+Affirmation
+Ich erkenne die Wahrheit klar und handle aus innerer Weisheit und Bewusstsein.`,
+},
+
+{
+  id: "S14",
+  title: "König der Schwerter",
+  general: `Ein König sitzt auf einem massiven, kunstvoll gestalteten Thron in einer weiten Landschaft. Seine Haltung ist aufrecht, ruhig und vollkommen stabil. In seiner Hand hält er ein senkrecht vor sich stehendes Schwert, fest und sicher, als Zeichen seiner Autorität und inneren Klarheit. Sein Blick ist wach, ruhig und unbeirrbar.
+Sein Gewand und sein Mantel fallen schwer und würdevoll über den Thron. Hinter ihm öffnen sich Himmel und Landschaft in weite Räume, während Vögel durch die Luft kreisen. Die Atmosphäre wirkt klar, ruhig und von geistiger Präsenz erfüllt.
+Der Thron symbolisiert geistige Autorität.
+Das aufrechte Schwert steht für klare Wahrheit.
+Die offene Landschaft zeigt Überblick und Weite.
+Die Vögel symbolisieren geistige Freiheit und höhere Perspektive.
+Diese Karte zeigt nicht Macht über andere.
+Sie zeigt Meisterschaft über den eigenen Geist.
+
+Psychologische Bedeutung
+Du wirst aufgefordert, Entscheidungen mit Klarheit, Objektivität und innerer Stabilität zu treffen. Der König der Schwerter steht für einen reifen, strukturierten Geist, der Situationen nüchtern beurteilt und Fürsorge übernimmt.
+Du erkennst Zusammenhänge klar, denkst logisch und handelst aus Einsicht statt aus Impuls. Diese Karte zeigt geistige Disziplin, Selbstkontrolle und innere Ordnung. Du kannst klare Grenzen setzen und Wahrheit aussprechen, auch wenn sie unbequem ist.
+Gleichzeitig erinnert sie dich daran, dass reine Rationalität ohne Menschlichkeit hart wirken kann. Wahre Führung verbindet Klarheit mit Weisheit und Fürsorge.
+Du führst nicht durch Macht —
+du führst durch Klarheit.
+
+Spirituelle Bedeutung
+Spirituell steht der König der Schwerter für die höchste Reife des Bewusstseins im Element Luft. Der Geist ist klar, ruhig und nicht mehr von Illusionen oder emotionaler Verwirrung getrieben. Denken wird zum Werkzeug des Erwachens.
+Das Schwert symbolisiert das unterscheidende Bewusstsein — die Fähigkeit, Wahrheit von Täuschung zu trennen. Der König sitzt im Zentrum geistiger Klarheit. Gedanken kommen und gehen, doch sein Bewusstsein bleibt unbewegt.
+Diese Karte zeigt innere Souveränität.
+Der Geist dient der Wahrheit — nicht dem Ego.
+Hier wird Erkenntnis zu Weisheit und Wissen zu Fürsorge.
+
+Essenz der Karte
+Wahre Autorität entsteht aus Klarheit des Geistes und innerer Souveränität.
+
+Affirmation
+Ich handle aus Klarheit, Wahrheit und innerer Weisheit.`,
+},
+
 
 
 
