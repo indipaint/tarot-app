@@ -1,6 +1,6 @@
 export const MEANINGS = [
   {
-    id: 1,
+    id: 0,
     general: `DER NARR
 Psychologisch steht der Narr für den Anfang aller Wege –
 für den Moment, in dem etwas Neues ruft, ohne dass der Ausgang bereits bekannt ist.
@@ -30,7 +30,7 @@ Essenz der Karte
   },
 
   {
-    id: 2,
+    id: 1,
     general: `DER MAGIER
 Psychologisch steht der Magier für Bewusstsein, Fokus und die Fähigkeit, die eigenen
 Gedanken in konkrete Handlungen zu verwandeln. Er symbolisiert das Erwachen der
@@ -54,7 +54,7 @@ Essenz der Karte
   },
 
   {
-    id: 3,
+    id: 2,
     general: `DIE HOHEPRIESTERIN
 Die Hohepriesterin steht psychologisch für das innere Wissen, das jenseits von Logik und Analyse wirkt. Sie symbolisiert die Fähigkeit, nach innen zu lauschen und den leisen Impulsen zu vertrauen. Sie erscheint oft, wenn äußere Antworten nicht weiterführen – wenn Stille, Geduld und Selbstbeobachtung notwendig sind. Diese Karte fordert nicht zum Handeln auf, sondern zum Innehalten. Die Hohepriesterin zeigt, dass nicht alles verstanden werden muss, um wahr zu sein. Manche Erkenntnisse entfalten sich erst, wenn Kontrolle losgelassen wird.
 
@@ -78,7 +78,7 @@ Wahrheit entfaltet sich zur richtigen Zeit.`,
   },
 
   {
-    id: 4,
+    id: 3,
     general: `DIE KÖNIGIN 
 Die Herrscherin steht für innere Fülle, Selbstwert und nährende Präsenz. Psychologisch verkörpert sie die Fähigkeit, sich selbst und andere zu halten, ohne sich dabei zu verlieren. Sie kennt ihren Wert – nicht durch Leistung, sondern durch Sein. Diese Karte erscheint oft, wenn Themen wie Selbstfürsorge, Kreativität, Beziehung oder Körperlichkeit in den Vordergrund treten. Sie lädt dazu ein, das Leben nicht zu kontrollieren, sondern zu empfangen und zu gestalten – mit Vertrauen, Geduld und innerer Ruhe. Die Löwen an ihrer Seite zeigen: Sanftheit und Stärke schließen sich nicht aus. Wahre Autorität entsteht aus innerer Sicherheit.
 
@@ -101,7 +101,7 @@ Würde, Liebe und Vertrauen sind gegenwärtig.`,
   },
 
   {
-    id: 5,
+    id: 4,
     general: `DER KÖNIG
 Psychologisch steht diese Karte für innere Ordnung, Verantwortung und Selbstführung. Der Kaiser verkörpert die Fähigkeit, Struktur ins eigene Leben zu bringen und Entscheidungen aus Klarheit statt aus Reaktion zu treffen. Er zeigt den Moment, in dem innere Reife entsteht. Grenzen werden gesetzt – nicht aus Härte, sondern aus Selbstachtung. Verantwortung wird übernommen, ohne sich zu verhärten. Die beiden Figuren im Hintergrund können als innere Stimmen gelesen werden: Erfahrung und Gewissen, die den Herrscher flankieren. Sie erinnern daran, dass wahre Autorität nicht isoliert ist, sondern aus reflektierter Weisheit entsteht.
 
@@ -124,7 +124,7 @@ Führung entsteht aus innerer Mitte.`,
   },
 
   {
-    id: 6,
+    id: 5,
     general: `DER HOHEPRIESTER
 Der Hohepriester verkörpert das innere Gesetz, die Instanz in dir, die weiß, was richtig ist, noch bevor du es begründen kannst. Psychologisch steht er für das Über-Ich in seiner reifen Form – nicht als strafende Stimme, sondern als verlässliche innere Autorität, die Halt gibt, wo Chaos oder Zweifel herrschen.
 
@@ -149,7 +149,7 @@ Meine Werte tragen mich, und aus meiner inneren Ordnung heraus treffe ich klare,
   },
 
   {
-    id: 7,
+    id: 6,
     general: `DIE LIEBENDEN
 Diese Karte spricht nicht von Romantik, sondern von Ausrichtung. Von der stillen Frage, ob das, was sich verbindet, auch dem Innersten dient. Über den Liebenden schwebt der Engel Raphael – kaum greifbar, nicht dominierend, eher wie ein atmender Raum. Er erinnert: Diese Verbindung steht unter Schutz, wenn sie aus Wahrheit entsteht.
 
@@ -171,7 +171,7 @@ Der Engel erinnert daran, dass jede echte Verbindung heilend wirkt – nicht wei
   },
 
   {
-    id: 8,
+    id: 7,
     general: `DER WAGEN
 Diese Karte spricht von gerichteter Bewegung.
 Nicht von Hast, sondern von innerer Bündelung.
@@ -193,7 +193,7 @@ nicht als Schwäche, sondern als Orientierung.`,
   },
 
   {
-    id: 9,
+    id: 8,
     general: `DIE KRAFT
 Diese Karte zeigt dir eine Form von Stärke, die nicht laut ist.
 Sie entsteht nicht durch Durchsetzung, sondern durch innere Übereinstimmung.
@@ -213,7 +213,7 @@ Vertraue deiner inneren Natur.
 Wenn Herz und Instinkt zusammenwirken, entsteht eine Kraft, die trägt – nicht verletzt.`,
   },
     {
-    id: 10,
+    id: 9,
     general: `DER EREMIT
 Der Eremit ist der Archetyp des inneren Rückzugs, nicht der Flucht.
 Er erscheint, wenn äußere Antworten nicht mehr tragen und die Orientierung nach innen verlegt werden muss.
@@ -231,7 +231,7 @@ Im bewussten Alleinsein zeigt sich, was wirklich trägt.`,
   },
 
   {
-    id: 11,
+    id: 10,
     general: `DAS RAD DES SCHICKSALS
 Steht für Wandel, Bewegung und zyklische Entwicklung.
 
@@ -255,7 +255,7 @@ Ich bin im Einklang mit dem Rhythmus des Lebens und des Universums.`,
   },
 
   {
-    id: 12,
+    id: 11,
     general: `XI · DIE GERECHTIGKEIT
 Diese Karte steht für innere Ausgewogenheit, nicht als starres Urteil, sondern als lebendiges Prinzip. Die Waage misst nicht Schuld, sondern Stimmigkeit.
 
@@ -271,7 +271,7 @@ Erkenne die Folgen – und wähle bewusst.
 Wahre Gerechtigkeit beginnt dort, wo du dir selbst gegenüber aufrichtig wirst.`,
   },
   {
-    id: 13,
+    id: 12,
     general: `DER GEHÄNGTE
 Diese Karte steht für einen freiwilligen Stillstand.
 Nicht, weil nichts mehr möglich wäre, sondern weil etwas Wesentliches reifen will.
@@ -289,7 +289,7 @@ Wenn du bereit bist, nichts zu erzwingen, öffnet sich ein neuer Sinn – leise,
   },
 
   {
-    id: 14,
+    id: 13,
     general: `DER TOD (DIE SCHWELLE DER WANDLUNG)
 In diesem Bild begegnet uns der Tod nicht als Zerstörer, sondern als sanfte Kraft der Verwandlung. Er erscheint nicht als Figur, sondern als Raum, als Licht, als Übergang. Ein Symbol für den Zustand zwischen Gewissheit und Loslassen. Was war, liegt hinter uns. Was kommt, ist noch nicht greifbar.
 Die Erde und die zarten Pflanzen am Wegesrand stehen für das Weiterleben trotz Abschieds. Nichts vergeht vollständig – alles wandelt sich. Selbst im Übergang wächst bereits Neues.
@@ -306,7 +306,7 @@ Nicht Ende, sondern Schwelle.`,
   },
 
   {
-    id: 15,
+    id: 14,
     general: `DIE MÄSSIGKEIT
 Die Mäßigkeit ist die Kunst des rechten Maßes.
 Im Bild mischt die Mäßigkeit zwei Elemente – Feuer mit Wasser – um ein rechtes Maß und etwas Neues entstehen zu lassen.
@@ -333,7 +333,7 @@ Wer den eigenen Rhythmus erkennt, muss nichts erzwingen.
 In der ruhigen Mitte entfaltet sich das Leben von selbst.`,
   },
   {
-    id: 16,
+    id: 15,
     general: `DER TEUFEL (VERKETTUNG)
 Die Erkenntnis der inneren Bindung. Diese Karte zeigt nicht das Böse, sondern das Bewusstwerden innerer Verstrickungen. Der Teufel erscheint hier nicht als Dämon, sondern als Spiegel des eigenen inneren Schattens – ruhig, klar, ohne Urteil.
 Die dargestellte Gestalt steht erhoben, nicht über andere herrschend, sondern als Sinnbild für die Kraft, die entsteht, wenn wir uns unseren inneren Bindungen stellen. Die Ketten, die die beiden Figuren halten, sind leicht, fast durchscheinend – sie fesseln nicht grundsätzlich. Das bedeutet: Die Abhängigkeit ist nicht erzwungen, sondern unbewusst anerkannt.
@@ -355,7 +355,7 @@ In dieser Erkenntnis liegt bereits der Schlüssel zur Wandlung.`,
   },
 
   {
-    id: 17,
+    id: 16,
     general: `DER TURM – DIE WAHRHEIT, DIE BEFREIT
 Der Turm steht für jenen Moment,
 in dem etwas zusammenbricht,
@@ -375,7 +375,7 @@ Und in dieser Klarheit liegt Freiheit.`,
   },
 
   {
-    id: 18,
+    id: 17,
     general: `DER STERN – SPIEGELUNG, HEILUNG UND RÜCKKEHR ZU SICH SELBST
 In dieser Darstellung zeigt sich der Stern nicht als fernes Himmelslicht, sondern als intime Begegnung mit dem eigenen Inneren. Die Frau beugt sich über das Wasser – nicht aus Schwäche, sondern aus bewusster Hinwendung. Sie schaut nicht nach außen, sondern nach innen.
 Das Wasser spiegelt nicht nur ihr Bild, sondern ihren inneren Zustand. Es ist der Ort, an dem Wahrheit nicht bewertet, sondern erkannt wird.
@@ -398,7 +398,7 @@ Der Stern erinnert dich daran:
   },
 
   {
-    id: 19,
+    id: 18,
     general: `DER MOND
 Der Mond ist die Karte der inneren Welten, der Zwischenreiche, des Unbewussten und der seelischen Tiefe. Er erscheint dort, wo Klarheit schwindet und Intuition beginnt. Wo das Licht der Sonne nicht mehr ausreicht, um Orientierung zu geben, beginnt die Reise nach innen.
 
@@ -426,7 +426,7 @@ Essenz der Karte
 Der Mond lädt ein, den Weg durch die Dunkelheit nicht zu meiden, sondern ihm zu vertrauen. Er erinnert daran, dass Klarheit nicht immer im Licht geboren wird – manchmal entsteht sie erst im stillen, geheimnisvollen Leuchten der Nacht.`,
   },
   {
-    id: 20,
+    id: 19,
     general: `DIE SONNE
 Psychologisch zeigt die Sonne den Zustand der Unversehrtheit. Die beiden Kinder verkörpern Anteile des Selbst, die nicht getrennt oder verletzt sind: Spiel, Vertrauen, Lebendigkeit – ein Ich, das nicht mehr gegen sich arbeitet.
 Die Sonne beleuchtet nichts Bedrohliches – sie entlarvt, ohne zu verletzen. Alles darf gesehen werden, ohne bewertet zu werden. In diesem Licht entsteht Selbstvertrauen nicht aus Leistung, sondern aus dem Gefühl: Ich darf (so) sein.
@@ -451,7 +451,7 @@ Heilung geschieht, wenn Vertrauen zurückkehrt.`,
   },
 
   {
-    id: 21,
+    id: 20,
     general: `DAS GERICHT
 Das Gericht steht für einen tiefgreifenden Moment des Erwachens. Sie zeigt den Augenblick, in dem etwas in uns erkannt, erlöst oder neu geboren wird. Es ist kein äußeres Urteil, sondern ein inneres Erwachen – das Erkennen der eigenen Wahrheit.
 
@@ -475,7 +475,7 @@ Vergangenes darf gehen.`,
   },
 
   {
-    id: 22,
+    id: 21,
     general: `DIE WELT
 Die Welt steht für Vollendung, Ganzheit und das bewusste Einswerden mit sich selbst und dem Leben.
 
