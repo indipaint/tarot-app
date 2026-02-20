@@ -67,6 +67,22 @@ const cards = [
 { id: "S12", name: "Ritter der Schwerter", image: require("../../assets/images/cards/S12.jpg") },
 { id: "S13", name: "Königin der Schwerter", image: require("../../assets/images/cards/S13.jpg") },
 { id: "S14", name: "König der Schwerter", image: require("../../assets/images/cards/S14.jpg") },
+// Münzen (Pentacles)
+{ id: "P01", name: "Ass der Münzen", image: require("../../assets/images/cards/P01.jpg") },
+{ id: "P02", name: "Zwei der Münzen", image: require("../../assets/images/cards/P02.jpg") },
+{ id: "P03", name: "Drei der Münzen", image: require("../../assets/images/cards/P03.jpg") },
+{ id: "P04", name: "Vier der Münzen", image: require("../../assets/images/cards/P04.jpg") },
+{ id: "P05", name: "Fünf der Münzen", image: require("../../assets/images/cards/P05.jpg") },
+{ id: "P06", name: "Sechs der Münzen", image: require("../../assets/images/cards/P06.jpg") },
+{ id: "P07", name: "Sieben der Münzen", image: require("../../assets/images/cards/P07.jpg") },
+{ id: "P08", name: "Acht der Münzen", image: require("../../assets/images/cards/P08.jpg") },
+{ id: "P09", name: "Neun der Münzen", image: require("../../assets/images/cards/P09.jpg") },
+{ id: "P10", name: "Zehn der Münzen", image: require("../../assets/images/cards/P10.jpg") },
+{ id: "P11", name: "Bube der Münzen", image: require("../../assets/images/cards/P11.jpg") },
+{ id: "P12", name: "Ritter der Münzen", image: require("../../assets/images/cards/P12.jpg") },
+{ id: "P13", name: "Königin der Münzen", image: require("../../assets/images/cards/P13.jpg") },
+{ id: "P14", name: "König der Münzen", image: require("../../assets/images/cards/P14.jpg") },
+
 
 
 
