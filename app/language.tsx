@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { setLocale } from "../src/i18n";
+const FORCE_LANGUAGE_SCREEN = true;
 
 export default function LanguageGate() {
   const router = useRouter();
@@ -23,12 +24,12 @@ export default function LanguageGate() {
   useEffect(() => {
     (async () => {
       try {
-       
+        await AsyncStorage.removeItem("app_lang");
         const saved = await AsyncStorage.getItem("app_lang");
-        if (saved === "de" || saved === "en") {
-          go(saved);
-          return;
-        }
+if (!FORCE_LANGUAGE_SCREEN && (saved === "de" || saved === "en")) {
+  go(saved);
+  return;
+}
       } catch (e) {
         console.log("LANG CHECK ERROR:", e);
       } finally {
@@ -47,7 +48,7 @@ export default function LanguageGate() {
   if (checking) {
     return (
       <View style={styles.wrap}>
-       
+        <Text style={styles.debug}>LANGUAGE SCREEN LOADING</Text>
       </View>
     );
   }
@@ -55,7 +56,7 @@ export default function LanguageGate() {
   // ✅ Normaler Screen
   return (
     <View style={styles.wrap}>
-     
+      <Text style={styles.debug}>LANGUAGE SCREEN ACTIVE</Text>
 
       <Text style={styles.title}>Sprache wählen</Text>
 
