@@ -1,0 +1,11 @@
+{
+  "app": {
+    "welcome": "Willkommen zur Tarot App"
+  },
+  "tarot": {
+    "major": {
+      "00": { "title": "Der Narr" },
+      "01": { "title": "Der Magier" }
+    }
+  }
+}
