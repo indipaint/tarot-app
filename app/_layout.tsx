@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+<Stack.Screen name="language" />
 
 export default function RootLayout() {
   return (
@@ -9,6 +10,7 @@ export default function RootLayout() {
         contentStyle: { backgroundColor: "#000" },
       }}
     >
+      
       <Stack.Screen name="intro" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="meaning" />

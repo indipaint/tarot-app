@@ -23,11 +23,14 @@ export default function LanguageGate() {
   useEffect(() => {
     (async () => {
       try {
+       
         const saved = await AsyncStorage.getItem("app_lang");
         if (saved === "de" || saved === "en") {
           go(saved);
           return;
         }
+      } catch (e) {
+        console.log("LANG CHECK ERROR:", e);
       } finally {
         setChecking(false);
       }
@@ -40,12 +43,20 @@ export default function LanguageGate() {
     go(lang);
   };
 
+  // ✅ Sichtbarer Loading Screen
   if (checking) {
-    return <View style={styles.wrap} />;
+    return (
+      <View style={styles.wrap}>
+       
+      </View>
+    );
   }
 
+  // ✅ Normaler Screen
   return (
     <View style={styles.wrap}>
+     
+
       <Text style={styles.title}>Sprache wählen</Text>
 
       <Pressable style={styles.btn} onPress={() => choose("de")}>
@@ -67,7 +78,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 18,
   },
-  title: { color: "#bbb", fontSize: 18, letterSpacing: 1 },
+
+  // nur Debug sichtbar
+  debug: {
+    color: "red",
+    fontSize: 22,
+    marginBottom: 20,
+  },
+
+  title: {
+    color: "#bbb",
+    fontSize: 18,
+    letterSpacing: 1,
+  },
+
   btn: {
     borderWidth: 1,
     borderColor: "#666",
@@ -75,5 +99,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     borderRadius: 10,
   },
-  btnText: { color: "#ddd", fontSize: 16, letterSpacing: 2 },
+
+  btnText: {
+    color: "#ddd",
+    fontSize: 16,
+    letterSpacing: 2,
+  },
 });
