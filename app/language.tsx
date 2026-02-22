@@ -1,12 +1,14 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { setLocale } from "../src/i18n";
 
 export default function LanguageGate() {
   const router = useRouter();
+  const [checking, setChecking] = useState(true);
 
-  const choose = (lang: "de" | "en") => {
+  const go = (lang: "de" | "en") => {
     setLocale(lang);
 
     if (lang === "de") {
@@ -17,6 +19,30 @@ export default function LanguageGate() {
     // EN Platzhalter
     router.replace("/modal");
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const saved = await AsyncStorage.getItem("app_lang");
+        if (saved === "de" || saved === "en") {
+          go(saved);
+          return;
+        }
+      } finally {
+        setChecking(false);
+      }
+    })();
+  }, []);
+
+  const choose = async (lang: "de" | "en") => {
+    setLocale(lang);
+    await AsyncStorage.setItem("app_lang", lang);
+    go(lang);
+  };
+
+  if (checking) {
+    return <View style={styles.wrap} />;
+  }
 
   return (
     <View style={styles.wrap}>
