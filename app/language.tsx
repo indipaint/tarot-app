@@ -9,7 +9,7 @@ export default function LanguageGate() {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
 
-  const go = (lang: "de" | "en") => {
+  const go = (lang: string) => {
     setLocale(lang);
 
     if (lang === "de") {
