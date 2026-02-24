@@ -18,7 +18,7 @@ export default function LanguageGate() {
     }
 
     // EN Platzhalter
-    router.replace("/modal");
+    router.replace("/intro");
   };
 
   useEffect(() => {

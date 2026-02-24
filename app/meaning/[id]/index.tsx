@@ -1,11 +1,10 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import i18n, { subscribeLocale, getLocale } from "../../../src/i18n";
 
-// Bedeutungen (robust: default oder named export)
 function getMeaningsModule(): any {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const mod = require("../../../src/data/meanings");
   return mod?.default ?? mod?.MEANINGS ?? mod;
 }
@@ -21,6 +20,12 @@ export default function MeaningByIdScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams();
+
+  // ✅ Locale-State für Re-render bei Sprachwechsel
+  const [locale, setLocaleState] = useState(getLocale());
+  useEffect(() => {
+    return subscribeLocale((lang: string) => setLocaleState(lang));
+  }, []);
 
   const idParam = (params?.id ?? "") as string;
   const meaning = useMemo(() => getMeaningByIdLocal(idParam), [idParam]);
@@ -46,19 +51,17 @@ export default function MeaningByIdScreen() {
             </Text>
           </View>
 
-          {/* Separate Linie – NUR diese mit bottom verschieben */}
           <View
             style={{
               position: "absolute",
               left: 14,
               right: 14,
-              bottom: 22,        // <<< NUR HIER ändern, um die Linie hoch/runter zu ziehen
+              bottom: 22,
               height: 1,
               backgroundColor: "#000",
             }}
           />
 
-          {/* Spacer */}
           <View style={styles.headerRightSpacer} />
         </View>
 
@@ -80,11 +83,9 @@ export default function MeaningByIdScreen() {
             style={[styles.bottomBtn, { backgroundColor: "#eedecc" }]}
             onPress={() => router.back()}
           >
-            <Text
-              style={[styles.bottomBtnText, { color: "#777" }]}
-              numberOfLines={1}
-            >
-              Zurück
+            {/* ✅ Zurück-Button übersetzt */}
+            <Text style={[styles.bottomBtnText, { color: "#777" }]} numberOfLines={1}>
+              {i18n.t("buttons.back")}
             </Text>
           </Pressable>
         </View>
@@ -96,7 +97,6 @@ export default function MeaningByIdScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#f4fbd1" },
   container: { flex: 1, backgroundColor: "#f4fbd1" },
-
   header: {
     height: 56,
     flexDirection: "row",
@@ -104,12 +104,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     backgroundColor: "#f4fbd1",
   },
-
-  headerTitleWrap: {
-    flex: 1,
-    alignItems: "flex-end",
-  },
-
+  headerTitleWrap: { flex: 1, alignItems: "flex-end" },
   headerTitle: {
     textAlign: "right",
     color: "#aaaaaa",
@@ -118,23 +113,10 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     marginTop: -29,
   },
-
-  headerRightSpacer: {
-    minWidth: 86,
-  },
-
+  headerRightSpacer: { minWidth: 86 },
   scroll: { flex: 1 },
-  scrollContent: {
-    padding: 16,
-    flexGrow: 1,
-  },
-
-  body: {
-    color: "#201a01",
-    fontSize: 19,
-    lineHeight: 24,
-  },
-
+  scrollContent: { padding: 16, flexGrow: 1 },
+  body: { color: "#201a01", fontSize: 19, lineHeight: 24 },
   bottomBar: {
     position: "absolute",
     left: 0,
@@ -144,7 +126,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     alignItems: "center",
   },
-
   bottomBtn: {
     borderWidth: 1,
     borderColor: "#333",
@@ -153,10 +134,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#eedecc",
   },
-
-  bottomBtnText: {
-    color: "#777",
-    fontSize: 10,
-    letterSpacing: 1,
-  },
+  bottomBtnText: { color: "#777", fontSize: 10, letterSpacing: 1 },
 });

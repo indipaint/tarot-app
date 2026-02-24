@@ -1,7 +1,6 @@
-import i18n, { subscribeLocale, getLocale } from "../src/i18n";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -14,6 +13,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// ✅ FIX 1: Kein require() mehr – sauberer ES-Import
+import i18n, { getLocale, setLocale, subscribeLocale } from "../src/i18n";
+
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
 const EDGE_WIDTH = 18;
@@ -21,10 +23,6 @@ const SWIPE_DISTANCE = 70;
 const SWIPE_VELOCITY = 0.35;
 const BUTTON_BAR_H = 76;
 const RITUAL_FADE_MS = 4000;
-
-const WELCOME_SCALE = 1.12;
-const WELCOME_TRANSLATE_Y = -177;
-const WELCOME_BTN_MARGIN_TOP = -266;
 
 function getCards(): any[] {
   const mod = require("../src/data/cards");
@@ -51,8 +49,9 @@ function toRoman(n: number) {
 export default function Index() {
   const router = useRouter();
 
-  // ✅ FIX: Locale-State für Re-render bei Sprachwechsel
+  // ✅ FIX 2: Locale-State damit Re-render bei Sprachwechsel passiert
   const [locale, setLocaleState] = useState(getLocale());
+
   useEffect(() => {
     return subscribeLocale((lang: string) => setLocaleState(lang));
   }, []);
@@ -63,7 +62,7 @@ export default function Index() {
   }, []);
 
   const [index, setIndex] = useState(0);
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome] = useState(true);
   const [incomingIndex, setIncomingIndex] = useState<number | null>(null);
   const progress = useRef(new Animated.Value(0)).current;
   const locked = useRef(false);
@@ -192,6 +191,12 @@ export default function Index() {
   const currentSource = (currentCard as any).image;
   const nextSource = nextCard ? (nextCard as any).image : null;
 
+  // ✅ FIX 3: EN navigiert jetzt genauso zur App wie DE
+  const setLangAndStart = (lang: "de" | "en") => {
+    setLocale(lang);
+    router.replace("/intro");
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
@@ -202,33 +207,30 @@ export default function Index() {
           <View style={styles.welcomeOverlay}>
             <Image
               source={require("../assets/images/cards/Rueckseite.jpg")}
-              style={{
-                width: "100%",
-                height: "100%",
-                transform: [
-                  { scale: WELCOME_SCALE },
-                  { translateY: WELCOME_TRANSLATE_Y },
-                ],
-              }}
-              resizeMode="contain"
+              style={styles.welcomeBg}
+              resizeMode="cover"
             />
-            <Pressable
-              style={[styles.welcomeBtn, { marginTop: WELCOME_BTN_MARGIN_TOP }]}
-              onPress={() => {
-                if (cards.length > 1) {
-                  let r = index;
-                  while (r === index) r = Math.floor(Math.random() * cards.length);
-                  setIndex(r);
-                  rebuildDeck(r);
-                } else {
-                  rebuildDeck(index);
-                }
-                setShowWelcome(false);
-              }}
-            >
-              {/* ✅ FIX: "ZIEH EINE KARTE" übersetzt */}
-              <Text style={styles.welcomeBtnText}>{i18n.t("buttons.draw_welcome")}</Text>
-            </Pressable>
+            <View style={styles.welcomeCard}>
+              <Image
+                source={require("../assets/icon.png")}
+                style={styles.welcomeIcon}
+                resizeMode="contain"
+              />
+              <View style={styles.langCol}>
+                <Pressable
+                  style={[styles.langBtn, styles.langBtnPrimary]}
+                  onPress={() => setLangAndStart("de")}
+                >
+                  <Text style={[styles.langBtnText, styles.langBtnTextPrimary]}>
+                    DE — Deutsch
+                  </Text>
+                </Pressable>
+
+                <Pressable style={styles.langBtn} onPress={() => setLangAndStart("en")}>
+                  <Text style={styles.langBtnText}>EN — English</Text>
+                </Pressable>
+              </View>
+            </View>
           </View>
         ) : null}
 
@@ -264,13 +266,18 @@ export default function Index() {
           </View>
         </View>
 
-        {/* BUTTONS */}
+        {/* ✅ FIX 4: Buttons verwenden i18n.t() statt hardcoded Deutsch */}
         <View style={styles.buttonRow}>
           <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${currentId}` as any)}>
             <Text style={styles.btnText}>{i18n.t("buttons.meaning")}</Text>
           </Pressable>
+
           <Pressable style={styles.btn} onPress={drawUnique}>
             <Text style={styles.btnText}>{i18n.t("buttons.draw")}</Text>
+          </Pressable>
+
+          <Pressable style={styles.btn} onPress={() => {}}>
+            <Text style={styles.btnText}>Language</Text>
           </Pressable>
         </View>
 
@@ -333,20 +340,29 @@ const styles = StyleSheet.create({
   errorText: { color: "#bbb", fontSize: 13, paddingHorizontal: 20, textAlign: "center" },
   welcomeOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#05050A",
+    backgroundColor: "#05050a",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 0,
     zIndex: 9999,
     elevation: 9999,
   },
-  welcomeBtn: {
-    paddingHorizontal: 18,
-    paddingVertical: 10,
+  welcomeBg: { ...StyleSheet.absoluteFillObject, opacity: 0.25 },
+  welcomeCard: { width: "100%", maxWidth: 460, paddingHorizontal: 24, alignItems: "center" },
+  welcomeIcon: { width: 140, height: 140, marginBottom: 18 },
+  langCol: { width: "100%", gap: 10 },
+  langBtn: {
+    height: 48,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "rgba(180,180,255,0.6)",
-    backgroundColor: "rgba(40,40,80,0.6)",
+    borderColor: "#666",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.55)",
   },
-  welcomeBtnText: { color: "#eaeaff", letterSpacing: 1.4, fontWeight: "700" },
+  langBtnPrimary: {
+    borderColor: "rgba(180,180,255,0.8)",
+    backgroundColor: "rgba(40,40,80,0.55)",
+  },
+  langBtnText: { color: "#bbb", letterSpacing: 1, fontSize: 15, fontWeight: "600" },
+  langBtnTextPrimary: { color: "#eaeaff" },
 });
