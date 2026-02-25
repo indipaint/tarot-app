@@ -249,9 +249,10 @@ const currentName =
     i18n.t(`cards.${currentId}`, { defaultValue: (currentCard as any).name ?? "Unbenannt" });
   
 
-  const nextName = nextCard
-    ? ((nextCard as any).name ?? (nextCard as any).title ?? "Unbenannt")
-    : "";
+  const nextId = nextCard ? String((nextCard as any).id ?? incomingIndex) : "";
+const nextName = nextCard
+  ? i18n.t(`cards.${nextId}`, { defaultValue: (nextCard as any).name ?? "Unbenannt" })
+  : "";
 
   const currentSource = (currentCard as any).image;
   const nextSource = nextCard ? (nextCard as any).image : null;

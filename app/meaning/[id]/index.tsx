@@ -2,18 +2,26 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import i18n, { subscribeLocale, getLocale } from "../../../src/i18n";
+import i18n, { getLocale, subscribeLocale } from "../../../src/i18n";
 
-function getMeaningsModule(): any {
+function getMeaningsModule(locale: string): any {
+  const lang = locale.split("-")[0];
+
+  if (lang === "en") {
+    const mod = require("../../../src/data/meanings_en");
+    return mod?.default ?? mod?.MEANINGS_EN ?? mod;
+  }
+
   const mod = require("../../../src/data/meanings");
   return mod?.default ?? mod?.MEANINGS ?? mod;
 }
 
 function getMeaningByIdLocal(id: string | number) {
-  const list = getMeaningsModule();
+  const locale = (i18n as any).language ?? (i18n as any).locale ?? "de";
+const list = getMeaningsModule(locale);
   const key = String(id).replace(/^0+/, "");
   const arr = Array.isArray(list) ? list : [];
-  return arr.find((m) => String(m.id).replace(/^0+/, "") === key);
+  return arr.find((m) => m && m.id && String(m.id).replace(/^0+/, "") === key);
 }
 
 export default function MeaningByIdScreen() {
