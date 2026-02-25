@@ -2,18 +2,23 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import i18n, { subscribeLocale, getLocale } from "../../../src/i18n";
+import i18n, { getLocale, subscribeLocale } from "../../../src/i18n";
 
-function getMeaningsModule(): any {
+// ✅ Lädt DE oder EN je nach Sprache
+function getMeaningsModule(locale: string): any {
+  if (locale === "en") {
+    const mod = require("../../../src/data/meanings_en");
+    return mod?.default ?? mod?.MEANINGS_EN ?? mod;
+  }
   const mod = require("../../../src/data/meanings");
   return mod?.default ?? mod?.MEANINGS ?? mod;
 }
 
-function getMeaningByIdLocal(id: string | number) {
-  const list = getMeaningsModule();
+function getMeaningByIdLocal(id: string | number, locale: string) {
+  const list = getMeaningsModule(locale);
   const key = String(id).replace(/^0+/, "");
   const arr = Array.isArray(list) ? list : [];
-  return arr.find((m) => String(m.id).replace(/^0+/, "") === key);
+  return arr.find((m: any) => String(m.id).replace(/^0+/, "") === key);
 }
 
 export default function MeaningByIdScreen() {
@@ -21,24 +26,27 @@ export default function MeaningByIdScreen() {
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams();
 
-  // ✅ Locale-State für Re-render bei Sprachwechsel
   const [locale, setLocaleState] = useState(getLocale());
   useEffect(() => {
     return subscribeLocale((lang: string) => setLocaleState(lang));
   }, []);
 
   const idParam = (params?.id ?? "") as string;
-  const meaning = useMemo(() => getMeaningByIdLocal(idParam), [idParam]);
+
+  // ✅ locale als Dependency damit Re-render bei Sprachwechsel
+  const meaning = useMemo(() => getMeaningByIdLocal(idParam, locale), [idParam, locale]);
 
   const title =
     meaning?.title ??
     meaning?.name ??
-    (meaning?.id ? `Deutung ${meaning.id - 1}` : "Deutung");
+    (meaning?.id !== undefined
+      ? `${locale === "en" ? "Meaning" : "Deutung"} ${meaning.id}`
+      : locale === "en" ? "Meaning" : "Deutung");
 
   const text =
     meaning?.general ??
     meaning?.text ??
-    "Keine Deutung gefunden. Prüfe meanings.ts und die ID.";
+    (locale === "en" ? "No meaning found." : "Keine Deutung gefunden.");
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
@@ -50,7 +58,6 @@ export default function MeaningByIdScreen() {
               {title}
             </Text>
           </View>
-
           <View
             style={{
               position: "absolute",
@@ -61,7 +68,6 @@ export default function MeaningByIdScreen() {
               backgroundColor: "#000",
             }}
           />
-
           <View style={styles.headerRightSpacer} />
         </View>
 
@@ -83,7 +89,6 @@ export default function MeaningByIdScreen() {
             style={[styles.bottomBtn, { backgroundColor: "#eedecc" }]}
             onPress={() => router.back()}
           >
-            {/* ✅ Zurück-Button übersetzt */}
             <Text style={[styles.bottomBtnText, { color: "#777" }]} numberOfLines={1}>
               {i18n.t("buttons.back")}
             </Text>
