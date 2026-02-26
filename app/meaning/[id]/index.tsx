@@ -12,13 +12,18 @@ function getMeaningsModule(locale: string): any {
     return mod?.default ?? mod?.MEANINGS_EN ?? mod;
   }
 
+  if (lang === "fr") {
+    const mod = require("../../../src/data/meanings_fr");
+    return mod?.default ?? mod?.MEANINGS_FR ?? mod;
+  }
+
   const mod = require("../../../src/data/meanings");
   return mod?.default ?? mod?.MEANINGS ?? mod;
 }
 
 function getMeaningByIdLocal(id: string | number) {
   const locale = (i18n as any).language ?? (i18n as any).locale ?? "de";
-const list = getMeaningsModule(locale);
+  const list = getMeaningsModule(locale);
   const key = String(id).replace(/^0+/, "");
   const arr = Array.isArray(list) ? list : [];
   return arr.find((m) => m && m.id && String(m.id).replace(/^0+/, "") === key);
@@ -29,19 +34,13 @@ export default function MeaningByIdScreen() {
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams();
 
-  // ✅ Locale-State für Re-render bei Sprachwechsel
   const [locale, setLocaleState] = useState(getLocale());
   useEffect(() => {
     return subscribeLocale((lang: string) => setLocaleState(lang));
   }, []);
 
   const idParam = (params?.id ?? "") as string;
-  const meaning = useMemo(() => getMeaningByIdLocal(idParam), [idParam]);
-
-  const title =
-    meaning?.title ??
-    meaning?.name ??
-    (meaning?.id ? `Deutung ${meaning.id - 1}` : "Deutung");
+  const meaning = useMemo(() => getMeaningByIdLocal(idParam), [idParam, locale]);
 
   const text =
     meaning?.general ??
@@ -51,27 +50,6 @@ export default function MeaningByIdScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
       <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerTitleWrap}>
-            <Text style={styles.headerTitle} numberOfLines={1}>
-              {title}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              position: "absolute",
-              left: 14,
-              right: 14,
-              bottom: 22,
-              height: 1,
-              backgroundColor: "#000",
-            }}
-          />
-
-          <View style={styles.headerRightSpacer} />
-        </View>
 
         {/* Content */}
         <ScrollView
@@ -91,7 +69,6 @@ export default function MeaningByIdScreen() {
             style={[styles.bottomBtn, { backgroundColor: "#eedecc" }]}
             onPress={() => router.back()}
           >
-            {/* ✅ Zurück-Button übersetzt */}
             <Text style={[styles.bottomBtnText, { color: "#777" }]} numberOfLines={1}>
               {i18n.t("buttons.back")}
             </Text>

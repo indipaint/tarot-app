@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { setLocale } from "../src/i18n";
 const FORCE_LANGUAGE_SCREEN = true;
@@ -11,13 +11,6 @@ export default function LanguageGate() {
 
   const go = (lang: string) => {
     setLocale(lang);
-
-    if (lang === "de") {
-      router.replace("/intro");
-      return;
-    }
-
-    // EN Platzhalter
     router.replace("/intro");
   };
 
@@ -26,10 +19,10 @@ export default function LanguageGate() {
       try {
         await AsyncStorage.removeItem("app_lang");
         const saved = await AsyncStorage.getItem("app_lang");
-if (!FORCE_LANGUAGE_SCREEN && (saved === "de" || saved === "en")) {
-  go(saved);
-  return;
-}
+        if (!FORCE_LANGUAGE_SCREEN && (saved === "de" || saved === "en" || saved === "fr")) {
+          go(saved);
+          return;
+        }
       } catch (e) {
         console.log("LANG CHECK ERROR:", e);
       } finally {
@@ -38,7 +31,7 @@ if (!FORCE_LANGUAGE_SCREEN && (saved === "de" || saved === "en")) {
     })();
   }, []);
 
-  const choose = async (lang: "de" | "en") => {
+  const choose = async (lang: "de" | "en" | "fr") => {
     setLocale(lang);
     await AsyncStorage.setItem("app_lang", lang);
     go(lang);
@@ -66,6 +59,10 @@ if (!FORCE_LANGUAGE_SCREEN && (saved === "de" || saved === "en")) {
 
       <Pressable style={styles.btn} onPress={() => choose("en")}>
         <Text style={styles.btnText}>EN</Text>
+      </Pressable>
+
+      <Pressable style={styles.btn} onPress={() => choose("fr")}>
+        <Text style={styles.btnText}>FR</Text>
       </Pressable>
     </View>
   );

@@ -280,6 +280,29 @@ The Star reminds you:
 – Gentleness is strength
 – Truthfulness heals
 – Everything you seek begins in the still encounter with yourself`,
+  },  
+  {
+    id: 16,
+    general: `THE TOWER — THE TRUTH THAT SETS YOU FREE
+The Tower stands for that moment when something collapses that has carried you for a long time — not out of malice, but because it is no longer true inside.
+It is not destruction for destruction’s sake. It is insight that can no longer be postponed. In this depiction, the Tower is not a place of terror, but a place of revelation. What falls away is not the essential — it is the shell that promised protection but brought constriction.
+
+Psychological Meaning:
+This card marks the moment when inner constructions — beliefs, roles, self-images — no longer hold. It can feel like a break, but in truth it is an act of liberation. A person recognizes: what I took for security has been limiting me.
+The collapse is not an attack from the outside, but an inner truth that can no longer be held back.
+
+Spiritual Level:
+The Tower is awakening from illusion. It shows that growth often begins exactly where certainties fall apart. This is the moment when the ego lets go through insight — and the soul remembers it is greater than its old forms.
+The light that pierces the Tower is not a destructive lightning strike, but a flash of realization: waking up from old patterns.
+
+Essence:
+The Tower does not say: “Everything is falling apart.”
+It says: “What is not true may go.”
+What remains is clarity.
+And in that clarity lies freedom.
+
+Affirmation:
+I allow what is untrue to fall away and trust the clarity that remains.`,
   },
   {
     id: 18,
