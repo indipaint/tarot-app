@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Tarot App",
-    "slug": "tarot-app",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "android": {
       "backgroundColor": "#000000",

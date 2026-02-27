@@ -49,21 +49,24 @@ export default function LanguageGate() {
   // ✅ Normaler Screen
   return (
     <View style={styles.wrap}>
-      <Text style={styles.debug}>LANGUAGE SCREEN ACTIVE</Text>
+      <Text style={styles.debug}>Endyia Tarot</Text>
 
-      <Text style={styles.title}>Sprache wählen</Text>
+      
+       <Pressable style={styles.btn} onPress={() => choose("en")}>
+        <Text style={styles.btnText}>🇬🇧  english</Text>
+      </Pressable>
 
+        <Pressable style={styles.btn} onPress={() => choose("fr")}>
+        <Text style={styles.btnText}>🇫🇷  français</Text>
+      </Pressable>
+     
       <Pressable style={styles.btn} onPress={() => choose("de")}>
-        <Text style={styles.btnText}>DE</Text>
+        <Text style={styles.btnText}>🇩🇪  deutsch</Text>
       </Pressable>
 
-      <Pressable style={styles.btn} onPress={() => choose("en")}>
-        <Text style={styles.btnText}>EN</Text>
-      </Pressable>
+      
 
-      <Pressable style={styles.btn} onPress={() => choose("fr")}>
-        <Text style={styles.btnText}>FR</Text>
-      </Pressable>
+      
     </View>
   );
 }
