@@ -1641,8 +1641,8 @@ J'agis depuis la clarté, la vérité et la sagesse intérieure.`,
   },
   {
     id: "P01",
-    title: "As de Pentacles",
-    general: `As de Pentacles
+    title: "As de Deniers",
+    general: `As de Deniers
 Une main sort d'un nuage lumineux et tient une pièce d'or massive. Sur la pièce brille un symbole doré – une étoile à cinq branches ou un pentagramme, signe de la vie incarnée et de la connexion entre le ciel et la terre. La pièce est grande, lourde et présente, comme quelque chose de réel, tangible et durable.
 En dessous s'étend un jardin fleuri – une arcade de fleurs et de verdure mène vers un paysage de montagne ouvert au loin. Le chemin est visible, libre et éclairé. Tout paraît fertile, ordonné et plein de possibilités.
 La main venant du nuage symbolise l'origine spirituelle de l'abondance matérielle.
@@ -1653,15 +1653,15 @@ Les montagnes au fond indiquent la stabilité et la durée.
 Cette carte montre le commencement de la vraie abondance.
 
 Signification psychologique
-L'As de Pentacles représente une nouvelle impulsion concrète dans ta vie. Quelque chose de nouveau s'offre à toi – un projet, une possibilité, une ressource ou un fondement que tu peux construire. Ce n'est pas une promesse floue, mais une offre réelle et tangible.
+L'As de Deniers représente une nouvelle impulsion concrète dans ta vie. Quelque chose de nouveau s'offre à toi – un projet, une possibilité, une ressource ou un fondement que tu peux construire. Ce n'est pas une promesse floue, mais une offre réelle et tangible.
 Cette carte apparaît souvent lorsqu'un nouveau départ dans le domaine matériel ou professionnel est imminent. Elle symbolise la confiance en toi et la conviction que tu peux créer quelque chose de durable. Le potentiel est présent – il attend seulement d'être reconnu et saisi.
 Tu es invité(e) à prendre consciemment le premier pas, à investir en toi-même et à créer de la valeur par ton action.
 L'abondance commence par la conscience.
 
 Signification spirituelle
-Sur le plan spirituel, l'As de Pentacles est l'expression de la grâce divine dans la matière. Il montre que l'abondance n'est pas seulement matérielle, mais est aussi une expression de la connexion spirituelle avec la vie.
+Sur le plan spirituel, l'As de Deniers est l'expression de la grâce divine dans la matière. Il montre que l'abondance n'est pas seulement matérielle, mais est aussi une expression de la connexion spirituelle avec la vie.
 La main venant du ciel rappelle que toutes les ressources – temps, énergie, argent, talent – sont en dernier ressort des cadeaux. L'utilisation consciente de ces cadeaux est la vraie richesse. Celui qui crée avec gratitude et intention manifeste plus qu'une valeur matérielle – il exprime de la confiance dans le flux de la vie.
-L'As de Pentacles t'invite à ancrer ta vision dans la réalité.
+L'As de Deniers t'invite à ancrer ta vision dans la réalité.
 
 Essence de la carte
 Un nouveau fondement s'offre à toi.
@@ -1674,8 +1674,8 @@ Je reçois consciemment ce qui m'est offert et construis avec confiance et grati
 
   {
     id: "P02",
-    title: "Deux de Pentacles",
-    general: `Deux de Pentacles
+    title: "Deux de Deniers",
+    general: `Deux de Deniers
 Un jeune homme danse légèrement sur un sol pierreux au bord de la mer. Dans ses mains il tient deux grandes pièces d'or qu'il fait tourner habilement, reliées par un ruban en forme d'infini – le signe lemniscate. Son mouvement paraît souple et équilibré, ni tendu ni lourd. Son visage est concentré, mais non stressé.
 Derrière lui sur la mer naviguent deux grands navires dans des vagues agitées. Le ciel paraît ouvert mais dynamique. Tout est en mouvement – et pourtant la figure au centre reste centrée.
 Les deux pièces représentent les tâches, ressources ou domaines de vie alternatifs.
@@ -1685,12 +1685,12 @@ La danse représente la compétence de l'équilibre en mouvement.
 Cette carte montre l'équilibre dans les exigences de la vie.
 
 Signification psychologique
-Tu jongleras peut-être actuellement avec différentes tâches, projets ou domaines de ta vie. Le Deux de Pentacles montre ta capacité à rester souple et équilibré(e) dans une telle phase. Ce n'est pas une phase de stabilité fixe, mais de compétence de l'équilibre en mouvement.
+Tu jongleras peut-être actuellement avec différentes tâches, projets ou domaines de ta vie. Le Deux de Deniers montre ta capacité à rester souple et équilibré(e) dans une telle phase. Ce n'est pas une phase de stabilité fixe, mais de compétence de l'équilibre en mouvement.
 La carte t'invite à rester présent(e) et concentré(e) sans te rigidifier. Si tu te crampons trop à un domaine, l'autre commence à vaciller. La clé réside dans la légèreté et l'adaptabilité.
 Parfois tu dois aussi reconnaître que pas tout ne peut être maîtrisé simultanément. La souplesse est ta force ici.
 
 Signification spirituelle
-Sur le plan spirituel, le Deux de Pentacles représente l'équilibre entre les exigences mondaines et les besoins intérieurs. Le signe infini montre que les opposés ne s'excluent pas, mais se complètent. Matière et esprit, action et repos, donner et recevoir peuvent tous deux coexister.
+Sur le plan spirituel, le Deux de Deniers représente l'équilibre entre les exigences mondaines et les besoins intérieurs. Le signe infini montre que les opposés ne s'excluent pas, mais se complètent. Matière et esprit, action et repos, donner et recevoir peuvent tous deux coexister.
 Cette carte rappelle que l'équilibre n'est pas un état statique, mais un processus vivant. Celui qui reste en mouvement et flexible peut maintenir l'harmonie, même lorsque les conditions extérieures changent.
 L'équilibre intérieur crée la stabilité extérieure.
 
@@ -1703,8 +1703,8 @@ Je reste centré(e) et souple et gère mes responsabilités avec légèreté et 
 
   {
     id: "P03",
-    title: "Trois de Pentacles",
-    general: `Trois de Pentacles
+    title: "Trois de Deniers",
+    general: `Trois de Deniers
 Trois personnes se tiennent devant une haute arche de pierre dans un édifice majestueux en construction. Un jeune artisan travaille à des ornements sculptés dans la pierre, tandis que deux personnes à côté de lui tiennent des plans et discutent. Elles se consultent et se parlent, chacune contribuant de sa propre expertise.
 Trois pièces d'or brillent déjà dans la voûte de pierre, symboles du progrès et de la valeur déjà créée. La scène paraît concentrée et coopérative, pas compétitive. Le travail est en cours et prend forme.
 L'artisan représente le savoir-faire et la maîtrise.
@@ -1714,13 +1714,13 @@ La collaboration représente la synergie et le travail d'équipe.
 Cette carte montre la croissance par le travail qualifié et la coopération.
 
 Signification psychologique
-Le Trois de Pentacles apparaît lorsque tu travailles sur quelque chose de significatif et que tu reconnais que la collaboration crée plus que le travail solitaire. Tes compétences sont demandées et appréciées. Tu contribues à quelque chose de plus grand.
+Le Trois de Deniers apparaît lorsque tu travailles sur quelque chose de significatif et que tu reconnais que la collaboration crée plus que le travail solitaire. Tes compétences sont demandées et appréciées. Tu contribues à quelque chose de plus grand.
 Cette carte montre que la maîtrise naît par la pratique, la dévotion et la volonté d'apprendre. Tu te trouves peut-être encore dans une phase d'apprentissage ou de perfectionnement – et c'est exactement là que réside ta force. Chaque pas de qualité construit le fondement de quelque chose de durable.
 Tu n'as pas à tout faire seul(e).
 La collaboration n'est pas une faiblesse – c'est la sagesse.
 
 Signification spirituelle
-Sur le plan spirituel, le Trois de Pentacles représente le service conscient et la création avec intention. Chaque œuvre faite avec soin et expertise est une forme d'expression spirituelle. Travailler avec maîtrise, c'est honorer le don qui t'a été confié.
+Sur le plan spirituel, le Trois de Deniers représente le service conscient et la création avec intention. Chaque œuvre faite avec soin et expertise est une forme d'expression spirituelle. Travailler avec maîtrise, c'est honorer le don qui t'a été confié.
 La collaboration symbolise la connexion spirituelle entre différentes forces qui s'unissent vers un but commun. Lorsque les compétences, les visions et les efforts se combinent consciemment, quelque chose naît qui dépasse l'individu.
 L'excellence est une forme de dévotion.
 
@@ -1733,8 +1733,8 @@ J'apporte mes compétences pleinement et crée quelque chose de précieux avec l
 
   {
     id: "P04",
-    title: "Quatre de Pentacles",
-    general: `Quatre de Pentacles
+    title: "Quatre de Deniers",
+    general: `Quatre de Deniers
 Un homme est assis seul devant les murs d'une ville. Il tient une grande pièce d'or serrée contre sa poitrine des deux mains, comme s'il craignait de la perdre. Une autre pièce est posée sous chacun de ses pieds, une quatrième repose sur sa tête. Son corps est fermé, replié sur lui-même, dirigé vers l'intérieur.
 La ville derrière lui paraît animée et vivante – mais il en est séparé. Son regard est méfiant, peut-être vide. Il possède beaucoup, mais ne semble pas libre.
 Les quatre pièces représentent les ressources matérielles ou émotionnelles.
@@ -1743,13 +1743,13 @@ La ville derrière lui représente la vie et la connexion dont il se coupe.
 Cette carte montre la richesse avec peur de la perte.
 
 Signification psychologique
-Tu pourrais te trouver dans une phase où tu t'accroches à la sécurité – à l'argent, à des relations, à des habitudes ou à une identité. Le Quatre de Pentacles montre que la peur de la perte peut devenir une prison.
+Tu pourrais te trouver dans une phase où tu t'accroches à la sécurité – à l'argent, à des relations, à des habitudes ou à une identité. Le Quatre de Deniers montre que la peur de la perte peut devenir une prison.
 La carte t'invite à examiner : qu'est-ce que tu retiens si fort que cela te coûte ta liberté ? La sécurité est importante – mais si elle naît de la peur plutôt que de la confiance, elle crée de l'étroitesse plutôt que de la stabilité.
 Tu peux protéger tes ressources et en même temps rester ouvert(e) à la vie.
 La vraie sécurité naît de l'intérieur – non de l'accrochage.
 
 Signification spirituelle
-Sur le plan spirituel, le Quatre de Pentacles représente l'attachement à la forme matérielle. Il montre comment l'ego cherche la sécurité dans le possessif, au lieu de faire confiance au flux naturel de la vie.
+Sur le plan spirituel, le Quatre de Deniers représente l'attachement à la forme matérielle. Il montre comment l'ego cherche la sécurité dans le possessif, au lieu de faire confiance au flux naturel de la vie.
 Cette carte rappelle que la vraie abondance ne peut pas être retenue – elle coule. Celui qui s'accroche bloque le flux. Lâcher prise n'est pas une perte, mais une ouverture à encore plus.
 La confiance remplace la peur.
 Le flux remplace l'accrochage.
@@ -1763,8 +1763,8 @@ Je fais confiance au flux de la vie et lâche ce que je ne dois plus retenir.`,
 
   {
     id: "P05",
-    title: "Cinq de Pentacles",
-    general: `Cinq de Pentacles
+    title: "Cinq de Deniers",
+    general: `Cinq de Deniers
 Deux figures marchent dans une nuit froide et enneigée. Leurs vêtements sont usés, leurs corps penchés sous le poids de la détresse et de l'épuisement. L'une d'elles marche avec des béquilles. Derrière eux brille une haute fenêtre en vitrail – chaude, lumineuse et accueillante. Cinq pièces d'or y brillent.
 Mais les deux figures regardent vers le bas ou vers l'avant – elles ne voient pas la fenêtre. Elles passent devant la lumière sans s'arrêter.
 La nuit et la neige représentent la difficulté et la solitude.
@@ -1776,11 +1776,11 @@ Cette carte montre le manque avec la possibilité visible de soutien.
 Signification psychologique
 Tu te trouves peut-être dans une phase où tu ressens la pénurie, l'exclusion ou la difficulté matérielle ou émotionnelle. Les forces semblent épuisées, le chemin paraît difficile. Cette carte prend au sérieux ta situation sans la minimiser.
 Mais elle montre aussi : une aide est souvent plus proche que tu ne le penses. Dans la douleur et la fatigue, il est facile de ne pas voir les ressources disponibles – les personnes, les possibilités, le soutien.
-Le Cinq de Pentacles t'invite à lever le regard et à demander de l'aide.
+Le Cinq de Deniers t'invite à lever le regard et à demander de l'aide.
 Tu n'as pas à porter la charge seul(e).
 
 Signification spirituelle
-Sur le plan spirituel, le Cinq de Pentacles représente la phase de l'épreuve dans la matière. Il montre que même dans les difficultés les plus profondes, la lumière est présente – même si elle n'est pas toujours visible.
+Sur le plan spirituel, le Cinq de Deniers représente la phase de l'épreuve dans la matière. Il montre que même dans les difficultés les plus profondes, la lumière est présente – même si elle n'est pas toujours visible.
 Cette carte rappelle que la grâce ne se retire pas dans les temps difficiles. Parfois le chemin spirituel passe par la reconnaissance que tu as besoin d'aide et que tu peux l'accepter. L'humilité devant la difficulté est aussi une forme de sagesse.
 La lumière est là – même lorsqu'on ne la voit pas encore.
 
@@ -1793,8 +1793,8 @@ Je permets à l'aide d'entrer dans ma vie et fais confiance que je ne suis pas s
 
   {
     id: "P06",
-    title: "Six de Pentacles",
-    general: `Six de Pentacles
+    title: "Six de Deniers",
+    general: `Six de Deniers
 Un homme richement vêtu se tient au centre de la scène. Dans une main il tient une balance à deux plateaux, dans l'autre il distribue des pièces d'or à des personnes agenouillées devant lui. Son expression est calme, généreuse et juste. La balance représente l'équité dans le don.
 Les personnes qui reçoivent regardent vers le haut avec gratitude. L'atmosphère est digne – ni condescendante ni dramatiquement charitable. Tout se passe avec une certaine simplicité et mesure.
 La balance symbolise l'équité et la juste mesure.
@@ -1804,13 +1804,13 @@ Les receveurs montrent le besoin et la gratitude.
 Cette carte montre le flux équilibré de donner et recevoir.
 
 Signification psychologique
-Le Six de Pentacles représente l'équilibre entre donner et recevoir. Tu pourrais te trouver dans un rôle où tu partages des ressources, du soutien ou du temps – ou dans un rôle où tu reçois de l'aide. Les deux sont également valables.
+Le Six de Deniers représente l'équilibre entre donner et recevoir. Tu pourrais te trouver dans un rôle où tu partages des ressources, du soutien ou du temps – ou dans un rôle où tu reçois de l'aide. Les deux sont également valables.
 Cette carte t'invite à examiner si le flux dans ta vie est équilibré. Donnes-tu trop sans recevoir ? Ou résistes-tu à accepter de l'aide ? La vraie générosité inclut aussi la capacité de recevoir avec grâce.
 Le don conscient crée la connexion.
 Le recevoir conscient crée la confiance.
 
 Signification spirituelle
-Sur le plan spirituel, le Six de Pentacles représente le principe de la circulation. L'énergie, les ressources et l'amour ne sont pas destinés à être retenus, mais à circuler. Quand on donne consciemment, l'espace se crée pour recevoir à nouveau.
+Sur le plan spirituel, le Six de Deniers représente le principe de la circulation. L'énergie, les ressources et l'amour ne sont pas destinés à être retenus, mais à circuler. Quand on donne consciemment, l'espace se crée pour recevoir à nouveau.
 La balance symbolise la loi karmique de l'équilibre – ce qui est donné avec amour revient multiplié. Cette carte rappelle que la générosité est une forme de confiance dans l'abondance de la vie.
 Donner et recevoir sont les deux faces du même flux.
 
@@ -1823,8 +1823,8 @@ Je donne consciemment et reçois avec grâce – le flux de la vie me traverse l
 
   {
     id: "P07",
-    title: "Sept de Pentacles",
-    general: `Sept de Pentacles
+    title: "Sept de Deniers",
+    general: `Sept de Deniers
 Un homme se tient dans un jardin et s'appuie sur son outil de jardinage. Son regard est posé contemplativement sur une plante qui pousse devant lui. Six pièces d'or brillent déjà dans les branches ou parmi les feuilles – fruits du travail déjà accompli. Une septième pièce se trouve sur le sol, comme une promesse ou une prochaine étape.
 L'homme ne travaille pas activement dans ce moment. Il observe, réfléchit, évalue. Son expression est calme, considérée – ni anxieuse ni impatiente.
 La plante symbolise la croissance organique et le travail patient.
@@ -1834,13 +1834,13 @@ L'outil indique l'engagement continu.
 Cette carte montre la croissance patiente et le bilan conscient.
 
 Signification psychologique
-Tu te trouves peut-être dans une phase où tu as investi beaucoup de travail et d'énergie, et tu te demandes maintenant si les efforts portent leurs fruits. Le Sept de Pentacles montre que la patience est ta plus grande ressource en ce moment.
+Tu te trouves peut-être dans une phase où tu as investi beaucoup de travail et d'énergie, et tu te demandes maintenant si les efforts portent leurs fruits. Le Sept de Deniers montre que la patience est ta plus grande ressource en ce moment.
 Cette carte t'invite à faire le point. Qu'as-tu déjà accompli ? Où en est ta croissance ? Parfois il faut s'arrêter et regarder le chemin parcouru, avant de décider des prochains pas.
 La persévérance récompense ceux qui restent fidèles à leur vision.
 Le succès ne naît pas de la précipitation, mais de l'engagement constant.
 
 Signification spirituelle
-Sur le plan spirituel, le Sept de Pentacles représente la confiance dans les processus naturels de croissance. Tout ce qui est semé avec soin et intention portera ses fruits en son temps. Le développement spirituel aussi ne se précipite pas.
+Sur le plan spirituel, le Sept de Deniers représente la confiance dans les processus naturels de croissance. Tout ce qui est semé avec soin et intention portera ses fruits en son temps. Le développement spirituel aussi ne se précipite pas.
 Cette carte rappelle que la valeur réside dans le processus, pas seulement dans le résultat. Chaque étape de travail conscient, même invisible, contribue à quelque chose de plus grand. La patience n'est pas de la passivité – c'est la sagesse active.
 La croissance suit son propre rythme.
 
@@ -1853,8 +1853,8 @@ Je fais confiance au processus de croissance et reste engagé(e) avec patience e
 
   {
     id: "P08",
-    title: "Huit de Pentacles",
-    general: `Huit de Pentacles
+    title: "Huit de Deniers",
+    general: `Huit de Deniers
 Un artisan est assis à son établi et travaille avec concentration sur une pièce d'or. Des pièces déjà terminées sont accrochées ou posées autour de lui – sept visibles, et celle entre ses mains est la huitième. Son attention est entièrement dédiée à son travail, son regard concentré sur le détail.
 La scène paraît simple et dédiée. Pas de distraction, pas d'ostentation. Juste l'homme et son art. Un chemin mène vers une ville en arrière-plan, mais il n'est pas encore emprunté.
 L'artisan représente la maîtrise par la pratique.
@@ -1864,13 +1864,13 @@ Le chemin vers la ville représente les possibilités futures.
 Cette carte montre la maîtrise par la pratique dédiée.
 
 Signification psychologique
-Le Huit de Pentacles apparaît lorsque tu es dans une phase d'apprentissage intense ou de perfectionnement de tes compétences. Tu travailles avec dévotion sur quelque chose d'important, en améliorant ta maîtrise pas à pas.
+Le Huit de Deniers apparaît lorsque tu es dans une phase d'apprentissage intense ou de perfectionnement de tes compétences. Tu travailles avec dévotion sur quelque chose d'important, en améliorant ta maîtrise pas à pas.
 Cette carte honore l'effort quotidien, la pratique répétée et la volonté de faire les choses bien. La grandeur naît rarement des grands gestes – elle naît de l'engagement constant dans les petites choses.
 Tu es invité(e) à rester sur ton chemin, même lorsque le progrès paraît lent.
 Chaque heure de pratique est un investissement dans ta maîtrise future.
 
 Signification spirituelle
-Sur le plan spirituel, le Huit de Pentacles représente la dévotion comme pratique spirituelle. Lorsque tu fais quelque chose avec pleine présence et intention, même le travail ordinaire devient une forme de méditation.
+Sur le plan spirituel, le Huit de Deniers représente la dévotion comme pratique spirituelle. Lorsque tu fais quelque chose avec pleine présence et intention, même le travail ordinaire devient une forme de méditation.
 Cette carte rappelle que l'excellence n'est pas séparée du développement spirituel. Honorer les dons qui t'ont été donnés en les développant consciemment est une forme de gratitude et de service.
 La maîtrise est une forme de dévotion.
 Chaque travail fait avec amour est sacré.
@@ -1884,8 +1884,8 @@ Je me dédie à mon travail avec pleine présence et développe mes compétences
 
   {
     id: "P09",
-    title: "Neuf de Pentacles",
-    general: `Neuf de Pentacles
+    title: "Neuf de Deniers",
+    general: `Neuf de Deniers
 Une femme élégante se tient dans un vignoble luxuriant. Son vêtement est riche, doré et coulant. Sur sa main gantée repose un faucon, symbole de maîtrise et d'indépendance. Autour d'elle se trouvent neuf pièces d'or brillantes parmi les feuilles et les fruits du jardin.
 Elle paraît calme, satisfaite d'elle-même et dans sa propre force. Son expression n'est ni arrogante ni avide – mais paisible et accomplie. Elle profite de ce qu'elle a créé.
 Le jardin symbolise l'abondance créée par l'effort.
@@ -1895,13 +1895,13 @@ La posture calme incarne l'indépendance et la satisfaction de soi.
 Cette carte montre l'abondance gagnée et la joie indépendante.
 
 Signification psychologique
-Le Neuf de Pentacles représente l'accomplissement et la satisfaction qui naissent de tes propres efforts. Tu as travaillé dur, développé tes compétences et créé quelque chose de précieux. Maintenant tu peux en jouir.
+Le Neuf de Deniers représente l'accomplissement et la satisfaction qui naissent de tes propres efforts. Tu as travaillé dur, développé tes compétences et créé quelque chose de précieux. Maintenant tu peux en jouir.
 Cette carte t'invite à reconnaître ta valeur et à prendre soin de toi-même. Tu mérites de profiter des fruits de ton travail. L'indépendance et la confiance en soi que tu as développées sont ta vraie richesse.
 Ne t'excuse pas de ce que tu as accompli.
 Tu l'as mérité par ton engagement.
 
 Signification spirituelle
-Sur le plan spirituel, le Neuf de Pentacles représente la souveraineté intérieure exprimée dans la vie matérielle. L'abondance n'est pas une fin en soi, mais une expression de l'alignement avec tes dons et ta valeur intérieure.
+Sur le plan spirituel, le Neuf de Deniers représente la souveraineté intérieure exprimée dans la vie matérielle. L'abondance n'est pas une fin en soi, mais une expression de l'alignement avec tes dons et ta valeur intérieure.
 Le faucon symbolise l'élévation – la capacité de voir de hauteur, d'agir avec précision et de rester libre intérieurement même dans l'abondance. Cette carte rappelle que la vraie richesse inclut la paix intérieure et la liberté.
 L'abondance extérieure reflète la richesse intérieure.
 
@@ -1914,8 +1914,8 @@ Je reconnais ma valeur et profite consciemment et avec gratitude de ce que j'ai 
 
   {
     id: "P10",
-    title: "Dix de Pentacles",
-    general: `Dix de Pentacles
+    title: "Dix de Deniers",
+    general: `Dix de Deniers
 Une scène familiale se déroule devant une grande demeure. Un homme âgé est assis en avant-plan avec deux chiens fidèles. Derrière lui un couple se tient ensemble, et des enfants jouent dans la scène. Des gens de différentes générations se trouvent dans un espace commun.
 Dix grandes pièces d'or sont réparties dans la scène, formant un motif de l'arbre de vie. Elles ne sont pas gardées ou comptées – elles font simplement partie du tableau d'ensemble de l'abondance.
 L'architecture solide représente la stabilité et l'héritage.
@@ -1925,12 +1925,12 @@ Les chiens représentent la fidélité et la protection.
 Cette carte montre l'abondance partagée et durable.
 
 Signification psychologique
-Le Dix de Pentacles représente l'accomplissement dans sa forme la plus complète et la plus durable. Ce n'est pas seulement la richesse personnelle, mais la création d'un fondement qui profite à d'autres – famille, communauté, héritage.
+Le Dix de Deniers représente l'accomplissement dans sa forme la plus complète et la plus durable. Ce n'est pas seulement la richesse personnelle, mais la création d'un fondement qui profite à d'autres – famille, communauté, héritage.
 Cette carte t'invite à penser au-delà de toi-même. Qu'est-ce que tu construis qui durera ? Quelle valeur transmets-tu ? Le vrai accomplissement naît lorsque ce que tu as créé enrichit aussi d'autres.
 L'abondance qui se partage et se transmet devient héritage.
 
 Signification spirituelle
-Sur le plan spirituel, le Dix de Pentacles représente la manifestation complète de l'énergie spirituelle dans la réalité matérielle. Les dix pièces disposées selon l'arbre de vie montrent que l'abondance matérielle peut être une expression de l'ordre divin.
+Sur le plan spirituel, le Dix de Deniers représente la manifestation complète de l'énergie spirituelle dans la réalité matérielle. Les dix pièces disposées selon l'arbre de vie montrent que l'abondance matérielle peut être une expression de l'ordre divin.
 Cette carte rappelle que la vie bien vécue laisse des traces positives. Le développement spirituel se reflète dans ce que tu construis, partages et transmets. La vraie richesse transcende l'individu.
 L'abondance devient héritage et bénédiction.
 
@@ -1943,8 +1943,8 @@ Je construis avec intention et amour quelque chose qui a de la valeur au-delà d
 
   {
     id: "P11",
-    title: "Valet de Pentacles",
-    general: `Valet de Pentacles
+    title: "Valet de Deniers",
+    general: `Valet de Deniers
 Un jeune homme se tient dans un paysage ouvert et fleuri. Il tient une grande pièce d'or devant lui des deux mains, la regardant avec concentration et fascination. Sa posture est contemplative – il ne joue pas avec la pièce, il l'étudie. Son expression montre la curiosité, l'intérêt et la réflexion sérieuse.
 Derrière lui s'étend un vaste paysage avec des champs, des arbres et des montagnes au loin. L'atmosphère paraît fraîche, prometteuse et ouverte. L'herbe est verte, le sol fertile.
 La pièce représente le potentiel et la possibilité.
@@ -1954,13 +1954,13 @@ La jeunesse de la figure représente le commencement et l'ouverture.
 Cette carte montre la curiosité studieuse devant les possibilités de la vie.
 
 Signification psychologique
-Le Valet de Pentacles représente le début d'un apprentissage pratique. Tu es dans une phase où tu explores de nouvelles possibilités, acquiers de nouvelles compétences ou commences un nouveau projet avec curiosité et sérieux.
+Le Valet de Deniers représente le début d'un apprentissage pratique. Tu es dans une phase où tu explores de nouvelles possibilités, acquiers de nouvelles compétences ou commences un nouveau projet avec curiosité et sérieux.
 Cette carte montre l'engagement sincère envers le développement personnel et pratique. Tu n'agis pas encore avec pleine maîtrise, mais tu y viens par la dévotion, l'attention et la volonté d'apprendre.
 Tu es invité(e) à prendre au sérieux même les petits pas.
 Chaque compétence commence par un premier regard attentif.
 
 Signification spirituelle
-Sur le plan spirituel, le Valet de Pentacles représente l'ancrage de la conscience spirituelle dans la réalité pratique. Il montre l'intérêt pour la manifestation – comment les visions et les intentions prennent forme concrète.
+Sur le plan spirituel, le Valet de Deniers représente l'ancrage de la conscience spirituelle dans la réalité pratique. Il montre l'intérêt pour la manifestation – comment les visions et les intentions prennent forme concrète.
 Cette carte rappelle que le développement spirituel inclut aussi la croissance pratique. Apprendre à gérer les ressources, à construire des compétences et à créer de la valeur tangible fait partie d'un chemin de vie conscient.
 La curiosité est le premier pas vers la maîtrise.
 
@@ -1973,8 +1973,8 @@ J'apprends avec curiosité et dévotion et construis pas à pas mes compétences
 
   {
     id: "P12",
-    title: "Cavalier de Pentacles",
-    general: `Cavalier de Pentacles
+    title: "Cavalier de Deniers",
+    general: `Cavalier de Deniers
 Un cavalier est assis calme et stable sur un cheval lourd et fort. Le cheval se tient immobile ou bouge très lentement, comme s'il était ancré dans le sol. Le cavalier tient une grande pièce d'or devant lui avec les deux mains et la regarde avec concentration.
 Le paysage autour d'eux paraît fertile mais calme. Des champs labourés s'étendent au loin, sous un ciel en partie nuageux mais non menaçant. L'atmosphère entière est celle de la stabilité, de la patience et du travail méthodique.
 Le cheval lourd symbolise la stabilité et la persévérance.
@@ -1984,13 +1984,13 @@ La posture calme incarne la méthode et la fiabilité.
 Cette carte montre le progrès par la constance et la persévérance.
 
 Signification psychologique
-Le Cavalier de Pentacles représente la progression lente mais sûre. Tu avances peut-être dans un domaine qui demande de la persévérance et de la constance. L'avancement n'est pas spectaculaire, mais solide et fiable.
+Le Cavalier de Deniers représente la progression lente mais sûre. Tu avances peut-être dans un domaine qui demande de la persévérance et de la constance. L'avancement n'est pas spectaculaire, mais solide et fiable.
 Cette carte t'invite à rester sur ton chemin, même lorsque la progression paraît lente. La fiabilité et le travail méthodique sont ta vraie force. Tu construis quelque chose de durable, pas de l'ordinaire.
 La lenteur consciente n'est pas de la paresse.
 C'est la sagesse de la construction solide.
 
 Signification spirituelle
-Sur le plan spirituel, le Cavalier de Pentacles représente la concrétisation patient de la vision spirituelle. Il montre que les idées et les intentions doivent être ancrées pas à pas dans la réalité.
+Sur le plan spirituel, le Cavalier de Deniers représente la concrétisation patient de la vision spirituelle. Il montre que les idées et les intentions doivent être ancrées pas à pas dans la réalité.
 Cette carte rappelle que la croissance spirituelle se manifeste aussi dans le monde pratique. La dévotion au travail régulier, la fiabilité dans les engagements et la persévérance dans les projets importants sont des formes d'expression spirituelle.
 La constance est une forme de sagesse.
 Chaque pas sûr construit le fondement de quelque chose de grand.
@@ -2004,8 +2004,8 @@ J'avance avec patience et constance et construis quelque chose de solide et dura
 
   {
     id: "P13",
-    title: "Reine de Pentacles",
-    general: `Reine de Pentacles
+    title: "Reine de Deniers",
+    general: `Reine de Deniers
 Une reine est assise sur un trône richement décoré dans un jardin luxuriant. Des roses et des fleurs l'entourent, de la verdure abondante encadre la scène. Sur ses genoux elle tient une grande pièce d'or avec soin, la regardant avec tendresse et concentration.
 Son vêtement est riche mais naturel, ses couleurs chaudes et terreuses. Son expression paraît chaleureuse, nourrissante et calme. Elle n'est pas distante ni formelle – elle est présente et incarnée.
 Un lièvre se trouve dans l'herbe à ses pieds – symbole de fertilité et de la connexion à la nature. Le trône lui-même est orné de sculptures d'anges et de formes naturelles.
@@ -2016,13 +2016,13 @@ La chaleur de son expression montre le soin et la présence.
 Cette carte montre l'abondance nourrissante et le soin pratique.
 
 Signification psychologique
-La Reine de Pentacles représente la capacité de créer un espace nourrissant et stable – pour soi-même et pour les autres. Tu incarnes peut-être en ce moment la qualité du soin pratique, de la chaleur et de l'attention aux besoins concrets.
+La Reine de Deniers représente la capacité de créer un espace nourrissant et stable – pour soi-même et pour les autres. Tu incarnes peut-être en ce moment la qualité du soin pratique, de la chaleur et de l'attention aux besoins concrets.
 Cette carte t'invite à prendre soin de toi-même avec la même générosité que tu offres aux autres. Elle honore l'intelligence pratique, la créativité dans la gestion des ressources et la capacité de rendre la vie belle et confortable.
 Le soin est une forme d'amour concret.
 La nourriture de la vie quotidienne est sacrée.
 
 Signification spirituelle
-Sur le plan spirituel, la Reine de Pentacles représente la connexion profonde avec la Terre et les cycles naturels. Elle incarne le principe maternel dans sa forme la plus nourrissante – non sentimentalement, mais concrètement et sagement.
+Sur le plan spirituel, la Reine de Deniers représente la connexion profonde avec la Terre et les cycles naturels. Elle incarne le principe maternel dans sa forme la plus nourrissante – non sentimentalement, mais concrètement et sagement.
 Cette carte rappelle que le corporel, le matériel et le naturel sont aussi des expressions du divin. Prendre soin de son corps, de sa maison, de la nature est une pratique spirituelle. La beauté de la vie quotidienne est une porte vers le sacré.
 La Terre nourrit – et nous faisons partie de la Terre.
 
@@ -2035,8 +2035,8 @@ Je prends soin de moi-même et des autres avec chaleur et sagesse et crée un es
 
   {
     id: "P14",
-    title: "Roi de Pentacles",
-    general: `Roi de Pentacles
+    title: "Roi de Deniers",
+    general: `Roi de Deniers
 Un roi puissant est assis sur un trône massif ornés de têtes de taureau. Son vêtement est somptueux, brodé de vignes et de raisins, symboles de la fertilité et de l'abondance. Dans une main il tient un sceptre, dans l'autre une grande pièce d'or. Son armure est partiellement visible sous ses vêtements riches.
 Autour de lui s'étend un jardin luxuriant plein de fleurs et de végétation. Une tour solide se dresse en arrière-plan, symbole de la durabilité de ce qu'il a construit. Son expression est stable, mature et souveraine – sans urgence, sans anxiété.
 Le taureau symbolise la force et la stabilité.
@@ -2046,14 +2046,14 @@ La pièce d'or montre la maîtrise des ressources.
 Cette carte montre la maîtrise de l'abondance matérielle et la souveraineté intérieure.
 
 Signification psychologique
-Le Roi de Pentacles représente la maturité dans les affaires pratiques et matérielles. Tu as acquis la sagesse pour créer, gérer et multiplier l'abondance. Tu agis depuis la sécurité intérieure, non depuis l'anxiété ou la cupidité.
+Le Roi de Deniers représente la maturité dans les affaires pratiques et matérielles. Tu as acquis la sagesse pour créer, gérer et multiplier l'abondance. Tu agis depuis la sécurité intérieure, non depuis l'anxiété ou la cupidité.
 Cette carte montre quelqu'un qui comprend la valeur de la stabilité, de l'engagement à long terme et de la construction de quelque chose de durable. Tu peux prendre des risques calculés, protéger ceux qui dépendent de toi et créer de la valeur durable.
 La vraie richesse est intérieure autant qu'extérieure.
 L'abondance qui naît de la sagesse se multiplie.
 
 Signification spirituelle
-Sur le plan spirituel, le Roi de Pentacles représente la pleine incarnation de la conscience spirituelle dans la réalité matérielle. Il montre que le sacré peut être pleinement présent dans la vie mondaine – dans les affaires, dans la création de richesse, dans la gestion des ressources.
-Cette carte rappelle que la maîtrise spirituelle inclut la maîtrise pratique. Créer de l'abondance avec sagesse, générosité et intégrité est une expression de la maturité spirituelle. Le Roi de Pentacles n'a pas peur de la matière – il la respecte.
+Sur le plan spirituel, le Roi de Deniers représente la pleine incarnation de la conscience spirituelle dans la réalité matérielle. Il montre que le sacré peut être pleinement présent dans la vie mondaine – dans les affaires, dans la création de richesse, dans la gestion des ressources.
+Cette carte rappelle que la maîtrise spirituelle inclut la maîtrise pratique. Créer de l'abondance avec sagesse, générosité et intégrité est une expression de la maturité spirituelle. Le Roi de Deniers n'a pas peur de la matière – il la respecte.
 La maîtrise de la matière est une forme de sagesse spirituelle.
 L'abondance créée avec intégrité est une bénédiction.
 
