@@ -93,9 +93,9 @@ const styles = StyleSheet.create({
   headerTitle: {
     textAlign: "right",
     color: "9dcdfc",
-    fontSize: 14,
+    fontSize: 9,
     letterSpacing: 1,
-    paddingRight: 10,
+    paddingRight: 14,
     marginTop: -29,
   },
   headerRightSpacer: { minWidth: 86 },

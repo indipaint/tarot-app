@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import QuestionButton from "../components/ui/QuestionButton";
 import i18n from "../src/i18n";
 
 
@@ -28,9 +29,9 @@ const BUTTON_BAR_H = 76;
 const RITUAL_FADE_MS = 4000;
 
 // ===== WELCOME FEINTUNING (HIER DREHST DU NUR ZAHLEN) =====
-const WELCOME_SCALE = 1.12; // höher = weniger Rand, aber mehr „Zoom“
-const WELCOME_TRANSLATE_Y = -177; // negativer = höher Richtung Selfiekamera
-const WELCOME_BTN_MARGIN_TOP = -266; // negativer = Button höher ins Bild
+const WELCOME_SCALE = 1.12;
+const WELCOME_TRANSLATE_Y = -177;
+const WELCOME_BTN_MARGIN_TOP = -266;
 
 // Karten laden
 function getCards(): any[] {
@@ -76,20 +77,13 @@ function toRoman(n: number) {
 export default function Index() {
   const router = useRouter();
 
-const cards = useMemo(() => {
-  const all = getCards();
-
-  // Rückseite / Welcome-Karte darf NIE im Spieldeck sein
-  return all.filter((c: any) => String(c?.id) !== "BACK");
-}, []);
-
+  const cards = useMemo(() => {
+    const all = getCards();
+    return all.filter((c: any) => String(c?.id) !== "BACK");
+  }, []);
 
   const [index, setIndex] = useState(0);
-
-  // Begrüßungs-Overlay
   const [showWelcome, setShowWelcome] = useState(true);
-
-  // Transition
   const [incomingIndex, setIncomingIndex] = useState<number | null>(null);
   const progress = useRef(new Animated.Value(0)).current;
   const locked = useRef(false);
@@ -123,7 +117,6 @@ const cards = useMemo(() => {
 
       setIndex(nextIndex);
 
-      // wichtig: erst im nächsten Frame resetten -> stabil, kein Flicker
       requestAnimationFrame(() => {
         setIncomingIndex(null);
         progress.setValue(0);
@@ -135,7 +128,6 @@ const cards = useMemo(() => {
   const next = () => startRitualTo(index + 1);
   const prev = () => startRitualTo(index - 1);
 
-  // ===== Deck ohne Dopplung (für Zieh-Button) =====
   const deckRef = useRef<number[]>([]);
   const deckPosRef = useRef(0);
 
@@ -158,7 +150,6 @@ const cards = useMemo(() => {
   const drawUnique = () => {
     if (!cards.length) return;
 
-    // Deck leer/aufgebraucht -> neu mischen (ohne aktuelle Karte)
     if (deckRef.current.length === 0 || deckPosRef.current >= deckRef.current.length) {
       rebuildDeck(index);
     }
@@ -172,32 +163,24 @@ const cards = useMemo(() => {
       PanResponder.create({
         onMoveShouldSetPanResponder: (evt, gs) => {
           if (locked.current) return false;
-
           const x0 = evt.nativeEvent.pageX;
           if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
-
           const absDx = Math.abs(gs.dx);
           const absDy = Math.abs(gs.dy);
           return absDx > 8 && absDx > absDy + 6;
         },
-
         onMoveShouldSetPanResponderCapture: (evt, gs) => {
           if (locked.current) return false;
-
           const x0 = evt.nativeEvent.pageX;
           if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
-
           const absDx = Math.abs(gs.dx);
           const absDy = Math.abs(gs.dy);
           return absDx > 8 && absDx > absDy + 6;
         },
-
         onPanResponderRelease: (_e, gs) => {
           if (locked.current) return;
-
           const swipeLeft = gs.dx < -SWIPE_DISTANCE || gs.vx < -SWIPE_VELOCITY;
           const swipeRight = gs.dx > SWIPE_DISTANCE || gs.vx > SWIPE_VELOCITY;
-
           if (swipeLeft) next();
           else if (swipeRight) prev();
         },
@@ -228,16 +211,10 @@ const cards = useMemo(() => {
   });
   const incomingOpacity = progress;
 
-  // Prefix (Arkana: römisch, Stäbe: 01..14) – NUR aus der Karten-ID, nie aus Index
   const displayPrefix = (card: any) => {
     const id = String(card?.id ?? "");
-
-    // Arkana: "01".."22" => römisch
     if (/^\d+$/.test(id)) return toRoman(Number(id));
-
-    // Stäbe: "W01".."W14" => "01".."14"
     if (id.startsWith("W")) return id.slice(1);
-
     return "";
   };
 
@@ -245,14 +222,12 @@ const cards = useMemo(() => {
   const nextPrefix = nextCard ? displayPrefix(nextCard) : "";
   const currentId = String((currentCard as any).id ?? index);
 
-const currentName =
-    i18n.t(`cards.${currentId}`, { defaultValue: (currentCard as any).name ?? "Unbenannt" });
-  
+  const currentName = i18n.t(`cards.${currentId}`, { defaultValue: (currentCard as any).name ?? "Unbenannt" });
 
   const nextId = nextCard ? String((nextCard as any).id ?? incomingIndex) : "";
-const nextName = nextCard
-  ? i18n.t(`cards.${nextId}`, { defaultValue: (nextCard as any).name ?? "Unbenannt" })
-  : "";
+  const nextName = nextCard
+    ? i18n.t(`cards.${nextId}`, { defaultValue: (nextCard as any).name ?? "Unbenannt" })
+    : "";
 
   const currentSource = (currentCard as any).image;
   const nextSource = nextCard ? (nextCard as any).image : null;
@@ -279,7 +254,6 @@ const nextName = nextCard
               }}
               resizeMode="contain"
             />
-
             <Pressable
               style={[styles.welcomeBtn, { marginTop: WELCOME_BTN_MARGIN_TOP }]}
               onPress={() => {
@@ -287,7 +261,7 @@ const nextName = nextCard
                   let r = index;
                   while (r === index) r = Math.floor(Math.random() * cards.length);
                   setIndex(r);
-                  rebuildDeck(r); // verhindert Sofort-Repeat bei "Zieh"
+                  rebuildDeck(r);
                 } else {
                   rebuildDeck(index);
                 }
@@ -302,7 +276,6 @@ const nextName = nextCard
         {/* SWIPE AREA */}
         <View style={styles.swipeArea} {...panResponder.panHandlers}>
           <View style={styles.imageBox}>
-            {/* INCOMING (hinten) */}
             {nextSource ? (
               <Animated.Image
                 source={nextSource}
@@ -310,8 +283,6 @@ const nextName = nextCard
                 resizeMode="contain"
               />
             ) : null}
-
-            {/* OUTGOING (oben) */}
             <Animated.Image
               source={currentSource}
               style={[styles.imageAbs, { opacity: outgoingOpacity }]}
@@ -319,16 +290,12 @@ const nextName = nextCard
             />
           </View>
 
-          {/* TITEL: exakt wie Bilder überblenden -> kein "1 weiter" Gefühl */}
           <View style={styles.titleWrap}>
-            {/* INCOMING Titel */}
             {nextCard ? (
               <Animated.Text style={[styles.title, { opacity: incomingOpacity }]} numberOfLines={2}>
                 {nextPrefix} · {nextName}
               </Animated.Text>
             ) : null}
-
-            {/* OUTGOING Titel */}
             <Animated.Text
               style={[styles.title, { opacity: outgoingOpacity, position: "absolute" }]}
               numberOfLines={2}
@@ -338,8 +305,8 @@ const nextName = nextCard
           </View>
         </View>
 
-        {/* BUTTONS */}
-        <View style={styles.buttonRow}>
+        {/* DEUTUNG + ZIEH */}
+        <View style={styles.buttonBar}>
           <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${currentId}` as any)}>
             <Text style={styles.btnText}>{i18n.t("buttons.meaning")}</Text>
           </Pressable>
@@ -348,6 +315,12 @@ const nextName = nextCard
             <Text style={styles.btnText}>{i18n.t("buttons.draw")}</Text>
           </Pressable>
         </View>
+
+        {/* FRAGE – unabhängig positioniert */}
+        <View style={styles.questionBar}>
+          <QuestionButton onPress={() => {}} />
+        </View>
+
       </View>
     </SafeAreaView>
   );
@@ -375,13 +348,13 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 
-titleWrap: {
-  marginTop: 8,
-  height: 44,          // <-- statt 24 (2 Zeilen à ~20 + Luft)
-  alignItems: "center",
-  justifyContent: "center",
-  overflow: "hidden",
-  width: "100%",
+  titleWrap: {
+    marginTop: -13,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+    width: "100%",
   },
 
   title: {
@@ -393,16 +366,27 @@ titleWrap: {
     textAlign: "center",
   },
 
-  buttonRow: {
+  // Deutung + Zieh – obere Reihe
+  buttonBar: {
     position: "absolute",
     left: 0,
     right: 0,
-    bottom: 60,
-    height: BUTTON_BAR_H,
+    bottom: 110,        // <-- hier obere Reihe verschieben
+    height: 55,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingHorizontal: 18,
+    paddingHorizontal: 30,
+    zIndex: 999,
+    elevation: 999,
+  },
+
+  // Frage – eigene Bar, unabhängig
+  questionBar: {
+    position: "absolute",
+    left: 41,
+    right: 41,
+    bottom: 54,         // <-- hier nur Frage-Button verschieben
     zIndex: 999,
     elevation: 999,
   },
@@ -411,7 +395,7 @@ titleWrap: {
     borderWidth: 1,
     borderColor: "#666",
     paddingVertical: 6,
-    paddingHorizontal: 15,
+    paddingHorizontal: 22,
     borderRadius: 6,
     backgroundColor: "#000",
   },

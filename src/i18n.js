@@ -9,6 +9,7 @@ const translations = {
       draw: "Zieh",
       draw_welcome: "ZIEH EINE KARTE",
       back: "Zurück",
+      question: "Frage",
     },
     cards: {
       "00": "Der Narr",
@@ -106,6 +107,7 @@ const translations = {
       draw: "Draw",
       draw_welcome: "DRAW A CARD",
       back: "Back",
+      question: "Question",
     },
     cards: {
       "00": "The Fool",
@@ -203,6 +205,7 @@ const translations = {
       draw: "Tirer",
       draw_welcome: "TIRER UNE CARTE",
       back: "Retour",
+      question: "Question",
     },
     cards: {
       "00": "Le Fou",
