@@ -1,3 +1,4 @@
+import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useMemo, useRef, useState } from "react";
@@ -14,7 +15,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import QuestionButton from "../components/ui/QuestionButton";
 import i18n from "../src/i18n";
-
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
@@ -75,6 +75,8 @@ function toRoman(n: number) {
 }
 
 export default function Index() {
+  const [questionOverlayOpen, setQuestionOverlayOpen] = useState(false);
+
   const router = useRouter();
 
   const cards = useMemo(() => {
@@ -222,7 +224,9 @@ export default function Index() {
   const nextPrefix = nextCard ? displayPrefix(nextCard) : "";
   const currentId = String((currentCard as any).id ?? index);
 
-  const currentName = i18n.t(`cards.${currentId}`, { defaultValue: (currentCard as any).name ?? "Unbenannt" });
+  const currentName = i18n.t(`cards.${currentId}`, {
+    defaultValue: (currentCard as any).name ?? "Unbenannt",
+  });
 
   const nextId = nextCard ? String((nextCard as any).id ?? incomingIndex) : "";
   const nextName = nextCard
@@ -231,8 +235,6 @@ export default function Index() {
 
   const currentSource = (currentCard as any).image;
   const nextSource = nextCard ? (nextCard as any).image : null;
-
-  const isTransitioning = incomingIndex !== null;
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -247,10 +249,7 @@ export default function Index() {
               style={{
                 width: "100%",
                 height: "100%",
-                transform: [
-                  { scale: WELCOME_SCALE },
-                  { translateY: WELCOME_TRANSLATE_Y },
-                ],
+                transform: [{ scale: WELCOME_SCALE }, { translateY: WELCOME_TRANSLATE_Y }],
               }}
               resizeMode="contain"
             />
@@ -283,11 +282,23 @@ export default function Index() {
                 resizeMode="contain"
               />
             ) : null}
+
             <Animated.Image
               source={currentSource}
               style={[styles.imageAbs, { opacity: outgoingOpacity }]}
               resizeMode="contain"
             />
+
+            {/* BLUR über der Karte */}
+            {questionOverlayOpen && (
+              <BlurView
+                intensity={6}
+                tint="default"
+                experimentalBlurMethod="dimezisBlurView"
+                style={styles.blurAbs}
+                pointerEvents="none"
+              />
+            )}
           </View>
 
           <View style={styles.titleWrap}>
@@ -316,11 +327,31 @@ export default function Index() {
           </Pressable>
         </View>
 
-        {/* FRAGE – unabhängig positioniert */}
+        {/* FRAGE */}
         <View style={styles.questionBar}>
-          <QuestionButton onPress={() => {}} />
+          <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
         </View>
 
+        {/* OVERLAY */}
+        {questionOverlayOpen && (
+          <View style={styles.overlayRoot}>
+            <Pressable style={styles.backdrop} onPress={() => setQuestionOverlayOpen(false)} />
+
+            <View style={styles.overlayPanel}>
+              <Pressable style={styles.depthBtn} onPress={() => {}}>
+                <Text style={styles.depthText}>Sanft</Text>
+              </Pressable>
+
+              <Pressable style={styles.depthBtn} onPress={() => {}}>
+                <Text style={styles.depthText}>Tief</Text>
+              </Pressable>
+
+              <Pressable style={styles.depthBtn} onPress={() => {}}>
+                <Text style={styles.depthText}>Existenziell</Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -348,6 +379,9 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 
+  blurAbs: {
+    ...StyleSheet.absoluteFillObject,
+  },
   titleWrap: {
     marginTop: -13,
     height: 44,
@@ -371,7 +405,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    bottom: 110,        // <-- hier obere Reihe verschieben
+    bottom: 110,
     height: 55,
     flexDirection: "row",
     justifyContent: "space-around",
@@ -381,12 +415,12 @@ const styles = StyleSheet.create({
     elevation: 999,
   },
 
-  // Frage – eigene Bar, unabhängig
+  // Frage – eigene Bar
   questionBar: {
     position: "absolute",
     left: 41,
     right: 41,
-    bottom: 54,         // <-- hier nur Frage-Button verschieben
+    bottom: 54,
     zIndex: 999,
     elevation: 999,
   },
@@ -405,6 +439,36 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
   errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
   errorText: { color: "#bbb", fontSize: 13, paddingHorizontal: 20, textAlign: "center" },
+
+  /* OVERLAY */
+  overlayRoot: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 5000,
+    elevation: 5000,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.0)",
+  },
+  overlayPanel: {
+    width: "86%",
+    borderRadius: 16,
+    padding: 16,
+    backgroundColor: "rgba(20,20,20,0.92)",
+  },
+  depthBtn: {
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,255,255,0.10)",
+    marginTop: 10,
+  },
+  depthText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 16,
+  },
 
   /* WELCOME STYLES */
   welcomeOverlay: {
