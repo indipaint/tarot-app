@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useMemo, useRef, useState } from "react";
 import {
+  Alert,
   Animated,
   Dimensions,
   Image,
@@ -14,7 +15,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import QuestionButton from "../components/ui/QuestionButton";
+import { getRandomQuestion } from "../src/data/questions";
 import i18n from "../src/i18n";
+
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
@@ -76,6 +79,7 @@ function toRoman(n: number) {
 
 export default function Index() {
   const [questionOverlayOpen, setQuestionOverlayOpen] = useState(false);
+  const [activeQuestion, setActiveQuestion] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -333,25 +337,45 @@ export default function Index() {
         </View>
 
         {/* OVERLAY */}
-        {questionOverlayOpen && (
-          <View style={styles.overlayRoot}>
-            <Pressable style={styles.backdrop} onPress={() => setQuestionOverlayOpen(false)} />
+        {/* OVERLAY */}
+{questionOverlayOpen && (
+  <View style={styles.overlayRoot}>
+    <Pressable style={styles.backdrop} onPress={() => setQuestionOverlayOpen(false)} />
 
-            <View style={styles.overlayPanel}>
-              <Pressable style={styles.depthBtn} onPress={() => {}}>
-                <Text style={styles.depthText}>Sanft</Text>
-              </Pressable>
+    <View style={styles.overlayPanel}>
+      <Pressable
+        style={styles.depthBtn}
+        onPress={() => {
+          const q = getRandomQuestion(1, "sanft", i18n.locale);
+          Alert.alert("Frage", q ?? "–");
+        }}
+      >
+        <Text style={styles.depthText}>Sanft</Text>
+      </Pressable>
 
-              <Pressable style={styles.depthBtn} onPress={() => {}}>
-                <Text style={styles.depthText}>Tief</Text>
-              </Pressable>
+      <Pressable
+        style={styles.depthBtn}
+        onPress={() => {
+          const q = getRandomQuestion(1, "tief", i18n.locale);
+          Alert.alert("Frage", q ?? "–");
+        }}
+      >
+        <Text style={styles.depthText}>Tief</Text>
+      </Pressable>
 
-              <Pressable style={styles.depthBtn} onPress={() => {}}>
-                <Text style={styles.depthText}>Existenziell</Text>
-              </Pressable>
-            </View>
-          </View>
-        )}
+      <Pressable
+        style={styles.depthBtn}
+        onPress={() => {
+          const q = getRandomQuestion(1, "existenziell", i18n.locale);
+          Alert.alert("Frage", q ?? "–");
+        }}
+      >
+        <Text style={styles.depthText}>Existenziell</Text>
+      </Pressable>
+    </View>
+  </View>
+)}
+
       </View>
     </SafeAreaView>
   );
