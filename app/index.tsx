@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
 
   imageBox: {
     width: "100%",
-    height: SCREEN_H * 0.72,
+    height: SCREEN_H * 0.68,
   },
 
   imageAbs: {
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   titleWrap: {
-    marginTop: -13,
+    marginTop: -1,
     height: 44,
     alignItems: "center",
     justifyContent: "center",
@@ -429,7 +429,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    bottom: 110,
+    bottom: 125,
     height: 55,
     flexDirection: "row",
     justifyContent: "space-around",
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 41,
     right: 41,
-    bottom: 54,
+    bottom: 70,
     zIndex: 999,
     elevation: 999,
   },
