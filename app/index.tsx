@@ -350,7 +350,7 @@ export default function Index() {
           Alert.alert("Frage", q ?? "–");
         }}
       >
-        <Text style={styles.depthText}>Sanft</Text>
+        <Text style={styles.depthText}>{i18n.t("buttons.soft")}</Text>
       </Pressable>
 
       <Pressable
@@ -360,7 +360,7 @@ export default function Index() {
           Alert.alert("Frage", q ?? "–");
         }}
       >
-        <Text style={styles.depthText}>Tief</Text>
+        <Text style={styles.depthText}>{i18n.t("buttons.deep")}</Text>
       </Pressable>
 
       <Pressable
@@ -370,7 +370,7 @@ export default function Index() {
           Alert.alert("Frage", q ?? "–");
         }}
       >
-        <Text style={styles.depthText}>Existenziell</Text>
+        <Text style={styles.depthText}>{i18n.t("buttons.existential")}</Text>
       </Pressable>
     </View>
   </View>

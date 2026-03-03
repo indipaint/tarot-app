@@ -5,12 +5,16 @@ const translations = {
   de: {
     app: { welcome: "Willkommen zur Tarot App" },
     buttons: {
-      meaning: "Deutung",
-      draw: "Zieh",
-      draw_welcome: "ZIEH EINE KARTE",
-      back: "Zurück",
-      question: "Frage",
-    },
+  meaning: "Deutung",
+  draw: "Zieh",
+  draw_welcome: "ZIEH EINE KARTE",
+  back: "Zurück",
+  question: "Frage",
+
+  soft: "Sanft",
+  deep: "Tief",
+  existential: "Existenziell",
+},
     cards: {
       "00": "Der Narr",
       "01": "Der Magier",
@@ -206,6 +210,9 @@ const translations = {
       draw_welcome: "TIRER UNE CARTE",
       back: "Retour",
       question: "Question",
+      soft: "Douce",
+deep: "Profond",
+existential: "Existentiel",
     },
     cards: {
       "00": "Le Fou",
