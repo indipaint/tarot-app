@@ -112,6 +112,10 @@ const translations = {
       draw_welcome: "DRAW A CARD",
       back: "Back",
       question: "Question",
+      soft: "Gentle",
+deep: "Deep",
+existential: "Existential",
+      
     },
     cards: {
       "00": "The Fool",

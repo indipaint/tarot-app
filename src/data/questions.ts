@@ -1441,7 +1441,9 @@ export function getRandomQuestion(
   locale: string
 ): string | null {
   const lang = locale.split("-")[0];
-  const list = QUESTIONS[cardId]?.[depth]?.[lang];
+  const list =
+  QUESTIONS[cardId]?.[depth]?.[lang] ??
+  QUESTIONS[cardId]?.[depth]?.["de"];
   if (!list || list.length === 0) return null;
   const index = Math.floor(Math.random() * list.length);
   return list[index];

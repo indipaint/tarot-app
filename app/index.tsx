@@ -339,7 +339,7 @@ export default function Index() {
           <View style={styles.overlayRoot}>
             <Pressable style={styles.backdrop} onPress={() => setQuestionOverlayOpen(false)} />
 
-            <View style={styles.overlayPanel}>
+            <View style={styles.overlayPanel} onStartShouldSetResponder={() => true}>
               <Pressable
                 style={styles.depthBtn}
                 onPress={() => {
