@@ -1,10 +1,10 @@
 import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Alert,
   Animated,
+  BackHandler,
   Dimensions,
   Image,
   PanResponder,
@@ -21,22 +21,18 @@ import i18n from "../src/i18n";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
-// Swipe-Tuning
 const EDGE_WIDTH = 18;
 const SWIPE_DISTANCE = 70;
 const SWIPE_VELOCITY = 0.35;
 
 const BUTTON_BAR_H = 76;
 
-// Ritual-Fade-Dauer
 const RITUAL_FADE_MS = 4000;
 
-// ===== WELCOME FEINTUNING (HIER DREHST DU NUR ZAHLEN) =====
 const WELCOME_SCALE = 1.12;
 const WELCOME_TRANSLATE_Y = -177;
 const WELCOME_BTN_MARGIN_TOP = -266;
 
-// Karten laden
 function getCards(): any[] {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const mod = require("../src/data/cards");
@@ -44,35 +40,20 @@ function getCards(): any[] {
   return Array.isArray(data) ? data : [];
 }
 
-// Roman numerals (Narr = 0)
 function toRoman(n: number) {
   if (n === 0) return "0";
   if (!Number.isFinite(n) || n < 0) return "";
 
   const map: Array<[number, string]> = [
-    [1000, "M"],
-    [900, "CM"],
-    [500, "D"],
-    [400, "CD"],
-    [100, "C"],
-    [90, "XC"],
-    [50, "L"],
-    [40, "XL"],
-    [10, "X"],
-    [9, "IX"],
-    [5, "V"],
-    [4, "IV"],
-    [1, "I"],
+    [1000, "M"], [900, "CM"], [500, "D"], [400, "CD"],
+    [100, "C"], [90, "XC"], [50, "L"], [40, "XL"],
+    [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"],
   ];
 
   let res = "";
   let x = Math.floor(n);
-
   for (const [v, s] of map) {
-    while (x >= v) {
-      res += s;
-      x -= v;
-    }
+    while (x >= v) { res += s; x -= v; }
   }
   return res;
 }
@@ -82,6 +63,21 @@ export default function Index() {
   const [activeQuestion, setActiveQuestion] = useState<string | null>(null);
 
   const router = useRouter();
+
+  useEffect(() => {
+    const sub = BackHandler.addEventListener("hardwareBackPress", () => {
+      if (activeQuestion) {
+        setActiveQuestion(null);
+        return true;
+      }
+      if (questionOverlayOpen) {
+        setQuestionOverlayOpen(false);
+        return true;
+      }
+      return false;
+    });
+    return () => sub.remove();
+  }, [activeQuestion, questionOverlayOpen]);
 
   const cards = useMemo(() => {
     const all = getCards();
@@ -105,7 +101,6 @@ export default function Index() {
 
     locked.current = true;
     setIncomingIndex(nextIndex);
-
     progress.stopAnimation();
     progress.setValue(0);
 
@@ -120,9 +115,7 @@ export default function Index() {
         locked.current = false;
         return;
       }
-
       setIndex(nextIndex);
-
       requestAnimationFrame(() => {
         setIncomingIndex(null);
         progress.setValue(0);
@@ -146,8 +139,7 @@ export default function Index() {
 
   const rebuildDeck = (excludeIndex?: number) => {
     const arr = Array.from({ length: cards.length }, (_, i) => i);
-    const filtered =
-      typeof excludeIndex === "number" ? arr.filter((i) => i !== excludeIndex) : arr;
+    const filtered = typeof excludeIndex === "number" ? arr.filter((i) => i !== excludeIndex) : arr;
     shuffleInPlace(filtered);
     deckRef.current = filtered;
     deckPosRef.current = 0;
@@ -155,11 +147,9 @@ export default function Index() {
 
   const drawUnique = () => {
     if (!cards.length) return;
-
     if (deckRef.current.length === 0 || deckPosRef.current >= deckRef.current.length) {
       rebuildDeck(index);
     }
-
     const nextIdx = deckRef.current[deckPosRef.current++];
     startRitualTo(nextIdx);
   };
@@ -203,18 +193,13 @@ export default function Index() {
         <StatusBar hidden />
         <View style={styles.center}>
           <Text style={styles.errorTitle}>Cards fehlen / Import stimmt nicht</Text>
-          <Text style={styles.errorText}>
-            Prüfe: src/data/cards.ts export (default oder named)
-          </Text>
+          <Text style={styles.errorText}>Prüfe: src/data/cards.ts export (default oder named)</Text>
         </View>
       </SafeAreaView>
     );
   }
 
-  const outgoingOpacity = progress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0],
-  });
+  const outgoingOpacity = progress.interpolate({ inputRange: [0, 1], outputRange: [1, 0] });
   const incomingOpacity = progress;
 
   const displayPrefix = (card: any) => {
@@ -245,6 +230,7 @@ export default function Index() {
       <StatusBar hidden />
 
       <View style={styles.container}>
+
         {/* WELCOME OVERLAY */}
         {showWelcome ? (
           <View style={styles.welcomeOverlay}>
@@ -278,6 +264,8 @@ export default function Index() {
 
         {/* SWIPE AREA */}
         <View style={styles.swipeArea} {...panResponder.panHandlers}>
+
+          {/* IMAGE BOX */}
           <View style={styles.imageBox}>
             {nextSource ? (
               <Animated.Image
@@ -293,10 +281,9 @@ export default function Index() {
               resizeMode="contain"
             />
 
-            {/* BLUR über der Karte */}
-            {questionOverlayOpen && (
+            {(questionOverlayOpen || activeQuestion !== null) && (
               <BlurView
-                intensity={6}
+                intensity={10}
                 tint="default"
                 experimentalBlurMethod="dimezisBlurView"
                 style={styles.blurAbs}
@@ -305,6 +292,17 @@ export default function Index() {
             )}
           </View>
 
+          {/* FRAGE TEXT – Tap schließt die Frage */}
+         {activeQuestion ? (
+  <View style={styles.questionOnCardWrap}>
+    <Text style={styles.questionOnCardText}>{activeQuestion}</Text>
+    <Pressable onPress={() => setActiveQuestion(null)} style={styles.closeBtn}>
+      <Text style={styles.closeBtnText}>✕ schließen</Text>
+    </Pressable>
+  </View>
+) : null}
+
+          {/* TITEL */}
           <View style={styles.titleWrap}>
             {nextCard ? (
               <Animated.Text style={[styles.title, { opacity: incomingOpacity }]} numberOfLines={2}>
@@ -318,6 +316,7 @@ export default function Index() {
               {currentPrefix} · {currentName}
             </Animated.Text>
           </View>
+
         </View>
 
         {/* DEUTUNG + ZIEH */}
@@ -325,56 +324,57 @@ export default function Index() {
           <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${currentId}` as any)}>
             <Text style={styles.btnText}>{i18n.t("buttons.meaning")}</Text>
           </Pressable>
-
           <Pressable style={styles.btn} onPress={drawUnique}>
             <Text style={styles.btnText}>{i18n.t("buttons.draw")}</Text>
           </Pressable>
         </View>
 
-        {/* FRAGE */}
+        {/* FRAGE BUTTON */}
         <View style={styles.questionBar}>
           <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
         </View>
 
-        {/* OVERLAY */}
-        {/* OVERLAY */}
-{questionOverlayOpen && (
-  <View style={styles.overlayRoot}>
-    <Pressable style={styles.backdrop} onPress={() => setQuestionOverlayOpen(false)} />
+        {/* TIEFEN OVERLAY */}
+        {questionOverlayOpen && (
+          <View style={styles.overlayRoot}>
+            <Pressable style={styles.backdrop} onPress={() => setQuestionOverlayOpen(false)} />
 
-    <View style={styles.overlayPanel}>
-      <Pressable
-        style={styles.depthBtn}
-        onPress={() => {
-          const q = getRandomQuestion(1, "sanft", i18n.locale);
-          Alert.alert("Frage", q ?? "–");
-        }}
-      >
-        <Text style={styles.depthText}>{i18n.t("buttons.soft")}</Text>
-      </Pressable>
+            <View style={styles.overlayPanel}>
+              <Pressable
+                style={styles.depthBtn}
+                onPress={() => {
+                  const q = getRandomQuestion(currentId, "sanft", i18n.locale);
+                  setActiveQuestion(q);
+                  setQuestionOverlayOpen(false);
+                }}
+              >
+                <Text style={styles.depthText}>{i18n.t("buttons.soft")}</Text>
+              </Pressable>
 
-      <Pressable
-        style={styles.depthBtn}
-        onPress={() => {
-          const q = getRandomQuestion(1, "tief", i18n.locale);
-          Alert.alert("Frage", q ?? "–");
-        }}
-      >
-        <Text style={styles.depthText}>{i18n.t("buttons.deep")}</Text>
-      </Pressable>
+              <Pressable
+                style={styles.depthBtn}
+                onPress={() => {
+                  const q = getRandomQuestion(currentId, "tief", i18n.locale);
+                  setActiveQuestion(q);
+                  setQuestionOverlayOpen(false);
+                }}
+              >
+                <Text style={styles.depthText}>{i18n.t("buttons.deep")}</Text>
+              </Pressable>
 
-      <Pressable
-        style={styles.depthBtn}
-        onPress={() => {
-          const q = getRandomQuestion(1, "existenziell", i18n.locale);
-          Alert.alert("Frage", q ?? "–");
-        }}
-      >
-        <Text style={styles.depthText}>{i18n.t("buttons.existential")}</Text>
-      </Pressable>
-    </View>
-  </View>
-)}
+              <Pressable
+                style={styles.depthBtn}
+                onPress={() => {
+                  const q = getRandomQuestion(currentId, "existenziell", i18n.locale);
+                  setActiveQuestion(q);
+                  setQuestionOverlayOpen(false);
+                }}
+              >
+                <Text style={styles.depthText}>{i18n.t("buttons.existential")}</Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
 
       </View>
     </SafeAreaView>
@@ -382,30 +382,44 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
+  questionOnCardWrap: {
+    
+    position: "absolute",
+    left: 18,
+    right: 18,
+    bottom: 400,
+    alignItems: "center",
+  },
+  questionOnCardText: {
+    color: "#fff",
+    fontSize: 20,
+    lineHeight: 26,
+    textAlign: "center",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 6,
+  },
   safe: { flex: 1, backgroundColor: "#000" },
   container: { flex: 1 },
-
   swipeArea: {
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
     paddingBottom: BUTTON_BAR_H + 120,
   },
-
   imageBox: {
     width: "100%",
     height: SCREEN_H * 0.68,
   },
-
   imageAbs: {
     ...StyleSheet.absoluteFillObject,
     width: "100%",
     height: "100%",
   },
-
   blurAbs: {
-    ...StyleSheet.absoluteFillObject,
-  },
+  ...StyleSheet.absoluteFillObject,
+  backgroundColor: "rgba(0, 0, 0, 0.4)",
+},
   titleWrap: {
     marginTop: -1,
     height: 44,
@@ -414,7 +428,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
   },
-
   title: {
     marginTop: 0,
     fontSize: 17,
@@ -423,8 +436,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     textAlign: "center",
   },
-
-  // Deutung + Zieh – obere Reihe
   buttonBar: {
     position: "absolute",
     left: 0,
@@ -438,8 +449,6 @@ const styles = StyleSheet.create({
     zIndex: 999,
     elevation: 999,
   },
-
-  // Frage – eigene Bar
   questionBar: {
     position: "absolute",
     left: 41,
@@ -448,7 +457,6 @@ const styles = StyleSheet.create({
     zIndex: 999,
     elevation: 999,
   },
-
   btn: {
     borderWidth: 1,
     borderColor: "#666",
@@ -457,14 +465,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: "#000",
   },
-
   btnText: { color: "#888", fontSize: 13, letterSpacing: 1 },
-
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
   errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
   errorText: { color: "#bbb", fontSize: 13, paddingHorizontal: 20, textAlign: "center" },
-
-  /* OVERLAY */
   overlayRoot: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 5000,
@@ -493,8 +497,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
   },
-
-  /* WELCOME STYLES */
   welcomeOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "#05050A",
@@ -504,7 +506,6 @@ const styles = StyleSheet.create({
     zIndex: 9999,
     elevation: 9999,
   },
-
   welcomeBtn: {
     paddingHorizontal: 18,
     paddingVertical: 10,
@@ -513,6 +514,18 @@ const styles = StyleSheet.create({
     borderColor: "rgba(180,180,255,0.6)",
     backgroundColor: "rgba(40,40,80,0.6)",
   },
-
   welcomeBtnText: { color: "#eaeaff", letterSpacing: 1.4, fontWeight: "700" },
+  closeBtn: {
+    marginTop: 20,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.5)",
+  },
+  closeBtnText: {
+    color: "#dbd6d6",
+    fontSize: 10,
+    textAlign: "center",
+  },
 });

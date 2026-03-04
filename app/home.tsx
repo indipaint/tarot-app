@@ -363,6 +363,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(180,180,255,0.8)",
     backgroundColor: "rgba(40,40,80,0.55)",
   },
-  langBtnText: { color: "#8d4b4b", letterSpacing: 1, fontSize: 15, fontWeight: "600" },
+  langBtnText: { color: "#bbb", letterSpacing: 1, fontSize: 15, fontWeight: "600" },
   langBtnTextPrimary: { color: "#eaeaff" },
 });
