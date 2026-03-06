@@ -1820,8 +1820,6 @@ Ich erschaffe stabile Fülle in meinem Leben, handle fürsorglich und lasse Wohl
 ];
 
 export function getMeaningById(id: string | number) {
-  const key = String(id).replace(/^0+/, "");
-  return MEANINGS.find(
-    (m) => String(m.id).replace(/^0+/, "") === key
-  );
+  const key = Number(id);
+  return MEANINGS.find((m) => Number(m.id) === key);
 }

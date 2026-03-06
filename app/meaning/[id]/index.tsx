@@ -29,9 +29,9 @@ function getMeaningsModule(locale: string): any {
 
 function getMeaningByIdLocal(id: string | number, locale: string) {
   const list = getMeaningsModule(locale);
-  const key = String(id).replace(/^0+/, "");
+  const key = Number(id);
   const arr = Array.isArray(list) ? list : [];
-  return arr.find((m) => m && m.id && String(m.id).replace(/^0+/, "") === key);
+  return arr.find((m) => m && Number(m.id) === key);
 }
 
 export default function MeaningByIdScreen() {
