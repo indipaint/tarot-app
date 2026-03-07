@@ -1,12 +1,28 @@
 {
   "expo": {
     "name": "Tarot App",
+    "slug": "tarot-app",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "android": {
-      "backgroundColor": "#000000",
-      "package": "com.indipaint.tarotapp"
+
+    "plugins": ["expo-splash-screen"],
+
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#000000"
     },
+
+    "android": {
+      "package": "com.indipaint.tarotapp",
+      "backgroundColor": "#000000",
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "cover",
+        "backgroundColor": "#000000"
+      }
+    },
+
     "extra": {
       "eas": {
         "projectId": "bc2d4844-314d-4926-9010-3faf8d49d49a"

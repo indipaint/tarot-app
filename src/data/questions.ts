@@ -13,655 +13,477 @@ export const QUESTIONS: Record<
   // GROSSE ARKANA
   // ─────────────────────────────────────────
 
-  "00": { // Der Narr
+   "00": { // Der Narr
     sanft: { de: [
-      "Was würdest du tun, wenn du nichts zu verlieren hättest?",
-      "Wo darfst du heute leichter sein?",
-      "Welcher erste Schritt fühlt sich spielerisch an?"
+      "Wo darf ich heute einen kleinen Schritt ins Unbekannte wagen?",
+      "Was würde ich tun, wenn ich nichts zu verlieren hätte?",
+      "Wo kann meine Neugier stärker sein als meine Sicherheit?",
+      "Was in mir möchte einfach ausprobieren, ohne alles zu verstehen?",
+      "Wo ruft mich gerade etwas Neues – obwohl ich den Ausgang noch nicht kenne?"
     ]},
     tief: { de: [
-      "Was hält dich davon ab, wirklich loszulassen?",
-      "Wo versteckst du deine Unbekümmertheit?",
-      "Was würdest du riskieren, wenn Scheitern keine Rolle spielte?"
+      "Wo halte ich mich zurück, obwohl ein innerer Impuls mich ruft?",
+      "Welche Angst vor Fehlern verhindert meinen nächsten Schritt?",
+      "Welche alten Gewohnheiten darf ich loslassen, damit in mir mehr Freiheit entsteht?",
+      "Was könnte ich alles tun, wenn ich dem Leben vertraue?",
+      "Was würde ich riskieren, wenn Scheitern keine Rolle spielte?"
     ]},
     existenziell: { de: [
-      "Wer bist du, bevor die Welt dich geformt hat?",
-      "Was wäre, wenn der Sprung ins Unbekannte dich rettet?",
-      "Welchen Teil von dir hast du aufgehört zu sein?"
+      "Wo beginne ich einen neuen Weg, auch wenn ich nicht weiß wohin er führt?",
+      "Wer bin ich, wenn ich mich nicht über meine Vergangenheit definiere?",
+      "Bin ich bereit, mich dem Leben ohne Garantie zu öffnen?"
     ]}
   },
 
   "01": { // Der Magier
     sanft: { de: [
-      "Welche Fähigkeit darfst du heute einsetzen?",
-      "Was hast du bereits, das du unterschätzt?",
-      "Welche kleine Handlung kannst du jetzt vollziehen?"
+      "Wo kann ich heute bewusst eine kleine Handlung durchführen?",
+      "Welche Fähigkeit in mir möchte gerade genutzt werden?",
+      "Gibt es eine Kraft in mir, die ich unterschätze?",
+      "Wo kann ich meine Aufmerksamkeit, Ziele und Bedürfnisse klar ausrichten?"
     ]},
     tief: { de: [
-      "Was vermeidest du wirklich zu fühlen?",
-      "Wo sabotierst du dich selbst?",
-      "Was würde sich verändern, wenn du ehrlicher wärst?"
+      "Wo kann ich meine eigene Gestaltungskraft noch besser einsetzen?",
+      "Welche Idee in mir darf umgesetzt werden?",
+      "Wo spüre ich gerade: Ich kann gestalten – und ich darf anfangen?"
     ]},
     existenziell: { de: [
-      "Wer wärst du ohne deine Angst?",
-      "Was in dir will erschaffen werden?",
-      "Welche Wahrheit traust du dich nicht auszusprechen?"
+      "Was möchte durch mich in dieser Welt Gestalt annehmen?",
+      "Wer wäre ich ohne das Gefühl machtlos zu sein?",
+      "Mit welchen Gedanken bin ich bereit, meine Wirklichkeit bewusst zu erschaffen?",
+      "Sage und lebe ich das, was ich sagen und leben will?",
+      "Gibt es eine Wahrheit, die ich aussprechen möchte?",
+      "Bin ich bereit, das entgegenzunehmen, was aus mir entstehen wird?"
     ]}
   },
 
   "02": { // Die Hohepriesterin
     sanft: { de: [
-      "Was sagt dir deine Stille gerade?",
-      "Welchem inneren Impuls darfst du vertrauen?",
-      "Was weißt du, ohne es erklären zu können?"
+      "Wo darf ich heute einfach still werden und lauschen?",
+      "Welche leise Ahnung in mir möchte wahrgenommen werden?",
+      "Was sagt mir meine Stille gerade?",
+      "Wo darf ich innehalten, statt sofort eine Lösung zu erzwingen?",
+      "Wo spüre ich eine Wahrheit, auch ohne Beweis?"
     ]},
     tief: { de: [
-      "Was verbirgst du vor dir selbst?",
-      "Welches Wissen wartet darauf, gehört zu werden?",
-      "Wo ignorierst du deine Intuition?"
+      "Wie kann ich meine Intuition besser wahrnehmen?",
+      "Welche Antwort kenne ich bereits, ohne sie auszusprechen?",
+      "Was kann ich ohne Verstehen erkennen?",
+      "Wo vertraue ich eher der Logik als meiner inneren Stimme?"
     ]},
     existenziell: { de: [
-      "Was liegt jenseits dessen, was du weißt?",
-      "Welches Geheimnis trägst du, das niemand kennt?",
-      "Was würde entstehen, wenn du aufhörst zu suchen?"
+      "Sagt mir mein Inneres etwas, bevor mein Verstand es versteht?",
+      "Bin ich bereit, meinem Nicht-Wissen Raum zu geben?",
+      "Welche Wahrheit zeigt sich, wenn ich still werde?",
+      "Was würde entstehen, wenn ich aufhöre zu suchen?"
     ]}
   },
 
   "03": { // Die Herrscherin
     sanft: { de: [
-      "Womit kannst du dich heute nähren?",
-      "Was blüht gerade in deinem Leben?",
-      "Wo darfst du dich um dich selbst kümmern?"
+      "Wo darf ich heute mehr empfangen statt leisten?",
+      "Was nährt mich gerade wirklich?",
+      "Wo kann ich mir selbst gütiger begegnen?",
+      "Was blüht gerade in meinem Leben?",
+      "Wo darf ich mich um mich selbst kümmern?"
     ]},
     tief: { de: [
-      "Wo hast du aufgehört, dich selbst zu lieben?",
-      "Was blockiert dein Wachstum?",
-      "Wo gibst du mehr, als du empfängst?"
+      "Wo kann ich Fülle leben?",
+      "Wie würde mein Lebensgefühl sein, wenn ich mir mehr Liebe zu mir gestatte?",
+      "Was in mir möchte wachsen und gesehen werden?",
+      "Wo darf ich mich selbst liebevoll halten?",
+      "Wo gebe ich mehr als ich empfange?"
     ]},
     existenziell: { de: [
-      "Was willst du auf dieser Welt erschaffen?",
-      "Welche Art von Leben willst du gebären?",
-      "Was wäre, wenn Fülle dein natürlicher Zustand wäre?"
+      "Wo darf ich mich dem Leben ganz öffnen?",
+      "Wie ist es für mich, wenn mein Wert nichts mit meiner Leistung zu tun hat?",
+      "Wie zeigt sich meine schöpferische Kraft im Alltag?"
     ]}
   },
 
-  "04": { // Der König
+  "04": { // Der Herrscher
     sanft: { de: [
-      "Wo kannst du heute Struktur schaffen?",
-      "Was gibt dir gerade Stabilität?",
-      "Welche Entscheidung wartet auf dich?"
+      "Wo tut mir heute eine klare Struktur gut?",
+      "Wo kann ich für Stabilität sorgen?"
     ]},
     tief: { de: [
-      "Wo übst du Kontrolle aus, wo du loslassen solltest?",
-      "Was kostet dich deine Starrheit?",
-      "Wessen Erwartungen erfüllst du – und warum?"
+      "Wo übernehme ich Fürsorge?",
+      "Setze ich Grenzen aus Selbstachtung – oder aus Angst, die Kontrolle zu verlieren?",
+      "Wie kann ich auf Kontrolle verzichten um mich gelöster zu fühlen?",
+      "Welche Grenze schützt meine innere Ordnung?"
     ]},
     existenziell: { de: [
-      "Was würde es bedeuten, wirklich Verantwortung zu übernehmen?",
-      "Welche Macht hast du, die du nicht annimmst?",
-      "Wofür willst du in Erinnerung bleiben?"
+      "Welche Ordnung brauche ich in meinem Leben?",
+      "Welche innere Ordnung trägt mich wirklich – und welche habe ich nur übernommen?",
+      "Wofür will ich in Erinnerung bleiben?",
+      "Woran erkenne ich, dass ich selbstermächtigt lebe?"
     ]}
   },
 
   "05": { // Der Hohepriester
     sanft: { de: [
-      "Welche Weisheit trägt dich gerade?",
-      "Von wem darfst du heute lernen?",
-      "Was gibt dir inneren Halt?"
+      "Welche Werte tragen mich gerade?",
+      "Wo suche ich Orientierung?",
+      "Welche Werte geben mir Halt, wenn im Außen alles schwankt?"
     ]},
     tief: { de: [
-      "Welchen Regeln folgst du blind?",
-      "Wo hat Tradition dich eingeengt?",
-      "Was glaubst du, weil man es dir gesagt hat?"
+      "Wo folge ich Regeln, die nicht mehr zu mir gehören?",
+      "Wo engt mich Tradition ein?",
+      "Wo folge ich Erwartungen, obwohl meine innere Stimme etwas anderes weiß?",
+      "Welche Weisheit habe ich durch Erfahrung gewonnen?"
     ]},
     existenziell: { de: [
-      "Was ist heilig für dich – wirklich heilig?",
-      "Welche Überzeugung trägt dich – und welche begrenzt dich?",
-      "Was wäre, wenn du deine eigene Autorität wärst?"
+      "Welche Wahrheit lebt in mir, unabhängig von Meinungen und Ansichten?",
+      "Was ist heilig für mich – wirklich heilig?",
+      "Woran glaube ich wirklich, wenn ich niemandem etwas beweisen muss?",
+      "Was glaube ich, weil man es mir gesagt hat?",
+      "Wo werde ich zum Lehrer meines eigenen Lebens?",
+      "Welche innere Ordnung führt mich?"
     ]}
   },
 
   "06": { // Die Liebenden
     sanft: { de: [
-      "Was liebst du gerade in deinem Leben?",
-      "Welche Verbindung nährt dich?",
-      "Wo darfst du dich heute öffnen?"
+      "Wo spüre ich heute echte Verbindung?",
+      "Welche Verbindung nährt mich?",
+      "Wo darf ich mein Herz offen halten?",
+      "Was liebe ich gerade in meinem Leben?"
     ]},
     tief: { de: [
-      "Welche Wahl vermeidest du zu treffen?",
-      "Wo bist du dir selbst gegenüber unehrlich in Beziehungen?",
-      "Was opferst du für Harmonie, das du nicht opfern solltest?"
+      "Wo wähle ich aus Angst statt aus Liebe?",
+      "Welche Beziehung spiegelt mir mein Inneres?",
+      "Wie liebe ich: aus Wahrheit – oder aus Angst, Mangel oder Gewohnheit?"
     ]},
     existenziell: { de: [
-      "Was bedeutet Liebe für dich wirklich?",
-      "Wen oder was wählst du – immer wieder?",
-      "Was wäre, wenn du dich selbst so liebtest wie jemand anderen?"
+      "Welche Freiheit in mir wird möglich, wenn ich nicht frage 'was bekomme ich', sondern 'was kann ich geben'?",
+      "Wie möchte ich lieben – mich selbst und andere?",
+      "Welche Wahl entspricht meiner tiefsten Wahrheit?",
+      "Was wäre, wenn ich mich selbst so liebte wie jemand anderen?",
+      "Ist irgendein Mensch es wert, dass ich meinen inneren Frieden verliere?"
     ]}
   },
 
   "07": { // Der Wagen
     sanft: { de: [
-      "Worauf kannst du heute fokussiert bleiben?",
-      "Was treibt dich gerade voran?",
-      "Welcher kleine Sieg verdient Anerkennung?"
+      "Wo bewege ich mich gerade vorwärts?",
+      "Was gibt mir inneren Antrieb?",
+      "Was treibt mich gerade voran?",
+      "Wogegen kämpfe ich, das ich gar nicht kämpfen müsste?"
     ]},
     tief: { de: [
-      "Was kämpfst du, das du nicht kämpfen müsstest?",
-      "Wo versuchst du, alles zu kontrollieren?",
-      "Wohin fährst du – und weißt du warum?"
+      "Welche gegensätzlichen Kräfte wirken in mir?",
+      "Wo brauche ich mehr innere Führung?",
+      "Wenn ich zentriert bleibe: Wohin würde ich mein Leben jetzt lenken, auch wenn es Mut braucht?"
     ]},
     existenziell: { de: [
-      "Was ist dein wirklicher Antrieb?",
-      "Wohin führt dich dein Weg, wenn du niemanden beeindrucken musst?",
-      "Was würdest du tun, wenn Sieg nicht das Ziel wäre?"
+      "Welche Kraft trägt mich durch Widerstände?",
+      "Wie fühle ich mich, wenn ich niemanden beeindrucken muss?",
+      "Was bedeutet es für mich, meinen Weg bewusst zu lenken?"
     ]}
   },
 
   "08": { // Die Kraft
     sanft: { de: [
-      "Wo bist du gerade mutiger als du denkst?",
-      "Was gibt dir heute Kraft?",
-      "Welche sanfte Stärke kannst du einsetzen?"
+      "Wo darf ich heute geduldiger mit mir sein?",
+      "Welcher Anteil in mir will nicht bekämpft, sondern gehalten werden?",
+      "Wo in mir spüre ich Kraft?",
+      "Wo erlebe ich meine sanfte Stärke?",
+      "Wo kann ich mich an meiner Kraft erfreuen?"
     ]},
     tief: { de: [
-      "Was in dir willst du zähmen – und warum?",
-      "Wo hast du Angst vor deiner eigenen Kraft?",
-      "Was würdest du tun, wenn du wüsstest, dass du stark genug bist?"
+      "Wo darf ich meine Sinnlichkeit leben?",
+      "Wo werde ich hart, obwohl ich eigentlich Nähe brauche – zu mir oder zu jemandem?",
+      "Was in mir will ich zähmen – und warum?",
+      "Wo entsteht Stärke durch Sanftheit?",
+      "Die tiefste Form von Mut für mich ist …?",
+      "Welche innere Kraft entdecke ich gerade?"
     ]},
     existenziell: { de: [
-      "Was ist die tiefste Form von Mut für dich?",
-      "Wo beginnt wahre Stärke?",
-      "Was wäre, wenn deine Verletzlichkeit deine größte Kraft wäre?"
+      "Was bedeutet wahre Stärke für mich?",
+      "Wie kann ich mich mit meiner Kraft verbinden?",
+      "Wenn wahre Stärke leise ist: Wo darf Liebe stärker sein als Durchsetzung?",
+      "Wer bin ich, wenn ich meine sinnliche Natur wirklich annehme?",
+      "Was würde ich tun, wenn ich wüsste, dass ich stark genug bin?"
     ]}
   },
 
   "09": { // Der Eremit
     sanft: { de: [
-      "Was brauchst du gerade an Stille?",
-      "Welche innere Stimme möchte gehört werden?",
-      "Wo tut dir Rückzug gut?"
+      "Wo tut mir heute ein Moment der Stille gut?",
+      "Was entdecke ich, wenn ich nach innen schaue?",
+      "Wo brauche ich Rückzug, um mich wieder zu hören?",
+      "Wo brauche ich weniger äußere Stimmen?",
+      "In der Stille liegt für mich Kraft weil …"
     ]},
     tief: { de: [
-      "Wovor ziehst du dich zurück?",
-      "Was findest du, wenn du wirklich allein bist?",
-      "Welche Einsamkeit trägst du schon lange?"
+      "Welche Wahrheit zeigt sich, wenn ich allein bin?",
+      "Wie darf ich mich vom Lärm der Welt lösen?",
+      "Welche Erkenntnis wächst gerade in mir?",
+      "Was leuchtet in mir, auch wenn niemand zuschaut?",
+      "Wovor ziehe ich mich zurück?"
     ]},
     existenziell: { de: [
-      "Was ist deine tiefste innere Wahrheit?",
-      "Wen triffst du, wenn du alle Rollen ablegst?",
-      "Was leuchtet in dir, auch wenn niemand zuschaut?"
+      "Welches Licht trage ich selbst in mir?",
+      "Wohin führt mich mein innerer Kompass?",
+      "Wie ist es, wenn ich mir wirklich zuhöre?",
+      "Wen treffe ich, wenn ich alle Rollen ablege?",
+      "Was finde ich, wenn ich wirklich allein bin?"
     ]}
   },
 
   "10": { // Rad des Schicksals
     sanft: { de: [
-      "Was verändert sich gerade in deinem Leben?",
-      "Welchem Wandel kannst du vertrauen?",
-      "Was darf sich heute drehen?"
+      "Welche Veränderung zeigt sich gerade in meinem Leben?",
+      "Wo darf ich mit dem Fluss gehen?",
+      "Was wandelt sich gerade ganz natürlich?"
     ]},
     tief: { de: [
-      "Welche Muster wiederholen sich in deinem Leben?",
-      "Wo widersteht du dem Unvermeidlichen?",
-      "Was müsste sich ändern, damit du wirklich frei bist?"
+      "Wo halte ich fest, obwohl Veränderung ruft?",
+      "Welche Lektion wiederholt sich in meinem Leben?",
+      "Wie gehe ich mit dem Unkontrollierbaren um?"
     ]},
     existenziell: { de: [
-      "Was ist dein Anteil an dem, was dir widerfährt?",
-      "Was bedeutet es, dem Leben zu vertrauen?",
-      "Wenn alles sich dreht – was bleibt?"
+      "Was möchte das Leben gerade durch mich verändern?",
+      "Wie vertraue ich dem Rhythmus meines Weges?",
+      "Was bedeutet Wandel für meine Entwicklung?"
     ]}
   },
 
-  "11": { // Gerechtigkeit
+  "11": { // Die Gerechtigkeit
     sanft: { de: [
-      "Wo kannst du heute ehrlich mit dir sein?",
-      "Was braucht gerade Klarheit statt Vermeidung?",
-      "Welche Entscheidung fühlt sich fair an?"
+      "Wie darf ich heute ehrlich zu mir sein?",
+      "Was braucht es für innere Ausgewogenheit?",
+      "Wo suche ich Klarheit?",
+      "Was braucht gerade Klarheit statt Vermeidung?"
     ]},
     tief: { de: [
-      "Was hast du verdrängt, weil es unbequem ist?",
-      "Wo bist du ungerecht – dir selbst gegenüber?",
-      "Was müsstest du anerkennen, das du noch nicht siehst?"
+      "Welche Handlung entspricht wirklich meinen Werten?",
+      "Wo muss ich gerade eine Entscheidung treffen und wie fühlt sie sich fair an?",
+      "Welche Entscheidung verlangt nach Aufrichtigkeit?"
     ]},
     existenziell: { de: [
-      "Was schuldest du dir selbst?",
-      "Was wäre, wenn du alles mit klaren Augen sehen würdest?",
-      "Was bedeutet Wahrheit für dein Leben?"
+      "Wie bringe ich Herz und Verstand in Balance?",
+      "Was bedeutet Wahrheit für mein Leben?"
     ]}
   },
 
   "12": { // Der Gehängte
     sanft: { de: [
-      "Was darfst du heute loslassen?",
-      "Wo hilft es, innezuhalten statt zu handeln?",
-      "Was verändert sich, wenn du die Perspektive wechselst?"
+      "Wo darf ich heute einfach innehalten?",
+      "Was darf ich heute loslassen?",
+      "Welche Situation möchte ich aus einer neuen Perspektive sehen?",
+      "Wo hilft mir Geduld?",
+      "Wo hilft es, innezuhalten statt zu handeln?"
     ]},
     tief: { de: [
-      "Was hältst du fest, das dich aufhängt?",
-      "Wo opferst du dich – und für wen?",
-      "Was würdest du sehen, wenn du alles auf den Kopf stellst?"
+      "Wo halte ich an einer alten Sichtweise fest?",
+      "Was halte ich fest, das mich aufhängt?",
+      "Was verändert sich, wenn ich nachgebe?",
+      "Wo opfere ich mich – und für wen?",
+      "Was versuche ich zu kontrollieren, obwohl ich spüre, dass Loslassen mir mehr Frieden geben würde?",
+      "Welche Erkenntnis entsteht im Innehalten?"
     ]},
     existenziell: { de: [
+      "Was zeigt sich mir, wenn ich Kontrolle aufgebe?",
       "Was muss sterben, damit etwas Neues entstehen kann?",
-      "Welches Warten hat einen tieferen Sinn?",
+      "Wie verändert sich mein Blick auf das Leben, wenn ich die andere Seite verstehe?",
       "Was wäre, wenn Stillstand die tiefste Bewegung ist?"
     ]}
   },
 
   "13": { // Der Tod
     sanft: { de: [
-      "Was darf heute enden?",
-      "Welcher Abschluss bringt dir Erleichterung?",
-      "Was verabschiedest du dich von gerade?"
+      "Was darf ich heute verabschieden?",
+      "Wo endet etwas ganz natürlich?",
+      "Was möchte sich wandeln?",
+      "Welcher Abschluss bringt mir Erleichterung?",
+      "Was halte ich am Leben, obwohl es längst vorbei ist?"
     ]},
     tief: { de: [
-      "Was hältst du am Leben, obwohl es längst tot ist?",
-      "Wovor hast du Angst, wenn du loslässt?",
-      "Was müsste sterben, damit du wachsen kannst?"
+      "Welche alte Identität passt nicht mehr zu mir?",
+      "Wo halte ich am Vergangenen fest?",
+      "Was in meinem Leben ist dabei zu enden – damit etwas Neues Platz hat?",
+      "Woran halte ich mich fest, obwohl ich innerlich längst weiß: Es darf gehen?",
+      "Wenn ich dem Wandel vertraue: Wer werde ich, wenn ich das Alte wirklich loslasse?"
     ]},
     existenziell: { de: [
-      "Was bedeutet Vergänglichkeit für dein Leben?",
-      "Wenn du wüsstest, dass alles endet – was würdest du anders tun?",
-      "Was bleibt von dir, wenn alles andere geht?"
+      "Welche Veränderung ruft mich gerade?",
+      "Wer bin ich jenseits meiner alten Formen?",
+      "Was müsste vorbei gehen, damit ich mich wieder freier fühle?",
+      "Was bedeutet Vergänglichkeit für mein Leben – und was ist das Positive daran?",
+      "Was bleibt von mir, wenn alles andere geht?"
     ]}
   },
 
-  "14": { // Mäßigkeit
+  "14": { // Die Mäßigkeit
     sanft: { de: [
-      "Wo findest du heute deine Balance?",
-      "Was braucht gerade Geduld statt Eile?",
-      "Welche kleine Harmonie kannst du schaffen?"
+      "Wie finde ich heute mein inneres Gleichgewicht?",
+      "Was bringt Ruhe in mein System?",
+      "Wo finde ich heute meine Balance?",
+      "Wo darf ich mir Zeit lassen?",
+      "Welche kleine Harmonie kann ich schaffen?"
     ]},
     tief: { de: [
-      "Wo lebst du in Extremen, wo Mitte wäre?",
-      "Was kostet dich dein Ungleichgewicht?",
-      "Was mischt sich in dir, das noch keine Form gefunden hat?"
+      "Welche Gegensätze möchten sich in mir verbinden?",
+      "Wo gerate ich aus dem Maß?",
+      "Wo brauche ich weniger Extrem – und mehr gutes Maß?",
+      "Was bedeutet innerer Frieden für mich?",
+      "Wie kann ich mich selbst wieder ausgleichen?"
     ]},
     existenziell: { de: [
-      "Was bedeutet innerer Frieden für dich?",
-      "Wie würde dein Leben aussehen, wenn du wirklich im Fluss wärst?",
-      "Was entsteht, wenn Gegensätze sich berühren?"
+      "Was bedeutet Balance für mein Leben?",
+      "Welche zwei Anteile in mir wollen versöhnt werden, statt gegeneinander zu kämpfen?",
+      "Was entsteht, wenn meine Gegensätze sich berühren?"
     ]}
   },
 
   "15": { // Der Teufel
     sanft: { de: [
-      "Was bindet dich gerade – und kannst du es lockern?",
-      "Wo darfst du ehrlich über eine Abhängigkeit sein?",
-      "Was gibt dir Kraft, auch wenn es dir nicht guttut?"
+      "Wo fühle ich mich gebunden – und was daran ist mir vertraut, auch wenn es mich eng macht?",
+      "Welche unangenehme Gewohnheit prägt bisher mein Verhalten?",
+      "Wo spüre ich innere Abhängigkeit?",
+      "Was fühlt sich vertraut, aber nicht frei an?"
     ]},
     tief: { de: [
-      "Welche Kette hast du selbst geschmiedet?",
-      "Was benutzt du, um nicht zu fühlen?",
-      "Wo gibst du deine Macht ab?"
+      "Welche Bindung halte ich selbst aufrecht?",
+      "Womit beruhige oder betäube ich mich, statt wirklich zu fühlen, was sich in mir bewegt?",
+      "Wo verliere ich meine Freiheit aus Angst?",
+      "Welche Schattenseite möchte ich erkennen?",
+      "Welchen Schatten in mir darf ich mir anschauen?"
     ]},
     existenziell: { de: [
-      "Was wärst du ohne das, woran du hängst?",
-      "Welcher Schatten in dir will gesehen werden?",
-      "Was würde Freiheit wirklich bedeuten?"
+      "Was bedeutet Freiheit für mich wirklich?",
+      "Wenn ich erkenne, dass ich nicht meine Abhängigkeiten bin – wer wäre dann frei?",
+      "Wo beginne ich, meine Fesseln zu erkennen?",
+      "Wie integriere ich meine Schatten?"
     ]}
   },
 
   "16": { // Der Turm
     sanft: { de: [
-      "Was bricht gerade zusammen – und macht vielleicht Platz?",
-      "Wo kannst du dem Chaos mit Atem begegnen?",
-      "Was hat sich verändert, das du noch nicht akzeptiert hast?"
+      "Gibt es eine Erkenntnis, die mich gerade überrascht?",
+      "Bricht etwas in mir gerade zusammen – und macht vielleicht Platz?",
+      "Verändert sich gerade mein Blick auf etwas?",
+      "Wo in meinem Leben stimmt etwas nicht mehr – auch wenn es nach außen noch funktioniert?",
+      "Bricht gerade etwas auf natürliche Weise auf?"
     ]},
     tief: { de: [
-      "Was in deinem Leben ist auf falschen Fundamenten gebaut?",
-      "Wovor hast du am meisten Angst zu verlieren?",
-      "Was müsste einstürzen, damit etwas Wahres entstehen kann?"
+      "Welche Überzeugung verliert gerade ihre Wahrheit?",
+      "Welche Wahrheit habe ich zu lange übersehen, bis sie nicht mehr leise bleiben kann?",
+      "Darf ich eine Illusion loslassen?",
+      "Was hat sich verändert, das ich noch nicht akzeptiert habe?"
     ]},
     existenziell: { de: [
-      "Was bist du, wenn alles Äußere fällt?",
-      "Was würde ein wirklicher Neuanfang bedeuten?",
-      "Was ist unzerstörbar in dir?"
+      "Welche Wahrheit befreit mich gerade?",
+      "Was entsteht, wenn alte Strukturen zerfallen?",
+      "Wenn das, was fällt, nicht mein Wesen ist: Was in mir bleibt wahr, wenn alles Unstimmige zusammenbricht?",
+      "Was in meinem Leben darf weniger werden, um mehr Platz für mich zu schaffen?"
     ]}
   },
 
   "17": { // Der Stern
     sanft: { de: [
-      "Wofür kannst du heute dankbar sein?",
-      "Was gibt dir gerade Hoffnung?",
-      "Welches Licht siehst du am Horizont?"
+      "Wo spüre ich gerade Hoffnung?",
+      "Wofür kann ich heute dankbar sein?",
+      "Was heilt in mir langsam?",
+      "Wo darf ich mir selbst vertrauen?"
     ]},
     tief: { de: [
-      "Wo hast du aufgehört zu hoffen?",
-      "Was würde sich heilen, wenn du dich erlaubst zu träumen?",
-      "Welche Wunde wartet auf Heilung?"
+      "Gibt es eine Verletzung in mir, die gesehen werden möchte?",
+      "Wo beginne ich, mir selbst zu vergeben?",
+      "Was nährt meine innere Heilung?",
+      "Was in mir braucht gerade keine Lösung, sondern Annahme?"
     ]},
     existenziell: { de: [
-      "Was ist dein tiefster Wunsch für dein Leben?",
-      "Worauf vertraust du, auch wenn du es nicht siehst?",
-      "Was würde entstehen, wenn du dich vollständig öffnetest?"
+      "Wann habe ich mich zuletzt ehrlich mit mir selbst versöhnt?",
+      "Was bedeutet Vertrauen in mich selbst?",
+      "Worauf vertraue ich, auch wenn ich es nicht sehe?"
     ]}
   },
 
   "18": { // Der Mond
     sanft: { de: [
-      "Was ist gerade unklar – und darf es sein?",
-      "Welchem Traum darfst du nachspüren?",
-      "Was zeigt sich dir im Halbdunkel?"
+      "Welche Gefühle bewegen mich gerade?",
+      "Was fühle ich, traue mich aber nicht ganz auszusprechen?"
     ]},
     tief: { de: [
-      "Welche Illusionen hältst du für Wahrheit?",
-      "Was verbirgt sich hinter deiner Angst?",
-      "Welche Stimmen hörst du, die nicht deine sind?"
+      "Was ist gerade unklar – und darf es sein?",
+      "Welche Angst möchte erkannt werden?",
+      "Welche inneren Bilder sprechen zu mir?",
+      "Wo mache ich mir etwas vor, auch durch äußere Einflüsse oder Meinungen?"
     ]},
     existenziell: { de: [
-      "Was liegt in deiner Tiefe, das du nicht kennst?",
-      "Was wäre, wenn das Unbewusste dir eine Botschaft schickt?",
-      "Wer bist du jenseits dessen, was du verstehst?"
+      "Was zeigt mir meine Seele durch Träume und Gefühle?",
+      "Bin ich bereit, meinen inneren Schatten zu begegnen?"
     ]}
   },
 
   "19": { // Die Sonne
     sanft: { de: [
-      "Was macht dich heute einfach froh?",
-      "Wo strahlst du, ohne es zu merken?",
-      "Was darf heute leicht und hell sein?"
+      "Was bringt heute Licht in mein Leben?",
+      "Wo spüre ich Freude ohne Grund?",
+      "Was darf ich einfach genießen?",
+      "Wann fühle ich mich wirklich unverstellt – einfach ich?",
+      "Wofür brenne ich wirklich?"
     ]},
     tief: { de: [
-      "Wo versteckst du deine Freude?",
-      "Was hindert dich daran, wirklich zu strahlen?",
-      "Was wäre, wenn du dich erlaubst, gesehen zu werden?"
+      "Wo darf mein inneres Kind sichtbar werden?",
+      "Was bringt mein inneres Kind heute noch zum Leuchten?",
+      "Welche Wahrheit darf ins Licht treten?",
+      "Wo fühle ich mich lebendig?",
+      "Erlaube ich mir, meine Freude zu zeigen?"
     ]},
     existenziell: { de: [
-      "Was bedeutet Lebensfreude für dich – jenseits aller Umstände?",
-      "Was ist dein Kern, wenn alles Dunkel sich lichtet?",
-      "Wofür brennst du wirklich?"
+      "Was bedeutet echte Lebensfreude für mich?",
+      "Wo darf ich aufhören, mich zu erklären – und einfach sein?",
+      "Was bedeutet Lebensfreude für mich – jenseits aller Umstände?",
+      "Wo erkenne ich, dass ich eigentlich Freude bin?",
+      "Wie kann ich meine Freude mit der Welt teilen?"
     ]}
   },
 
   "20": { // Das Gericht
     sanft: { de: [
-      "Was rufst du heute in dein Leben?",
-      "Welcher neue Beginn wartet auf dich?",
-      "Was darf auferstehen?"
+      "Was ruft mich gerade innerlich?",
+      "Entsteht in mir gerade eine neue Erkenntnis?",
+      "Was in meinem Leben ruft nach einer ehrlichen Entscheidung?"
     ]},
     tief: { de: [
-      "Was urteilst du an dir selbst – zu hart?",
-      "Welcher Ruf bleibt ungehört in dir?",
-      "Was müsstest du vergeben, um wirklich neu zu beginnen?"
+      "Welche Vergangenheit möchte ich loslassen?",
+      "Welche alte Identität bin ich bereit hinter mir zu lassen?",
+      "Wo darf ich mir selbst vergeben?",
+      "Was will neu gelebt werden?",
+      "Wo urteile ich über mich selbst zu hart?"
     ]},
     existenziell: { de: [
-      "Was ist deine tiefste Berufung?",
-      "Wenn du dein Leben neu gestalten könntest – was würde bleiben?",
-      "Was würde es bedeuten, wirklich erwacht zu sein?"
+      "Wer bin ich jenseits meiner alten Geschichte?",
+      "Bin ich bereit, meinem inneren Ruf zu folgen?",
+      "Wofür möchte ich vergeben – um frei weiterzugehen?",
+      "Wenn ich mein Leben neu gestalten könnte – was würde bleiben?"
     ]}
   },
 
   "21": { // Die Welt
     sanft: { de: [
-      "Was hast du gerade vollendet, das Anerkennung verdient?",
-      "Wo bist du angekommen?",
+      "Wobei fühle ich mich ganz?",
+      "Was habe ich bereits erreicht?",
+      "Wo darf ich meinen Weg würdigen?",
+      "Wie könnte ich Frieden mit mir schließen – und was könnte mich dorthin führen?",
       "Was darf heute gefeiert werden?"
     ]},
     tief: { de: [
-      "Was verhindert, dass du dich vollständig fühlst?",
-      "Wo sabotierst du deinen eigenen Abschluss?",
-      "Was fehlt dir noch – wirklich?"
+      "Welche Erfahrung hat mich vollständiger gemacht?",
+      "Was fühlt sich für mich gerade vollendet an – auch wenn es kein offizielles Ende hat?",
+      "Wie erkenne ich meinen inneren Frieden?",
+      "Was integriert sich gerade in meinem Leben?"
     ]},
     existenziell: { de: [
-      "Was bedeutet Vollständigkeit für dich?",
-      "Was wäre, wenn du bereits alles bist, was du sein musst?",
-      "Was ist der nächste Kreis deines Lebens?"
-    ]}
-  },
-
-  // ─────────────────────────────────────────
-  // STÄBE
-  // ─────────────────────────────────────────
-
-  "W01": { // Ass der Stäbe
-    sanft: { de: [
-      "Welcher neue Anfang klopft gerade an?",
-      "Was würdest du tun, wenn du keine Angst hättest?",
-      "Wo spürst du gerade Lebendigkeit?"
-    ]},
-    tief: { de: [
-      "Was hält dich davon ab, wirklich anzufangen?",
-      "Wo brennst du – und zeigst es nicht?",
-      "Was willst du erschaffen, das noch keinen Namen hat?"
-    ]},
-    existenziell: { de: [
-      "Wozu bist du wirklich hier?",
-      "Was würde entstehen, wenn du dich völlig erlaubst?",
-      "Welches Feuer in dir wartet darauf, entfacht zu werden?"
-    ]}
-  },
-
-  "W02": { // Zwei der Stäbe
-    sanft: { de: [
-      "Wohin könntest du heute deinen Blick richten?",
-      "Welche Möglichkeit liegt vor dir?",
-      "Was planst du – mit Freude statt Druck?"
-    ]},
-    tief: { de: [
-      "Worauf wartest du, bevor du losgehst?",
-      "Was hält dich in der Vertrautheit gefangen?",
-      "Welche Vision hast du aufgegeben?"
-    ]},
-    existenziell: { de: [
-      "Was ist deine Welt – und wie groß darf sie sein?",
-      "Wohin würdest du gehen, wenn alles möglich wäre?",
-      "Was liegt jenseits deines Horizonts?"
-    ]}
-  },
-
-  "W03": { // Drei der Stäbe
-    sanft: { de: [
-      "Was hast du auf den Weg gebracht, das jetzt wächst?",
-      "Wo darfst du auf Ergebnisse warten?",
-      "Was kommt auf dich zu – und du bist bereit?"
-    ]},
-    tief: { de: [
-      "Was sendest du aus – und was erwartest du zurück?",
-      "Wo bist du ungeduldig mit deinem eigenen Prozess?",
-      "Was müsstest du loslassen, damit etwas zurückkommen kann?"
-    ]},
-    existenziell: { de: [
-      "Was hinterlässt du in der Welt?",
-      "Welche Reise hat wirklich begonnen?",
-      "Was wächst in dir, das noch kein Ufer gesehen hat?"
-    ]}
-  },
-
-  "W04": { // Vier der Stäbe
-    sanft: { de: [
-      "Was darf heute gefeiert werden?",
-      "Wo bist du zuhause – in dir selbst?",
-      "Was gibt dir gerade Sicherheit?"
-    ]},
-    tief: { de: [
-      "Was fehlte dir an echtem Zuhause?",
-      "Wo suchst du Zugehörigkeit, die du dir selbst geben könntest?",
-      "Was würde sich verändern, wenn du dich wirklich willkommen heißt?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Heimat für dich – jenseits von Orten?",
-      "Wo gehörst du wirklich hin?",
-      "Was wäre, wenn du dein eigenes Zuhause wärst?"
-    ]}
-  },
-
-  "W05": { // Fünf der Stäbe
-    sanft: { de: [
-      "Wo kannst du heute einen Konflikt sanft ansprechen?",
-      "Was braucht Klärung statt Vermeidung?",
-      "Welcher Widerstand hat einen Kern Wahrheit?"
-    ]},
-    tief: { de: [
-      "Mit wem oder was kämpfst du wirklich?",
-      "Was kostet dich dein innerer Widerstand?",
-      "Wo streitest du, weil du dich nicht gehört fühlst?"
-    ]},
-    existenziell: { de: [
-      "Was verteidigst du – und ist es das wert?",
-      "Was wäre, wenn Konflikt Wachstum wäre?",
-      "Was entsteht, wenn du aufhörst zu kämpfen?"
-    ]}
-  },
-
-  "W06": { // Sechs der Stäbe
-    sanft: { de: [
-      "Welchen Erfolg darfst du heute anerkennen?",
-      "Was hast du erreicht, das du übergangen hast?",
-      "Wer verdient heute deine Anerkennung?"
-    ]},
-    tief: { de: [
-      "Wessen Anerkennung suchst du – und warum?",
-      "Was würde sich ändern, wenn du dir selbst applaudierst?",
-      "Wo feierst du andere, aber nicht dich?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Erfolg für dich – wirklich?",
-      "Wofür möchtest du gesehen werden?",
-      "Was wäre, wenn du bereits genug geleistet hast?"
-    ]}
-  },
-
-  "W07": { // Sieben der Stäbe
-    sanft: { de: [
-      "Wofür stehst du heute ein?",
-      "Was ist es wert, verteidigt zu werden?",
-      "Wo kannst du standhaft bleiben?"
-    ]},
-    tief: { de: [
-      "Gegen wen oder was behauptest du dich – wirklich?",
-      "Was kostet dich das Kämpfen auf diesem Hügel?",
-      "Wo verteidigst du dich, wo du dich öffnen könntest?"
-    ]},
-    existenziell: { de: [
-      "Was ist dein unverhandelbarer Kern?",
-      "Wofür würdest du alles riskieren?",
-      "Was wäre, wenn du nicht kämpfen müsstest, um zu existieren?"
-    ]}
-  },
-
-  "W08": { // Acht der Stäbe
-    sanft: { de: [
-      "Was bewegt sich gerade schnell in deinem Leben?",
-      "Welche Nachricht wartet auf dich?",
-      "Was darf heute in Bewegung kommen?"
-    ]},
-    tief: { de: [
-      "Was überwältigte dich durch seine Geschwindigkeit?",
-      "Wo verlierst du dich im Tempo?",
-      "Was müsstest du loslassen, um wirklich zu fliegen?"
-    ]},
-    existenziell: { de: [
-      "Wohin trägt dich dein Leben gerade – willst du das?",
-      "Was wäre, wenn Geschwindigkeit Klarheit wäre?",
-      "Was fliegt auf dich zu, dem du dich stellst?"
-    ]}
-  },
-
-  "W09": { // Neun der Stäbe
-    sanft: { de: [
-      "Was gibt dir heute Ausdauer?",
-      "Wo bist du widerstandsfähiger als du denkst?",
-      "Wie kannst du dich heute schützen, ohne dich zu verschließen?"
-    ]},
-    tief: { de: [
-      "Was hat dich so vorsichtig gemacht?",
-      "Welche alten Wunden bestimmen noch dein Verhalten?",
-      "Wo bist du auf der Hut, wo Vertrauen möglich wäre?"
-    ]},
-    existenziell: { de: [
-      "Was hast du durchgehalten – und was hat es dich gelehrt?",
-      "Was wäre, wenn Erschöpfung der Preis für falsche Kämpfe ist?",
-      "Welche Narben tragen deine Weisheit?"
-    ]}
-  },
-
-  "W10": { // Zehn der Stäbe
-    sanft: { de: [
-      "Was kannst du heute ablegen?",
-      "Welche Last ist nicht deine zu tragen?",
-      "Wo darfst du um Hilfe bitten?"
-    ]},
-    tief: { de: [
-      "Was trägst du, das du nicht loslassen willst – warum?",
-      "Welche Verantwortung hast du übernommen, die nicht dir gehört?",
-      "Was kostet dich deine Überbelastung wirklich?"
-    ]},
-    existenziell: { de: [
-      "Was wäre dein Leben ohne diese Last?",
-      "Was würdest du tun, wenn du frei wärst?",
-      "Was hält dich davon ab, Hilfe anzunehmen?"
-    ]}
-  },
-
-  "W11": { // Bube der Stäbe
-    sanft: { de: [
-      "Welche neue Idee begeistert dich gerade?",
-      "Wo kannst du heute neugierig sein?",
-      "Was möchtest du ausprobieren?"
-    ]},
-    tief: { de: [
-      "Was startest du – und bringst nie zu Ende?",
-      "Wo fehlt dir die Ausdauer hinter deiner Begeisterung?",
-      "Was würde passieren, wenn du eine Sache wirklich durchziehst?"
-    ]},
-    existenziell: { de: [
-      "Was entzündet dich – wirklich, tief?",
-      "Wer bist du, wenn du vollkommen lebendig bist?",
-      "Was wäre, wenn deine Unruhe eine Richtung sucht?"
-    ]}
-  },
-
-  "W12": { // Ritter der Stäbe
-    sanft: { de: [
-      "Wohin kannst du heute mit Energie aufbrechen?",
-      "Was treibt dich mit gutem Grund an?",
-      "Welche Leidenschaft darf sich zeigen?"
-    ]},
-    tief: { de: [
-      "Wo handelst du impulsiv statt weise?",
-      "Was brennt in dir, das keine Richtung hat?",
-      "Wen verletzt du in deinem Vorwärtsdrang?"
-    ]},
-    existenziell: { de: [
-      "Was willst du wirklich – jenseits des Adrenalins?",
-      "Wohin führt dich deine Leidenschaft, wenn du ihr voll folgst?",
-      "Was wäre, wenn Feuer auch wärmen kann, nicht nur verbrennen?"
-    ]}
-  },
-
-  "W13": { // Königin der Stäbe
-    sanft: { de: [
-      "Was gibst du heute mit Wärme und Stärke?",
-      "Wo kannst du andere mit deiner Energie inspirieren?",
-      "Was liebst du an deiner eigenen Kraft?"
-    ]},
-    tief: { de: [
-      "Wo zeigst du Stärke, wo du Schwäche zeigen darfst?",
-      "Was kostet es dich, immer die Starke zu sein?",
-      "Wo verbirgst du deine eigene Bedürftigkeit?"
-    ]},
-    existenziell: { de: [
-      "Was ist deine Flamme – unabhängig von allen anderen?",
-      "Wer bist du, wenn du niemanden führst?",
-      "Was wäre, wenn du deine Kraft nicht beweisen müsstest?"
-    ]}
-  },
-
-  "W14": { // König der Stäbe
-    sanft: { de: [
-      "Wo kannst du heute mit Autorität und Wärme führen?",
-      "Was inspiriert dich, andere zu inspirieren?",
-      "Welche Vision trägst du mit dir?"
-    ]},
-    tief: { de: [
-      "Wo herrschst du, wo du dienen solltest?",
-      "Was kostet deinen Stolz die Wahrheit?",
-      "Wessen Feuer unterdrückst du mit deinem eigenen?"
-    ]},
-    existenziell: { de: [
-      "Was ist dein Vermächtnis – wirklich?",
-      "Wofür setzt du deine Kraft ein – für dich oder für alle?",
-      "Was wäre, wenn wahre Führung Loslassen bedeutet?"
+      "Was bedeutet Echtsein für mich?",
+      "Wie zeigt sich mein Platz im größeren Ganzen?",
+      "Wobei empfinde ich Einheit mit dem Leben?",
+      "Wenn ich nichts mehr plausibel machen müsste – wie frei wäre ich dann?",
+      "Was bedeutet Vollständigkeit für mich?",
+      "Was wäre, wenn ich bereits alles bin, was ich sein muss?"
     ]}
   },
 
@@ -1435,6 +1257,18 @@ export const QUESTIONS: Record<
 
 };
 
+const questionDecks: Record<string, string[]> = {};
+const deckPositions: Record<string, number> = {};
+
+function shuffleArray(arr: string[]): string[] {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export function getRandomQuestion(
   cardId: string,
   depth: "sanft" | "tief" | "existenziell",
@@ -1442,9 +1276,19 @@ export function getRandomQuestion(
 ): string | null {
   const lang = locale.split("-")[0];
   const list =
-  QUESTIONS[cardId]?.[depth]?.[lang] ??
-  QUESTIONS[cardId]?.[depth]?.["de"];
+    QUESTIONS[cardId]?.[depth]?.[lang] ??
+    QUESTIONS[cardId]?.[depth]?.["de"];
+
   if (!list || list.length === 0) return null;
-  const index = Math.floor(Math.random() * list.length);
-  return list[index];
+
+  const key = `${cardId}_${depth}_${lang}`;
+
+  if (!questionDecks[key] || deckPositions[key] >= questionDecks[key].length) {
+    questionDecks[key] = shuffleArray(list);
+    deckPositions[key] = 0;
+  }
+
+  const question = questionDecks[key][deckPositions[key]];
+  deckPositions[key]++;
+  return question;
 }
