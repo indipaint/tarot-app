@@ -287,7 +287,7 @@ export default function Index() {
                   <Text style={styles.closeBtnText}>✦ {i18n.t("buttons.question")}</Text>
                 </Pressable>
                 <Pressable onPress={() => setActiveQuestion(null)} style={styles.closeBtn}>
-                  <Text style={styles.closeBtnText}>✕ schließen</Text>
+                 <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
                 </Pressable>
               </View>
             </View>

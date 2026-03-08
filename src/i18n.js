@@ -14,6 +14,7 @@ const translations = {
   soft: "Sanft",
   deep: "Tief",
   existential: "Existenziell",
+  close: "schließen",
 },
     cards: {
       "00": "Der Narr",
@@ -115,6 +116,7 @@ const translations = {
       soft: "Gentle",
 deep: "Deep",
 existential: "Existential",
+ close: "close",
       
     },
     cards: {
@@ -217,6 +219,7 @@ existential: "Existential",
       soft: "Douce",
 deep: "Profond",
 existential: "Existentiel",
+ close: "fermer",
     },
     cards: {
       "00": "Le Fou",

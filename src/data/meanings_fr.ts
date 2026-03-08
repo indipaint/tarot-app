@@ -1,4 +1,4 @@
-export const MEANINGS_FR = [,
+export const MEANINGS_FR = [
 
   {
     id: 0,
