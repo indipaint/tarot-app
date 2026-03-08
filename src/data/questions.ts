@@ -486,7 +486,373 @@ export const QUESTIONS: Record<
       "Was wäre, wenn ich bereits alles bin, was ich sein muss?"
     ]}
   },
+"W01": { // Ass der Stäbe
+  sanft: { de: [
+    "Was macht mich im Moment neugierig?",
+    "Welche Idee möchte ich heute einfach ausprobieren?",
+    "Wo darf ich meiner spontanen Energie folgen?",
+    "Welcher Neuanfang klopft gerade an?",
+    "Was möchte in mir gerade entstehen?",
+    "Welche neue Möglichkeit zeigt sich leise?",
+    "Wo spüre ich Lust, etwas zu beginnen?"
+  ]},
+  tief: { de: [
+    "Welche neue Kraft beginnt gerade in mir zu wachsen?",
+    "Was möchte ich wirklich in Bewegung bringen?",
+    "Welche Vision berührt mich stärker, als ich dachte?",
+    "Wo halte ich meinen eigenen Impuls noch zurück?",
+    "Welche Idee verdient es, ernst genommen zu werden?",
+    "Was würde entstehen, wenn ich meinem Inneren vertraue?"
+  ]},
+  existenziell: { de: [
+    "Wofür bin ich bereit, meine ganze Lebenskraft einzusetzen?",
+    "Welche Vision möchte durch mein Leben Wirklichkeit werden?",
+    "Was beginnt, wenn ich meinem inneren Ruf folge?",
+    "Wo ruft mich mein eigenes Feuer?",
+    "Was würde ich erschaffen, wenn ich mutig beginne?",
+    "Welche Spur möchte ich mit meiner Energie hinterlassen?",
+    "Welches neue Kapitel meines Lebens möchte entstehen?"
+  ]}
+},
 
+"W02": { // Zwei der Stäbe
+  sanft: { de: [
+    "Wo öffnet sich für mich gerade ein neuer Blick auf Möglichkeiten?",
+    "Was planst du – mit Freude statt Druck?",
+    "Was hält dich in der Vertrautheit gefangen?",
+    "Wo darf ich mir erlauben, größer zu denken?",
+    "Welche Vision hast du aufgegeben?"
+  ]},
+  tief: { de: [
+    "Was könnte wachsen, wenn ich meinen Horizont erweitere?",
+    "Wo stehe ich zwischen Sicherheit und Abenteuer?",
+    "Welche Möglichkeit habe ich bisher unterschätzt?",
+    "Was ruft mich, obwohl ich noch zögere?",
+    "Welche Zukunft beginne ich mir vorzustellen?"
+  ]},
+  existenziell: { de: [
+    "Welche Richtung meines Lebens möchte ich wirklich einschlagen?",
+    "Was wäre möglich, wenn ich meine Angst vor meiner Größe loslasse?",
+    "Wo darf ich über meine bisherigen Grenzen hinausdenken?",
+    "Welche Entscheidung könnte mein Leben verändern?",
+    "Wohin möchte ich meine Lebensreise führen?",
+    "Wohin würdest du gehen, wenn alles möglich wäre?"
+  ]}
+},
+
+"W03": { // Drei der Stäbe
+  sanft: { de: [
+    "Wo darf ich heute auf das vertrauen, was ich begonnen habe?",
+    "Was entwickelt sich gerade langsam weiter?",
+    "Wo zeigt sich ein erster Ausblick auf das, was kommen kann?",
+    "Was habe ich angestoßen, das nun wachsen darf?",
+    "Welche Entwicklung beginnt sich abzuzeichnen?"
+  ]},
+  tief: { de: [
+    "Welche meiner Entscheidungen trägt bereits erste kleine Früchte?",
+    "Wo lohnt es sich, Vertrauen in meinen Weg zu haben?",
+    "Was entsteht gerade aus meinem früheren Mut?",
+    "Wo darf ich dem Prozess des Wachsens Zeit geben?",
+    "Welche Vision beginnt Wirklichkeit zu werden?",
+    "Was sendest du aus – und was erwartest du zurück?",
+    "Was wächst, auch wenn ich es noch nicht vollständig sehe?"
+  ]},
+  existenziell: { de: [
+    "Welcher Weg meines Lebens entfaltet sich gerade?",
+    "Was habe ich begonnen, das größer wird als ich dachte?",
+    "Wo darf ich dem Fluss meines Lebens vertrauen?",
+    "Was zeigt mir, dass mein Weg Sinn hat?",
+    "Welche Vision beginnt Realität zu werden?",
+    "Was müsstest du loslassen, damit etwas zurückkommen kann?",
+    "Was hinterlässt du in der Welt?"
+  ]}
+},
+
+"W04": { // Vier der Stäbe
+  sanft: { de: [
+    "Wo darf ich heute einen Moment der Freude zulassen?",
+    "Was fühlt sich für mich gerade stabil und gut an?",
+    "Wo spüre ich ein Gefühl von Zuhause?",
+    "Was möchte ich heute bewusst feiern?",
+    "Wo erlebe ich Gemeinschaft oder Unterstützung?",
+    "Was gibt mir im Moment Halt?",
+    "Welche kleine Freude darf ich würdigen?"
+  ]},
+  tief: { de: [
+    "Wo suchst du Zugehörigkeit, die du dir selbst geben könntest?",
+    "Wo in meinem Leben ist ein Fundament entstanden?",
+    "Welche Verbindung gibt mir echte Stärke?",
+    "Was habe ich aufgebaut, das mich trägt?",
+    "Welche Beziehung schenkt mir Vertrauen?",
+    "Wo darf ich Dankbarkeit spüren?"
+  ]},
+  existenziell: { de: [
+    "Was wäre, wenn du dein eigenes Zuhause wärst?",
+    "Welche Form von Gemeinschaft trägt mein Leben wirklich?",
+    "Wo finde ich echten inneren Halt?",
+    "Was bedeutet Heimat für dich – jenseits von Orten?",
+    "Was bedeutet für mich ein erfülltes Zuhause?",
+    "Welche Beziehungen geben meinem Leben Sinn?",
+    "Was habe ich aufgebaut, das bleibt?",
+    "Was erfüllt mein Herz mit echter Zugehörigkeit?"
+  ]}
+},
+
+"W05": { // Fünf der Stäbe
+  sanft: { de: [
+    "Wo begegnen sich gerade unterschiedliche Energien in meinem Leben?",
+    "Wo kannst du heute einen Konflikt sanft ansprechen?",
+    "Welche gegenteiligen Welten um mich herum wollen gehört werden?",
+    "Wo entsteht lebendige Bewegung durch Unterschiedlichkeit?",
+    "Was lerne ich gerade durch Reibung mit anderen?",
+    "Wo darf ich spielerischer mit Wettbewerb umgehen?",
+    "Welche Herausforderung bringt Bewegung in mein Leben?",
+    "Wo entsteht Entwicklung durch Austausch?"
+  ]},
+  tief: { de: [
+    "Welche inneren Stimmen stehen miteinander im Dialog?",
+    "Was fordert mich heraus, meine eigene Position zu finden?",
+    "Wo lerne ich, mich klarer zu zeigen?",
+    "Was braucht Klärung statt Vermeidung?",
+    "Welche Spannung hilft mir zu wachsen?",
+    "Wo darf ich lernen, mit Unterschiedlichkeit umzugehen?"
+  ]},
+  existenziell: { de: [
+    "Wofür möchtest du gesehen werden?",
+    "Was fordert mich heraus, wirklich zu mir zu stehen?",
+    "Wo lerne ich, meine eigene Kraft zu behaupten?",
+    "Was zeigt mir, wofür ich wirklich kämpfen will?",
+    "Wo entsteht aus Konflikt eine neue Stärke?",
+    "Was kostet dich dein innerer Widerstand?"
+  ]}
+},
+
+"W06": { // Sechs der Stäbe
+  sanft: { de: [
+    "Was darf ich heute an mir anerkennen?",
+    "Was ist mir in letzter Zeit gelungen?",
+    "Welche Unterstützung habe ich erfahren?",
+    "Wo durfte ich über mich hinauswachsen?"
+  ]},
+  tief: { de: [
+    "Welche Entwicklung verdanke ich meinem Durchhaltevermögen?",
+    "Wo darf ich mir erlauben, gesehen zu werden?",
+    "Was habe ich erreicht, das mir vorher unmöglich schien?"
+  ]},
+  existenziell: { de: [
+    "Welche Form von Anerkennung erfüllt mein Herz wirklich?",
+    "Was bedeutet es für mich, meinen eigenen Weg zu gehen?",
+    "Was in meinem Leben verdient wirklich Würdigung?",
+    "Wie möchte ich meine Stärke in die Welt bringen?"
+  ]}
+},
+
+"W07": { // Sieben der Stäbe
+  sanft: { de: [
+    "Welche Grenze darf ich ruhig und klar setzen?",
+    "Welche Situation fordert meine Standhaftigkeit?",
+    "Wo darf ich meinen Platz behaupten?",
+    "Was stärkt mein Vertrauen in mich selbst?",
+    "Wo halte ich meine Position mit Ruhe?"
+  ]},
+  tief: { de: [
+    "Wo zeigt sich mein Mut, mich zu zeigen?",
+    "Was gibt mir Kraft, auch gegen Widerstand weiterzugehen?",
+    "Wo prüft das Leben meine innere Haltung?",
+    "Was stärkt meine Standfestigkeit?",
+    "Wo verteidigst du dich, wo du dich öffnen könntest?"
+  ]},
+  existenziell: { de: [
+    "Welche Wahrheit in mir ist nicht verhandelbar?",
+    "Wofür bin ich bereit, aufzustehen?",
+    "Welche Werte tragen mein Leben?",
+    "Wo zeigt sich meine Integrität?"
+  ]}
+},
+
+"W08": { // Acht der Stäbe
+  sanft: { de: [
+    "Wo spüre ich gerade Bewegung in meinem Leben?",
+    "Was kommt schneller auf mich zu, als ich dachte?",
+    "Welche Entwicklung nimmt gerade Fahrt auf?",
+    "Wo darf ich dem Fluss des Geschehens vertrauen?",
+    "Was bringt frische Energie in meinen Alltag?"
+  ]},
+  tief: { de: [
+    "Wo darf ich dem Tempo des Lebens vertrauen?",
+    "Welche Veränderung bewegt mich gerade stark?",
+    "Welche Entscheidung könnte jetzt Klarheit bringen?",
+    "Wo entsteht Dynamik, die mich vorwärts trägt?",
+    "Was will jetzt in Bewegung kommen?",
+    "Wohin trägt dich dein Leben gerade – willst du das?"
+  ]},
+  existenziell: { de: [
+    "Welche Veränderung meines Lebens lässt sich nicht mehr aufhalten?",
+    "Wo führt mich das Leben schneller voran, als ich erwartet habe?",
+    "Was bringt mein Leben in eine neue Richtung?",
+    "Was geschieht, wenn ich dem Fluss vertraue?",
+    "Wohin trägt mich die Dynamik meines Lebens?"
+  ]}
+},
+
+"W09": { // Neun der Stäbe
+  sanft: { de: [
+    "Welches Problem konnte mich stärker machen?",
+    "Wo darf ich mich an meine eigene Stärke erinnern?",
+    "Welche Erfahrung hat mich wachsen lassen?",
+    "Wo lohnt es sich, noch einen Moment durchzuhalten?",
+    "Was zeigt mir meine innere Widerstandskraft?",
+    "Wo habe ich bereits mehr geschafft, als ich glaubte?",
+    "Wie kannst du dich heute schützen, ohne dich zu verschließen?"
+  ]},
+  tief: { de: [
+    "Wo zeigt sich meine innere Ausdauer?",
+    "Was hat mich stärker gemacht als zuvor?",
+    "Was hat dich so vorsichtig gemacht?",
+    "Welche alten Wunden bestimmen noch dein Verhalten?",
+    "Wo bist du auf der Hut, wo Vertrauen möglich wäre?",
+    "Welche Erfahrung hat mir Weisheit geschenkt?",
+    "Was trägt mich auch in schwierigen Zeiten?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet es für mich, nicht aufzugeben?",
+    "Wo zeigt sich meine innere Standhaftigkeit?",
+    "Was habe ich gelernt, das mir niemand mehr nehmen kann?",
+    "Welche Stärke trägt mein Leben durch jede Herausforderung?"
+  ]}
+},
+
+"W10": { // Zehn der Stäbe
+  sanft: { de: [
+    "Wo trage ich im Moment sehr viel?",
+    "Welche Aufgabe fühlt sich schwerer an als gedacht?",
+    "Was habe ich lange getragen?",
+    "Wo könnte ich mir Unterstützung erlauben?",
+    "Welche Last ist nicht deine zu tragen?",
+    "Wo darfst du um Hilfe bitten?"
+  ]},
+  tief: { de: [
+    "Welche Aufgabe habe ich lange allein getragen?",
+    "Wo habe ich vielleicht mehr übernommen, als mir guttut?",
+    "Was verlangt gerade meine Ausdauer?",
+    "Was trägst du, das du nicht loslassen willst – warum?",
+    "Welche Verantwortung hast du übernommen, die nicht dir gehört?",
+    "Wo darf ich lernen, Hilfe anzunehmen?",
+    "Was möchte ich neu ordnen?"
+  ]},
+  existenziell: { de: [
+    "Welche Last gehört wirklich zu meinem Weg – und welche nicht?",
+    "Was zeigt mir meine Grenze über mein Leben?",
+    "Was hält dich davon ab, Hilfe anzunehmen?",
+    "Was darf ich loslassen, um frei weiterzugehen?",
+    "Wo beginnt Erleichterung, wenn ich ehrlich hinschaue?"
+  ]}
+},
+
+"W11": { // Bube der Stäbe
+  sanft: { de: [
+    "Welche neue Idee macht mich neugierig?",
+    "Wo spüre ich spielerische Energie?",
+    "Was möchte ich heute entdecken?",
+    "Welche Inspiration berührt mich?",
+    "Wo darf ich wieder experimentieren?",
+    "Welche Möglichkeit klingt spannend?",
+    "Was bringt frische Lebendigkeit in mein Leben?"
+  ]},
+  tief: { de: [
+    "Welche neue Leidenschaft beginnt in mir?",
+    "Was möchte ich lernen oder erforschen?",
+    "Welche Vision weckt meine Begeisterung?",
+    "Was würde passieren, wenn du eine Sache wirklich durchziehst?",
+    "Wo zeigt sich meine kreative Energie?",
+    "Was möchte ich mutig ausprobieren?",
+    "Welche Idee trägt Potenzial in sich?"
+  ]},
+  existenziell: { de: [
+    "Welche neue Lebensrichtung beginnt sich zu zeigen?",
+    "Wo möchte ich mich wirklich entfalten?",
+    "Welche Leidenschaft könnte mein Leben prägen?",
+    "Was möchte ich mutig in die Welt bringen?",
+    "Welche Vision berührt mein Herz?",
+    "Was möchte ich in diesem Leben entdecken?",
+    "Welche Möglichkeit wartet darauf, von mir gelebt zu werden?"
+  ]}
+},
+
+"W12": { // Ritter der Stäbe
+  sanft: { de: [
+    "Wo spüre ich gerade Aufbruchsstimmung?",
+    "Welche Energie treibt mich voran?",
+    "Was weckt meine Abenteuerlust?",
+    "Wo darf ich mutiger handeln?",
+    "Welche Idee bringt Bewegung in mein Leben?",
+    "Was ruft mich nach vorne?",
+    "Wo möchte ich etwas wagen?"
+  ]},
+  tief: { de: [
+    "Welche Leidenschaft gibt meinem Leben Richtung?",
+    "Wo zeigt sich mein Mut, neue Wege zu gehen?",
+    "Was brennt in dir, das keine Richtung hat?",
+    "Welche Leidenschaft darf sich zeigen?",
+    "Welche Herausforderung reizt mich?"
+  ]},
+  existenziell: { de: [
+    "Welche Leidenschaft gibt meinem Leben Sinn?",
+    "Welche Vision fordert meinen ganzen Mut?",
+    "Was treibt mich wirklich an?",
+    "Welche Richtung fühlt sich lebendig an?",
+    "Wofür möchte ich meine ganze Energie einsetzen?"
+  ]}
+},
+
+"W13": { // Königin der Stäbe
+  sanft: { de: [
+    "Wo spüre ich Vertrauen in meine eigene Ausstrahlung?",
+    "Wo darf ich mich selbstbewusst zeigen?",
+    "Welche Qualität in mir wirkt inspirierend?",
+    "Was bringt mein inneres Leuchten hervor?",
+    "Wo spüre ich Freude an meiner Lebendigkeit?",
+    "Welche Seite von mir möchte sichtbar sein?"
+  ]},
+  tief: { de: [
+    "Welche Kraft in mir wirkt auf andere?",
+    "Was bedeutet Selbstvertrauen für mich?",
+    "Welche Stärke habe ich über die Jahre entwickelt?",
+    "Welche Wirkung hat meine Präsenz?",
+    "Wo kannst du andere mit deiner Energie inspirieren?",
+    "Was liebst du an deiner eigenen Kraft?",
+    "Wo zeigst du Stärke, wo du Schwäche zeigen darfst?",
+    "Was kostet es dich, immer die Starke zu sein?"
+  ]},
+  existenziell: { de: [
+    "Was wäre, wenn du deine Kraft nicht beweisen müsstest?",
+    "Wie möchte ich meine Kraft in die Welt bringen?",
+    "Welche Ausstrahlung möchte ich verkörpern?",
+    "Was bedeutet es für mich, ganz ich selbst zu sein?",
+    "Wo zeigt sich meine wahre Größe?",
+    "Wie verberge ich meine eigene Bedürftigkeit?"
+  ]}
+},
+
+"W14": { // König der Stäbe
+  sanft: { de: [
+    "Was inspiriert mich, voranzugehen?",
+    "Welche Entscheidung fühlt sich kraftvoll an?",
+    "Was möchte ich bewusst gestalten?"
+  ]},
+  tief: { de: [
+    "Welche Vision meines Lebens möchte ich führen?",
+    "Welche Kraft hilft mir, andere zu inspirieren?",
+    "Was bedeutet für mich echte Führung?",
+    "Wo darf ich meine Erfahrung einsetzen?"
+  ]},
+  existenziell: { de: [
+    "Wo herrschst du, wo du dienen könntest?",
+    "Welche Richtung gebe ich meinem Leben?",
+    "Was bedeutet es für mich, mein Leben bewusst zu gestalten?",
+    "Setze ich meine Kraft für mich oder für alle ein?"
+  ]}
+},
   // ─────────────────────────────────────────
   // KELCHE
   // ─────────────────────────────────────────

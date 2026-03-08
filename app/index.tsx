@@ -24,17 +24,13 @@ const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 const EDGE_WIDTH = 18;
 const SWIPE_DISTANCE = 70;
 const SWIPE_VELOCITY = 0.35;
-
 const BUTTON_BAR_H = 76;
-
 const RITUAL_FADE_MS = 4000;
-
 const WELCOME_SCALE = 1.12;
 const WELCOME_TRANSLATE_Y = -177;
 const WELCOME_BTN_MARGIN_TOP = -266;
 
 function getCards(): any[] {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const mod = require("../src/data/cards");
   const data = mod?.default ?? mod?.cards ?? mod;
   return Array.isArray(data) ? data : [];
@@ -43,13 +39,11 @@ function getCards(): any[] {
 function toRoman(n: number) {
   if (n === 0) return "0";
   if (!Number.isFinite(n) || n < 0) return "";
-
   const map: Array<[number, string]> = [
     [1000, "M"], [900, "CM"], [500, "D"], [400, "CD"],
     [100, "C"], [90, "XC"], [50, "L"], [40, "XL"],
     [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"],
   ];
-
   let res = "";
   let x = Math.floor(n);
   for (const [v, s] of map) {
@@ -61,19 +55,12 @@ function toRoman(n: number) {
 export default function Index() {
   const [questionOverlayOpen, setQuestionOverlayOpen] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState<string | null>(null);
-
   const router = useRouter();
 
   useEffect(() => {
     const sub = BackHandler.addEventListener("hardwareBackPress", () => {
-      if (activeQuestion) {
-        setActiveQuestion(null);
-        return true;
-      }
-      if (questionOverlayOpen) {
-        setQuestionOverlayOpen(false);
-        return true;
-      }
+      if (activeQuestion) { setActiveQuestion(null); return true; }
+      if (questionOverlayOpen) { setQuestionOverlayOpen(false); return true; }
       return false;
     });
     return () => sub.remove();
@@ -95,15 +82,12 @@ export default function Index() {
   const startRitualTo = (targetIndex: number) => {
     if (locked.current) return;
     if (!cards.length) return;
-
     const nextIndex = clampIndex(targetIndex);
     if (nextIndex === index) return;
-
     locked.current = true;
     setIncomingIndex(nextIndex);
     progress.stopAnimation();
     progress.setValue(0);
-
     Animated.timing(progress, {
       toValue: 1,
       duration: RITUAL_FADE_MS,
@@ -155,32 +139,31 @@ export default function Index() {
   };
 
   const panResponder = useMemo(
-    () =>
-      PanResponder.create({
-        onMoveShouldSetPanResponder: (evt, gs) => {
-          if (locked.current) return false;
-          const x0 = evt.nativeEvent.pageX;
-          if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
-          const absDx = Math.abs(gs.dx);
-          const absDy = Math.abs(gs.dy);
-          return absDx > 8 && absDx > absDy + 6;
-        },
-        onMoveShouldSetPanResponderCapture: (evt, gs) => {
-          if (locked.current) return false;
-          const x0 = evt.nativeEvent.pageX;
-          if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
-          const absDx = Math.abs(gs.dx);
-          const absDy = Math.abs(gs.dy);
-          return absDx > 8 && absDx > absDy + 6;
-        },
-        onPanResponderRelease: (_e, gs) => {
-          if (locked.current) return;
-          const swipeLeft = gs.dx < -SWIPE_DISTANCE || gs.vx < -SWIPE_VELOCITY;
-          const swipeRight = gs.dx > SWIPE_DISTANCE || gs.vx > SWIPE_VELOCITY;
-          if (swipeLeft) next();
-          else if (swipeRight) prev();
-        },
-      }),
+    () => PanResponder.create({
+      onMoveShouldSetPanResponder: (evt, gs) => {
+        if (locked.current) return false;
+        const x0 = evt.nativeEvent.pageX;
+        if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
+        const absDx = Math.abs(gs.dx);
+        const absDy = Math.abs(gs.dy);
+        return absDx > 8 && absDx > absDy + 6;
+      },
+      onMoveShouldSetPanResponderCapture: (evt, gs) => {
+        if (locked.current) return false;
+        const x0 = evt.nativeEvent.pageX;
+        if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
+        const absDx = Math.abs(gs.dx);
+        const absDy = Math.abs(gs.dy);
+        return absDx > 8 && absDx > absDy + 6;
+      },
+      onPanResponderRelease: (_e, gs) => {
+        if (locked.current) return;
+        const swipeLeft = gs.dx < -SWIPE_DISTANCE || gs.vx < -SWIPE_VELOCITY;
+        const swipeRight = gs.dx > SWIPE_DISTANCE || gs.vx > SWIPE_VELOCITY;
+        if (swipeLeft) next();
+        else if (swipeRight) prev();
+      },
+    }),
     [cards.length, index]
   );
 
@@ -228,7 +211,6 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
-
       <View style={styles.container}>
 
         {/* WELCOME OVERLAY */}
@@ -274,13 +256,11 @@ export default function Index() {
                 resizeMode="contain"
               />
             ) : null}
-
             <Animated.Image
               source={currentSource}
               style={[styles.imageAbs, { opacity: outgoingOpacity }]}
               resizeMode="contain"
             />
-
             {(questionOverlayOpen || activeQuestion !== null) && (
               <BlurView
                 intensity={10}
@@ -292,15 +272,26 @@ export default function Index() {
             )}
           </View>
 
-          {/* FRAGE TEXT – Tap schließt die Frage */}
-         {activeQuestion ? (
-  <View style={styles.questionOnCardWrap}>
-    <Text style={styles.questionOnCardText}>{activeQuestion}</Text>
-    <Pressable onPress={() => setActiveQuestion(null)} style={styles.closeBtn}>
-      <Text style={styles.closeBtnText}>✕ schließen</Text>
-    </Pressable>
-  </View>
-) : null}
+          {/* FRAGE TEXT */}
+          {activeQuestion ? (
+            <View style={styles.questionOnCardWrap}>
+              <Text style={styles.questionOnCardText}>{activeQuestion}</Text>
+              <View style={styles.questionBtnRow}>
+                <Pressable
+                  onPress={() => {
+                    setActiveQuestion(null);
+                    setQuestionOverlayOpen(true);
+                  }}
+                  style={styles.closeBtn}
+                >
+                  <Text style={styles.closeBtnText}>✦ {i18n.t("buttons.question")}</Text>
+                </Pressable>
+                <Pressable onPress={() => setActiveQuestion(null)} style={styles.closeBtn}>
+                  <Text style={styles.closeBtnText}>✕ schließen</Text>
+                </Pressable>
+              </View>
+            </View>
+          ) : null}
 
           {/* TITEL */}
           <View style={styles.titleWrap}>
@@ -338,7 +329,6 @@ export default function Index() {
         {questionOverlayOpen && (
           <View style={styles.overlayRoot}>
             <Pressable style={styles.backdrop} onPress={() => setQuestionOverlayOpen(false)} />
-
             <View style={styles.overlayPanel} onStartShouldSetResponder={() => true}>
               <Pressable
                 style={styles.depthBtn}
@@ -350,7 +340,6 @@ export default function Index() {
               >
                 <Text style={styles.depthText}>{i18n.t("buttons.soft")}</Text>
               </Pressable>
-
               <Pressable
                 style={styles.depthBtn}
                 onPress={() => {
@@ -361,7 +350,6 @@ export default function Index() {
               >
                 <Text style={styles.depthText}>{i18n.t("buttons.deep")}</Text>
               </Pressable>
-
               <Pressable
                 style={styles.depthBtn}
                 onPress={() => {
@@ -383,12 +371,16 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   questionOnCardWrap: {
-    
     position: "absolute",
     left: 18,
     right: 18,
     bottom: 400,
     alignItems: "center",
+  },
+  questionBtnRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 20,
   },
   questionOnCardText: {
     color: "#fff",
@@ -417,9 +409,9 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   blurAbs: {
-  ...StyleSheet.absoluteFillObject,
-  backgroundColor: "rgba(0, 0, 0, 0.4)",
-},
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+  },
   titleWrap: {
     marginTop: -1,
     height: 44,
