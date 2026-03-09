@@ -14,7 +14,8 @@ const translations = {
   soft: "Sanft",
   deep: "Tief",
   existential: "Existenziell",
-  close: "schließen",
+  close: "schliessen",
+  
 },
     cards: {
       "00": "Der Narr",

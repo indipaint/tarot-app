@@ -857,257 +857,400 @@ export const QUESTIONS: Record<
   // KELCHE
   // ─────────────────────────────────────────
 
-  "C01": { // Ass der Kelche
-    sanft: { de: [
-      "Was öffnet dein Herz heute?",
-      "Wo kannst du heute mit Mitgefühl begegnen?",
-      "Was darf fließen?"
-    ]},
-    tief: { de: [
-      "Was blockiert deinen emotionalen Ausdruck?",
-      "Welches Gefühl wartet darauf, zugelassen zu werden?",
-      "Wo hast du dein Herz verschlossen?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet es, vollständig zu lieben?",
-      "Was wäre, wenn du dein Herz weit öffnetest?",
-      "Was fließt durch dich, wenn du dich nicht wehrst?"
-    ]}
-  },
+"C01": { // Ass der Kelche
+  sanft: { de: [
+    "Wobei öffnet sich mein Herz gerade ganz von selbst?",
+    "Was berührt mich im Moment besonders sanft?",
+    "Wo spüre ich heute Dankbarkeit?",
+    "Welches Gefühl möchte in mir Raum bekommen?",
+    "Was tut meinem Herzen heute gut?",
+    "Wo erlaube ich mir, weich zu sein?",
+    "Was möchte ich heute mit offenem Herzen empfangen?"
+  ]},
+  tief: { de: [
+    "Welches Gefühl möchte in mir wirklich gefühlt werden?",
+    "Wie beginne ich, mich innerlich zu öffnen?",
+    "Was nährt mein Herz gerade wirklich?",
+    "Wo wünsche ich mir mehr Verbundenheit?",
+    "Welcher Teil in mir sehnt sich nach Annahme?",
+    "Was darf ich heute liebevoll zulassen?",
+    "Welche neue Form von Liebe möchte in mir entstehen?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet es für mich, mit offenem Herzen zu leben?",
+    "Welche Quelle in mir nährt mein Leben wirklich?",
+    "Was möchte ich empfangen, ohne es festhalten zu wollen?",
+    "Wie könnte sich mein Leben verändern, wenn ich mein Herz nicht verschließe?",
+    "Welche Form von Verbundenheit trägt mein Leben?",
+    "Was fließt in mein Leben, wenn ich innerlich Ja sage?"
+  ]}
+},
 
-  "C02": { // Zwei der Kelche
-    sanft: { de: [
-      "Welche Verbindung nährt dich gerade?",
-      "Was schenkst du heute jemandem – mit Herz?",
-      "Wo begegnest du jemandem auf Augenhöhe?"
-    ]},
-    tief: { de: [
-      "Was hältst du in einer Beziehung zurück?",
-      "Wo gibst du, ohne dich selbst zu sehen?",
-      "Was brauchst du in Verbindung, das du nicht ausdrückst?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet echte Verbindung für dich?",
-      "Wer sieht dich wirklich – und lässt du es zu?",
-      "Was wäre, wenn Liebe keine Gegenleistung braucht?"
-    ]}
-  },
+"C02": { // Zwei der Kelche
+  sanft: { de: [
+    "Wo erlebe ich gerade ehrliche Nähe?",
+    "Mit wem fühle ich mich im Herzen verbunden?",
+    "Wo darf Begegnung heute leicht sein?",
+    "Welche Verbindung tut mir gerade gut?",
+    "Wo fühle ich mich wirklich gesehen?",
+    "Was entsteht, wenn ich mich ein wenig mehr öffne?",
+    "Welche Begegnung trägt Wärme in sich?"
+  ]},
+  tief: { de: [
+    "Wo wünsche ich mir echte Resonanz?",
+    "Wie zeige ich mich, wenn mir jemand wichtig ist?",
+    "Welche Verbindung in meinem Leben ist heilsam für mich?",
+    "Wo halte ich Nähe zurück, obwohl ich sie mir wünsche?",
+    "Was bedeutet für mich eine harmonische Beziehung?",
+    "Wo darf ich Vertrauen in Verbindung wachsen lassen?",
+    "Welche Begegnung berührt mich tiefer, als ich zeige?"
+  ]},
+  existenziell: { de: [
+    "Wie liebe ich, wenn ich nichts beweisen muss?",
+    "Welche Verbindung in meinem Leben trägt Wahrheit in sich?",
+    "Was heilt in mir durch wahrhaftige Begegnung?",
+    "Welche Beziehung spiegelt mir mein eigenes Herz zu mir?",
+    "Wie möchte ich Verbundenheit leben?"
+  ]}
+},
 
-  "C03": { // Drei der Kelche
-    sanft: { de: [
-      "Mit wem möchtest du heute Freude teilen?",
-      "Was darf gefeiert werden – gemeinsam?",
-      "Wo kannst du dich heute verbunden fühlen?"
-    ]},
-    tief: { de: [
-      "Wo vermeidest du echte Gemeinschaft?",
-      "Was hält dich davon ab, dich zu zeigen?",
-      "Welche Freundschaft vernachlässigst du?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Zugehörigkeit für dich?",
-      "Was wäre dein Leben ohne Gemeinschaft?",
-      "Was gibst du in die Welt, wenn du wirklich Teil von ihr bist?"
-    ]}
-  },
+"C03": { // Drei der Kelche
+  sanft: { de: [
+    "Wo darf ich heute Freude teilen?",
+    "Mit wem lache ich von Herzen gern?",
+    "Welche Begegnung hebt gerade meine Stimmung?",
+    "Wo erlebe ich Leichtigkeit mit anderen?",
+    "Was gibt mir das Gefühl, dazuzugehören?",
+    "Welche gemeinsame Freude tut mir gut?"
+  ]},
+  tief: { de: [
+    "Wo erlebe ich Gemeinschaft, in der ich mich zeigen kann?",
+    "Was bedeutet für mich geteilte Freude?",
+    "Welche Verbindung lässt mich aufatmen?",
+    "Wo darf ich mich getragen fühlen?",
+    "Welche Form von Miteinander wünsche ich mir mehr?"
+  ]},
+  existenziell: { de: [
+    "Welche Gemeinschaft entspricht meinem Wesen?",
+    "Wo finde ich Verbundenheit, ohne mich zu verlieren?",
+    "Was bedeutet Zugehörigkeit für mich wirklich?",
+    "Mit wem teile ich nicht nur Zeit, sondern Leben?"
+  ]}
+},
 
-  "C04": { // Vier der Kelche
-    sanft: { de: [
-      "Was bietet sich dir an, das du vielleicht übersiehst?",
-      "Wo darfst du heute innehalten und neu bewerten?",
-      "Was ist genug – gerade jetzt?"
-    ]},
-    tief: { de: [
-      "Womit bist du unzufrieden – und warum?",
-      "Was nimmst du als selbstverständlich hin?",
-      "Wo bist du gelangweilt von deinem eigenen Leben?"
-    ]},
-    existenziell: { de: [
-      "Was wäre, wenn das Angebotene ausreicht?",
-      "Was suchst du, das bereits da ist?",
-      "Was bedeutet Dankbarkeit jenseits von Worten?"
-    ]}
-  },
+"C04": { // Vier der Kelche
+  sanft: { de: [
+    "Wo bin ich gerade innerlich eher still als offen?",
+    "Wo wünsche ich mir mehr Lebendigkeit?",
+    "Welches Gefühl zieht sich im Moment eher zurück?",
+    "Was spricht mich gerade nicht wirklich an?",
+    "Wo brauche ich einen neuen Blick auf das, was da ist?"
+  ]},
+  tief: { de: [
+    "Wo habe ich mich innerlich ein Stück verschlossen?",
+    "Was kann ich gerade nicht wirklich annehmen?",
+    "Welche Enttäuschung wirkt vielleicht noch in mir nach?",
+    "Wo sehne ich mich nach mehr Sinn oder Berührung?",
+    "Was übersehe ich, obwohl es mir gut tun könnte?",
+    "Wo ist mein Herz müde geworden?"
+  ]},
+  existenziell: { de: [
+    "Welche Form von Lebendigkeit vermisse ich in mir?",
+    "Wo bin ich innerlich nicht mehr ganz anwesend?",
+    "Was wartet auf mich, wenn ich meine Abgewandtheit löse?",
+    "Was bedeutet Dankbarkeit jenseits von Worten?"
+  ]}
+},
 
-  "C05": { // Fünf der Kelche
-    sanft: { de: [
-      "Was trauert in dir gerade – und darf es?",
-      "Welcher Verlust darf heute betrauert werden?",
-      "Was bleibt noch, auch nach dem Schmerz?"
-    ]},
-    tief: { de: [
-      "Was weinst du, das du noch nicht weinst?",
-      "Wo hältst du dich im Schmerz fest?",
-      "Was siehst du nicht, weil du auf das Verlorene starrst?"
-    ]},
-    existenziell: { de: [
-      "Was hat Verlust dich gelehrt?",
-      "Was wäre, wenn Trauer ein Weg zur Tiefe ist?",
-      "Was bleibt von Liebe, wenn sie geht?"
-    ]}
-  },
+"C05": { // Fünf der Kelche
+  sanft: { de: [
+    "Wo trauere ich noch um etwas, das mir wichtig war?",
+    "Was in mir braucht heute Trost?",
+    "Welche Enttäuschung darf ich liebevoll ansehen?",
+    "Wo spüre ich Verlust oder Schmerz?",
+    "Was hat Verlust dich gelehrt?",
+    "Was darf in mir betrauert werden?",
+    "Wo wünsche ich mir Mitgefühl – von mir selbst oder anderen?",
+    "Was hilft mir, sanft mit Traurigkeit umzugehen?"
+  ]},
+  tief: { de: [
+    "Worüber bin ich noch nicht ganz hinweg?",
+    "Welche Verletzung wirkt in mir noch nach?",
+    "Was habe ich verloren, das ich innerlich noch halte?",
+    "Wo hältst du dich im Schmerz fest?",
+    "Wo fällt es mir schwer, das Verbliebene zu sehen?",
+    "Welche Traurigkeit verdient ehrlichen Raum?",
+    "Was siehst du nicht, weil du auf das Verlorene starrst?",
+    "Was wäre, wenn Trauer ein Weg zur Tiefe ist?",
+    "Was in mir möchte beweint werden, damit Heilung beginnt?",
+    "Wo braucht mein Herz heute Fürsorge?"
+  ]},
+  existenziell: { de: [
+    "Wie gehe ich mit Verlust um, ohne mich darin zu verlieren?",
+    "Was bleibt, wenn etwas Wichtiges gegangen ist?",
+    "Welche Form von Trauer hat mich als Mensch verändert?",
+    "Wo finde ich Sinn, obwohl etwas zerbrochen ist?",
+    "Was bleibt noch, auch nach dem Schmerz?",
+    "Wie lerne ich, mit offenem Herzen weiterzuleben?",
+    "Was zeigt mir der Schmerz über meine Fähigkeit zu lieben?",
+    "Was trägt mich, wenn ich Abschied nehmen muss?",
+    "Was bleibt von Liebe, wenn sie geht?"
+  ]}
+},
 
-  "C06": { // Sechs der Kelche
-    sanft: { de: [
-      "Welche schöne Erinnerung trägt dich heute?",
-      "Was aus deiner Vergangenheit gibt dir Wärme?",
-      "Wem kannst du heute etwas Schönes schenken?"
-    ]},
-    tief: { de: [
-      "Was hält dich in der Vergangenheit gefangen?",
-      "Welche Nostalgie verhindert dein Jetzt?",
-      "Was idealisierst du an früher, das so nie war?"
-    ]},
-    existenziell: { de: [
-      "Was trägst du aus deiner Kindheit, das noch heilt?",
-      "Wer warst du, bevor die Welt dich prägte?",
-      "Was wäre, wenn Unschuld wiederherstellbar ist?"
-    ]}
-  },
+"C06": { // Sechs der Kelche
+  sanft: { de: [
+    "Welche Erinnerung wärmt mein Herz heute?",
+    "Was lässt mich an Unschuld oder Leichtigkeit denken?",
+    "Wo spüre ich eine vertraute Wärme?",
+    "Was aus deiner Vergangenheit gibt dir Wärme?",
+    "Welche Begegnung erinnert mich an etwas Schönes?",
+    "Was verbindet mich mit meiner Vergangenheit auf gute Weise?",
+    "Welche alte Freude lebt noch in mir?"
+  ]},
+  tief: { de: [
+    "Welche Erfahrung aus meiner Vergangenheit nährt mich noch heute?",
+    "Wünsche ich mir die Unbeschwertheit von früher zurück?",
+    "Welche Erfahrung aus meiner Vergangenheit nährt mich noch heute?",
+    "Was hält dich in der Vergangenheit gefangen?",
+    "Was idealisierst du an früher, das so nie war?",
+    "Welche Nostalgie verhindert dein Jetzt?",
+    "Welche Beziehung trägt noch immer einen zarten Wert in sich?",
+    "Was in mir ist über die Jahre weich geblieben?",
+    "Welche Sehnsucht nach Geborgenheit kenne ich gut?",
+    "Wo wirkt kindliche Offenheit noch in mir?",
+    "Was erinnert mich daran, wer ich einmal ganz natürlich war?"
+  ]},
+  existenziell: { de: [
+    "Welche Teile meiner Geschichte gehören liebevoll zu mir?",
+    "Was aus meiner Vergangenheit möchte integriert statt vergessen werden?",
+    "Was trägst du aus deiner Kindheit, das noch heilt?",
+    "Wo berührt mich mein eigenes inneres Kind heute noch?",
+    "Welche Form von Unschuld suche ich vielleicht wieder?",
+    "Warst du wirklich jemand anderes, bevor die Welt dich prägte?",
+    "Was bleibt von mir, wenn ich mich an mein ursprüngliches Wesen erinnere?",
+    "Wie prägt meine Vergangenheit mein heutiges Lieben?"
+  ]}
+},
 
-  "C07": { // Sieben der Kelche
-    sanft: { de: [
-      "Welcher Traum darf heute Raum einnehmen?",
-      "Was fasziniert dich gerade?",
-      "Welche Möglichkeit klingt am stimmigsten?"
-    ]},
-    tief: { de: [
-      "Worin verlierst du dich in Illusionen?",
-      "Was wünschst du dir – und meidest die Wahrheit dahinter?",
-      "Welche Wahl vermeidest du durch Träumen?"
-    ]},
-    existenziell: { de: [
-      "Was ist der Unterschied zwischen deinem Traum und deiner Wahrheit?",
-      "Was wäre, wenn du nur einen Wunsch wählen dürftest?",
-      "Wohin führt deine Vorstellungskraft, wenn sie frei ist?"
-    ]}
-  },
+"C07": { // Sieben der Kelche
+  sanft: { de: [
+    "Wo verliere ich mich manchmal in Möglichkeiten?",
+    "Was regt meine Fantasie im Moment an?",
+    "Welche Vorstellung fühlt sich verlockend an?",
+    "Wo brauche ich mehr Klarheit zwischen Wunsch und Wirklichkeit?",
+    "Welche Sehnsucht zeigt sich in meinen inneren Bildern?"
+  ]},
+  tief: { de: [
+    "Welche meiner Wünsche sind wirklich meine eigenen?",
+    "Wo lenken mich Vorstellungen von dem ab, was gerade da ist?",
+    "Welche Sehnsucht trägt Tiefe – und welche eher Flucht?",
+    "Wo verwirre ich mich durch zu viele Möglichkeiten?",
+    "Welcher Wunsch sagt etwas Wesentliches über mich aus?",
+    "Was suche ich im Außen, das vielleicht in mir beginnt?",
+    "Wo wünsche ich mir mehr Ehrlichkeit mir mir selbst?"
+  ]},
+  existenziell: { de: [
+    "Wo verwechsle ich Fantasie mit innerer Wahrheit?",
+    "Welche Möglichkeit entspricht meinem Wesen am tiefsten?",
+    "Wie erkenne ich, was mich wirklich ruft?"
+  ]}
+},
 
-  "C08": { // Acht der Kelche
-    sanft: { de: [
-      "Was darfst du heute hinter dir lassen?",
-      "Wo fühlt sich ein Aufbruch richtig an?",
-      "Was hat sich erfüllt – und braucht keinen Abschluss mehr?"
-    ]},
-    tief: { de: [
-      "Was verlässt du – und traust dich nicht zuzugeben, warum?",
-      "Was suchst du, das du nicht mehr dort findest?",
-      "Wo gehst du weg, ohne wirklich gegangen zu sein?"
-    ]},
-    existenziell: { de: [
-      "Was suchst du jenseits dessen, was du kennst?",
-      "Was wäre, wenn Aufbruch die tiefste Form von Treue zu dir ist?",
-      "Was liegt hinter dem Horizont, den du dir nicht erlaubst?"
-    ]}
-  },
+"C08": { // Acht der Kelche
+  sanft: { de: [
+    "Wo spüre ich, dass etwas in meinem Leben nicht mehr zu mir passt?",
+    "Was darf ich vielleicht hinter mir lassen?",
+    "Wo ruft mich etwas weiter als das Vertraute?",
+    "Wo spüre ich einen stillen Wunsch nach Aufbruch?",
+    "Was könnte ich loslassen, um freier zu werden?",
+    "Was hat sich erfüllt – und braucht keinen Abschluss mehr?",
+    "Welche Situation fühlt sich innerlich abgeschlossen an?"
+  ]},
+  tief: { de: [
+    "Wo bleibe ich noch, obwohl mein Herz schon weitergezogen ist?",
+    "Was halte ich aus Gewohnheit fest?",
+    "Welche Form von Abschied möchte in mir reifen?",
+    "Wo sehne ich mich nach mehr Tiefe oder Wahrheit?",
+    "Was lasse ich zurück, wenn ich mir selbst treu werde?",
+    "Welche Leere weist mich vielleicht auf einen neuen Weg hin?",
+    "Wo in meinem Körper spüre ich Aufbruch zu etwas Neuem?"
+  ]},
+  existenziell: { de: [
+    "Wovon gehe ich weg, um mir selbst näherzukommen?",
+    "Was suchst du jenseits dessen, was du kennst?",
+    "Was ist vorbei, auch wenn ich es noch nicht ganz ausgesprochen habe?",
+    "Welche innere Reise beginnt, wenn ich dem Ruf meines Herzens folge?",
+    "Wo führt mich Sehnsucht tiefer als Bequemlichkeit?",
+    "Was wäre, wenn Aufbruch die tiefste Form von Treue zu dir ist?",
+    "Was darf enden, damit ich wahrhaftiger lebe?",
+    "Wie erkenne ich, wann Bleiben nicht mehr Liebe ist?",
+    "Was suche ich jenseits des Vertrauten wirklich?"
+  ]}
+},
 
-  "C09": { // Neun der Kelche
-    sanft: { de: [
-      "Was wünschst du dir – und erlaubst es dir?",
-      "Was macht dich heute zufrieden?",
-      "Welcher Wunsch darf erfüllt werden?"
-    ]},
-    tief: { de: [
-      "Was hast du erreicht – und fühlst dich trotzdem leer?",
-      "Wo verwechselst du Wünsche mit Bedürfnissen?",
-      "Was wünschst du dir wirklich – tief, jenseits des Offensichtlichen?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Erfüllung für dich – wirklich?",
-      "Was wäre, wenn du bereits bekommst, was du brauchst?",
-      "Was liegt jenseits aller Wünsche?"
-    ]}
-  },
+"C09": { // Neun der Kelche
+  sanft: { de: [
+    "Was erfüllt mich heute auf angenehme Weise?",
+    "Wo spüre ich Zufriedenheit in meinem Leben?",
+    "Was genieße ich im Moment wirklich?",
+    "Welche kleine Erfüllung darf ich bewusst wahrnehmen?",
+    "Wo fühle ich mich innerlich rund und zufrieden?",
+    "Was tut mir gerade richtig gut?",
+    "Welche Wünsche haben sich schon erfüllt?"
+  ]},
+  tief: { de: [
+    "Was bedeutet echte Zufriedenheit für mich?",
+    "Wo fühle ich mich innerlich reich?",
+    "Welche Erfüllung kommt nicht von außen, sondern aus mir selbst?",
+    "Was genieße ich, ohne mich dafür rechtfertigen zu müssen?",
+    "Welche Sehnsucht hat Frieden gefunden?",
+    "Wo darf ich mein Glück annehmen?",
+    "Was nährt mein Gefühl von innerer Fülle?"
+  ]},
+  existenziell: { de: [
+    "Was macht mein Leben wirklich erfüllt?",
+    "Welche Form von Glück ist für mich nährend?",
+    "Woran merke ich, dass ich innerlich angekommen bin?",
+    "Was wünsche ich mir – und was davon brauche ich gar nicht mehr?",
+    "Wie fühlt sich Fülle an, wenn sie nicht von Leistung abhängt?",
+    "Was ist für mich ein gelungenes Leben im Kleinen?"
+  ]}
+},
 
-  "C10": { // Zehn der Kelche
-    sanft: { de: [
-      "Was macht dein Leben gerade reich?",
-      "Welche Beziehung trägt dich?",
-      "Was fühlst du, wenn du an Glück denkst?"
-    ]},
-    tief: { de: [
-      "Was hindert dich, dich wirklich glücklich zu fühlen?",
-      "Wo setzt du Glück von Bedingungen abhängig?",
-      "Was fehlt dir noch – und was, wenn gar nichts fehlt?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet ein erfülltes Leben für dich?",
-      "Was wäre, wenn du bereits vollständig bist?",
-      "Wofür ist dein Herz dankbar, auch ohne Worte?"
-    ]}
-  },
+"C10": { // Zehn der Kelche
+  sanft: { de: [
+    "Wo erlebe ich heute ein Gefühl von Herzfrieden?",
+    "Welche Menschen schenken mir Geborgenheit?",
+    "Wo spüre ich Dankbarkeit für mein Miteinander?",
+    "Was gibt mir ein Gefühl von emotionalem Zuhause?",
+    "Welche Beziehung trägt Wärme und Vertrauen?",
+    "Was macht dein Leben gerade reich?",
+    "Welche Beziehung trägt dich?",
+    "Wo darf ich mich heute verbunden fühlen?"
+  ]},
+  tief: { de: [
+    "Welche Verbindung gibt mir das Gefühl, ganz gemeint zu sein?",
+    "Was braucht mein Herz, um sich zuhause zu fühlen?",
+    "Wo erlebe ich Liebe nicht als Drama, sondern als Ruhe?",
+    "Welche Form von Nähe trägt mein Leben?"
+  ]},
+  existenziell: { de: [
+    "Welche Beziehungen machen mein Leben ganz?",
+    "Wo finde ich Zugehörigkeit, ohne mich zu verbiegen?",
+    "Wo beginnt für mich das Gefühl von Heimat im Herzen?",
+    "Was bedeutet ein erfülltes Leben für dich?",
+    "Wie möchte ich Liebe leben, damit sie Frieden trägt?",
+    "Wofür ist dein Herz dankbar, auch ohne Worte?"
+  ]}
+},
 
-  "C11": { // Bube der Kelche
-    sanft: { de: [
-      "Welche kreative Botschaft trägt dich heute?",
-      "Was möchtest du ausdrücken – mit Herz?",
-      "Welchem Gefühl darfst du heute folgen?"
-    ]},
-    tief: { de: [
-      "Was träumst du, das du nicht lebst?",
-      "Wo verdrängst du deine Empfindsamkeit?",
-      "Was wäre, wenn du deine Gefühle nicht rechtfertigen müsstest?"
-    ]},
-    existenziell: { de: [
-      "Was will durch dich ausgedrückt werden?",
-      "Wer bist du, wenn du vollkommen fühlst?",
-      "Was wäre, wenn Empfindsamkeit deine Stärke ist?"
-    ]}
-  },
+"C11": { // Bube der Kelche
+  sanft: { de: [
+    "Welches Gefühl zeigt sich in mir noch ganz zart?",
+    "Wo spüre ich heute Offenheit und Neugier?",
+    "Was überrascht mein Herz im Moment?",
+    "Wo darf ich weicher und spielerischer sein?",
+    "Was berührt mich auf unerwartete Weise?",
+    "Was will durch dich ausgedrückt werden?"
+  ]},
+  tief: { de: [
+    "Welche zarte Wahrheit meines Herzens möchte ich ernst nehmen?",
+    "Wo beginnt in mir etwas Neues zu fühlen?",
+    "Was würde geschehen, wenn ich meinem Herzen unvoreingenommen zuhöre?",
+    "Wovon träumst du, das du nicht lebst?",
+    "Welches Gefühl möchte ich nicht gleich erklären, sondern erst einmal kennenlernen?",
+    "Was wäre, wenn Empfindsamkeit deine Stärke ist?",
+    "Welche Form von Offenheit wünsche ich mir zurück?"
+  ]},
+  existenziell: { de: [
+    "Wie bewahre ich die Offenheit meines Herzens in einer harten Welt?",
+    "Welche Form von Unschuld möchte in mir lebendig bleiben?",
+    "Was beginnt, wenn ich dem Zarten in mir vertraue?",
+    "Welche innere Botschaft erreicht mich gerade auf leise Weise?",
+    "Wie möchte ich mit meiner Empfindsamkeit leben?",
+    "Was sagt mir mein Herz, bevor mein Verstand eingreift?",
+    "Welche neue Form von Liebe oder Kreativität will in mir geboren werden?"
+  ]}
+},
 
-  "C12": { // Ritter der Kelche
-    sanft: { de: [
-      "Wem kannst du heute Mitgefühl zeigen?",
-      "Was trägt dich romantisch und zärtlich voran?",
-      "Welchem Ruf des Herzens folgst du?"
-    ]},
-    tief: { de: [
-      "Wo bist du romantisch – und verlierst dich dabei?",
-      "Was idealisierst du in anderen, das du in dir suchst?",
-      "Wo sind deine Gefühle Wunschdenken?"
-    ]},
-    existenziell: { de: [
-      "Was ist die Reise deines Herzens?",
-      "Wohin folgt dein Mitgefühl – und was kostet das?",
-      "Was wäre, wenn Liebe kein Ziel ist, sondern ein Weg?"
-    ]}
-  },
+"C12": { // Ritter der Kelche
+  sanft: { de: [
+    "Welche Sehnsucht bewegt mein Herz gerade?",
+    "Wo folge ich einem Gefühl mit Hoffnung?",
+    "Wem kannst du heute Mitgefühl zeigen?",
+    "Wo wünsche ich mir mehr Romantik oder Schönheit?",
+    "Was berührt mich so, dass ich in Bewegung komme?"
+  ]},
+  tief: { de: [
+    "Welchem Gefühl bin ich bereit zu folgen?",
+    "Welche Sehnsucht ist stark genug, mich in Bewegung zu bringen?",
+    "Was trage ich in mir, das in Beziehung will?",
+    "Was idealisierst du in anderen, das du in dir suchst?"
+  ]},
+  existenziell: { de: [
+    "Welcher Ruf meines Herzens verdient es, gelebt zu werden?",
+    "Wie liebe ich, wenn ich meiner Sehnsucht vertraue?",
+    "Was wäre, wenn Liebe kein Ziel ist, sondern ein Weg, sei die Liebe, die du dir wünschst?",
+    "Was bin ich bereit, aus Liebe oder Wahrhaftigkeit zu leben?",
+    "Wohin folgt dein Mitgefühl – und was kostet dich das?",
+    "Welche Schönheit oder Wahrheit möchte ich in die Welt tragen?",
+    "Wie möchte ich die Tiefe meines Herzens leben?"
+  ]}
+},
 
-  "C13": { // Königin der Kelche
-    sanft: { de: [
-      "Wem kannst du heute zuhören – wirklich?",
-      "Was fühlt sich intuitiv richtig an?",
-      "Wo kannst du heute mitfühlend sein – auch dir selbst gegenüber?"
-    ]},
-    tief: { de: [
-      "Wo verlierst du dich in den Gefühlen anderer?",
-      "Was nimmst du auf dich, das dir nicht gehört?",
-      "Wo grenzt du dich nicht ab, weil du nicht verletzen willst?"
-    ]},
-    existenziell: { de: [
-      "Was ist die tiefste Form von Mitgefühl für dich?",
-      "Wie hältst du Fühlen und Sein in Balance?",
-      "Was wäre, wenn du der Ozean bist – nicht die Wellen?"
-    ]}
-  },
+"C13": { // Königin der Kelche
+  sanft: { de: [
+    "Wo spüre ich heute Mitgefühl – für mich oder andere?",
+    "Welche innere Ruhe trägt mich gerade?",
+    "Wo darf ich meinem Gefühl vertrauen?",
+    "Was nährt die Tiefe meiner Gefühle?",
+    "Welche Form von Fürsorge erfüllt mich?"
+  ]},
+  tief: { de: [
+    "Wo vertraue ich meiner Intuition mehr als äußeren Stimmen?",
+    "Wie gehe ich fürsorglich mit meiner inneren Welt um?",
+    "Was nimmst du auf dich, das dir nicht gehört?",
+    "Welche Tiefe in mir möchte geachtet werden?",
+    "Wo verlierst du dich in den Gefühlen anderer?",
+    "Wo zeigt sich meine Fähigkeit, zu fühlen, ohne darin zu ertrinken?",
+    "Was hilft mir, offen und zugleich klar zu bleiben?",
+    "Wo grenzt du dich nicht ab, weil du nicht verletzen willst?"
+  ]},
+  existenziell: { de: [
+    "Wie möchte ich meine Sensibilität als Stärke leben?",
+    "Was bedeutet es für mich, mit offenem Herzen und klarem Inneren zu leben?",
+    "Wie trage ich Mitgefühl, ohne mich selbst zu verlieren?",
+    "Wie kann meine Sanftheit heilsam in die Welt kommen?"
+  ]}
+},
 
-  "C14": { // König der Kelche
-    sanft: { de: [
-      "Wie kannst du heute emotional reif begegnen?",
-      "Was hältst du mit Würde und Wärme?",
-      "Wo kannst du Fühlen und Handeln verbinden?"
-    ]},
-    tief: { de: [
-      "Was unterdrückst du in dir, um stark zu wirken?",
-      "Wo trägst du die Emotionen anderer, statt deine eigenen?",
-      "Was kostet dich deine emotionale Kontrolle?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet emotionale Reife für dich?",
-      "Was wäre, wenn Fühlen und Führen dasselbe sind?",
-      "Was trägst du in dir, das die Welt braucht?"
-    ]}
-  },
+"C14": { // König der Kelche
+  sanft: { de: [
+    "Wie bleibe ich ruhig in mir, auch wenn es um mich herum sehr chaotisch ist?",
+    "Welche Ruhe hilft mir heute, klar zu bleiben?",
+    "Wo gelingt es mir, Herz und Haltung zusammenzubringen?",
+    "Was unterstützt mich darin, innerlich ausgeglichen zu bleiben?",
+    "Wo zeige ich emotionale Reife?",
+    "Was hilft mir, mit meinen Gefühlen freundlich umzugehen?",
+    "Wo kann ich heute zugleich weich und klar sein?"
+  ]},
+  tief: { de: [
+    "Wie halte ich meine Gefühle, ohne von ihnen fortgetragen zu werden?",
+    "Welche Erfahrung hat mir innere Ruhe geschenkt?",
+    "Wo wünsche ich mir mehr Souveränität im Fühlen?",
+    "Was bedeutet für mich ein reifes Herz?",
+    "Wo trägst du die Emotionen anderer, statt deine eigenen?",
+    "Wie bleibe ich im Kontakt, ohne mich zu verlieren?"
+  ]},
+  existenziell: { de: [
+    "Was heißt es für mich, ein verlässliches Herz zu haben?",
+    "Wie verkörpere ich Liebe, ohne mich aufzugeben?",
+    "Welche innere Haltung lässt mich im Sturm ruhig bleiben?",
+    "Was bedeutet innere Reife für mich wirklich?",
+    "Was trägst du in dir, das die Welt braucht?",
+  ]}
+},
 
   // ─────────────────────────────────────────
   // SCHWERTER
