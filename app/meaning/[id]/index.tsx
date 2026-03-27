@@ -29,9 +29,8 @@ function getMeaningsModule(locale: string): any {
 
 function getMeaningByIdLocal(id: string | number, locale: string) {
   const list = getMeaningsModule(locale);
-  const key = Number(id);
   const arr = Array.isArray(list) ? list : [];
-  return arr.find((m) => m && Number(m.id) === key);
+  return arr.find((m) => String(m?.id) === String(id));
 }
 
 export default function MeaningByIdScreen() {
@@ -39,7 +38,6 @@ export default function MeaningByIdScreen() {
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams();
 
-  // Locale-State für Re-render bei Sprachwechsel
   const [locale, setLocaleState] = useState(getLocale());
   useEffect(() => {
     return subscribeLocale((lang: string) => setLocaleState(lang));
@@ -65,6 +63,7 @@ export default function MeaningByIdScreen() {
           ]}
           showsVerticalScrollIndicator={false}
         >
+          {meaning?.title ? <Text style={styles.title}>{meaning.title}</Text> : null}
           <Text style={styles.body}>{text}</Text>
         </ScrollView>
 
@@ -89,6 +88,14 @@ const styles = StyleSheet.create({
 
   scroll: { flex: 1 },
   scrollContent: { padding: 16, flexGrow: 1 },
+
+  title: {
+    color: "#201a01",
+    fontSize: 24,
+    fontWeight: "700",
+    marginBottom: 16,
+  },
+
   body: { color: "#201a01", fontSize: 19, lineHeight: 24 },
 
   bottomBar: {

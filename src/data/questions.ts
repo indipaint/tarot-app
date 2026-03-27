@@ -1,4 +1,4 @@
-export type Depth = "sanft" | "tief" | "existenziell";
+
 
 export const QUESTIONS: Record<
   string,
@@ -1256,548 +1256,739 @@ export const QUESTIONS: Record<
   // SCHWERTER
   // ─────────────────────────────────────────
 
-  "S01": { // Ass der Schwerter
-    sanft: { de: [
-      "Welche Klarheit kommt gerade zu dir?",
-      "Was kannst du heute mit einem klaren Gedanken beginnen?",
-      "Welche Wahrheit darf heute ausgesprochen werden?"
-    ]},
-    tief: { de: [
-      "Was willst du nicht klar sehen?",
-      "Welche Wahrheit vermeidest du?",
-      "Was würde sich verändern, wenn du die Dinge beim Namen nennen würdest?"
-    ]},
-    existenziell: { de: [
-      "Was ist deine schärfste Wahrheit?",
-      "Was wäre, wenn Klarheit befreit – auch wenn sie schmerzt?",
-      "Was liegt jenseits aller deiner Überzeugungen?"
-    ]}
-  },
+ "S01": { // Ass der Schwerter
+  sanft: { de: [
+    "Wo wünsche ich mir gerade mehr Klarheit?",
+    "Welche Wahrheit beginnt sich in mir zu zeigen?",
+    "Was möchte ich endlich klar aussprechen?",
+    "Wo darf ich genauer hinschauen?",
+    "Welche Erkenntnis kommt gerade in mein Bewusstsein?",
+    "Wo beginnt sich ein Nebel in mir zu lichten?"
+  ]},
+  tief: { de: [
+    "Welche Wahrheit habe ich lange nicht sehen wollen?",
+    "Was erkenne ich, wenn ich mich selbst nicht mehr täusche?",
+    "Welche Wahrheit vermeidest du?",
+    "Wie darf ich Klarheit über meine Situation gewinnen?",
+    "Welche Wahrheit möchte ausgesprochen werden?"
+  ]},
+  existenziell: { de: [
+    "Bin ich bereit, die Dinge beim Namen zu nennen?",
+    "Welche Klarheit befreit mein Denken?",
+    "Was bedeutet Wahrheit für mich?",
+    "Welche Wahrheit bin ich bereit zu leben?",
+    "Was liegt jenseits aller deiner Überzeugungen?"
+  ]}
+},
 
-  "S02": { // Zwei der Schwerter
-    sanft: { de: [
-      "Was darf heute noch unentschieden bleiben?",
-      "Wo hilft es, einen Moment zu pausieren?",
-      "Was brauchst du, bevor du entscheidest?"
-    ]},
-    tief: { de: [
-      "Was siehst du nicht – weil du die Augen verschlossen hast?",
-      "Welche Entscheidung vermeidest du – und warum?",
-      "Was kostet dich das Nicht-Entscheiden?"
-    ]},
-    existenziell: { de: [
-      "Was wäre, wenn es keine falsche Wahl gibt?",
-      "Was fürchtest du zu sehen, wenn du die Binde löst?",
-      "Was liegt jenseits der Entscheidung?"
-    ]}
-  },
+"S02": { // Zwei der Schwerter
+  sanft: { de: [
+    "Wo halte ich gerade inne, bevor ich entscheide?",
+    "Wo sollte ich mir Zeit für eine Entscheidung nehmen?",
+    "Was möchte ich erst fühlen, bevor ich entscheide?",
+    "Wo stehe ich zwischen zwei Möglichkeiten?",
+    "Welche Entscheidung braucht Ruhe statt Druck?",
+    "Wo darf ich mir erlauben, noch nicht zu wissen?"
+  ]},
+  tief: { de: [
+    "Welche Wahrheit vermeide ich gerade zu sehen?",
+    "Welche Entscheidung fällt mir schwer?",
+    "Was hindert mich daran, klar zu wählen?",
+    "Versuche ich, einen inneren Konflikt zu übergehen?",
+    "Wo darf ich ehrlich zu meiner Unsicherheit stehen?"
+  ]},
+  existenziell: { de: [
+    "Welche Richtung meines Lebens entsteht aus meiner Entscheidung?",
+    "Was fürchtest du zu sehen, wenn du die Binde löst?",
+    "Was kostet dich das Nicht-Entscheiden?",
+    "Gibt es etwas, das ich nicht sehen möchte?"
+  ]}
+},
 
-  "S03": { // Drei der Schwerter
-    sanft: { de: [
-      "Was schmerzt – und darf es?",
-      "Wo darfst du heute traurig sein?",
-      "Was braucht Raum – ohne sofort besser zu werden?"
-    ]},
-    tief: { de: [
-      "Welchen Schmerz trägst du schon zu lange allein?",
-      "Was hat dein Herz gebrochen – und du hast es nie wirklich gefühlt?",
-      "Wo verschließt du dich vor dem Schmerz?"
-    ]},
-    existenziell: { de: [
-      "Was hat Schmerz dich über dich selbst gelehrt?",
-      "Was wäre, wenn Herzschmerz das Herz öffnet?",
-      "Was bleibt, nachdem der Schmerz nachlässt?"
-    ]}
-  },
+"S03": { // Drei der Schwerter
+  sanft: { de: [
+    "Wo spüre ich gerade eine verletzliche Stelle in mir?",
+    "Welche Erfahrung hat mein Herz berührt?",
+    "Wo darf ich meinem Schmerz Raum geben?",
+    "Welche Enttäuschung möchte gesehen werden?",
+    "Wo brauche ich gerade Mitgefühl mit mir selbst?",
+    "Was hilft mir, mein Herz wieder zu öffnen?",
+    "Wo beginnt Heilung durch Ehrlichkeit?"
+  ]},
+  tief: { de: [
+    "Welche Verletzung wirkt noch in mir nach?",
+    "Was hat mein Herz wirklich getroffen?",
+    "Wo halte ich noch an einem alten Schmerz fest?",
+    "Welche Erfahrung möchte ich endlich annehmen?",
+    "Was hilft mir, inneren Schmerz anzunehmen?",
+    "Welche Wahrheit liegt in meiner Verletzlichkeit?",
+    "Wo beginnt mein Herz, sich neu zu öffnen?"
+  ]},
+  existenziell: { de: [
+    "Was lehrt mich mein Schmerz über das Leben?",
+    "Wie verändert Verletzlichkeit meine Sicht auf Liebe?",
+    "Welche Erfahrung hat mein Herz reifer gemacht?",
+    "Was bedeutet es, trotz Schmerz offen zu bleiben?"
+  ]}
+},
 
-  "S04": { // Vier der Schwerter
-    sanft: { de: [
-      "Was braucht heute Ruhe statt Aktivität?",
-      "Wo darfst du dich erholen?",
-      "Was lässt du los, wenn du zur Stille kommst?"
-    ]},
-    tief: { de: [
-      "Was treibst du weiter, obwohl du erschöpft bist?",
-      "Wovor schützt dich die Aktivität?",
-      "Was zeigt sich, wenn du wirklich zur Ruhe kommst?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet echte Erholung für dich?",
-      "Was wäre, wenn Stille keine Leere ist?",
-      "Wer bist du, wenn du nichts tust?"
-    ]}
-  },
+"S04": { // Vier der Schwerter
+  sanft: { de: [
+    "Wo wünsche ich mir gerade Ruhe?",
+    "Welche Pause würde mir gut tun?",
+    "Wo darf ich mich zurückziehen?",
+    "Was hilft mir, innerlich still zu werden?",
+    "Welche Form von Erholung brauche ich?",
+    "Wo darf mein Geist zur Ruhe kommen?",
+    "Was schenkt mir einen Moment des Friedens?"
+  ]},
+  tief: { de: [
+    "Wo braucht mein Geist eine Pause vom Denken?",
+    "Welche Gedanken kreisen zu viel in mir?",
+    "Was hilft mir, innerlich Abstand zu gewinnen?",
+    "Welche Situation verlangt bewusste Ruhe?",
+    "Wo entsteht Klarheit durch Stille?",
+    "Wo beginnt Erneuerung durch Rückzug?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet wirkliche innere Ruhe für mich?",
+    "Wo finde ich Frieden in mir selbst?",
+    "Was geschieht, wenn ich meinem Geist Raum gebe?",
+    "Wie könnte in mir Weisheit aus innerer Ruhe entstehen?",
+    "Was zeigt sich mir in der Stille?",
+    "Wie verändert mich bewusster Rückzug?"
+  ]}
+},
 
-  "S05": { // Fünf der Schwerter
-    sanft: { de: [
-      "Was kannst du heute loslassen – auch wenn du Recht hast?",
-      "Wo lohnt sich der Kampf nicht?",
-      "Was wäre, wenn du gewinnst, indem du gehst?"
-    ]},
-    tief: { de: [
-      "Was kostet dich dein Müssen-Recht-Haben?",
-      "Wen verletzt du in deinem Beharren?",
-      "Was gewinnst du wirklich, wenn du gewinnst?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Sieg für dich – und auf wessen Kosten?",
-      "Was wäre, wenn du niemanden besiegen müsstest?",
-      "Was bleibt, wenn der Konflikt vorbei ist?"
-    ]}
-  },
+"S05": { // Fünf der Schwerter
+  sanft: { de: [
+    "Wo entsteht gerade Spannung zwischen mir und anderen?",
+    "Welche Situation fühlt sich wie ein innerer Konflikt an?",
+    "Wo habe ich unterschiedliche Interessen erlebt?",
+    "Was hat mich in letzter Zeit herausgefordert?",
+    "Wo wünsche ich mir mehr Verständnis?",
+    "Welche Situation fordert meine Haltung heraus?",
+    "Wo wünsche ich mir einen friedlicheren Weg?"
+  ]},
+  tief: { de: [
+    "Welche Konflikte wirken noch in mir nach?",
+    "Wo habe ich mich oder andere verletzt?",
+    "Was zeigt mir ein Konflikt über meine Haltung?",
+    "Welche Spannung möchte ich genauer betrachten?",
+    "Was lerne ich über mich durch Konflikte?"
+  ]},
+  existenziell: { de: [
+    "Welche Haltung möchte ich im Konflikt leben?",
+    "Wo beginnt wahrer Frieden für mich?",
+    "Was zeigt mir ein Konflikt über mein Leben?",
+    "Was erkenne ich über mich durch Auseinandersetzung?",
+    "Wie möchte ich mit Macht und Konflikt umgehen?"
+  ]}
+},
 
-  "S06": { // Sechs der Schwerter
-    sanft: { de: [
-      "Wohin bewegst du dich gerade – innerlich?",
-      "Was lässt du hinter dir?",
-      "Welcher ruhigere Ort wartet auf dich?"
-    ]},
-    tief: { de: [
-      "Was nimmst du mit, das du loslassen solltest?",
-      "Welche Unruhe begleitet dich überall hin?",
-      "Wovor fliehst du – auch wenn du es Aufbruch nennst?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Übergang für dich?",
-      "Was wäre, wenn der Weg selbst die Heilung ist?",
-      "Wohin gehst du, wenn du wirklich bei dir ankommst?"
-    ]}
-  },
+"S06": { // Sechs der Schwerter
+  sanft: { de: [
+    "Welche Situation darf ich langsam hinter mir lassen?",
+    "Wo spüre ich den Wunsch nach einem ruhigeren Abschnitt?",
+    "Welche Veränderung bringt mich in ruhigere Gewässer?",
+    "Was hilft mir, Abstand zu gewinnen?",
+    "Wo beginnt für mich ein neuer, stillerer Weg?",
+    "Was darf ich Schritt für Schritt hinter mir lassen?"
+  ]},
+  tief: { de: [
+    "Welche Erfahrung habe ich innerlich noch nicht ganz verlassen?",
+    "Welche Veränderung bringt mich näher zu mir selbst?",
+    "Was unterstützt mich auf meinem Weg in eine ruhigere Phase?",
+    "Wo zeigt sich Heilung durch Abstand?"
+  ]},
+  existenziell: { de: [
+    "Welche Lebensphase lasse ich gerade hinter mir?",
+    "Welcher Abschnitt meines Lebens beginnt sich zu verändern?",
+    "Möchte ich für mein Leben eine neue Richtung?"
+  ]}
+},
 
-  "S07": { // Sieben der Schwerter
-    sanft: { de: [
-      "Wo kannst du heute klug statt direkt vorgehen?",
-      "Was brauchst du für dich – ohne jemanden zu verletzen?",
-      "Welche Strategie fühlt sich integer an?"
-    ]},
-    tief: { de: [
-      "Wo bist du unehrlich – dir selbst oder anderen?",
-      "Was nimmst du, ohne zu fragen?",
-      "Welche Lüge erzählst du dir – und warum?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Integrität für dich?",
-      "Was wäre, wenn du dich selbst nicht betrügen könntest?",
-      "Was trägst du fort, das dir nicht gehört?"
-    ]}
-  },
+"S07": { // Sieben der Schwerter
+  sanft: { de: [
+    "Wo gehe ich im Moment einen ungewöhnlichen Weg?",
+    "Welche Situation verlangt eine kluge Lösung?",
+    "Wo versuche ich, einen eigenen Weg zu finden?",
+    "Welche Idee verlangt etwas Geschick?",
+    "Wo handle ich lieber im Hintergrund?",
+    "Welche Strategie hilft mir gerade weiter?",
+    "Wie kann ich genauer auf meine Motive schauen?"
+  ]},
+  tief: { de: [
+    "Welche Situation fordert meine Aufrichtigkeit heraus?",
+    "Wo habe ich versucht, etwas zu umgehen?",
+    "Was zeigt mir mein Verhalten über meine Absichten?",
+    "Welche Wahrheit habe ich vielleicht verschleiert?",
+    "Wo beginnt Ehrlichkeit mit mir selbst?"
+  ]},
+  existenziell: { de: [
+    "Welche Wahrheit über mich selbst erkenne ich gerade?",
+    "Wo kannst du heute klug statt direkt vorgehen?",
+    "Was brauchst du für dich – ohne jemanden zu verletzen?",
+    "Wo zeigt sich mein wahrer Charakter?",
+    "Welche Haltung möchte ich im Leben verkörpern?"
+  ]}
+},
 
-  "S08": { // Acht der Schwerter
-    sanft: { de: [
-      "Was hindert dich – und ist kleiner als es scheint?",
-      "Welcher Gedanke hält dich gefangen?",
-      "Was wäre der kleinste Schritt in Freiheit?"
-    ]},
-    tief: { de: [
-      "Welche Geschichte erzählst du dir über deine Gefangenschaft?",
-      "Was würde sich zeigen, wenn du die Binde abnimmst?",
-      "Wer hat die Fesseln wirklich angelegt?"
-    ]},
-    existenziell: { de: [
-      "Was wäre, wenn du freier bist als du glaubst?",
-      "Was hält dich – wirklich?",
-      "Was wird möglich, wenn du aufhörst, dir selbst im Weg zu stehen?"
-    ]}
-  },
+"S08": { // Acht der Schwerter
+  sanft: { de: [
+    "Wo fühle ich mich im Moment eingeschränkt?",
+    "Welche Gedanken behindern mich?",
+    "Was hilft mir, innerlich freier zu werden?"
+  ]},
+  tief: { de: [
+    "Welche Gedankenmuster begrenzen mich?",
+    "Wo halte ich mich selbst zurück?",
+    "Welche Überzeugung darf ich hinterfragen?",
+    "Wo sehe ich eine Situation enger, als sie wirklich ist?",
+    "Was hilft mir, mich von alten Denkweisen zu lösen?",
+    "Welche Freiheit wartet jenseits meiner Zweifel?",
+    "Wie könnte ich meine eigene Freiheit erkennen?"
+  ]},
+  existenziell: { de: [
+    "Welche inneren Grenzen habe ich mir selbst gesetzt?",
+    "Was bedeutet Freiheit in meinem Denken?",
+    "Wo beginne ich, mich aus meinen eigenen Begrenzungen zu lösen?",
+    "Was geschieht, wenn ich meine Angst vor Veränderung loslasse?",
+    "Welche Gedanken bestimmen mein Leben?",
+    "Wo beginnt wirkliche geistige Freiheit?"
+  ]}
+},
 
-  "S09": { // Neun der Schwerter
-    sanft: { de: [
-      "Was macht dir Sorgen – und darf es kleiner sein?",
-      "Welcher Gedanke braucht heute Mitgefühl statt Glauben?",
-      "Was hilft dir, wenn die Angst groß wird?"
-    ]},
-    tief: { de: [
-      "Welche Angst dominiert dein Denken?",
-      "Was erzählst du dir im Dunkeln, das nicht wahr ist?",
-      "Wo quälst du dich mit Szenarien, die nie eintreten?"
-    ]},
-    existenziell: { de: [
-      "Was ist deine tiefste Angst – und was sagt sie über dich?",
-      "Was wäre, wenn dein größter Schmerz ein Lehrer ist?",
-      "Was bleibt, wenn du der Angst ins Gesicht siehst?"
-    ]}
-  },
+"S09": { // Neun der Schwerter
+  sanft: { de: [
+    "Welche Sorge beschäftigt mich gerade besonders?",
+    "Wo wünsche ich mir mehr innere Ruhe?",
+    "Welche Gedanken halten mich nachts wach?",
+    "Was hilft mir, mit meinen Sorgen sanfter umzugehen?",
+    "Wo darf ich mir selbst Mitgefühl schenken?",
+    "Welche Angst möchte gehört werden?",
+    "Was hilft mir, wieder zuversichtlicher zu werden?"
+  ]},
+  tief: { de: [
+    "Wo mache ich mir selbst zu viele Vorwürfe?",
+    "Welche Gedanken verstärken meine Sorgen?",
+    "Welche Angst dominiert dein Denken?",
+    "Was zeigt mir meine Angst über meine Bedürfnisse?",
+    "Wo darf ich lernen, mich selbst zu entlasten?",
+    "Welche Wahrheit liegt hinter meinen Sorgen?",
+    "Was hilft mir, meine Gedanken zu beruhigen?",
+    "Wo quälst du dich mit Szenarien, die nie eintreten?"
+  ]},
+  existenziell: { de: [
+    "Was lehrt mich meine Angst über mein Leben?",
+    "Welche Schatten meines Denkens zeigen sich gerade?",
+    "Wie gehe ich mit meinen inneren Zweifeln um?",
+    "Was bedeutet es, sich selbst zu vergeben?",
+    "Wo finde ich inneren Frieden trotz Unsicherheit?"
+  ]}
+},
 
-  "S10": { // Zehn der Schwerter
-    sanft: { de: [
-      "Was ist zu Ende – und darf es sein?",
-      "Welcher Schmerz hat seinen Tiefpunkt erreicht?",
-      "Was kommt nach dem Ende?"
-    ]},
-    tief: { de: [
-      "Was dramatisierst du – und warum?",
-      "Welchen Untergang hast du überlebt, den du nicht hinter dir lässt?",
-      "Was hält dich im tiefsten Punkt?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet es, ganz unten gewesen zu sein?",
-      "Was wäre, wenn das Ende der tiefste Neubeginn ist?",
-      "Was überlebt in dir, auch wenn alles andere fällt?"
-    ]}
-  },
+"S10": { // Zehn der Schwerter
+  sanft: { de: [
+    "Was fühlt sich gerade endgültig an?",
+    "Welche Situation ist an ein Ende gekommen?",
+    "Wo darf ich einen Abschluss akzeptieren?",
+    "Was möchte ich hinter mir lassen?",
+    "Welche Erfahrung hat mich verändert?",
+    "Beginnt nach einem Ende etwas Neues?",
+    "Was hilft mir, einen Abschluss anzunehmen?"
+  ]},
+  tief: { de: [
+    "Welche Erfahrung hat mich besonders getroffen?",
+    "Was darf ich endgültig loslassen?",
+    "Welche Lektion liegt in diesem Ende?",
+    "Wie beginnt Heilung nach einer schwierigen Erfahrung?",
+    "Welche Wahrheit zeigt sich im Abschluss einer Situation?"
+  ]},
+  existenziell: { de: [
+    "Welche Enden haben mein Leben geprägt?",
+    "Was bedeutet es für mich, etwas wirklich loszulassen?",
+    "Welche Erfahrung hat meine Sicht auf das Leben verändert?",
+    "Was entsteht nach einem tiefen Ende?",
+    "Wo beginnt ein neuer Abschnitt meines Lebens?",
+    "Welche Weisheit liegt in einem endgültigen Abschluss?",
+    "Was wächst aus dem Ende einer Geschichte?"
+  ]}
+},
 
-  "S11": { // Bube der Schwerter
-    sanft: { de: [
-      "Welche neue Idee beflügelt deinen Geist?",
-      "Was möchtest du heute herausfinden?",
-      "Welche Frage brennt in dir?"
-    ]},
-    tief: { de: [
-      "Wo redest du, ohne zu handeln?",
-      "Was weißt du – und lebst es nicht?",
-      "Welche Kritik übst du an anderen, die dir selbst gilt?"
-    ]},
-    existenziell: { de: [
-      "Was ist der Unterschied zwischen Wissen und Weisheit für dich?",
-      "Was wäre, wenn dein Geist dir dient – statt dich treibt?",
-      "Was würdest du sagen, wenn du wirklich schweigen könntest?"
-    ]}
-  },
+"S11": { // Bube der Schwerter
+  sanft: { de: [
+    "Welche neue Idee beschäftigt meinen Geist?",
+    "Wo spüre ich Neugier auf neue Gedanken?",
+    "Welche Frage interessiert mich gerade besonders?",
+    "Wo möchte ich etwas genauer verstehen?",
+    "Welche Entdeckung weckt meinen Verstand?",
+    "Was inspiriert mein Denken?",
+    "Welche neue Perspektive möchte ich erkunden?"
+  ]},
+  tief: { de: [
+    "Welche Wahrheit möchte ich genauer erforschen?",
+    "Wo fordert mich mein Denken heraus?",
+    "Welche Erkenntnis beginnt sich zu entwickeln?",
+    "Wo möchte ich eine Situation wirklich verstehen?",
+    "Welche Frage führt mich tiefer?",
+    "Was lerne ich gerade über mich selbst?",
+    "Welche Gedanken öffnen neue Möglichkeiten?"
+  ]},
+  existenziell: { de: [
+    "Welche Fragen treiben mein Leben an?",
+    "Was bedeutet Erkenntnis für mich?",
+    "Welche Wahrheit suche ich wirklich?",
+    "Wie verändert Wissen meinen Blick auf das Leben?",
+    "Welche Fragen begleiten meinen Lebensweg?",
+    "Was möchte ich in diesem Leben verstehen?",
+    "Welche Suche prägt mein Denken?"
+  ]}
+},
 
-  "S12": { // Ritter der Schwerter
-    sanft: { de: [
-      "Wo kannst du heute mit klarem Kopf vorgehen?",
-      "Welche Wahrheit ist es wert, ausgesprochen zu werden?",
-      "Was treibt dich mit guten Gründen voran?"
-    ]},
-    tief: { de: [
-      "Wo überrennst du andere mit deiner Meinung?",
-      "Was kostet dich dein Tempo?",
-      "Wen verletzt du in deiner Direktheit?"
-    ]},
-    existenziell: { de: [
-      "Was wäre, wenn Stärke manchmal Schweigen bedeutet?",
-      "Wofür kämpfst du wirklich?",
-      "Was bleibt von deiner Wahrheit, wenn du sie nicht verteidigst?"
-    ]}
-  },
+"S12": { // Ritter der Schwerter
+  sanft: { de: [
+    "Wo spüre ich gerade starke Entschlossenheit?",
+    "Welche Idee möchte ich entschlossen verfolgen?",
+    "Wo treibt mich meine Energie voran?",
+    "Steht eine Entscheidung vor mir?"
+  ]},
+  tief: { de: [
+    "Wo treibt mich mein Denken besonders stark an?",
+    "Welche Entscheidung verlangt Mut?",
+    "Wo handle ich vielleicht zu schnell?",
+    "Welche Wahrheit möchte ich klar vertreten?",
+    "Was treibt meine Entschlossenheit an?"
+  ]},
+  existenziell: { de: [
+    "Welche Wahrheit verteidige ich im Leben?",
+    "Was wäre, wenn Stärke manchmal Schweigen bedeutet?",
+    "Welche Haltung bestimmt mein Handeln?",
+    "Verletze ich jemanden mit meiner Direktheit?",
+    "Welche Überzeugungen prägen meinen Weg?",
+    "Überrennst du andere mit deiner Meinung?"
+  ]}
+},
 
-  "S13": { // Königin der Schwerter
-    sanft: { de: [
-      "Was kannst du heute mit Klarheit und Mitgefühl sagen?",
-      "Welche Grenze darfst du heute ziehen?",
-      "Was siehst du klarer als andere?"
-    ]},
-    tief: { de: [
-      "Wo benutzt du Schärfe als Schutz?",
-      "Was verbirgst du hinter deiner Kälte?",
-      "Welcher Schmerz hat dich so klar gemacht?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet es, unabhängig zu denken?",
-      "Was wäre, wenn deine Einsamkeit deine Stärke gemacht hat?",
-      "Was siehst du, das andere nicht sehen wollen?"
-    ]}
-  },
+"S13": { // Königin der Schwerter
+  sanft: { de: [
+    "Wo hilft mir Klarheit im Denken?",
+    "Welche Situation verlangt einen klaren Blick?",
+    "Wo darf ich ehrlich und zugleich freundlich sein?",
+    "Welche Einsicht hilft mir gerade weiter?",
+    "Wo erkenne ich eine Situation klarer als zuvor?",
+    "Welche Wahrheit zeigt sich mir?",
+    "Wo hilft mir innere Klarheit?"
+  ]},
+  tief: { de: [
+    "Welche Erfahrung hat mein Denken geschärft?",
+    "Welche Wahrheit sehe ich heute klarer als früher?",
+    "Wo hilft mir meine Lebenserfahrung?",
+    "Welche Einsicht hat mich reifer gemacht?",
+    "Was habe ich über Wahrheit gelernt?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet Weisheit für mich?",
+    "Welche Wahrheit habe ich durch Erfahrung erkannt?",
+    "Welche Haltung prägt mein Denken?",
+    "Was bedeutet es, ehrlich zu leben?",
+    "Welche Erkenntnis hat mein Leben verändert?",
+    "Welche Weisheit trage ich heute in mir?"
+  ]}
+},
 
-  "S14": { // König der Schwerter
-    sanft: { de: [
-      "Wo kannst du heute gerecht und klar entscheiden?",
-      "Was braucht einen klaren, ruhigen Geist?",
-      "Welche Wahrheit kann heute mit Würde gesprochen werden?"
-    ]},
-    tief: { de: [
-      "Wo bist du kalt, wo Wärme gefragt wäre?",
-      "Was unterdrückst du in dir, um rational zu wirken?",
-      "Wessen Gefühle übergibst du deiner Logik?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Gerechtigkeit für dich – wirklich?",
-      "Was wäre, wenn Wahrheit und Mitgefühl sich nicht widersprechen?",
-      "Was ist dein Urteil über dein eigenes Leben?"
-    ]}
-  },
-
+"S14": { // König der Schwerter
+  sanft: { de: [
+    "Wo hilft mir ein klarer Blick auf die Situation?",
+    "Welche Entscheidung verlangt Übersicht?",
+    "Wo darf ich eine Situation objektiv betrachten?"
+  ]},
+  tief: { de: [
+    "Welche Wahrheit erkenne ich klarer als zuvor?",
+    "Wo hilft mir mein Verstand, Ordnung zu schaffen?",
+    "Welche Entscheidung verlangt nüchterne Klarheit?",
+    "Welche Verantwortung trage ich für meine Entscheidungen?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet Wahrheit in meinem Leben?",
+    "Welche Verantwortung trage ich für meine Entscheidungen?",
+    "Welche Haltung bestimmt mein Denken und Handeln?"
+  ]}
+},
   // ─────────────────────────────────────────
   // MÜNZEN
   // ─────────────────────────────────────────
 
   "P01": { // Ass der Münzen
-    sanft: { de: [
-      "Welche neue Möglichkeit zeigt sich dir im Alltag?",
-      "Was kannst du heute mit deinen Händen erschaffen?",
-      "Welcher erste Schritt in etwas Konkretes fühlt sich richtig an?"
-    ]},
-    tief: { de: [
-      "Was hält dich davon ab, deine Ressourcen zu nutzen?",
-      "Wo vertraust du der Fülle nicht?",
-      "Was wäre, wenn Sicherheit in dir beginnt, nicht außen?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Reichtum für dich – wirklich?",
-      "Was wäre, wenn die Erde dich trägt, wenn du ihr vertraust?",
-      "Was willst du aufbauen, das bleibt?"
-    ]}
-  },
+  sanft: { de: [
+    "Welche neue Möglichkeit zeigt sich mir gerade ganz konkret?",
+    "Was möchte ich in meinem Leben verwirklichen?",
+    "Welche kleine Chance möchte ich aufmerksam annehmen?",
+    "Wo wünsche ich mir mehr Stabilität im Alltag?",
+    "Was fühlt sich nach einem guten Anfang an?",
+    "Welcher Samen möchte jetzt von mir gelegt werden?"
+  ]},
+  tief: { de: [
+    "Was in mir möchte wirklich aufgebaut werden?",
+    "Welche Form von Sicherheit wünsche ich mir von Grund auf?",
+    "Wo bin ich bereit, etwas mit Geduld wachsen zu lassen?",
+    "Was könnte entstehen, wenn ich meinem Weg praktisch vertraue?",
+    "Wo darf ich meinen Wert klarer erkennen?",
+    "Welche neue Grundlage möchte ich bewusst schaffen?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet echte Fülle für mich jenseits von Besitz?",
+    "Welche Form von Wachstum entspricht meinem Wesen wirklich?",
+    "Was möchte durch mich Form annehmen?",
+    "Welche Gabe in mir will Wirklichkeit werden?",
+    "Was trage ich in mir, das einen konkreten Platz im Leben sucht?",
+    "Welcher neue Anfang verdient mein volles Ja?"
+  ]}
+},
 
-  "P02": { // Zwei der Münzen
-    sanft: { de: [
-      "Was jonglierst du gerade – und was darf warten?",
-      "Wo kannst du heute Prioritäten setzen?",
-      "Was hält sich gerade im Gleichgewicht?"
-    ]},
-    tief: { de: [
-      "Wo überlastest du dich damit, alles im Griff zu halten?",
-      "Was würde passieren, wenn du eine Sache loslässt?",
-      "Wo verausgabst du dich für Kontrolle?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Balance für dein Leben – wirklich?",
-      "Was wäre, wenn du nicht alles gleichzeitig sein musst?",
-      "Was bleibt, wenn du aufhörst zu jonglieren?"
-    ]}
-  },
+"P02": { // Zwei der Münzen
+  sanft: { de: [
+    "Wo jongliere ich gerade vieles gleichzeitig?",
+    "Was hilft mir heute, beweglich und gelassen zu bleiben?",
+    "Wo wünsche ich mir mehr Leichtigkeit im Umgang mit Anforderungen?",
+    "Wo darf ich spielerischer mit Veränderung umgehen?",
+    "Was bringt mich zurück in mein Gleichgewicht?",
+    "Welche kleine Anpassung würde mir heute guttun?"
+  ]},
+  tief: { de: [
+    "Wo verliere ich mich zwischen Pflichten und Bedürfnissen?",
+    "Was versuche ich gleichzeitig zu halten, obwohl es mich erschöpft?",
+    "Wo darf ich klarer ordnen, was wirklich wichtig ist?",
+    "Welche Veränderung fordert gerade meine innere Beweglichkeit?",
+    "Was würde leichter werden, wenn ich nicht alles zugleich tragen wollte?",
+    "Wie finde ich mein Gleichgewicht, ohne alles kontrollieren zu müssen?"
+  ]},
+  existenziell: { de: [
+    "Was trägt mich, wenn alles in Bewegung ist?",
+    "Welche Form von Balance ist für mich wirklich lebendig?",
+    "Wie kann ich Wandel annehmen, ohne mich selbst zu verlieren?",
+    "Was bedeutet für mich innere Mitte mitten im Fluss des Lebens?",
+    "Wie lerne ich, dem Rhythmus des Lebens zu vertrauen?"
+  ]}
+},
 
-  "P03": { // Drei der Münzen
-    sanft: { de: [
-      "Mit wem kannst du heute gut zusammenarbeiten?",
-      "Was erschaffst du, das größer ist als du allein?",
-      "Welche Fähigkeit kannst du heute einbringen?"
-    ]},
-    tief: { de: [
-      "Wo arbeitest du, ohne gesehen zu werden – und leidest darunter?",
-      "Was hältst du zurück, weil du dich nicht gut genug fühlst?",
-      "Wo erkennst du die Meisterschaft anderer nicht an?"
-    ]},
-    existenziell: { de: [
-      "Was willst du mit anderen gemeinsam erschaffen?",
-      "Was ist dein Beitrag zur Welt – konkret?",
-      "Was wäre, wenn Meisterschaft ein Weg ist, kein Ziel?"
-    ]}
-  },
+"P03": { // Drei der Münzen
+  sanft: { de: [
+    "Wo entsteht gerade etwas Wertvolles durch Zusammenarbeit?",
+    "Welche Fähigkeit bringe ich heute gerne ein?",
+    "Was lerne ich gerade im Austausch mit anderen?",
+    "Wo darf ich mich als Teil von etwas Sinnvollem erleben?",
+    "Welche Form von Unterstützung tut mir gerade gut?",
+    "Was wächst, wenn ich mich auf Kooperation einlasse?",
+    "Wo möchte ich mein Können weiterentwickeln?"
+  ]},
+  tief: { de: [
+    "Welche meiner Fähigkeiten möchte ich ernster nehmen?",
+    "Wo darf ich lernen, mich sichtbar einzubringen?",
+    "Was entsteht, wenn ich mein Wissen mit anderen teile?",
+    "Welche Zusammenarbeit fordert meine Reife und Offenheit?",
+    "Wo wünsche ich mir Anerkennung für das, was ich kann?",
+    "Was in mir will durch Übung, Geduld und Austausch wachsen?",
+    "Wie gehe ich damit um, noch nicht fertig zu sein?"
+  ]},
+  existenziell: { de: [
+    "Welche Aufgabe in meinem Leben möchte bewusst gestaltet werden?",
+    "Wo dient mein Können nicht nur mir, sondern auch etwas Größerem?",
+    "Was bedeutet es für mich, mein Werk in die Welt zu bringen?",
+    "Welche Form von Arbeit entspricht meinem inneren Ruf?",
+    "Was möchte ich aufbauen, das Bestand hat?",
+    "Wie verbinde ich meine Begabung mit Sinn?",
+    "Welche Spur möchte ich durch mein Tun hinterlassen?"
+  ]}
+},
 
-  "P04": { // Vier der Münzen
-    sanft: { de: [
-      "Was möchtest du heute schützen – mit gutem Grund?",
-      "Wo ist Vorsicht angebracht?",
-      "Was gibt dir materielle oder emotionale Sicherheit?"
-    ]},
-    tief: { de: [
-      "Was hältst du so fest, dass es dich einengt?",
-      "Wovor hast du Angst, wenn du loslässt?",
-      "Was kostet dich dein Festhalten?"
-    ]},
-    existenziell: { de: [
-      "Was wäre, wenn echte Sicherheit nicht besessen werden kann?",
-      "Was hält dich – und was hältst du?",
-      "Was würdest du verschenken, wenn du nichts verlieren könntest?"
-    ]}
-  },
+"P04": { // Vier der Münzen
+  sanft: { de: [
+    "Wo halte ich gerade lieber fest als loszulassen?",
+    "Was gibt mir im Moment ein Gefühl von Sicherheit?",
+    "Wo wünsche ich mir mehr Stabilität?",
+    "Was möchte ich im Augenblick bewahren?",
+    "Welche Grenze fühlt sich heute schützend an?",
+    "Wo darf ich sorgsam mit meinen Kräften umgehen?",
+    "Was hilft mir, mich innerlich sicher zu fühlen?"
+  ]},
+  tief: { de: [
+    "Wo beengt mich mein Bedürfnis nach Sicherheit?",
+    "Was halte ich fest, obwohl es mich unfrei macht?",
+    "Welche Angst nährt mein Klammern?",
+    "Wo schütze ich mich so sehr, dass kein Leben mehr hineinfindet?",
+    "Welche Form von Kontrolle kostet mich Lebendigkeit?",
+    "Wo darf ich zwischen Schutz und Offenheit neu wählen?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet Sicherheit für mich wirklich?",
+    "Wo verwechsle ich Besitz mit Halt?",
+    "Was bleibt mir, wenn ich nicht mehr festhalte?",
+    "Welche innere Form von Reichtum ist unabhängig vom Außen?",
+    "Wie finde ich Vertrauen, ohne mich an alles zu klammern?",
+    "Was in mir sucht Schutz, der nur von innen kommen kann?",
+    "Wo beginnt Freiheit, wenn ich das Festhalten lockere?"
+  ]}
+},
 
-  "P05": { // Fünf der Münzen
-    sanft: { de: [
-      "Was brauchst du gerade – und darfst darum bitten?",
-      "Wo ist Hilfe nah, die du noch nicht gesehen hast?",
-      "Was darf heute weniger sein?"
-    ]},
-    tief: { de: [
-      "Wo fühlst du dich ausgeschlossen – und warum?",
-      "Was verhindert, dass du Hilfe annimmst?",
-      "Welcher Mangel ist tief in dir verwurzelt?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Würde im Mangel für dich?",
-      "Was wäre, wenn Not ein Ruf zur Gemeinschaft ist?",
-      "Was trägst du durch die Kälte – und wofür?"
-    ]}
-  },
+"P05": { // Fünf der Münzen
+  sanft: { de: [
+    "Wo fühle ich mich gerade innerlich ausgeschlossen oder allein?",
+    "Was in mir braucht heute Trost und Wärme?",
+    "Wo wünsche ich mir Unterstützung, traue mich aber kaum zu fragen?",
+    "Welche Sorge belastet mich im Moment besonders?",
+    "Was hilft mir, auch in schwierigen Zeiten freundlich mit mir zu sein?",
+    "Wo spüre ich Mangel – und was brauche ich wirklich?",
+    "Welche kleine Form von Hilfe darf ich annehmen?"
+  ]},
+  tief: { de: [
+    "Welche Angst vor Verlust wirkt gerade stark in mir?",
+    "Wo habe ich mich innerlich von Fülle abgeschnitten?",
+    "Welche Erfahrung von Mangel prägt mich noch heute?",
+    "Wie gehe ich mit meinem Gefühl von Nicht-genug um?",
+    "Wo darf ich neu lernen, Hilfe zuzulassen?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet Armut für mich jenseits von Geld?",
+    "Wo verliere ich den Kontakt zu meinem eigenen inneren Reichtum?",
+    "Wie bleibe ich in Würde, wenn ich mich schwach fühle?",
+    "Was trägt mich, wenn äußere Sicherheiten wegbrechen?",
+    "Wo finde ich Sinn mitten in einer Zeit des Mangels?",
+    "Welche Form von Hoffnung möchte in mir lebendig bleiben?",
+    "Was in mir bleibt unberührt, selbst wenn ich wenig habe?"
+  ]}
+},
 
-  "P06": { // Sechs der Münzen
-    sanft: { de: [
-      "Was kannst du heute großzügig teilen?",
-      "Wo darf Geben und Nehmen im Gleichgewicht sein?",
-      "Wem kannst du heute etwas Gutes tun?"
-    ]},
-    tief: { de: [
-      "Gibst du aus Großzügigkeit – oder aus Kontrolle?",
-      "Wo nimmst du, ohne zu geben?",
-      "Was kostet dich deine Großzügigkeit wirklich?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet echtes Geben für dich?",
-      "Was wäre, wenn Fülle nur im Fluss entsteht?",
-      "Was wäre die Welt, wenn jeder gäbe, was er kann?"
-    ]}
-  },
+"P06": { // Sechs der Münzen
+  sanft: { de: [
+    "Wo darf ich heute geben?",
+    "Welche Unterstützung nehme ich gerade dankbar an?",
+    "Wo erlebe ich einen guten Ausgleich zwischen Geben und Empfangen?",
+    "Was teile ich gern mit anderen?",
+    "Welche Form von Großzügigkeit tut mir heute gut?",
+    "Wo wünsche ich mir mehr Fairness?",
+    "Was fühlt sich im Miteinander ausgewogen an?"
+  ]},
+  tief: { de: [
+    "Gebe ich mehr, als mir guttut?",
+    "Was hindert mich daran, Unterstützung wirklich anzunehmen?",
+    "Welche Rolle nehme ich leichter ein – die gebende oder die empfangende?",
+    "Was zeigt mir mein Verhältnis zu Fülle und Mangel?",
+    "Wie kann ich großzügig sein, ohne mich selbst zu verlieren?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet wahre Großzügigkeit für mich?",
+    "Wie möchte ich mit meinen Ressourcen im Leben umgehen?",
+    "Wo zeigt sich in meinem Leben das Gesetz von Geben und Empfangen?",
+    "Wie lerne ich, Fülle fließen zu lassen statt sie zu kontrollieren?"
+  ]}
+},
 
-  "P07": { // Sieben der Münzen
-    sanft: { de: [
-      "Was wächst gerade – auch wenn du es nicht siehst?",
-      "Wo darf Geduld mit deinem Prozess sein?",
-      "Was hast du gesät, das Zeit braucht?"
-    ]},
-    tief: { de: [
-      "Wo zweifelst du an deiner Arbeit – zu früh?",
-      "Was sabotierst du durch Ungeduld?",
-      "Was würde wachsen, wenn du aufhörst zu ziehen?"
-    ]},
-    existenziell: { de: [
-      "Was willst du ernten – in deinem Leben?",
-      "Was wäre, wenn das Warten selbst die Reife ist?",
-      "Was hinterlässt du, das nach dir wächst?"
-    ]}
-  },
+"P07": { // Sieben der Münzen
+  sanft: { de: [
+    "Wo darf ich heute geduldiger mit mir sein?",
+    "Was wächst in meinem Leben langsam, aber beständig?",
+    "Welche Entwicklung möchte ich aufmerksam betrachten?",
+    "Wo habe ich bereits mehr aufgebaut, als ich oft wahrnehme?",
+    "Was verdient heute meine ruhige Wertschätzung?",
+    "Wo bin ich im Warten statt im schnellen Handeln?",
+    "Welche kleine Frucht meines Weges kann ich schon erkennen?"
+  ]},
+  tief: { de: [
+    "Wo frage ich mich gerade, ob sich mein Einsatz lohnt?",
+    "Welche Form von Geduld fällt mir besonders schwer?",
+    "Was in meinem Leben braucht mehr Reifezeit, als ich akzeptieren will?",
+    "Wo bin ich versucht, zu früh aufzugeben?",
+    "Wie gehe ich mit langsamen Prozessen in mir um?",
+    "Wo darf ich lernen, Entwicklung nicht zu erzwingen?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet für mich ein fruchtbares Leben?",
+    "Was in mir ist bereit zu säen, ohne sofort zu ernten?",
+    "Welche Geduld verlangt mein Leben gerade von mir?",
+    "Wo zeigt sich Vertrauen als stilles Weiterpflegen statt als schnelles Resultat?"
+  ]}
+},
 
-  "P08": { // Acht der Münzen
-    sanft: { de: [
-      "Welche Aufgabe kannst du heute mit Hingabe tun?",
-      "Was macht dir Freude, wenn du es gut machst?",
-      "Wo kannst du heute einfach üben – ohne Ergebnis?"
-    ]},
-    tief: { de: [
-      "Was arbeitest du – aber nicht wofür du brennst?",
-      "Wo verlierst du dich in Perfektionismus?",
-      "Was würdest du meistern, wenn du keine Angst vor dem Prozess hättest?"
-    ]},
-    existenziell: { de: [
-      "Was ist dein Handwerk – im tiefsten Sinne?",
-      "Was wäre, wenn Meisterschaft Hingabe an den Moment ist?",
-      "Was erschaffst du, das dich überdauert?"
-    ]}
-  },
+"P08": { // Acht der Münzen
+  sanft: { de: [
+    "Woran arbeite ich gerade mit Aufmerksamkeit?",
+    "Welche Fähigkeit möchte ich heute weiter verfeinern?",
+    "Wo tut mir Wiederholung gerade gut?",
+    "Was möchte ich mit Sorgfalt gestalten?",
+    "Welche kleine Übung bringt mich meinem Ziel näher?",
+    "Wo spüre ich Freude am Lernen?"
+  ]},
+  tief: { de: [
+    "Welche Form von Disziplin trägt mich wirklich weiter?",
+    "Wo darf ich mein Können ernster nehmen?",
+    "Was verlangt gerade Hingabe statt Ablenkung?",
+    "Welche Arbeit in mir oder in meinem Leben möchte bewusst vertieft werden?",
+    "Wie gehe ich mit dem Prozess um, noch nicht meisterhaft zu sein?",
+    "Was lerne ich über mich, wenn ich dranbleibe?"
+  ]},
+  existenziell: { de: [
+    "Welche Form von Arbeit formt nicht nur mein Werk, sondern auch mich selbst?",
+    "Was entsteht in mir durch geduldige Wiederholung?",
+    "Welche Aufgabe in meinem Leben verdient treue Aufmerksamkeit?",
+    "Wo wird mein Tun zu einem Weg innerer Reifung?"
+  ]}
+},
 
-  "P09": { // Neun der Münzen
-    sanft: { de: [
-      "Was hast du dir erarbeitet, das du heute genießen darfst?",
-      "Wo bist du unabhängiger als du denkst?",
-      "Was gibt dir ein Gefühl von Würde und Fülle?"
-    ]},
-    tief: { de: [
-      "Wo kaufst du dir Sicherheit, statt sie zu fühlen?",
-      "Was fehlt dir trotz allem, was du erreicht hast?",
-      "Wo bist du allein – obwohl du alles hast?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Selbstständigkeit wirklich für dich?",
-      "Was wäre, wenn Fülle ein innerer Zustand ist?",
-      "Was hast du dir selbst gegeben, das niemand dir nehmen kann?"
-    ]}
-  },
+"P09": { // Neun der Münzen
+  sanft: { de: [
+    "Was in meinem Leben habe ich mir selbst aufgebaut?",
+    "Wo darf ich mir bewusst etwas Gutes gönnen?",
+    "Welche Form von Fülle ist heute schon da?",
+    "Was schenkt mir ein Gefühl von Würde und Selbstvertrauen?",
+    "Wo spüre ich die Schönheit dessen, was gewachsen ist?",
+    "Was darf ich heute an meinem Weg würdigen?"
+  ]},
+  tief: { de: [
+    "Welche Form von Selbstwert ist in mir gewachsen?",
+    "Was in mir fühlt sich reich an – unabhängig von äußeren Maßstäben?",
+    "Welche Reife habe ich über die Jahre entwickelt?"
+  ]},
+  existenziell: { de: [
+    "Was heißt es für mich, innerlich frei zu sein?",
+    "Was bleibt, wenn mein Wert nicht mehr von Leistung abhängt?",
+    "Wo berührt mich Schönheit?",
+    "Welche Art von Reichtum möchte ich verkörpern?"
+  ]}
+},
 
-  "P10": { // Zehn der Münzen
-    sanft: { de: [
-      "Was gibt dir heute ein Gefühl von Beständigkeit?",
-      "Was hat Bestand in deinem Leben?",
-      "Welches Erbe trägst du weiter?"
-    ]},
-    tief: { de: [
-      "Was erbst du – und willst du es wirklich?",
-      "Wo lebst du für die Erwartungen anderer Generationen?",
-      "Was kostet dich Sicherheit an Lebendigkeit?"
-    ]},
-    existenziell: { de: [
-      "Was willst du hinterlassen?",
-      "Was bedeutet Familie oder Gemeinschaft für dich – tief?",
-      "Was wäre dein Beitrag zu dem, was bleibt?"
-    ]}
-  },
+"P10": { // Zehn der Münzen
+  sanft: { de: [
+    "Wo erlebe ich heute Verbundenheit und Beständigkeit?",
+    "Was gibt mir ein Gefühl von Zuhause und Halt?",
+    "Welche Menschen oder Werte tragen mein Leben?",
+    "Wo spüre ich die Kraft von Zugehörigkeit?",
+    "Welche Form von Fülle teile ich gern mit anderen?",
+    "Wo darf ich mich in ein größeres Ganzes eingebunden fühlen?"
+  ]},
+  tief: { de: [
+    "Welche Werte aus meiner Herkunft tragen mich heute noch?",
+    "Wo sehne ich mich nach echter Verwurzelung?",
+    "Wie prägen Familie, Geschichte oder Tradition mein heutiges Leben?",
+    "Was möchte ich weitergeben, das über mich hinaus Bestand hat?",
+    "Wo erlebe ich Fülle als etwas Gemeinsames statt nur Persönliches?"
+  ]},
+  existenziell: { de: [
+    "Welche Spur meiner Werte soll bleiben, wenn ich einmal gehe?",
+    "Was bedeutet für mich ein erfülltes Erbe – materiell und seelisch?",
+    "Was trägt mein Leben in einem größeren Zusammenhang?",
+    "Welche Form von Beständigkeit entspricht meiner tiefsten Wahrheit?"
+  ]}
+},
 
-  "P11": { // Bube der Münzen
-    sanft: { de: [
-      "Was möchtest du heute lernen – praktisch?",
-      "Welche neue Fähigkeit kannst du heute üben?",
-      "Was interessiert dich, das du noch nicht ausprobiert hast?"
-    ]},
-    tief: { de: [
-      "Wo bist du ungeduldig mit deinem eigenen Lernprozess?",
-      "Was gibst du auf, bevor es Früchte trägt?",
-      "Was hält dich davon ab, wirklich anzufangen?"
-    ]},
-    existenziell: { de: [
-      "Was willst du wirklich können – in diesem Leben?",
-      "Was wäre, wenn Anfänger sein eine Gnade ist?",
-      "Was wächst in dir, das noch keinen Namen hat?"
-    ]}
-  },
+"P11": { // Bube der Münzen
+  sanft: { de: [
+    "Welche neue Möglichkeit betrachte ich gerade mit Neugier?",
+    "Welche Fähigkeit möchte ich behutsam entwickeln?",
+    "Was möchte von mir konkret erkundet werden?"
+  ]},
+  tief: { de: [
+    "Welche Form von Lernen tut meinem Leben gerade gut?",
+    "Was möchte ich ernsthaft aufbauen, auch wenn ich noch am Anfang stehe?",
+    "Welche Möglichkeit in mir braucht Geduld statt Druck?",
+    "Was will in meinem Leben sorgfältig vorbereitet werden?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet es für mich, ein Lernender zu bleiben?",
+    "Welche neue Wirklichkeit möchte ich Schritt für Schritt erschaffen?",
+    "Was in mir sucht einen konkreten Ausdruck in der Welt?",
+    "Wie kann ich dem Unfertigen in mir mit Würde begegnen?"
+  ]}
+},
 
-  "P12": { // Ritter der Münzen
-    sanft: { de: [
-      "Was kannst du heute zuverlässig und gründlich tun?",
-      "Wo zahlt sich Beständigkeit aus?",
-      "Was verdient heute deine volle Aufmerksamkeit?"
-    ]},
-    tief: { de: [
-      "Wo bist du stur, wo Flexibilität gefragt wäre?",
-      "Was tust du aus Pflicht – nicht aus Liebe?",
-      "Was kostet dich dein Festhalten an Routine?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet es, wirklich verlässlich zu sein?",
-      "Was wäre, wenn Beständigkeit und Lebendigkeit sich nicht widersprechen?",
-      "Was baust du – Schritt für Schritt – das wirklich zählt?"
-    ]}
-  },
+"P12": { // Ritter der Münzen
+  sanft: { de: [
+    "Wo gehe ich gerade ruhig und beständig meinen Weg?",
+    "Welche Aufgabe verlangt heute Verlässlichkeit von mir?",
+    "Was tut mir gut, wenn ich es Schritt für Schritt angehe?",
+    "Wo darf ich meinem Tempo vertrauen?",
+    "Was wächst durch meine Geduld im Alltag?",
+    "Wo zeigt sich meine stille Ausdauer?"
+  ]},
+  tief: { de: [
+    "Wo trägt mich mein Durchhaltevermögen – und wo macht es mich starr?",
+    "Was in meinem Leben will beharrlich gepflegt werden?",
+    "Wo verwechsel ich Sicherheit mit Stillstand?"
+  ]},
+  existenziell: { de: [
+    "Was bedeutet es für mich, meinen Weg treu zu gehen?",
+    "Wie möchte ich Disziplin leben, ohne mich zu verhärten?",
+    "Welche Aufgabe in meinem Leben verdient Ausdauer über lange Zeit?"
+  ]}
+},
 
-  "P13": { // Königin der Münzen
-    sanft: { de: [
-      "Wie kannst du heute für dich und andere sorgen?",
-      "Was nährt dich – körperlich, praktisch, real?",
-      "Wo kannst du Geborgenheit schaffen?"
-    ]},
-    tief: { de: [
-      "Wo pflegst du andere – und vernachlässigst dich?",
-      "Was gibst du, weil du dich sonst nicht wertvoll fühlst?",
-      "Was kostet dich deine Fürsorge?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet Heimat für dich – in dir selbst?",
-      "Was wäre, wenn du dir selbst die fürsorgende Mutter wärst?",
-      "Was wächst, wenn du es liebevoll pflegst?"
-    ]}
-  },
+"P13": { // Königin der Münzen
+  sanft: { de: [
+    "Wo darf ich heute gut für mich sorgen?",
+    "Was nährt mich wirklich auf eine ruhige Weise?",
+    "Welche Form von Fürsorge tut mir heute gut?",
+    "Was lässt mich im Alltag innerlich sicherer werden?",
+    "Was braucht mein Körper oder mein Herz gerade von mir?"
+  ]},
+  tief: { de: [
+    "Wie gehe ich mit meinen eigenen Bedürfnissen um?",
+    "Wo darf ich mich selbst ernster nähren statt nur zu funktionieren?",
+    "Welche Form von Fürsorge habe ich vielleicht lange vernachlässigt?",
+    "Wo wünsche ich mir mehr innere und äußere Geborgenheit?",
+    "Wie kann ich geben, ohne mich dabei selbst zu übergehen?",
+    "Welche Art von Fülle möchte ich bewusst kultivieren?"
+  ]},
+  existenziell: { de: [
+    "Was heißt es für mich, ein nährender Mensch zu sein – auch für mich selbst?",
+    "Welche Form von Weiblichkeit, Reife oder Sanftheit will in mir gelebt werden?",
+    "Was in mir schenkt Leben Raum zum Wachsen?",
+    "Welche Gestalt von innerem Reichtum möchte ich ausstrahlen?"
+  ]}
+},
 
-  "P14": { // König der Münzen
-    sanft: { de: [
-      "Was kannst du heute mit Großzügigkeit und Weisheit gestalten?",
-      "Wo kannst du Sicherheit für andere schaffen?",
-      "Was trägst du mit ruhiger Stärke?"
-    ]},
-    tief: { de: [
-      "Wo identifizierst du dich zu sehr mit dem, was du besitzt?",
-      "Was würdest du sein, ohne deinen materiellen Erfolg?",
-      "Wo kaufst du Einfluss, statt ihn zu verdienen?"
-    ]},
-    existenziell: { de: [
-      "Was bedeutet wahrer Reichtum für dich?",
-      "Was wäre, wenn Sicherheit ein Geschenk ist, das du weitergibst?",
-      "Was hinterlässt du, das mehr wert ist als Geld?"
-    ]}
-  },
-
-};
-
-const questionDecks: Record<string, string[]> = {};
-const deckPositions: Record<string, number> = {};
-
-function shuffleArray(arr: string[]): string[] {
-  const shuffled = [...arr];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
+"P14": { // König der Münzen
+  sanft: { de: [
+    "Wo stehe ich heute fest und verlässlich in meinem Leben?",
+    "Was gibt mir ein Gefühl von Sicherheit und Ruhe?",
+    "Wo spüre ich Vertrauen in das, was ich aufgebaut habe?",
+    "Welche Form von Fülle ist in meinem Leben?"
+  ]},
+  tief: { de: [
+    "Wo wünsche ich mir mehr innere Autorität und Ruhe?",
+    "Wie gehe ich mit Macht, Besitz oder Einfluss um?",
+    "Wo zeigt sich mein Wert nicht nur in Worten?"
+  ]},
+  existenziell: { de: [
+    "Was heißt es für mich, ein tragender Mensch zu sein?",
+    "Was in mir darf führen, ohne zu kontrollieren?",
+    "Welche Werte sollen mein Handeln und Aufbauen bestimmen?"
+  ]}
 }
+};
+export type Depth = "sanft" | "tief" | "existenziell";
 
 export function getRandomQuestion(
   cardId: string,
-  depth: "sanft" | "tief" | "existenziell",
+  depth: Depth,
   locale: string
 ): string | null {
-  const lang = locale.split("-")[0];
+  const lang = locale?.split("-")[0] || "de";
+  const card = QUESTIONS[cardId as keyof typeof QUESTIONS];
+
+  if (!card) return null;
+
+  const entry = card[depth as keyof typeof card] as
+    | { de?: string[]; en?: string[]; fr?: string[] }
+    | undefined;
+
+  if (!entry) return null;
+
   const list =
-    QUESTIONS[cardId]?.[depth]?.[lang] ??
-    QUESTIONS[cardId]?.[depth]?.["de"];
+    entry[lang as "de" | "en" | "fr"] ||
+    entry.de ||
+    [];
 
-  if (!list || list.length === 0) return null;
+  if (!list.length) return null;
 
-  const key = `${cardId}_${depth}_${lang}`;
-
-  if (!questionDecks[key] || deckPositions[key] >= questionDecks[key].length) {
-    questionDecks[key] = shuffleArray(list);
-    deckPositions[key] = 0;
-  }
-
-  const question = questionDecks[key][deckPositions[key]];
-  deckPositions[key]++;
-  return question;
+  return list[Math.floor(Math.random() * list.length)];
 }
