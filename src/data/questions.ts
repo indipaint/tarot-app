@@ -1,5 +1,6 @@
 
 
+import { QUESTIONS_EN } from "./questions_en";
 export const QUESTIONS: Record<
   string,
   {
@@ -249,23 +250,44 @@ export const QUESTIONS: Record<
     ]}
   },
 
-  "11": { // Die Gerechtigkeit
-    sanft: { de: [
+"11": { // Justice
+  sanft: {
+    de: [
       "Wie darf ich heute ehrlich zu mir sein?",
       "Was braucht es für innere Ausgewogenheit?",
       "Wo suche ich Klarheit?",
       "Was braucht gerade Klarheit statt Vermeidung?"
-    ]},
-    tief: { de: [
+    ],
+    en: [
+      "How can I be honest with myself today?",
+      "What would support a sense of inner balance right now?",
+      "Where am I seeking clarity?",
+      "What needs clarity right now instead of avoidance?"
+    ]
+  },
+  tief: {
+    de: [
       "Welche Handlung entspricht wirklich meinen Werten?",
       "Wo muss ich gerade eine Entscheidung treffen und wie fühlt sie sich fair an?",
       "Welche Entscheidung verlangt nach Aufrichtigkeit?"
-    ]},
-    existenziell: { de: [
+    ],
+    en: [
+      "Which action truly aligns with my values?",
+      "Where do I need to make a decision right now — and what would feel fair?",
+      "Which decision calls for honesty?"
+    ]
+  },
+  existenziell: {
+    de: [
       "Wie bringe ich Herz und Verstand in Balance?",
       "Was bedeutet Wahrheit für mein Leben?"
-    ]}
-  },
+    ],
+    en: [
+      "How do I bring heart and mind into balance?",
+      "What does truth mean in my life?"
+    ]
+  }
+},
 
   "12": { // Der Gehängte
     sanft: { de: [
@@ -1967,28 +1989,45 @@ export const QUESTIONS: Record<
 };
 export type Depth = "sanft" | "tief" | "existenziell";
 
+const questionCycleStore: Record<string, string[]> = {};
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 export function getRandomQuestion(
   cardId: string,
   depth: Depth,
   locale: string
 ): string | null {
   const lang = locale?.split("-")[0] || "de";
+
+  if (lang === "en") {
+    const list = QUESTIONS_EN?.[cardId]?.[depth as "sanft" | "tief" | "existenziell"] || [];
+    if (!list.length) return null;
+    const cycleKey = `${cardId}_${depth}_${lang}`;
+    if (!questionCycleStore[cycleKey] || questionCycleStore[cycleKey].length === 0) {
+      questionCycleStore[cycleKey] = shuffleArray([...list]);
+    }
+    return questionCycleStore[cycleKey].shift() ?? null;
+  }
+
   const card = QUESTIONS[cardId as keyof typeof QUESTIONS];
-
   if (!card) return null;
-
   const entry = card[depth as keyof typeof card] as
     | { de?: string[]; en?: string[]; fr?: string[] }
     | undefined;
-
   if (!entry) return null;
-
-  const list =
-    entry[lang as "de" | "en" | "fr"] ||
-    entry.de ||
-    [];
-
+  const list = entry.de || [];
   if (!list.length) return null;
-
-  return list[Math.floor(Math.random() * list.length)];
+  const cycleKey = `${cardId}_${depth}_${lang}`;
+  if (!questionCycleStore[cycleKey] || questionCycleStore[cycleKey].length === 0) {
+    questionCycleStore[cycleKey] = shuffleArray([...list]);
+  }
+  return questionCycleStore[cycleKey].shift() ?? null;
 }
