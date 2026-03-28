@@ -1,6 +1,7 @@
 
 
 import { QUESTIONS_EN } from "./questions_en";
+import { QUESTIONS_FR } from "./questions_fr";
 export const QUESTIONS: Record<
   string,
   {
@@ -2009,6 +2010,16 @@ export function getRandomQuestion(
 
   if (lang === "en") {
     const list = QUESTIONS_EN?.[cardId]?.[depth as "sanft" | "tief" | "existenziell"] || [];
+    if (!list.length) return null;
+    const cycleKey = `${cardId}_${depth}_${lang}`;
+    if (!questionCycleStore[cycleKey] || questionCycleStore[cycleKey].length === 0) {
+      questionCycleStore[cycleKey] = shuffleArray([...list]);
+    }
+    return questionCycleStore[cycleKey].shift() ?? null;
+  }
+
+  if (lang === "fr") {
+    const list = QUESTIONS_FR?.[cardId]?.[depth as "sanft" | "tief" | "existenziell"] || [];
     if (!list.length) return null;
     const cycleKey = `${cardId}_${depth}_${lang}`;
     if (!questionCycleStore[cycleKey] || questionCycleStore[cycleKey].length === 0) {
