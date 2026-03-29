@@ -19,7 +19,7 @@ export default function LanguageGate() {
       try {
         await AsyncStorage.removeItem("app_lang");
         const saved = await AsyncStorage.getItem("app_lang");
-        if (!FORCE_LANGUAGE_SCREEN && (saved === "de" || saved === "en" || saved === "fr")) {
+        if (!FORCE_LANGUAGE_SCREEN && (saved === "de" || saved === "en" || saved === "fr" || saved === "es")) {
           go(saved);
           return;
         }
@@ -31,7 +31,7 @@ export default function LanguageGate() {
     })();
   }, []);
 
-  const choose = async (lang: "de" | "en" | "fr") => {
+const choose = async (lang: "de" | "en" | "fr" | "es") => {
     setLocale(lang);
     await AsyncStorage.setItem("app_lang", lang);
     go(lang);
@@ -59,6 +59,9 @@ export default function LanguageGate() {
         <Pressable style={styles.btn} onPress={() => choose("fr")}>
         <Text style={styles.btnText}>🇫🇷  français</Text>
       </Pressable>
+      <Pressable style={styles.btn} onPress={() => choose("es")}>
+  <Text style={styles.btnText}>🇪🇸  español</Text>
+</Pressable>
      
       <Pressable style={styles.btn} onPress={() => choose("de")}>
         <Text style={styles.btnText}>🇩🇪  deutsch</Text>

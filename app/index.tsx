@@ -313,10 +313,10 @@ export default function Index() {
         {/* DEUTUNG + ZIEH */}
         <View style={styles.buttonBar}>
           <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${currentId}` as any)}>
-            <Text style={styles.btnText}>{i18n.t("buttons.meaning")}</Text>
+            <Text style={styles.btnText} numberOfLines={1} adjustsFontSizeToFit>{i18n.t("buttons.meaning")}</Text>
           </Pressable>
           <Pressable style={styles.btn} onPress={drawUnique}>
-            <Text style={styles.btnText}>{i18n.t("buttons.draw")}</Text>
+            <Text style={styles.btnText} numberOfLines={1} adjustsFontSizeToFit>{i18n.t("buttons.draw")}</Text>
           </Pressable>
         </View>
 
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
   },
   buttonBar: {
     position: "absolute",
-    left: 0,
+    left:-17,
     right: 0,
     bottom: 125,
     height: 55,
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#666",
     paddingVertical: 6,
-    paddingHorizontal: 22,
+    paddingHorizontal: 15,
     borderRadius: 6,
     backgroundColor: "#000",
   },
