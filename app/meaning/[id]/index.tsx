@@ -20,6 +20,10 @@ function getMeaningsModule(locale: string): any {
     const mod = require("../../../src/data/meanings_en");
     return mod?.default ?? mod?.MEANINGS_EN ?? mod;
   }
+  if (lang === "es") {
+  const mod = require("../../../src/data/meanings_es");
+  return mod?.default ?? mod?.MEANINGS_ES ?? mod;
+}
 
   // DE fallback
   // eslint-disable-next-line @typescript-eslint/no-var-requires
