@@ -31,7 +31,7 @@ export default function LanguageGate() {
     })();
   }, []);
 
-const choose = async (lang: "de" | "en" | "fr" | "es") => {
+const choose = async (lang: "de" | "en" | "fr" | "es" | "pt") => {
     setLocale(lang);
     await AsyncStorage.setItem("app_lang", lang);
     go(lang);
@@ -60,7 +60,11 @@ const choose = async (lang: "de" | "en" | "fr" | "es") => {
         <Text style={styles.btnText}>🇫🇷  français</Text>
       </Pressable>
       <Pressable style={styles.btn} onPress={() => choose("es")}>
+        
   <Text style={styles.btnText}>🇪🇸  español</Text>
+</Pressable>
+<Pressable style={styles.btn} onPress={() => choose("pt")}>
+  <Text style={styles.btnText}>🇵🇹  português</Text>
 </Pressable>
      
       <Pressable style={styles.btn} onPress={() => choose("de")}>
