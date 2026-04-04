@@ -3,6 +3,7 @@
 import { QUESTIONS_EN } from "./questions_en";
 import { QUESTIONS_ES } from "./questions_es";
 import { QUESTIONS_FR } from "./questions_fr";
+import { QUESTIONS_PT } from "./questions_pt";
 export const QUESTIONS: Record<
   string,
   {
@@ -2037,7 +2038,15 @@ export function getRandomQuestion(
     }
     return questionCycleStore[cycleKey].shift() ?? null;
   }
-
+if (lang === "pt") {
+  const list = QUESTIONS_PT?.[cardId]?.[depth as "sanft" | "tief" | "existenziell"] || [];
+  if (!list.length) return null;
+  const cycleKey = `${cardId}_${depth}_${lang}`;
+  if (!questionCycleStore[cycleKey] || questionCycleStore[cycleKey].length === 0) {
+    questionCycleStore[cycleKey] = shuffleArray([...list]);
+  }
+  return questionCycleStore[cycleKey].shift() ?? null;
+}
   const card = QUESTIONS[cardId as keyof typeof QUESTIONS];
   if (!card) return null;
   const entry = card[depth as keyof typeof card] as
