@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -11,7 +12,8 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
+  TextInput,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import QuestionButton from "../components/ui/QuestionButton";
@@ -54,17 +56,20 @@ function toRoman(n: number) {
 
 export default function Index() {
   const [questionOverlayOpen, setQuestionOverlayOpen] = useState(false);
+  const [journalOpen, setJournalOpen] = useState(false);
+  const [journalNote, setJournalNote] = useState("");
   const [activeQuestion, setActiveQuestion] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const sub = BackHandler.addEventListener("hardwareBackPress", () => {
+      if (journalOpen) { setJournalOpen(false); setJournalNote(""); return true; }
       if (activeQuestion) { setActiveQuestion(null); return true; }
       if (questionOverlayOpen) { setQuestionOverlayOpen(false); return true; }
       return false;
     });
     return () => sub.remove();
-  }, [activeQuestion, questionOverlayOpen]);
+  }, [activeQuestion, questionOverlayOpen, journalOpen]);
 
   const cards = useMemo(() => {
     const all = getCards();
@@ -208,6 +213,26 @@ export default function Index() {
   const currentSource = (currentCard as any).image;
   const nextSource = nextCard ? (nextCard as any).image : null;
 
+  const saveJournalEntry = async () => {
+    const entry = {
+      id: Date.now().toString(),
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      cardId: currentId,
+      cardTitle: currentName,
+      lang: i18n.locale,
+      question: activeQuestion ?? "",
+      note: journalNote,
+    };
+    const existing = await AsyncStorage.getItem("journal_entries");
+    const entries = existing ? JSON.parse(existing) : [];
+    entries.unshift(entry);
+    await AsyncStorage.setItem("journal_entries", JSON.stringify(entries));
+    setJournalNote("");
+    setJournalOpen(false);
+    setActiveQuestion(null);
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
@@ -287,9 +312,15 @@ export default function Index() {
                   <Text style={styles.closeBtnText}>✦ {i18n.t("buttons.question")}</Text>
                 </Pressable>
                 <Pressable onPress={() => setActiveQuestion(null)} style={styles.closeBtn}>
-                 <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
+                  <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
                 </Pressable>
               </View>
+              <Pressable
+                onPress={() => setJournalOpen(true)}
+                style={[styles.closeBtn, { marginTop: 10 }]}
+              >
+                <Text style={styles.closeBtnText}>✍️ {i18n.t("buttons.journal")}</Text>
+              </Pressable>
             </View>
           ) : null}
 
@@ -364,6 +395,39 @@ export default function Index() {
           </View>
         )}
 
+        {/* JOURNAL MODAL */}
+        {journalOpen && (
+          <View style={styles.journalOverlay}>
+            <View style={styles.journalHeader}>
+              <Text style={styles.journalTitle}>✍️ {i18n.t("buttons.journal")}</Text>
+              <Text style={styles.journalCard}>{currentName}</Text>
+              <Text style={styles.journalQuestion}>{activeQuestion ?? ""}</Text>
+            </View>
+            <TextInput
+              style={styles.journalInput}
+              multiline
+              placeholder="..."
+              placeholderTextColor="#666"
+              value={journalNote}
+              onChangeText={setJournalNote}
+              textAlignVertical="top"
+              autoFocus={true}
+              scrollEnabled={true}
+            />
+            <View style={styles.journalButtons}>
+              <Pressable style={styles.closeBtn} onPress={saveJournalEntry}>
+                <Text style={styles.closeBtnText}>💾 Speichern</Text>
+              </Pressable>
+              <Pressable
+                style={styles.closeBtn}
+                onPress={() => { setJournalOpen(false); setJournalNote(""); }}
+              >
+                <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
+
       </View>
     </SafeAreaView>
   );
@@ -430,7 +494,7 @@ const styles = StyleSheet.create({
   },
   buttonBar: {
     position: "absolute",
-    left:-17,
+    left: -17,
     right: 0,
     bottom: 125,
     height: 55,
@@ -519,5 +583,52 @@ const styles = StyleSheet.create({
     color: "#dbd6d6",
     fontSize: 10,
     textAlign: "center",
+  },
+  journalOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "#111",
+    zIndex: 6000,
+    elevation: 6000,
+    flexDirection: "column",
+    padding: 0,
+  },
+  journalHeader: {
+    padding: 20,
+    paddingBottom: 10,
+    backgroundColor: "#111",
+  },
+  journalTitle: {
+    color: "#fff",
+    fontSize: 18,
+    textAlign: "center",
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+  journalCard: {
+    color: "#888",
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 4,
+  },
+  journalQuestion: {
+    color: "#aaa",
+    fontSize: 13,
+    textAlign: "center",
+    fontStyle: "italic",
+  },
+  journalInput: {
+    flex: 1,
+    backgroundColor: "#222",
+    color: "#fff",
+    fontSize: 15,
+    padding: 20,
+    textAlignVertical: "top",
+  },
+  journalButtons: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 20,
+    padding: 20,
+    backgroundColor: "#111",
   },
 });

@@ -14,6 +14,7 @@ const translations = {
       deep: "Tief",
       existential: "Existenziell",
       close: "schliessen",
+      journal: "Tagebuch",
     },
     cards: {
       "00": "Der Narr",
@@ -116,6 +117,8 @@ const translations = {
       deep: "Deep",
       existential: "Existential",
       close: "close",
+      journal: "Journal",
+
     },
     cards: {
       "00": "The Fool",
@@ -218,6 +221,7 @@ const translations = {
       deep: "Profond",
       existential: "Existentiel",
       close: "fermer",
+      journal: "Journal",
     },
     cards: {
       "00": "Le Fou",
@@ -320,6 +324,7 @@ const translations = {
       deep: "Profundo",
       existential: "Existencial",
       close: "cerrar",
+      journal: "Diario",
     },
     cards: {
       "00": "El Loco",
@@ -422,6 +427,7 @@ const translations = {
       deep: "Profundo",
       existential: "Existencial",
       close: "fechar",
+      journal: "Diário",
     },
     cards: {
       "00": "O Louco",
