@@ -25,6 +25,7 @@ export default function RootLayout() {
       <Stack.Screen name="intro" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="meaning" />
+      <Stack.Screen name="journal" />
     </Stack>
   );
 }

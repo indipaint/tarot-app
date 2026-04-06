@@ -351,10 +351,18 @@ export default function Index() {
           </Pressable>
         </View>
 
-        {/* FRAGE BUTTON */}
-        <View style={styles.questionBar}>
-          <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
-        </View>
+        {/* FRAGE + JOURNAL BUTTON */}
+<View style={styles.questionBar}>
+  <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+    <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
+    <Pressable
+      style={styles.journalNavBtn}
+      onPress={() => router.push("/journal" as any)}
+    >
+      <Text style={styles.journalNavBtnText}>📖</Text>
+    </Pressable>
+  </View>
+</View>
 
         {/* TIEFEN OVERLAY */}
         {questionOverlayOpen && (
@@ -629,6 +637,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 20,
     padding: 20,
+    paddingBottom: 88,
     backgroundColor: "#111",
   },
+  journalNavBtn: {
+  borderWidth: 1,
+  borderColor: "#666",
+  borderRadius: 6,
+  paddingVertical: 6,
+  paddingHorizontal: 10,
+  backgroundColor: "#000",
+},
+journalNavBtnText: {
+  fontSize: 16,
+},
 });

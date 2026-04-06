@@ -45,7 +45,7 @@ export default function CardById() {
 
   if (!card) {
     return (
-      <SafeAreaView style={styles.safe} edges={["top"]}>
+      <SafeAreaView style={styles.safe} edges={[]}>
         <Text style={styles.err}>Karte nicht gefunden (id: {idStr})</Text>
         <Pressable style={styles.btn} onPress={() => router.back()}>
           <Text style={styles.btnText}>Zurück</Text>
@@ -88,14 +88,16 @@ export default function CardById() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#000" },
-  container: { flex: 1, padding: 16, alignItems: "center" },
-  image: { width: "100%", height: "75%" },
+  container: { flex: 1, padding: 0, alignItems: "center", justifyContent: "flex-start" },
+  image: { width: "100%", flex: 1 },
   title: { color: "#888", marginTop: 10, fontSize: 16, letterSpacing: 1 },
   row: {
     marginTop: 16,
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-around",
+     paddingBottom: 88
+     ,
   },
   btn: {
     borderWidth: 1,
