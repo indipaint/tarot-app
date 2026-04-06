@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, Share, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import i18n from "../src/i18n";
 
@@ -35,6 +35,17 @@ export default function JournalScreen() {
     const updated = entries.filter((e) => e.id !== id);
     setEntries(updated);
     await AsyncStorage.setItem("journal_entries", JSON.stringify(updated));
+  };
+
+  const confirmDelete = (id: string) => {
+    Alert.alert(
+      "Eintrag löschen",
+      "Möchtest du diesen Eintrag wirklich löschen?",
+      [
+        { text: "Abbrechen", style: "cancel" },
+        { text: "Löschen", style: "destructive", onPress: () => deleteEntry(id) },
+      ]
+    );
   };
 
   return (
@@ -71,10 +82,18 @@ export default function JournalScreen() {
                     <Text style={styles.cardBtnText}>🃏 Karte ansehen</Text>
                   </Pressable>
                   <Pressable
-                    style={styles.deleteBtn}
-                    onPress={() => deleteEntry(entry.id)}
+                    style={styles.cardBtn}
+                    onPress={() => Share.share({
+                      message: `🃏 ${entry.cardTitle}\n\n${entry.question}\n\n${entry.note}`,
+                    })}
                   >
-                    <Text style={styles.deleteBtnText}>✕</Text>
+                    <Text style={styles.cardBtnText}>↗️ Teilen</Text>
+                  </Pressable>
+                  <Pressable
+                    style={styles.deleteBtn}
+                    onPress={() => confirmDelete(entry.id)}
+                  >
+                    <Text style={styles.deleteBtnText}>🗑️ Löschen</Text>
                   </Pressable>
                 </View>
               </View>
@@ -149,28 +168,33 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   cardActions: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: "column",
+    gap: 8,
     marginTop: 8,
   },
   cardBtn: {
     borderWidth: 1,
     borderColor: "#444",
     borderRadius: 6,
-    paddingVertical: 3,
-    paddingHorizontal: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    alignSelf: "flex-start",
   },
   cardBtnText: {
     color: "#777",
     fontSize: 11,
   },
   deleteBtn: {
-    padding: 4,
+    borderWidth: 1,
+    borderColor: "#622",
+    borderRadius: 6,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    alignSelf: "flex-start",
   },
   deleteBtnText: {
-    color: "#555",
-    fontSize: 12,
+    color: "#944",
+    fontSize: 11,
   },
   bottomBar: {
     position: "absolute",

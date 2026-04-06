@@ -10,6 +10,7 @@ import {
   Image,
   PanResponder,
   Pressable,
+  Share,
   StyleSheet,
   Text,
   TextInput,
@@ -321,6 +322,14 @@ export default function Index() {
               >
                 <Text style={styles.closeBtnText}>✍️ {i18n.t("buttons.journal")}</Text>
               </Pressable>
+              <Pressable
+                onPress={() => Share.share({
+                  message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
+                })}
+                style={[styles.closeBtn, { marginTop: 10 }]}
+              >
+                <Text style={styles.closeBtnText}>↗️ Teilen</Text>
+              </Pressable>
             </View>
           ) : null}
 
@@ -351,7 +360,7 @@ export default function Index() {
           </Pressable>
         </View>
 
-        {/* FRAGE + JOURNAL BUTTON */}
+{/* FRAGE + JOURNAL + SHARE BUTTON */}
 <View style={styles.questionBar}>
   <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
     <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
@@ -360,6 +369,14 @@ export default function Index() {
       onPress={() => router.push("/journal" as any)}
     >
       <Text style={styles.journalNavBtnText}>📖</Text>
+    </Pressable>
+    <Pressable
+      style={styles.journalNavBtn}
+      onPress={() => Share.share({
+        message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
+      })}
+    >
+      <Text style={styles.journalNavBtnText}>↗️</Text>
     </Pressable>
   </View>
 </View>
