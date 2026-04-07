@@ -18,8 +18,8 @@ export default function QuestionButton({ onPress }: Props) {
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 5,
-    borderRadius: 3
-    ,
+    flex: 1,
+    borderRadius: 3,
     backgroundColor: "rgba(4, 0, 0, 0.6)",
     alignItems: "center",
     paddingHorizontal: 1,

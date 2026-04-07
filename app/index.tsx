@@ -362,7 +362,7 @@ export default function Index() {
 
 {/* FRAGE + JOURNAL + SHARE BUTTON */}
 <View style={styles.questionBar}>
-  <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+  <View style={{ flexDirection: "row", gap: 10, alignItems: "center", width: "100%" }}>
     <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
     <Pressable
       style={styles.journalNavBtn}
@@ -518,27 +518,29 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonBar: {
-    position: "absolute",
-    left: -17,
-    right: 0,
-    bottom: 125,
-    height: 55,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    paddingHorizontal: 30,
-    zIndex: 999,
-    elevation: 999,
-  },
+  position: "absolute",
+  left: 0,
+  right: 0,
+  gap: 10,
+  bottom: 125,
+  height: 55,
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  paddingHorizontal: 40,
+  zIndex: 999,
+  elevation: 999,
+},
   questionBar: {
     position: "absolute",
-    left: 41,
+    left: 40,
     right: 41,
-    bottom: 70,
+    bottom: 60,
     zIndex: 999,
     elevation: 999,
   },
   btn: {
+    flex: 1,
     borderWidth: 1,
     borderColor: "#666",
     paddingVertical: 6,
@@ -547,6 +549,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   btnText: { color: "#888", fontSize: 13, letterSpacing: 1 },
+  btnText: { color: "#888", fontSize: 13, letterSpacing: 1, textAlign: "center" },
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
   errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
   errorText: { color: "#bbb", fontSize: 13, paddingHorizontal: 20, textAlign: "center" },
@@ -662,10 +665,11 @@ const styles = StyleSheet.create({
   borderColor: "#666",
   borderRadius: 6,
   paddingVertical: 6,
-  paddingHorizontal: 10,
+  paddingHorizontal: 12,
   backgroundColor: "#000",
 },
 journalNavBtnText: {
   fontSize: 16,
+  opacity: 0.6,
 },
 });
