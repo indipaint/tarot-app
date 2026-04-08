@@ -64,7 +64,7 @@ export default function JournalScreen() {
           showsVerticalScrollIndicator={false}
         >
           {loading ? (
-            <Text style={styles.empty}>...</Text>
+          <Text style={styles.empty}>{i18n.t("journal_screen.empty")}</Text>
           ) : entries.length === 0 ? (
             <Text style={styles.empty}>Noch keine Einträge.</Text>
           ) : (

@@ -8,7 +8,9 @@ import {
   BackHandler,
   Dimensions,
   Image,
+  KeyboardAvoidingView,
   PanResponder,
+  Platform,
   Pressable,
   Share,
   StyleSheet,
@@ -17,6 +19,7 @@ import {
   View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
 import { getRandomQuestion } from "../src/data/questions";
 import i18n from "../src/i18n";
@@ -60,6 +63,8 @@ export default function Index() {
   const [journalOpen, setJournalOpen] = useState(false);
   const [journalNote, setJournalNote] = useState("");
   const [activeQuestion, setActiveQuestion] = useState<string | null>(null);
+  const [journalUnlocked, setJournalUnlocked] = useState(false);
+  const [pinModalOpen, setPinModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -360,26 +365,32 @@ export default function Index() {
           </Pressable>
         </View>
 
-{/* FRAGE + JOURNAL + SHARE BUTTON */}
-<View style={styles.questionBar}>
-  <View style={{ flexDirection: "row", gap: 10, alignItems: "center", width: "100%" }}>
-    <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
-    <Pressable
-      style={styles.journalNavBtn}
-      onPress={() => router.push("/journal" as any)}
-    >
-      <Text style={styles.journalNavBtnText}>📖</Text>
-    </Pressable>
-    <Pressable
-      style={styles.journalNavBtn}
-      onPress={() => Share.share({
-        message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
-      })}
-    >
-      <Text style={styles.journalNavBtnText}>↗️</Text>
-    </Pressable>
-  </View>
-</View>
+        {/* FRAGE + JOURNAL + SHARE BUTTON */}
+        <View style={styles.questionBar}>
+          <View style={{ flexDirection: "row", gap: 10, alignItems: "center", width: "100%" }}>
+            <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
+            <Pressable
+              style={styles.journalNavBtn}
+              onPress={() => {
+                if (journalUnlocked) {
+                  router.push("/journal" as any);
+                } else {
+                  setPinModalOpen(true);
+                }
+              }}
+            >
+              <Text style={styles.journalNavBtnText}>📖</Text>
+            </Pressable>
+            <Pressable
+              style={styles.journalNavBtn}
+              onPress={() => Share.share({
+                message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
+              })}
+            >
+              <Text style={styles.journalNavBtnText}>↗️</Text>
+            </Pressable>
+          </View>
+        </View>
 
         {/* TIEFEN OVERLAY */}
         {questionOverlayOpen && (
@@ -420,38 +431,53 @@ export default function Index() {
           </View>
         )}
 
-        {/* JOURNAL MODAL */}
-        {journalOpen && (
-          <View style={styles.journalOverlay}>
-            <View style={styles.journalHeader}>
-              <Text style={styles.journalTitle}>✍️ {i18n.t("buttons.journal")}</Text>
-              <Text style={styles.journalCard}>{currentName}</Text>
-              <Text style={styles.journalQuestion}>{activeQuestion ?? ""}</Text>
-            </View>
-            <TextInput
-              style={styles.journalInput}
-              multiline
-              placeholder="..."
-              placeholderTextColor="#666"
-              value={journalNote}
-              onChangeText={setJournalNote}
-              textAlignVertical="top"
-              autoFocus={true}
-              scrollEnabled={true}
-            />
-            <View style={styles.journalButtons}>
-              <Pressable style={styles.closeBtn} onPress={saveJournalEntry}>
-                <Text style={styles.closeBtnText}>💾 {i18n.t("buttons.save")}</Text>
-              </Pressable>
-              <Pressable
-                style={styles.closeBtn}
-                onPress={() => { setJournalOpen(false); setJournalNote(""); }}
-              >
-                <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
-              </Pressable>
-            </View>
-          </View>
+        {/* PIN MODAL */}
+        {pinModalOpen && (
+          <PinModal
+            onSuccess={() => {
+              setJournalUnlocked(true);
+              setPinModalOpen(false);
+              router.push("/journal" as any);
+            }}
+            onClose={() => setPinModalOpen(false)}
+          />
         )}
+
+        {/* JOURNAL MODAL */}
+        {/* JOURNAL MODAL */}
+{journalOpen && (
+  <KeyboardAvoidingView
+    style={styles.journalOverlay}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+  >
+    <View style={styles.journalHeader}>
+      <Text style={styles.journalTitle}>✍️ {i18n.t("buttons.journal")}</Text>
+      <Text style={styles.journalQuestion}>{activeQuestion ?? ""}</Text>
+    </View>
+    <TextInput
+      style={styles.journalInput}
+      multiline
+      placeholder="..."
+      placeholderTextColor="#666"
+      value={journalNote}
+      onChangeText={setJournalNote}
+      textAlignVertical="top"
+      autoFocus={true}
+      scrollEnabled={true}
+    />
+    <View style={styles.journalButtons}>
+      <Pressable style={styles.closeBtn} onPress={saveJournalEntry}>
+        <Text style={styles.closeBtnText}>💾 {i18n.t("buttons.save")}</Text>
+      </Pressable>
+      <Pressable
+        style={styles.closeBtn}
+        onPress={() => { setJournalOpen(false); setJournalNote(""); }}
+      >
+        <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
+      </Pressable>
+    </View>
+  </KeyboardAvoidingView>
+)}
 
       </View>
     </SafeAreaView>
@@ -518,19 +544,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonBar: {
-  position: "absolute",
-  left: 0,
-  right: 0,
-  gap: 10,
-  bottom: 125,
-  height: 55,
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-  paddingHorizontal: 40,
-  zIndex: 999,
-  elevation: 999,
-},
+    position: "absolute",
+    left: 0,
+    right: 0,
+    gap: 10,
+    bottom: 125,
+    height: 55,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 40,
+    zIndex: 999,
+    elevation: 999,
+  },
   questionBar: {
     position: "absolute",
     left: 40,
@@ -620,16 +646,16 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   journalHeader: {
-    padding: 20,
+    padding: 1,
     paddingBottom: 10,
     backgroundColor: "#111",
   },
   journalTitle: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 10,
     textAlign: "center",
-    letterSpacing: 1,
-    marginBottom: 4,
+    letterSpacing: 4,
+    marginBottom: -3,
   },
   journalCard: {
     color: "#888",
@@ -639,36 +665,37 @@ const styles = StyleSheet.create({
   },
   journalQuestion: {
     color: "#aaa",
-    fontSize: 13,
+    fontSize: 9,
     textAlign: "center",
     fontStyle: "italic",
   },
   journalInput: {
-    flex: 1,
+    flex: -1,
     backgroundColor: "#222",
     color: "#fff",
-    fontSize: 15,
+    fontSize: 11,
     padding: 20,
     textAlignVertical: "top",
   },
   journalButtons: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 20,
-    padding: 20,
-    paddingBottom: 88,
+    gap: 33,
+    padding: 0,
+    paddingBottom: 32,
     backgroundColor: "#111",
+    marginTop: -22, 
   },
   journalNavBtn: {
-  borderWidth: 1,
-  borderColor: "#666",
-  borderRadius: 6,
-  paddingVertical: 6,
-  paddingHorizontal: 12,
-  backgroundColor: "#000",
-},
-journalNavBtnText: {
-  fontSize: 16,
-  opacity: 0.6,
-},
+    borderWidth: 1,
+    borderColor: "#666",
+    borderRadius: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: "#000",
+  },
+  journalNavBtnText: {
+    fontSize: 16,
+    opacity: 0.6,
+  },
 });
