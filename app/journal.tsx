@@ -21,12 +21,14 @@ export default function JournalScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
       (async () => {
         const raw = await AsyncStorage.getItem("journal_entries");
         setEntries(raw ? JSON.parse(raw) : []);
+        setLoading(false);
       })();
     }, [])
   );
@@ -39,11 +41,11 @@ export default function JournalScreen() {
 
   const confirmDelete = (id: string) => {
     Alert.alert(
-      "Eintrag löschen",
-      "Möchtest du diesen Eintrag wirklich löschen?",
+      i18n.t("buttons.confirm_delete"),
+      i18n.t("buttons.confirm_delete"),
       [
-        { text: "Abbrechen", style: "cancel" },
-        { text: "Löschen", style: "destructive", onPress: () => deleteEntry(id) },
+        { text: i18n.t("buttons.cancel"), style: "cancel" },
+        { text: i18n.t("buttons.delete"), style: "destructive", onPress: () => deleteEntry(id) },
       ]
     );
   };
@@ -61,7 +63,9 @@ export default function JournalScreen() {
           ]}
           showsVerticalScrollIndicator={false}
         >
-          {entries.length === 0 ? (
+          {loading ? (
+            <Text style={styles.empty}>...</Text>
+          ) : entries.length === 0 ? (
             <Text style={styles.empty}>Noch keine Einträge.</Text>
           ) : (
             entries.map((entry) => (
@@ -79,7 +83,7 @@ export default function JournalScreen() {
                     style={styles.cardBtn}
                     onPress={() => router.push(`/card/${entry.cardId}` as any)}
                   >
-                    <Text style={styles.cardBtnText}>🃏 Karte ansehen</Text>
+                    <Text style={styles.cardBtnText}>🃏 {i18n.t("buttons.view_card")}</Text>
                   </Pressable>
                   <Pressable
                     style={styles.cardBtn}
@@ -87,13 +91,13 @@ export default function JournalScreen() {
                       message: `🃏 ${entry.cardTitle}\n\n${entry.question}\n\n${entry.note}`,
                     })}
                   >
-                    <Text style={styles.cardBtnText}>↗️ Teilen</Text>
+                    <Text style={styles.cardBtnText}>↗️ {i18n.t("buttons.share")}</Text>
                   </Pressable>
                   <Pressable
                     style={styles.deleteBtn}
                     onPress={() => confirmDelete(entry.id)}
                   >
-                    <Text style={styles.deleteBtnText}>🗑️ Löschen</Text>
+                    <Text style={styles.deleteBtnText}>🗑️ {i18n.t("buttons.delete")}</Text>
                   </Pressable>
                 </View>
               </View>

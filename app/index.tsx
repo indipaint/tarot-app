@@ -328,7 +328,7 @@ export default function Index() {
                 })}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
-                <Text style={styles.closeBtnText}>↗️ Teilen</Text>
+                <Text style={styles.closeBtnText}> ↗️ {i18n.t("buttons.share")}</Text>
               </Pressable>
             </View>
           ) : null}
@@ -441,7 +441,7 @@ export default function Index() {
             />
             <View style={styles.journalButtons}>
               <Pressable style={styles.closeBtn} onPress={saveJournalEntry}>
-                <Text style={styles.closeBtnText}>💾 Speichern</Text>
+                <Text style={styles.closeBtnText}>💾 {i18n.t("buttons.save")}</Text>
               </Pressable>
               <Pressable
                 style={styles.closeBtn}
@@ -548,7 +548,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: "#000",
   },
-  btnText: { color: "#888", fontSize: 13, letterSpacing: 1 },
   btnText: { color: "#888", fontSize: 13, letterSpacing: 1, textAlign: "center" },
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
   errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
