@@ -334,6 +334,15 @@ export default function Index() {
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
                 <Text style={styles.closeBtnText}> ↗️ {i18n.t("buttons.share")}</Text>
+                 </Pressable>
+              <Pressable
+                onPress={() => {
+                  setActiveQuestion(null);
+                  router.push("/community");
+                }}
+                style={[styles.closeBtn, { marginTop: 10 }]}
+              >
+                <Text style={styles.closeBtnText}>🌍 Community</Text>
               </Pressable>
             </View>
           ) : null}
