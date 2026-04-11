@@ -1,6 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../src/firebase";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -23,7 +25,6 @@ import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
 import { getRandomQuestion } from "../src/data/questions";
 import i18n from "../src/i18n";
-
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
@@ -239,6 +240,18 @@ export default function Index() {
     setActiveQuestion(null);
   };
 
+  const shareToCommunity = async () => {
+    if (!activeQuestion) return;
+    await addDoc(collection(db, "messages"), {
+      text: `🃏 ${currentName}\n\n${activeQuestion}`,
+      nickname: "Tarot",
+      uid: "shared",
+      isCardShare: true,
+      createdAt: serverTimestamp(),
+    });
+    router.push("/community" as any);
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
@@ -333,12 +346,18 @@ export default function Index() {
                 })}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
-                <Text style={styles.closeBtnText}> ↗️ {i18n.t("buttons.share")}</Text>
-                 </Pressable>
+                <Text style={styles.closeBtnText}>↗️ {i18n.t("buttons.share")}</Text>
+              </Pressable>
+              <Pressable
+                onPress={shareToCommunity}
+                style={[styles.closeBtn, { marginTop: 10 }]}
+              >
+                <Text style={styles.closeBtnText}>🃏 {i18n.t("buttons.share_community")}</Text>
+              </Pressable>
               <Pressable
                 onPress={() => {
                   setActiveQuestion(null);
-                  router.push("/community");
+                  router.push("/community" as any);
                 }}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
@@ -453,40 +472,39 @@ export default function Index() {
         )}
 
         {/* JOURNAL MODAL */}
-        {/* JOURNAL MODAL */}
-{journalOpen && (
-  <KeyboardAvoidingView
-    style={styles.journalOverlay}
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
-  >
-    <View style={styles.journalHeader}>
-      <Text style={styles.journalTitle}>✍️ {i18n.t("buttons.journal")}</Text>
-      <Text style={styles.journalQuestion}>{activeQuestion ?? ""}</Text>
-    </View>
-    <TextInput
-      style={styles.journalInput}
-      multiline
-      placeholder="..."
-      placeholderTextColor="#666"
-      value={journalNote}
-      onChangeText={setJournalNote}
-      textAlignVertical="top"
-      autoFocus={true}
-      scrollEnabled={true}
-    />
-    <View style={styles.journalButtons}>
-      <Pressable style={styles.closeBtn} onPress={saveJournalEntry}>
-        <Text style={styles.closeBtnText}>💾 {i18n.t("buttons.save")}</Text>
-      </Pressable>
-      <Pressable
-        style={styles.closeBtn}
-        onPress={() => { setJournalOpen(false); setJournalNote(""); }}
-      >
-        <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
-      </Pressable>
-    </View>
-  </KeyboardAvoidingView>
-)}
+        {journalOpen && (
+          <KeyboardAvoidingView
+            style={styles.journalOverlay}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <View style={styles.journalHeader}>
+              <Text style={styles.journalTitle}>✍️ {i18n.t("buttons.journal")}</Text>
+              <Text style={styles.journalQuestion}>{activeQuestion ?? ""}</Text>
+            </View>
+            <TextInput
+              style={styles.journalInput}
+              multiline
+              placeholder="..."
+              placeholderTextColor="#666"
+              value={journalNote}
+              onChangeText={setJournalNote}
+              textAlignVertical="top"
+              autoFocus={true}
+              scrollEnabled={true}
+            />
+            <View style={styles.journalButtons}>
+              <Pressable style={styles.closeBtn} onPress={saveJournalEntry}>
+                <Text style={styles.closeBtnText}>💾 {i18n.t("buttons.save")}</Text>
+              </Pressable>
+              <Pressable
+                style={styles.closeBtn}
+                onPress={() => { setJournalOpen(false); setJournalNote(""); }}
+              >
+                <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
+              </Pressable>
+            </View>
+          </KeyboardAvoidingView>
+        )}
 
       </View>
     </SafeAreaView>
@@ -693,7 +711,7 @@ const styles = StyleSheet.create({
     padding: 0,
     paddingBottom: 32,
     backgroundColor: "#111",
-    marginTop: -22, 
+    marginTop: -22,
   },
   journalNavBtn: {
     borderWidth: 1,
