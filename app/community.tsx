@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -68,13 +68,13 @@ export default function CommunityScreen() {
 const styles = StyleSheet.create({
   nickSafe: {
     flex: 1,
-    backgroundColor: "#1a0a2e",
+    backgroundColor: "#0a182e",
   },
   nickContainer: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
-    padding: 40,
+    padding: 20,
     gap: 20,
   },
   nickTitle: {
@@ -82,37 +82,37 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textAlign: "center",
     letterSpacing: 2,
-    marginBottom: 8,
+    marginBottom: 2,
   },
   nickSubtitle: {
-    color: "#ccc",
+    color: "#fcfbfb",
     fontSize: 15,
     textAlign: "center",
     marginBottom: 10,
   },
   nickInput: {
-    width: "100%",
-    backgroundColor: "#2a1a4e",
+    width: "85%",
+    backgroundColor: "#0435f8",
     color: "#fff",
     borderRadius: 12,
-    padding: 16,
+    padding: 8,
     fontSize: 20,
     textAlign: "center",
     borderWidth: 1,
-    borderColor: "#7755cc",
+    borderColor: "#f2f98c",
   },
   nickBtn: {
-    backgroundColor: "#5533bb",
+    backgroundColor: "#0a35f8",
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 50,
     borderWidth: 1,
-    borderColor: "#9977ee",
+    borderColor: "#f6ee02",
     marginTop: 10,
   },
   nickBtnText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     letterSpacing: 1,
   },
   safe: {
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     letterSpacing: 1,
     borderBottomWidth: 1,
-    borderBottomColor: "#222",
+    borderBottomColor: "#1b1b1b",
   },
   placeholderWrap: {
     flex: 1,
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   placeholderSub: {
-    color: "#bbb",
+    color: "#f9f6f6",
     fontSize: 14,
     textAlign: "center",
   },
