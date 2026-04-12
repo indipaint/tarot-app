@@ -11,6 +11,7 @@ const translations = {
       delete: "Löschen", view_card: "Karte ansehen", share: "Teilen",
       cancel: "Abbrechen", confirm_delete: "Wirklich löschen?", journal: "Tagebuch",
       share_community: "🌍 In Community teilen",
+      edit: "Bearbeiten",
     },
     journal_screen: { empty: "Noch keine Einträge." },
     pin: {
@@ -69,6 +70,7 @@ const translations = {
       delete: "Delete", view_card: "View card", share: "Share",
       cancel: "Cancel", confirm_delete: "Really delete?", journal: "Journal",
       share_community: "🌍 Share in Community",
+      edit: "Edit",
     },
     journal_screen: { empty: "No entries yet." },
     pin: {
@@ -127,6 +129,7 @@ const translations = {
       delete: "Supprimer", view_card: "Voir la carte", share: "Partager",
       cancel: "Annuler", confirm_delete: "Vraiment supprimer?", journal: "Journal",
       share_community: "🌍 Partager en communauté",
+      edit: "Modifier",
     },
     journal_screen: { empty: "Aucune entrée." },
     pin: {
@@ -185,6 +188,7 @@ const translations = {
       delete: "Eliminar", view_card: "Ver carta", share: "Compartir",
       cancel: "Cancelar", confirm_delete: "¿Realmente eliminar?", journal: "Diario",
       share_community: "🌍 Compartir en comunidad",
+      edit: "Editar",
     },
     journal_screen: { empty: "Sin entradas." },
     pin: {
@@ -243,6 +247,7 @@ const translations = {
       delete: "Apagar", view_card: "Ver carta", share: "Partilhar",
       cancel: "Cancelar", confirm_delete: "Realmente apagar?", journal: "Diário",
       share_community: "🌍 Partilhar na comunidade",
+      edit: "Editar",
     },
     journal_screen: { empty: "Sem entradas." },
     pin: {
