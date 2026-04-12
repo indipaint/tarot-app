@@ -247,6 +247,7 @@ export default function Index() {
       nickname: "Tarot",
       uid: "shared",
       isCardShare: true,
+      cardId: currentId,
       createdAt: serverTimestamp(),
     });
     router.push("/community" as any);
