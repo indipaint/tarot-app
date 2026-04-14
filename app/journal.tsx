@@ -65,12 +65,16 @@ export default function JournalScreen() {
   };
 
   const shareToCommunity = async (entry: JournalEntry) => {
-    await addDoc(collection(db, "messages"), {
-      text: `📖 ${entry.cardTitle}\n\n${entry.question}\n\n${entry.note}`,
-      nickname: "Tagebuch",
-      uid: "journal_share",
-      isCardShare: true,
+    const storedUid = await AsyncStorage.getItem("community_uid");
+    const storedNickname = await AsyncStorage.getItem("community_nickname");
+
+    await addDoc(collection(db, "posts"), {
+      authorUid: storedUid || "journal_share",
+      authorName: storedNickname || "Tagebuch",
+      type: "journal",
       cardId: entry.cardId,
+      question: entry.question,
+      journalText: entry.note,
       createdAt: serverTimestamp(),
     });
     router.push("/community" as any);

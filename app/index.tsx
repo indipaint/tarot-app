@@ -1,9 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "../src/firebase";
 import { StatusBar } from "expo-status-bar";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
@@ -24,6 +23,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
 import { getRandomQuestion } from "../src/data/questions";
+import { db } from "../src/firebase";
 import i18n from "../src/i18n";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
@@ -241,17 +241,23 @@ export default function Index() {
   };
 
   const shareToCommunity = async () => {
-    if (!activeQuestion) return;
-    await addDoc(collection(db, "messages"), {
-      text: `🃏 ${currentName}\n\n${activeQuestion}`,
-      nickname: "Tarot",
-      uid: "shared",
-      isCardShare: true,
-      cardId: currentId,
-      createdAt: serverTimestamp(),
-    });
-    router.push("/community" as any);
-  };
+  if (!activeQuestion) return;
+
+  const storedUid = await AsyncStorage.getItem("community_uid");
+  const storedNickname = await AsyncStorage.getItem("community_nickname");
+
+  await addDoc(collection(db, "posts"), {
+    authorUid: storedUid || "shared",
+    authorName: storedNickname || "Tarot",
+    type: "card",
+    cardId: currentId,
+    question: activeQuestion,
+    journalText: "",
+    createdAt: serverTimestamp(),
+  });
+
+  router.push("/community" as any);
+};
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -354,15 +360,6 @@ export default function Index() {
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
                 <Text style={styles.closeBtnText}>🃏 {i18n.t("buttons.share_community")}</Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  setActiveQuestion(null);
-                  router.push("/community" as any);
-                }}
-                style={[styles.closeBtn, { marginTop: 10 }]}
-              >
-                <Text style={styles.closeBtnText}>🌍 Community</Text>
               </Pressable>
             </View>
           ) : null}
@@ -517,7 +514,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 18,
     right: 18,
-    bottom: 400,
+    bottom: 300,
     alignItems: "center",
   },
   questionBtnRow: {
@@ -654,15 +651,15 @@ const styles = StyleSheet.create({
   welcomeBtnText: { color: "#eaeaff", letterSpacing: 1.4, fontWeight: "700" },
   closeBtn: {
     marginTop: 20,
-    paddingVertical: 2,
+    paddingVertical: 4,
     paddingHorizontal: 10,
-    borderRadius: 8,
+    borderRadius: 6,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.5)",
   },
   closeBtnText: {
     color: "#dbd6d6",
-    fontSize: 10,
+    fontSize: 12,
     textAlign: "center",
   },
   journalOverlay: {
