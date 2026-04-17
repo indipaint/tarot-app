@@ -1,18 +1,21 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
+  limit,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -43,6 +46,7 @@ type CommunityPost = {
   cardId?: string;
   question?: string;
   journalText?: string;
+  lastReplyThreadId?: string;
 };
 
 const buildThreadId = (userA: string, userB: string, postId: string) =>
@@ -70,12 +74,26 @@ export default function CommunityScreen() {
   const [nicknameSet, setNicknameSet] = useState(false);
   const [posts, setPosts] = useState<CommunityPost[]>([]);
 
-  const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
   const [thoughtDrafts, setThoughtDrafts] = useState<Record<string, string>>({});
   const [bootReady, setBootReady] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [consentChecked, setConsentChecked] = useState(false);
   const [bootError, setBootError] = useState<string | null>(null);
+  const [unreadByPostId, setUnreadByPostId] = useState<Record<string, number>>({});
+  const [totalUnreadThreads, setTotalUnreadThreads] = useState(0);
+  const [translatedPostById, setTranslatedPostById] = useState<Record<string, string>>({});
+  const [unreadRefreshTick, setUnreadRefreshTick] = useState(0);
+
+  const markPostAsReadLocal = (postId: string) => {
+    setUnreadByPostId((prev) => {
+      const count = prev[postId] || 0;
+      if (!count) return prev;
+      const next = { ...prev };
+      delete next[postId];
+      setTotalUnreadThreads((t) => Math.max(0, t - count));
+      return next;
+    });
+  };
 
   useEffect(() => {
     (async () => {
@@ -126,6 +144,159 @@ export default function CommunityScreen() {
     return unsub;
   }, [nicknameSet]);
 
+  useEffect(() => {
+    if (!uid || !nicknameSet) return;
+    let docsA: any[] = [];
+    let docsB: any[] = [];
+
+    const recomputeUnread = async () => {
+      const seen = new Set<string>();
+      const merged = [...docsA, ...docsB].filter((d) => {
+        if (seen.has(d.id)) return false;
+        seen.add(d.id);
+        return true;
+      });
+      if (!merged.length) {
+        setUnreadByPostId({});
+        setTotalUnreadThreads(0);
+        return;
+      }
+      const keys = merged.map((d) => `thread_last_seen_${d.id}`);
+      const storedSeen = await AsyncStorage.multiGet(keys);
+      const seenMap: Record<string, number> = {};
+      for (const [key, val] of storedSeen) {
+        seenMap[key] = Number(val || 0);
+      }
+
+      const nextByPost: Record<string, number> = {};
+      let total = 0;
+      for (const threadDoc of merged) {
+        const data = threadDoc.data() as any;
+        const postId = String(data?.basedOnPostId || "");
+        const lastSender = String(data?.lastMessageSenderUid || "");
+        const lastMs = Number(data?.lastMessageAt?.toMillis?.() || 0);
+        const seenMs = seenMap[`thread_last_seen_${threadDoc.id}`] || 0;
+        if (postId && lastSender && lastSender !== uid && lastMs > seenMs) {
+          nextByPost[postId] = (nextByPost[postId] || 0) + 1;
+          total += 1;
+        }
+      }
+      setUnreadByPostId(nextByPost);
+      setTotalUnreadThreads(total);
+    };
+
+    const qA = query(collection(db, "threads"), where("userA", "==", uid), limit(80));
+    const qB = query(collection(db, "threads"), where("userB", "==", uid), limit(80));
+    const unsubA = onSnapshot(qA, (snap) => {
+      docsA = snap.docs;
+      recomputeUnread().catch(() => {});
+    });
+    const unsubB = onSnapshot(qB, (snap) => {
+      docsB = snap.docs;
+      recomputeUnread().catch(() => {});
+    });
+    return () => {
+      unsubA();
+      unsubB();
+    };
+  }, [uid, nicknameSet]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setUnreadRefreshTick((x) => x + 1);
+      return () => {};
+    }, [])
+  );
+
+  useEffect(() => {
+    if (!uid || !nicknameSet) return;
+    const rerun = async () => {
+      const qA = query(collection(db, "threads"), where("userA", "==", uid), limit(80));
+      const qB = query(collection(db, "threads"), where("userB", "==", uid), limit(80));
+      const [snapA, snapB] = await Promise.all([getDocs(qA), getDocs(qB)]);
+      const seen = new Set<string>();
+      const merged = [...snapA.docs, ...snapB.docs].filter((d) => {
+        if (seen.has(d.id)) return false;
+        seen.add(d.id);
+        return true;
+      });
+      const keys = merged.map((d) => `thread_last_seen_${d.id}`);
+      const storedSeen = await AsyncStorage.multiGet(keys);
+      const seenMap: Record<string, number> = {};
+      for (const [key, val] of storedSeen) seenMap[key] = Number(val || 0);
+      const nextByPost: Record<string, number> = {};
+      let total = 0;
+      for (const threadDoc of merged) {
+        const data = threadDoc.data() as any;
+        const postId = String(data?.basedOnPostId || "");
+        const lastSender = String(data?.lastMessageSenderUid || "");
+        const lastMs = Number(data?.lastMessageAt?.toMillis?.() || 0);
+        const seenMs = seenMap[`thread_last_seen_${threadDoc.id}`] || 0;
+        if (postId && lastSender && lastSender !== uid && lastMs > seenMs) {
+          nextByPost[postId] = (nextByPost[postId] || 0) + 1;
+          total += 1;
+        }
+      }
+      setUnreadByPostId(nextByPost);
+      setTotalUnreadThreads(total);
+    };
+    rerun().catch(() => {});
+  }, [unreadRefreshTick, uid, nicknameSet]);
+
+  useEffect(() => {
+    if (!uid || !posts.length) return;
+    const target = localeCode;
+    const toTranslate = posts.filter(
+      (p) =>
+        p.authorUid &&
+        p.authorUid !== uid &&
+        !!p.journalText &&
+        String(p.journalText).trim().length > 0 &&
+        !translatedPostById[p.id]
+    );
+    if (!toTranslate.length) return;
+
+    const run = async () => {
+      const updates: Record<string, string> = {};
+      for (const post of toTranslate) {
+        const text = String(post.journalText || "").trim();
+        try {
+          let translated = "";
+          try {
+            const res = await fetch("https://libretranslate.de/translate", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                q: text,
+                source: "auto",
+                target,
+                format: "text",
+              }),
+            });
+            const data = await res.json();
+            translated = String(data?.translatedText || "").trim();
+          } catch {}
+
+          if (!translated) {
+            const fallbackUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(
+              target
+            )}&dt=t&q=${encodeURIComponent(text)}`;
+            const fallbackRes = await fetch(fallbackUrl);
+            const fallbackData = await fallbackRes.json();
+            const chunks = Array.isArray(fallbackData?.[0]) ? fallbackData[0] : [];
+            translated = chunks.map((chunk: any) => String(chunk?.[0] || "")).join("").trim();
+          }
+
+          if (translated) updates[post.id] = translated;
+        } catch {}
+      }
+      if (Object.keys(updates).length) {
+        setTranslatedPostById((prev) => ({ ...prev, ...updates }));
+      }
+    };
+    run().catch(() => {});
+  }, [posts, uid, localeCode, translatedPostById]);
+
   const getCardImage = (inputCardId?: string) => {
     if (!inputCardId) return null;
     const card = cards.find((c: any) => String(c?.id) === String(inputCardId));
@@ -141,6 +312,14 @@ export default function CommunityScreen() {
         onPress: () => deleteDoc(doc(db, "posts", postId)),
       },
     ]);
+  };
+
+  const tryDeletePost = (post: CommunityPost, isOwn: boolean) => {
+    if (!isOwn) {
+      Alert.alert("Info", i18n.t("community.delete_only_own"));
+      return;
+    }
+    deletePost(post.id);
   };
 
   const openPrivateThread = async (post: CommunityPost) => {
@@ -172,6 +351,11 @@ export default function CommunityScreen() {
 
   const openLatestPrivateReply = async (post: CommunityPost) => {
     if (!uid || !post.id) return;
+    if (post.lastReplyThreadId) {
+      markPostAsReadLocal(post.id);
+      router.push(`/community/thread/${post.lastReplyThreadId}` as any);
+      return;
+    }
     try {
       const qA = query(
         collection(db, "threads"),
@@ -201,64 +385,14 @@ export default function CommunityScreen() {
         const bSec = Number((b.data() as any)?.createdAt?.seconds || 0);
         return bSec - aSec;
       });
+      markPostAsReadLocal(post.id);
       router.push(`/community/thread/${merged[0].id}` as any);
     } catch {
       Alert.alert("Error", "Private thread could not be opened.");
     }
   };
 
-  const startPrivateWithMessage = async (post: CommunityPost) => {
-    if (!uid || !post.id) return;
-    if (!post.authorUid) {
-      Alert.alert("Info", i18n.t("community.private_unavailable"));
-      return;
-    }
-    if (post.authorUid === uid) return;
-    const draft = (replyDrafts[post.id] || "").trim();
-    if (!draft) {
-      Alert.alert("Info", "Please enter a private message first.");
-      return;
-    }
-    const recipientName = (post.authorName || i18n.t("community.unknown_author")).trim();
-    const confirmed = await new Promise<boolean>((resolve) => {
-      Alert.alert(
-        i18n.t("community.private_send_confirm_title"),
-        i18n.t("community.private_send_confirm_body", { name: recipientName }),
-        [
-          { text: i18n.t("buttons.cancel"), style: "cancel", onPress: () => resolve(false) },
-          { text: i18n.t("community.private_send_confirm_ok"), onPress: () => resolve(true) },
-        ]
-      );
-    });
-    if (!confirmed) return;
-
-    try {
-      const [userA, userB] = [uid, post.authorUid].sort();
-      const threadId = buildThreadId(userA, userB, post.id);
-      const threadRef = doc(db, "threads", threadId);
-      const existing = await getDoc(threadRef);
-      if (!existing.exists()) {
-        await setDoc(threadRef, {
-          userA,
-          userB,
-          basedOnPostId: post.id,
-          createdAt: serverTimestamp(),
-        });
-      }
-
-      await addDoc(collection(db, "threads", threadId, "messages"), {
-        text: draft,
-        senderUid: uid,
-        senderName: nickname || i18n.t("thread.fallback_user"),
-        createdAt: serverTimestamp(),
-      });
-
-      setReplyDrafts((prev) => ({ ...prev, [post.id!]: "" }));
-      router.push(`/community/thread/${threadId}` as any);
-    } catch {
-      Alert.alert("Error", "Private message could not be sent.");
-    }
-  };
+  const replyOrOpenPrivate = async (post: CommunityPost) => openPrivateThread(post);
 
   const saveOwnThoughts = async (post: CommunityPost) => {
     if (!post.id) return;
@@ -410,11 +544,18 @@ export default function CommunityScreen() {
           <Pressable style={styles.backBtn} onPress={() => router.back()}>
             <Text style={styles.backBtnText}>← {i18n.t("buttons.back")}</Text>
           </Pressable>
-          <Text style={styles.header}>{i18n.t("community.center_title")}</Text>
+          <Text style={styles.header}>
+            {i18n.t("community.center_title")}
+            {totalUnreadThreads > 0 ? `  🔴${totalUnreadThreads}` : ""}
+          </Text>
           <View style={styles.backBtnPlaceholder} />
         </View>
 
-        <ScrollView style={styles.feed} contentContainerStyle={styles.feedContent}>
+        <ScrollView
+          style={styles.feed}
+          contentContainerStyle={styles.feedContent}
+          keyboardShouldPersistTaps="handled"
+        >
           {posts.map((post) => {
             const isOwn =
               (!!post.authorUid && post.authorUid === uid) ||
@@ -426,6 +567,11 @@ export default function CommunityScreen() {
                 style={[styles.postRow, isOwn ? styles.postRowOwn : styles.postRowOther]}
               >
                 <View style={[styles.postCard, isOwn ? styles.postCardOwn : styles.postCardOther]}>
+                {(unreadByPostId[post.id] || 0) > 0 ? (
+                  <View style={styles.postUnreadPill}>
+                    <Text style={styles.postUnreadPillText}>● {unreadByPostId[post.id]}</Text>
+                  </View>
+                ) : null}
                 <Text style={styles.postAuthor}>
                   {post.authorName || i18n.t("community.unknown_author")}
                 </Text>
@@ -438,7 +584,20 @@ export default function CommunityScreen() {
                   <Image source={image} style={styles.cardImage} resizeMode="contain" />
                 ) : null}
                 {post.question ? <Text style={styles.postQuestion}>{post.question}</Text> : null}
-                {post.journalText ? <Text style={styles.postText}>{post.journalText}</Text> : null}
+                {post.journalText ? (
+                  <>
+                    <Text style={styles.postText}>
+                      {(!isOwn && translatedPostById[post.id]) || post.journalText}
+                    </Text>
+                    {!isOwn &&
+                    translatedPostById[post.id] &&
+                    translatedPostById[post.id] !== post.journalText ? (
+                      <Text style={styles.postOriginalText}>
+                        {i18n.t("community.post_original_prefix")} {post.journalText}
+                      </Text>
+                    ) : null}
+                  </>
+                ) : null}
 
                 <View style={styles.row}>
                   {isOwn ? (
@@ -478,43 +637,30 @@ export default function CommunityScreen() {
                       style={styles.replyBtnGhost}
                       onPress={() => openLatestPrivateReply(post)}
                     >
-                      <Text style={styles.replyBtnText}>{i18n.t("community.private_open")}</Text>
+                      <View style={styles.replyViewWrap}>
+                        <Text style={styles.replyBtnText}>{i18n.t("community.private_view_replies")}</Text>
+                        {(unreadByPostId[post.id] || 0) > 0 ? (
+                          <View style={styles.unreadBadge}>
+                            <Text style={styles.unreadBadgeText}>{unreadByPostId[post.id]}</Text>
+                          </View>
+                        ) : null}
+                      </View>
                     </Pressable>
                   ) : null}
 
                   {!isOwn ? (
                     <View style={styles.replyBox}>
-                      <TextInput
-                        style={styles.replyInput}
-                        value={replyDrafts[post.id] || ""}
-                        onChangeText={(value) =>
-                          setReplyDrafts((prev) => ({ ...prev, [post.id]: value }))
-                        }
-                        placeholder={i18n.t("community.private_message_placeholder")}
-                        placeholderTextColor="#777"
-                        multiline
-                      />
                       <View style={styles.replyActions}>
-                        <Pressable
-                          style={styles.replyBtn}
-                        onPress={() => startPrivateWithMessage(post)}
-                        >
-                          <Text style={styles.replyBtnText}>{i18n.t("community.private_send")}</Text>
-                        </Pressable>
-                        <Pressable
-                          style={styles.replyBtnGhost}
-                          onPress={() => openPrivateThread(post)}
-                        >
-                          <Text style={styles.replyBtnText}>{i18n.t("community.private_open")}</Text>
+                        <Pressable style={styles.replyBtn} onPress={() => replyOrOpenPrivate(post)}>
+                          <Text style={styles.replyBtnText}>{i18n.t("community.private_reply")}</Text>
                         </Pressable>
                       </View>
+                      <Text style={styles.privateReplyHint}>{i18n.t("community.private_reply_hint")}</Text>
                     </View>
                   ) : null}
-                  {isOwn ? (
-                    <Pressable style={styles.deleteBtn} onPress={() => deletePost(post.id)}>
-                      <Text style={styles.deleteBtnText}>🗑️ {i18n.t("buttons.delete")}</Text>
-                    </Pressable>
-                  ) : null}
+                  <Pressable style={styles.deleteBtn} onPress={() => tryDeletePost(post, isOwn)}>
+                    <Text style={styles.deleteBtnText}>🗑️ {i18n.t("buttons.delete")}</Text>
+                  </Pressable>
                 </View>
                 </View>
               </View>
@@ -614,12 +760,21 @@ const styles = StyleSheet.create({
     padding: 12,
     gap: 6,
   },
+  postUnreadPill: {
+    alignSelf: "flex-end",
+    backgroundColor: "#b3261e",
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  postUnreadPillText: { color: "#fff", fontSize: 10, fontWeight: "700" },
   postCardOwn: { backgroundColor: "#152136", borderColor: "#3b4b66" },
   postCardOther: { backgroundColor: "#111", borderColor: "#303030" },
   postAuthor: { color: "#cfd7ff", fontSize: 11, letterSpacing: 1 },
   postType: { color: "#8fa0bf", fontSize: 10 },
   postQuestion: { color: "#dedede", fontSize: 13, lineHeight: 18 },
   postText: { color: "#c0c0c0", fontSize: 13, lineHeight: 20 },
+  postOriginalText: { color: "#7f7f7f", fontSize: 10, lineHeight: 14, fontStyle: "italic" },
   cardImage: { width: 100, height: 165, borderRadius: 8, marginTop: 4 },
   row: { gap: 8, marginTop: 8 },
   replyBox: { gap: 8 },
@@ -635,6 +790,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
   },
   replyActions: { flexDirection: "row", gap: 8 },
+  privateReplyHint: { color: "#6f6f6f", fontSize: 10, lineHeight: 14 },
   replyBtn: {
     borderWidth: 1,
     borderColor: "#4d5f85",
@@ -651,6 +807,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     backgroundColor: "#101010",
   },
+  replyViewWrap: { flexDirection: "row", alignItems: "center", gap: 6 },
+  unreadBadge: {
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: "#b3261e",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 4,
+  },
+  unreadBadgeText: { color: "#fff", fontSize: 9, fontWeight: "700" },
   replyBtnText: { color: "#888", fontSize: 11 },
   deleteBtn: {
     borderWidth: 1,

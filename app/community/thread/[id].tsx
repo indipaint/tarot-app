@@ -7,10 +7,12 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
@@ -40,6 +42,13 @@ const SUPPORTED_LANGS = new Set(["de", "en", "fr", "es", "pt"]);
 const normalizeLang = (value?: string) => {
   const candidate = String(value || "").toLowerCase().split("-")[0];
   return SUPPORTED_LANGS.has(candidate) ? candidate : "de";
+};
+const LANGUAGE_FOR_PROVIDER: Record<string, string> = {
+  de: "de",
+  en: "en",
+  fr: "fr",
+  es: "es",
+  pt: "pt",
 };
 
 export default function PrivateThreadScreen() {
@@ -110,6 +119,19 @@ export default function PrivateThreadScreen() {
 
   useEffect(() => {
     if (!threadId || !allowed) return;
+    const markSeenFromThread = async (fallbackMs: number) => {
+      try {
+        const threadSnap = await getDoc(doc(db, "threads", threadId));
+        const threadLastMs = Number((threadSnap.data() as any)?.lastMessageAt?.toMillis?.() || 0);
+        const seenMs = threadLastMs || fallbackMs || Date.now();
+        await AsyncStorage.setItem(`thread_last_seen_${threadId}`, String(seenMs));
+      } catch {
+        AsyncStorage.setItem(`thread_last_seen_${threadId}`, String(fallbackMs || Date.now())).catch(
+          () => {}
+        );
+      }
+    };
+
     const q = query(
       collection(db, "threads", threadId, "messages"),
       orderBy("createdAt", "asc")
@@ -121,6 +143,9 @@ export default function PrivateThreadScreen() {
           ...(d.data() as Omit<ThreadMessage, "id">),
         }))
       );
+      const last = snap.docs[snap.docs.length - 1];
+      const fallbackMs = Number((last?.data() as any)?.createdAt?.toMillis?.() || Date.now());
+      markSeenFromThread(fallbackMs).catch(() => {});
     });
     return unsub;
   }, [threadId, allowed]);
@@ -133,26 +158,48 @@ export default function PrivateThreadScreen() {
     }
 
     const targetLang = normalizeLang(preferredLang || getLocale() || i18n.locale);
+    const providerTarget = LANGUAGE_FOR_PROVIDER[targetLang] || "de";
     setIsTranslatingByMsgId((prev) => ({ ...prev, [msg.id]: true }));
     try {
-      const res = await fetch("https://libretranslate.de/translate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          q: msg.text,
-          source: "auto",
-          target: targetLang,
-          format: "text",
-        }),
-      });
-      const data = await res.json();
-      const translated = String(data?.translatedText || "").trim();
+      let translated = "";
+      try {
+        const res = await fetch("https://libretranslate.de/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            q: msg.text,
+            source: "auto",
+            target: providerTarget,
+            format: "text",
+          }),
+        });
+        const data = await res.json();
+        translated = String(data?.translatedText || "").trim();
+      } catch {
+        // fallback handled below
+      }
+
+      if (!translated) {
+        const fallbackUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(
+          providerTarget
+        )}&dt=t&q=${encodeURIComponent(msg.text)}`;
+        const fallbackRes = await fetch(fallbackUrl);
+        const fallbackData = await fallbackRes.json();
+        const chunks = Array.isArray(fallbackData?.[0]) ? fallbackData[0] : [];
+        translated = chunks
+          .map((chunk: any) => String(chunk?.[0] || ""))
+          .join("")
+          .trim();
+      }
+
       if (translated) {
         setTranslatedByMsgId((prev) => ({ ...prev, [msg.id]: translated }));
         setShowOriginalByMsgId((prev) => ({ ...prev, [msg.id]: false }));
+      } else {
+        throw new Error("translation_empty");
       }
     } catch {
-      Alert.alert(i18n.t("community.privacy_link_error_title"), i18n.t("thread.translate_error"));
+      Alert.alert(i18n.t("thread.translate_error_title"), i18n.t("thread.translate_error"));
     } finally {
       setIsTranslatingByMsgId((prev) => ({ ...prev, [msg.id]: false }));
     }
@@ -167,6 +214,10 @@ export default function PrivateThreadScreen() {
         senderName: nickname,
         createdAt: serverTimestamp(),
       });
+      await updateDoc(doc(db, "threads", threadId), {
+        lastMessageAt: serverTimestamp(),
+        lastMessageSenderUid: uid,
+      }).catch(() => {});
       setText("");
     } catch {
       Alert.alert("Error", "Message could not be sent.");
@@ -221,6 +272,29 @@ export default function PrivateThreadScreen() {
     ]);
   };
 
+  const deleteWholeChat = () => {
+    Alert.alert(i18n.t("thread.delete_chat_title"), i18n.t("thread.delete_chat_body"), [
+      { text: i18n.t("buttons.cancel"), style: "cancel" },
+      {
+        text: i18n.t("buttons.delete"),
+        style: "destructive",
+        onPress: async () => {
+          try {
+            const msgSnap = await getDocs(collection(db, "threads", threadId, "messages"));
+            await Promise.all(
+              msgSnap.docs.map((d) => deleteDoc(doc(db, "threads", threadId, "messages", d.id)))
+            );
+            await deleteDoc(doc(db, "threads", threadId));
+            await AsyncStorage.removeItem(`thread_last_seen_${threadId}`);
+            router.replace("/community" as any);
+          } catch {
+            Alert.alert("Error", "Chat could not be deleted.");
+          }
+        },
+      },
+    ]);
+  };
+
   if (!allowed) {
     return (
       <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
@@ -262,10 +336,13 @@ export default function PrivateThreadScreen() {
                 <Text style={styles.menuItemText}>{i18n.t("thread.unblock")}</Text>
               </Pressable>
             ) : (
-              <Pressable style={styles.menuItemLast} onPress={blockUser}>
+              <Pressable style={styles.menuItem} onPress={blockUser}>
                 <Text style={styles.menuItemText}>{i18n.t("thread.block")}</Text>
               </Pressable>
             )}
+            <Pressable style={styles.menuItemLast} onPress={deleteWholeChat}>
+              <Text style={styles.menuItemDangerText}>{i18n.t("thread.delete_chat")}</Text>
+            </Pressable>
           </View>
         ) : null}
 
@@ -384,6 +461,7 @@ const styles = StyleSheet.create({
   menuItem: { paddingVertical: 10, paddingHorizontal: 14, borderBottomWidth: 1, borderBottomColor: "#2a2a2a" },
   menuItemLast: { paddingVertical: 10, paddingHorizontal: 14 },
   menuItemText: { color: "#ddd", fontSize: 12 },
+  menuItemDangerText: { color: "#d18080", fontSize: 12 },
   info: { color: "#aaa", fontSize: 12 },
   backBtn: {
     marginTop: 12,
