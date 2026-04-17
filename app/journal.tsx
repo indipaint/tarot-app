@@ -5,6 +5,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React, { useCallback, useState } from "react";
 import { Alert, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n from "../src/i18n";
 
@@ -26,6 +27,7 @@ export default function JournalScreen() {
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
+  const [sharingByEntryId, setSharingByEntryId] = useState<Record<string, boolean>>({});
 
   useFocusEffect(
     useCallback(() => {
@@ -65,19 +67,28 @@ export default function JournalScreen() {
   };
 
   const shareToCommunity = async (entry: JournalEntry) => {
-    const storedUid = await AsyncStorage.getItem("community_uid");
+    if (sharingByEntryId[entry.id]) return;
+    setSharingByEntryId((prev) => ({ ...prev, [entry.id]: true }));
+    const authUid = await ensureCommunityAuth();
     const storedNickname = await AsyncStorage.getItem("community_nickname");
-
-    await addDoc(collection(db, "posts"), {
-      authorUid: storedUid || "journal_share",
-      authorName: storedNickname || "Tagebuch",
-      type: "journal",
-      cardId: entry.cardId,
-      question: entry.question,
-      journalText: entry.note,
-      createdAt: serverTimestamp(),
-    });
-    router.push("/community" as any);
+    try {
+      await addDoc(collection(db, "posts"), {
+        authorUid: authUid,
+        authorName: storedNickname || "Tagebuch",
+        type: "journal",
+        cardId: entry.cardId,
+        question: entry.question,
+        journalText: entry.note,
+        createdAt: serverTimestamp(),
+      });
+      router.push("/community" as any);
+    } finally {
+      setSharingByEntryId((prev) => {
+        const next = { ...prev };
+        delete next[entry.id];
+        return next;
+      });
+    }
   };
 
   return (
@@ -155,6 +166,7 @@ export default function JournalScreen() {
                   </Pressable>
                   <Pressable
                     style={styles.cardBtn}
+                    disabled={!!sharingByEntryId[entry.id]}
                     onPress={() => shareToCommunity(entry)}
                   >
                     <Text style={styles.cardBtnText}>{i18n.t("buttons.share_community")}</Text>

@@ -23,6 +23,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
 import { getRandomQuestion } from "../src/data/questions";
+import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n from "../src/i18n";
 
@@ -66,6 +67,8 @@ export default function Index() {
   const [activeQuestion, setActiveQuestion] = useState<string | null>(null);
   const [journalUnlocked, setJournalUnlocked] = useState(false);
   const [pinModalOpen, setPinModalOpen] = useState(false);
+  const [sharingToCommunity, setSharingToCommunity] = useState(false);
+  const lastShareAtRef = useRef(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -241,23 +244,32 @@ export default function Index() {
   };
 
   const shareToCommunity = async () => {
-  if (!activeQuestion) return;
+    if (!activeQuestion) return;
+    if (sharingToCommunity) return;
+    const now = Date.now();
+    if (now - lastShareAtRef.current < 1200) return;
+    lastShareAtRef.current = now;
+    setSharingToCommunity(true);
 
-  const storedUid = await AsyncStorage.getItem("community_uid");
-  const storedNickname = await AsyncStorage.getItem("community_nickname");
+    try {
+      const authUid = await ensureCommunityAuth();
+      const storedNickname = await AsyncStorage.getItem("community_nickname");
 
-  await addDoc(collection(db, "posts"), {
-    authorUid: storedUid || "shared",
-    authorName: storedNickname || "Tarot",
-    type: "card",
-    cardId: currentId,
-    question: activeQuestion,
-    journalText: "",
-    createdAt: serverTimestamp(),
-  });
+      await addDoc(collection(db, "posts"), {
+        authorUid: authUid,
+        authorName: storedNickname || "Tarot",
+        type: "card",
+        cardId: currentId,
+        question: activeQuestion,
+        journalText: "",
+        createdAt: serverTimestamp(),
+      });
 
-  router.push("/community" as any);
-};
+      router.push("/community" as any);
+    } finally {
+      setSharingToCommunity(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -357,6 +369,7 @@ export default function Index() {
               </Pressable>
               <Pressable
                 onPress={shareToCommunity}
+                disabled={sharingToCommunity}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
                 <Text style={styles.closeBtnText}>🃏 {i18n.t("buttons.share_community")}</Text>

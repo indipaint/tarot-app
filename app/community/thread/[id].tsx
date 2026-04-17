@@ -46,7 +46,7 @@ export default function PrivateThreadScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ id?: string }>();
   const threadId = String(params.id || "");
-  const localeCode = String(i18n.locale || "de").toLowerCase();
+  const localeCode = normalizeLang(getLocale() || i18n.locale);
   const privacyConsentKey = `community_privacy_accepted_v2_${localeCode}`;
 
   const [uid, setUid] = useState("");
@@ -75,8 +75,11 @@ export default function PrivateThreadScreen() {
 
   useEffect(() => {
     (async () => {
-      const accepted = await AsyncStorage.getItem(privacyConsentKey);
-      if (accepted !== "1") {
+      const [acceptedV2, acceptedLegacy] = await Promise.all([
+        AsyncStorage.getItem(privacyConsentKey),
+        AsyncStorage.getItem("community_privacy_accepted"),
+      ]);
+      if (acceptedV2 !== "1" && acceptedLegacy !== "1") {
         router.replace("/community" as any);
         return;
       }
@@ -157,13 +160,17 @@ export default function PrivateThreadScreen() {
 
   const send = async () => {
     if (!text.trim() || !threadId || !uid || !allowed || blocked) return;
-    await addDoc(collection(db, "threads", threadId, "messages"), {
-      text: text.trim(),
-      senderUid: uid,
-      senderName: nickname,
-      createdAt: serverTimestamp(),
-    });
-    setText("");
+    try {
+      await addDoc(collection(db, "threads", threadId, "messages"), {
+        text: text.trim(),
+        senderUid: uid,
+        senderName: nickname,
+        createdAt: serverTimestamp(),
+      });
+      setText("");
+    } catch {
+      Alert.alert("Error", "Message could not be sent.");
+    }
   };
 
   const blockUser = async () => {

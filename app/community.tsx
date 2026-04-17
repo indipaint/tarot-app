@@ -6,14 +6,13 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDocs,
-  limit,
+  getDoc,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
+  setDoc,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -32,7 +31,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
-import i18n from "../src/i18n";
+import i18n, { getLocale, subscribeLocale } from "../src/i18n";
 import { getLegalUrls } from "../src/legal";
 
 type PostType = "card" | "journal";
@@ -46,6 +45,9 @@ type CommunityPost = {
   journalText?: string;
 };
 
+const buildThreadId = (userA: string, userB: string, postId: string) =>
+  `${userA}__${userB}__${postId}`;
+
 function getCards(): any[] {
   const mod = require("../src/data/cards");
   const data = mod?.default ?? mod?.cards ?? mod;
@@ -55,7 +57,11 @@ function getCards(): any[] {
 export default function CommunityScreen() {
   const router = useRouter();
   const cards = useMemo(() => getCards(), []);
-  const localeCode = String(i18n.locale || "de").toLowerCase();
+  const normalizeLang = (value?: string) => {
+    const lang = String(value || "").toLowerCase().split("-")[0];
+    return ["de", "en", "fr", "es", "pt"].includes(lang) ? lang : "de";
+  };
+  const [localeCode, setLocaleCode] = useState(() => normalizeLang(getLocale()));
   const privacyConsentKey = `community_privacy_accepted_v2_${localeCode}`;
   const legalUrls = getLegalUrls(localeCode);
 
@@ -69,21 +75,41 @@ export default function CommunityScreen() {
   const [bootReady, setBootReady] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [consentChecked, setConsentChecked] = useState(false);
+  const [bootError, setBootError] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
-      const authUid = await ensureCommunityAuth();
-      setUid(authUid);
+      const saved = await AsyncStorage.getItem("app_lang");
+      if (saved) setLocaleCode(normalizeLang(saved));
+    })();
+    const unsubscribe = subscribeLocale((lang) => {
+      setLocaleCode(normalizeLang(lang));
+    });
+    return unsubscribe;
+  }, []);
 
-      const privacy = await AsyncStorage.getItem(privacyConsentKey);
-      setPrivacyAccepted(privacy === "1");
+  useEffect(() => {
+    (async () => {
+      try {
+        const authUid = await ensureCommunityAuth();
+        setUid(authUid);
 
-      const storedNickname = await AsyncStorage.getItem("community_nickname");
-      if (storedNickname && storedNickname.trim().length > 1) {
-        setNickname(storedNickname.trim());
-        setNicknameSet(true);
+        const [privacyV2, privacyLegacy] = await Promise.all([
+          AsyncStorage.getItem(privacyConsentKey),
+          AsyncStorage.getItem("community_privacy_accepted"),
+        ]);
+        setPrivacyAccepted(privacyV2 === "1" || privacyLegacy === "1");
+
+        const storedNickname = await AsyncStorage.getItem("community_nickname");
+        if (storedNickname && storedNickname.trim().length > 1) {
+          setNickname(storedNickname.trim());
+          setNicknameSet(true);
+        }
+      } catch {
+        setBootError("community_boot_error");
+      } finally {
+        setBootReady(true);
       }
-      setBootReady(true);
     })();
   }, [privacyConsentKey]);
 
@@ -118,80 +144,135 @@ export default function CommunityScreen() {
   };
 
   const openPrivateThread = async (post: CommunityPost) => {
-    if (!uid || !post.authorUid || post.authorUid === uid || !post.id) return;
-
-    const [userA, userB] = [uid, post.authorUid].sort();
-    const existingQ = query(
-      collection(db, "threads"),
-      where("userA", "==", userA),
-      where("userB", "==", userB),
-      where("basedOnPostId", "==", post.id),
-      limit(1)
-    );
-    const existing = await getDocs(existingQ);
-
-    if (!existing.empty) {
-      router.push(`/community/thread/${existing.docs[0].id}` as any);
+    if (!uid || !post.id) return;
+    if (!post.authorUid) {
+      Alert.alert("Info", i18n.t("community.private_unavailable"));
       return;
     }
+    if (post.authorUid === uid) return;
 
-    const created = await addDoc(collection(db, "threads"), {
-      userA,
-      userB,
-      basedOnPostId: post.id,
-      createdAt: serverTimestamp(),
-    });
-    router.push(`/community/thread/${created.id}` as any);
+    try {
+      const [userA, userB] = [uid, post.authorUid].sort();
+      const threadId = buildThreadId(userA, userB, post.id);
+      const threadRef = doc(db, "threads", threadId);
+      const existing = await getDoc(threadRef);
+      if (!existing.exists()) {
+        await setDoc(threadRef, {
+          userA,
+          userB,
+          basedOnPostId: post.id,
+          createdAt: serverTimestamp(),
+        });
+      }
+      router.push(`/community/thread/${threadId}` as any);
+    } catch {
+      Alert.alert("Error", "Private thread could not be opened.");
+    }
+  };
+
+  const openLatestPrivateReply = async (post: CommunityPost) => {
+    if (!uid || !post.id) return;
+    try {
+      const qA = query(
+        collection(db, "threads"),
+        where("basedOnPostId", "==", post.id),
+        where("userA", "==", uid),
+        limit(20)
+      );
+      const qB = query(
+        collection(db, "threads"),
+        where("basedOnPostId", "==", post.id),
+        where("userB", "==", uid),
+        limit(20)
+      );
+      const [snapA, snapB] = await Promise.all([getDocs(qA), getDocs(qB)]);
+      const seen = new Set<string>();
+      const merged = [...snapA.docs, ...snapB.docs].filter((d) => {
+        if (seen.has(d.id)) return false;
+        seen.add(d.id);
+        return true;
+      });
+      if (!merged.length) {
+        Alert.alert("Info", i18n.t("community.private_no_reply_yet"));
+        return;
+      }
+      merged.sort((a, b) => {
+        const aSec = Number((a.data() as any)?.createdAt?.seconds || 0);
+        const bSec = Number((b.data() as any)?.createdAt?.seconds || 0);
+        return bSec - aSec;
+      });
+      router.push(`/community/thread/${merged[0].id}` as any);
+    } catch {
+      Alert.alert("Error", "Private thread could not be opened.");
+    }
   };
 
   const startPrivateWithMessage = async (post: CommunityPost) => {
-    if (!uid || !post.authorUid || post.authorUid === uid || !post.id) return;
+    if (!uid || !post.id) return;
+    if (!post.authorUid) {
+      Alert.alert("Info", i18n.t("community.private_unavailable"));
+      return;
+    }
+    if (post.authorUid === uid) return;
     const draft = (replyDrafts[post.id] || "").trim();
-    if (!draft) return;
+    if (!draft) {
+      Alert.alert("Info", "Please enter a private message first.");
+      return;
+    }
+    const recipientName = (post.authorName || i18n.t("community.unknown_author")).trim();
+    const confirmed = await new Promise<boolean>((resolve) => {
+      Alert.alert(
+        i18n.t("community.private_send_confirm_title"),
+        i18n.t("community.private_send_confirm_body", { name: recipientName }),
+        [
+          { text: i18n.t("buttons.cancel"), style: "cancel", onPress: () => resolve(false) },
+          { text: i18n.t("community.private_send_confirm_ok"), onPress: () => resolve(true) },
+        ]
+      );
+    });
+    if (!confirmed) return;
 
-    const [userA, userB] = [uid, post.authorUid].sort();
-    const existingQ = query(
-      collection(db, "threads"),
-      where("userA", "==", userA),
-      where("userB", "==", userB),
-      where("basedOnPostId", "==", post.id),
-      limit(1)
-    );
-    const existing = await getDocs(existingQ);
+    try {
+      const [userA, userB] = [uid, post.authorUid].sort();
+      const threadId = buildThreadId(userA, userB, post.id);
+      const threadRef = doc(db, "threads", threadId);
+      const existing = await getDoc(threadRef);
+      if (!existing.exists()) {
+        await setDoc(threadRef, {
+          userA,
+          userB,
+          basedOnPostId: post.id,
+          createdAt: serverTimestamp(),
+        });
+      }
 
-    let threadId = "";
-    if (!existing.empty) {
-      threadId = existing.docs[0].id;
-    } else {
-      const created = await addDoc(collection(db, "threads"), {
-        userA,
-        userB,
-        basedOnPostId: post.id,
+      await addDoc(collection(db, "threads", threadId, "messages"), {
+        text: draft,
+        senderUid: uid,
+        senderName: nickname || i18n.t("thread.fallback_user"),
         createdAt: serverTimestamp(),
       });
-      threadId = created.id;
+
+      setReplyDrafts((prev) => ({ ...prev, [post.id!]: "" }));
+      router.push(`/community/thread/${threadId}` as any);
+    } catch {
+      Alert.alert("Error", "Private message could not be sent.");
     }
-
-    await addDoc(collection(db, "threads", threadId, "messages"), {
-      text: draft,
-      senderUid: uid,
-      senderName: nickname,
-      createdAt: serverTimestamp(),
-    });
-
-    setReplyDrafts((prev) => ({ ...prev, [post.id!]: "" }));
-    router.push(`/community/thread/${threadId}` as any);
   };
 
   const saveOwnThoughts = async (post: CommunityPost) => {
     if (!post.id) return;
     const text = (thoughtDrafts[post.id] ?? post.journalText ?? "").trim();
-    await updateDoc(doc(db, "posts", post.id), { journalText: text });
-    setThoughtDrafts((prev) => {
-      const next = { ...prev };
-      delete next[post.id];
-      return next;
-    });
+    try {
+      await updateDoc(doc(db, "posts", post.id), { journalText: text });
+      setThoughtDrafts((prev) => {
+        const next = { ...prev };
+        delete next[post.id];
+        return next;
+      });
+    } catch {
+      Alert.alert("Error", "Post could not be updated.");
+    }
   };
 
   const openLegalUrl = async (url: string) => {
@@ -219,6 +300,8 @@ export default function CommunityScreen() {
       return;
     }
     await AsyncStorage.setItem(privacyConsentKey, "1");
+    // Keep compatibility for existing users/screens still reading the legacy key.
+    await AsyncStorage.setItem("community_privacy_accepted", "1");
     setPrivacyAccepted(true);
   };
 
@@ -228,6 +311,20 @@ export default function CommunityScreen() {
         <StatusBar style="light" />
         <View style={styles.nickContainer}>
           <Text style={styles.bootText}>…</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (bootError) {
+    return (
+      <SafeAreaView style={styles.nickSafe} edges={["top", "bottom"]}>
+        <StatusBar style="light" />
+        <View style={styles.nickContainer}>
+          <Text style={styles.nickSubtitle}>Community unavailable right now.</Text>
+          <Pressable style={styles.backBtnNick} onPress={() => router.back()}>
+            <Text style={styles.backBtnText}>← {i18n.t("buttons.back")}</Text>
+          </Pressable>
         </View>
       </SafeAreaView>
     );
@@ -319,7 +416,9 @@ export default function CommunityScreen() {
 
         <ScrollView style={styles.feed} contentContainerStyle={styles.feedContent}>
           {posts.map((post) => {
-            const isOwn = post.authorUid === uid;
+            const isOwn =
+              (!!post.authorUid && post.authorUid === uid) ||
+              (!post.authorUid && !!nickname && post.authorName === nickname);
             const image = getCardImage(post.cardId);
             return (
               <View
@@ -374,7 +473,16 @@ export default function CommunityScreen() {
                     </View>
                   ) : null}
 
-                  {post.authorUid && post.authorUid !== uid ? (
+                  {isOwn ? (
+                    <Pressable
+                      style={styles.replyBtnGhost}
+                      onPress={() => openLatestPrivateReply(post)}
+                    >
+                      <Text style={styles.replyBtnText}>{i18n.t("community.private_open")}</Text>
+                    </Pressable>
+                  ) : null}
+
+                  {!isOwn ? (
                     <View style={styles.replyBox}>
                       <TextInput
                         style={styles.replyInput}
@@ -389,7 +497,7 @@ export default function CommunityScreen() {
                       <View style={styles.replyActions}>
                         <Pressable
                           style={styles.replyBtn}
-                          onPress={() => startPrivateWithMessage(post)}
+                        onPress={() => startPrivateWithMessage(post)}
                         >
                           <Text style={styles.replyBtnText}>{i18n.t("community.private_send")}</Text>
                         </Pressable>
