@@ -25,7 +25,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ensureCommunityAuth } from "../../../src/ensureCommunityAuth";
 import { db } from "../../../src/firebase";
+import i18n, { getLocale, subscribeLocale } from "../../../src/i18n";
 
 type ThreadMessage = {
   id: string;
@@ -34,10 +36,18 @@ type ThreadMessage = {
   senderName?: string;
 };
 
+const SUPPORTED_LANGS = new Set(["de", "en", "fr", "es", "pt"]);
+const normalizeLang = (value?: string) => {
+  const candidate = String(value || "").toLowerCase().split("-")[0];
+  return SUPPORTED_LANGS.has(candidate) ? candidate : "de";
+};
+
 export default function PrivateThreadScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ id?: string }>();
   const threadId = String(params.id || "");
+  const localeCode = String(i18n.locale || "de").toLowerCase();
+  const privacyConsentKey = `community_privacy_accepted_v2_${localeCode}`;
 
   const [uid, setUid] = useState("");
   const [nickname, setNickname] = useState("");
@@ -47,20 +57,36 @@ export default function PrivateThreadScreen() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [peerUid, setPeerUid] = useState("");
   const [blocked, setBlocked] = useState(false);
+  const [translatedByMsgId, setTranslatedByMsgId] = useState<Record<string, string>>({});
+  const [showOriginalByMsgId, setShowOriginalByMsgId] = useState<Record<string, boolean>>({});
+  const [isTranslatingByMsgId, setIsTranslatingByMsgId] = useState<Record<string, boolean>>({});
+  const [preferredLang, setPreferredLang] = useState(() => normalizeLang(getLocale()));
 
   useEffect(() => {
     (async () => {
-      const accepted = await AsyncStorage.getItem("community_privacy_accepted");
+      const saved = await AsyncStorage.getItem("app_lang");
+      if (saved) setPreferredLang(normalizeLang(saved));
+    })();
+    const unsubscribe = subscribeLocale((lang) => {
+      setPreferredLang(normalizeLang(lang));
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const accepted = await AsyncStorage.getItem(privacyConsentKey);
       if (accepted !== "1") {
         router.replace("/community" as any);
         return;
       }
-      const storedUid = (await AsyncStorage.getItem("community_uid")) || "";
-      const storedNickname = (await AsyncStorage.getItem("community_nickname")) || "User";
+      const storedUid = await ensureCommunityAuth();
+      const storedNickname =
+        (await AsyncStorage.getItem("community_nickname")) || i18n.t("thread.fallback_user");
       setUid(storedUid);
       setNickname(storedNickname);
     })();
-  }, []);
+  }, [privacyConsentKey]);
 
   useEffect(() => {
     if (!threadId || !uid) return;
@@ -95,6 +121,39 @@ export default function PrivateThreadScreen() {
     });
     return unsub;
   }, [threadId, allowed]);
+
+  const translateMessage = async (msg: ThreadMessage) => {
+    if (!msg.id || !msg.text || !msg.text.trim()) return;
+    if (translatedByMsgId[msg.id]) {
+      setShowOriginalByMsgId((prev) => ({ ...prev, [msg.id]: false }));
+      return;
+    }
+
+    const targetLang = normalizeLang(preferredLang || getLocale() || i18n.locale);
+    setIsTranslatingByMsgId((prev) => ({ ...prev, [msg.id]: true }));
+    try {
+      const res = await fetch("https://libretranslate.de/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          q: msg.text,
+          source: "auto",
+          target: targetLang,
+          format: "text",
+        }),
+      });
+      const data = await res.json();
+      const translated = String(data?.translatedText || "").trim();
+      if (translated) {
+        setTranslatedByMsgId((prev) => ({ ...prev, [msg.id]: translated }));
+        setShowOriginalByMsgId((prev) => ({ ...prev, [msg.id]: false }));
+      }
+    } catch {
+      Alert.alert(i18n.t("community.privacy_link_error_title"), i18n.t("thread.translate_error"));
+    } finally {
+      setIsTranslatingByMsgId((prev) => ({ ...prev, [msg.id]: false }));
+    }
+  };
 
   const send = async () => {
     if (!text.trim() || !threadId || !uid || !allowed || blocked) return;
@@ -139,14 +198,14 @@ export default function PrivateThreadScreen() {
       createdAt: serverTimestamp(),
     });
     setMenuOpen(false);
-    Alert.alert("Danke", "Meldung wurde gespeichert.");
+    Alert.alert(i18n.t("thread.report_success_title"), i18n.t("thread.report_success_body"));
   };
 
   const deleteOwnMessage = (messageId: string) => {
-    Alert.alert("Nachricht löschen?", "Diese Nachricht wird komplett entfernt.", [
-      { text: "Abbrechen", style: "cancel" },
+    Alert.alert(i18n.t("thread.delete_title"), i18n.t("thread.delete_body"), [
+      { text: i18n.t("buttons.cancel"), style: "cancel" },
       {
-        text: "Löschen",
+        text: i18n.t("buttons.delete"),
         style: "destructive",
         onPress: async () => {
           await deleteDoc(doc(db, "threads", threadId, "messages", messageId));
@@ -160,10 +219,10 @@ export default function PrivateThreadScreen() {
       <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
         <StatusBar style="light" />
         <View style={styles.center}>
-          <Text style={styles.title}>Privater Bereich</Text>
-          <Text style={styles.info}>Du hast auf diesen Thread keinen Zugriff.</Text>
+          <Text style={styles.title}>{i18n.t("thread.private_area_title")}</Text>
+          <Text style={styles.info}>{i18n.t("thread.no_access")}</Text>
           <Pressable style={styles.backBtn} onPress={() => router.back()}>
-            <Text style={styles.backBtnText}>← Zurück</Text>
+            <Text style={styles.backBtnText}>← {i18n.t("buttons.back")}</Text>
           </Pressable>
         </View>
       </SafeAreaView>
@@ -179,9 +238,9 @@ export default function PrivateThreadScreen() {
       >
         <View style={styles.header}>
           <Pressable style={styles.backBtnInline} onPress={() => router.back()}>
-            <Text style={styles.backBtnText}>← Zurück</Text>
+            <Text style={styles.backBtnText}>← {i18n.t("buttons.back")}</Text>
           </Pressable>
-          <Text style={styles.title}>Privater Chat</Text>
+          <Text style={styles.title}>{i18n.t("thread.private_chat_title")}</Text>
           <Pressable style={styles.menuBtn} onPress={() => setMenuOpen((prev) => !prev)}>
             <Text style={styles.menuBtnText}>⋮</Text>
           </Pressable>
@@ -189,15 +248,15 @@ export default function PrivateThreadScreen() {
         {menuOpen ? (
           <View style={styles.menuPanel}>
             <Pressable style={styles.menuItem} onPress={reportUser}>
-              <Text style={styles.menuItemText}>Melden</Text>
+              <Text style={styles.menuItemText}>{i18n.t("thread.report")}</Text>
             </Pressable>
             {blocked ? (
               <Pressable style={styles.menuItemLast} onPress={unblockUser}>
-                <Text style={styles.menuItemText}>Blockierung aufheben</Text>
+                <Text style={styles.menuItemText}>{i18n.t("thread.unblock")}</Text>
               </Pressable>
             ) : (
               <Pressable style={styles.menuItemLast} onPress={blockUser}>
-                <Text style={styles.menuItemText}>Blockieren</Text>
+                <Text style={styles.menuItemText}>{i18n.t("thread.block")}</Text>
               </Pressable>
             )}
           </View>
@@ -206,17 +265,52 @@ export default function PrivateThreadScreen() {
         <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>
           {messages.map((msg) => {
             const isOwn = msg.senderUid === uid;
+            const isIncoming = !isOwn;
+            const translated = translatedByMsgId[msg.id];
+            const showOriginal = !!showOriginalByMsgId[msg.id];
+            const displayText =
+              isIncoming && translated && !showOriginal ? translated : msg.text || "";
             return (
               <View
                 key={msg.id}
                 style={[styles.msgRow, isOwn ? styles.msgRowOwn : styles.msgRowOther]}
               >
                 <View style={[styles.msgBubble, isOwn ? styles.msgBubbleOwn : styles.msgBubbleOther]}>
-                  <Text style={styles.msgName}>{msg.senderName || "User"}</Text>
-                  <Text style={styles.msgText}>{msg.text || ""}</Text>
+                  <Text style={styles.msgName}>{msg.senderName || i18n.t("thread.fallback_user")}</Text>
+                  <Text style={styles.msgText}>{displayText}</Text>
+                  {isIncoming ? (
+                    <View style={styles.msgActionsRow}>
+                      <Pressable
+                        style={styles.msgActionBtn}
+                        onPress={() => translateMessage(msg)}
+                        disabled={!!isTranslatingByMsgId[msg.id]}
+                      >
+                        <Text style={styles.msgActionText}>
+                          {isTranslatingByMsgId[msg.id]
+                            ? i18n.t("thread.translating")
+                            : i18n.t("thread.translate")}
+                        </Text>
+                      </Pressable>
+                      {translated ? (
+                        <Pressable
+                          style={styles.msgActionBtn}
+                          onPress={() =>
+                            setShowOriginalByMsgId((prev) => ({ ...prev, [msg.id]: true }))
+                          }
+                        >
+                          <Text style={styles.msgActionText}>{i18n.t("thread.show_original")}</Text>
+                        </Pressable>
+                      ) : null}
+                    </View>
+                  ) : null}
+                  {isIncoming && translated && !showOriginal ? (
+                    <Text style={styles.msgOriginal}>
+                      {i18n.t("thread.original_prefix")} {msg.text || ""}
+                    </Text>
+                  ) : null}
                   {isOwn ? (
                     <Pressable onPress={() => deleteOwnMessage(msg.id)} style={styles.deleteOwnBtn}>
-                      <Text style={styles.deleteOwnBtnText}>Löschen</Text>
+                      <Text style={styles.deleteOwnBtnText}>{i18n.t("buttons.delete")}</Text>
                     </Pressable>
                   ) : null}
                 </View>
@@ -228,10 +322,10 @@ export default function PrivateThreadScreen() {
         {blocked ? (
           <View style={styles.blockInfoWrap}>
             <Text style={styles.blockInfoText}>
-              Du hast diesen Nutzer blockiert. Senden ist deaktiviert.
+              {i18n.t("thread.blocked_info")}
             </Text>
             <Pressable style={styles.unblockBtn} onPress={unblockUser}>
-              <Text style={styles.unblockBtnText}>Blockierung aufheben</Text>
+              <Text style={styles.unblockBtnText}>{i18n.t("thread.unblock")}</Text>
             </Pressable>
           </View>
         ) : (
@@ -240,7 +334,7 @@ export default function PrivateThreadScreen() {
               style={styles.input}
               value={text}
               onChangeText={setText}
-              placeholder="Privat antworten..."
+              placeholder={i18n.t("thread.input_placeholder")}
               placeholderTextColor="#888"
               multiline
             />
@@ -304,6 +398,16 @@ const styles = StyleSheet.create({
   msgBubbleOther: { backgroundColor: "#111", borderColor: "#303030" },
   msgName: { color: "#9eadcf", fontSize: 10 },
   msgText: { color: "#ddd", fontSize: 13, lineHeight: 18 },
+  msgOriginal: { color: "#8f8f8f", fontSize: 10, lineHeight: 14, marginTop: 4, fontStyle: "italic" },
+  msgActionsRow: { flexDirection: "row", gap: 8, marginTop: 6 },
+  msgActionBtn: {
+    borderWidth: 1,
+    borderColor: "#3b3b3b",
+    borderRadius: 6,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  msgActionText: { color: "#9fb0cc", fontSize: 10 },
   deleteOwnBtn: { marginTop: 6, alignSelf: "flex-end" },
   deleteOwnBtnText: { color: "#c58b8b", fontSize: 10 },
   inputRow: {

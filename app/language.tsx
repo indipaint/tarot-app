@@ -17,9 +17,11 @@ export default function LanguageGate() {
   useEffect(() => {
     (async () => {
       try {
-        await AsyncStorage.removeItem("app_lang");
         const saved = await AsyncStorage.getItem("app_lang");
-        if (!FORCE_LANGUAGE_SCREEN && (saved === "de" || saved === "en" || saved === "fr" || saved === "es")) {
+        if (
+          !FORCE_LANGUAGE_SCREEN &&
+          (saved === "de" || saved === "en" || saved === "fr" || saved === "es" || saved === "pt")
+        ) {
           go(saved);
           return;
         }

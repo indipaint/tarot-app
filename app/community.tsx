@@ -30,9 +30,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n from "../src/i18n";
-import { PRIVACY_POLICY_URL, TERMS_OF_USE_URL } from "../src/legal";
+import { getLegalUrls } from "../src/legal";
 
 type PostType = "card" | "journal";
 type CommunityPost = {
@@ -54,6 +55,9 @@ function getCards(): any[] {
 export default function CommunityScreen() {
   const router = useRouter();
   const cards = useMemo(() => getCards(), []);
+  const localeCode = String(i18n.locale || "de").toLowerCase();
+  const privacyConsentKey = `community_privacy_accepted_v2_${localeCode}`;
+  const legalUrls = getLegalUrls(localeCode);
 
   const [uid, setUid] = useState("");
   const [nickname, setNickname] = useState("");
@@ -68,16 +72,10 @@ export default function CommunityScreen() {
 
   useEffect(() => {
     (async () => {
-      const storedUid = await AsyncStorage.getItem("community_uid");
-      if (storedUid) {
-        setUid(storedUid);
-      } else {
-        const newUid = Math.random().toString(36).slice(2);
-        await AsyncStorage.setItem("community_uid", newUid);
-        setUid(newUid);
-      }
+      const authUid = await ensureCommunityAuth();
+      setUid(authUid);
 
-      const privacy = await AsyncStorage.getItem("community_privacy_accepted");
+      const privacy = await AsyncStorage.getItem(privacyConsentKey);
       setPrivacyAccepted(privacy === "1");
 
       const storedNickname = await AsyncStorage.getItem("community_nickname");
@@ -87,7 +85,7 @@ export default function CommunityScreen() {
       }
       setBootReady(true);
     })();
-  }, []);
+  }, [privacyConsentKey]);
 
   useEffect(() => {
     if (!nicknameSet) return;
@@ -196,8 +194,23 @@ export default function CommunityScreen() {
     });
   };
 
-  const openLegalUrl = (url: string) => {
-    Linking.openURL(url).catch(() => {});
+  const openLegalUrl = async (url: string) => {
+    const target = String(url || "").trim();
+    try {
+      if (!/^https?:\/\//i.test(target)) {
+        throw new Error("invalid_url_scheme");
+      }
+      const canOpen = await Linking.canOpenURL(target);
+      if (!canOpen) {
+        throw new Error("cannot_open_url");
+      }
+      await Linking.openURL(target);
+    } catch {
+      Alert.alert(
+        i18n.t("community.privacy_link_error_title"),
+        i18n.t("community.privacy_link_error_body", { url: target || "-" })
+      );
+    }
   };
 
   const acceptPrivacy = async () => {
@@ -205,7 +218,7 @@ export default function CommunityScreen() {
       Alert.alert("", i18n.t("community.privacy_need_checkbox"));
       return;
     }
-    await AsyncStorage.setItem("community_privacy_accepted", "1");
+    await AsyncStorage.setItem(privacyConsentKey, "1");
     setPrivacyAccepted(true);
   };
 
@@ -230,13 +243,11 @@ export default function CommunityScreen() {
         >
           <Text style={styles.privacyTitle}>{i18n.t("community.privacy_title")}</Text>
           <Text style={styles.privacyBody}>{i18n.t("community.privacy_intro")}</Text>
-          <Text style={styles.privacySafetyNote}>
-            Sicherheitsfunktionen: Blockieren und Melden sind im privaten Chat verfuegbar (oben rechts ueber ⋮).
-          </Text>
-          <Pressable style={styles.privacyLinkBtn} onPress={() => openLegalUrl(PRIVACY_POLICY_URL)}>
+          <Text style={styles.privacySafetyNote}>{i18n.t("community.privacy_safety_note")}</Text>
+          <Pressable style={styles.privacyLinkBtn} onPress={() => openLegalUrl(legalUrls.privacy)}>
             <Text style={styles.privacyLinkText}>{i18n.t("community.privacy_link_privacy")}</Text>
           </Pressable>
-          <Pressable style={styles.privacyLinkBtn} onPress={() => openLegalUrl(TERMS_OF_USE_URL)}>
+          <Pressable style={styles.privacyLinkBtn} onPress={() => openLegalUrl(legalUrls.terms)}>
             <Text style={styles.privacyLinkText}>{i18n.t("community.privacy_link_terms")}</Text>
           </Pressable>
           <Pressable
@@ -320,7 +331,9 @@ export default function CommunityScreen() {
                   {post.authorName || i18n.t("community.unknown_author")}
                 </Text>
                 <Text style={styles.postType}>
-                  {post.type === "journal" ? "📖 Journal" : "🃏 Karte"}
+                  {post.type === "journal"
+                    ? i18n.t("community.post_type_journal")
+                    : i18n.t("community.post_type_card")}
                 </Text>
                 {image ? (
                   <Image source={image} style={styles.cardImage} resizeMode="contain" />
