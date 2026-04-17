@@ -38,7 +38,16 @@ if (lang === "pt") {
 function getMeaningByIdLocal(id: string | number, locale: string) {
   const list = getMeaningsModule(locale);
   const arr = Array.isArray(list) ? list : [];
-  return arr.find((m) => String(m?.id) === String(id));
+  const raw = String(id ?? "").trim();
+  const normalizedNumeric = /^\d+$/.test(raw) ? String(Number(raw)) : raw;
+  return arr.find((m) => {
+    const candidate = String(m?.id ?? "").trim();
+    if (candidate === raw) return true;
+    if (/^\d+$/.test(candidate) && /^\d+$/.test(raw)) {
+      return String(Number(candidate)) === normalizedNumeric;
+    }
+    return false;
+  });
 }
 
 export default function MeaningByIdScreen() {
