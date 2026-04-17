@@ -82,7 +82,30 @@ export default function CommunityScreen() {
   const [unreadByPostId, setUnreadByPostId] = useState<Record<string, number>>({});
   const [totalUnreadThreads, setTotalUnreadThreads] = useState(0);
   const [translatedPostById, setTranslatedPostById] = useState<Record<string, string>>({});
+  const [translatedQuestionById, setTranslatedQuestionById] = useState<Record<string, string>>({});
   const [unreadRefreshTick, setUnreadRefreshTick] = useState(0);
+
+  const normalizeAuthorName = (value: string) =>
+    String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+
+  const isOwnPost = (post: CommunityPost) => {
+    const postUid = String(post.authorUid || "").trim();
+    const meUid = String(uid || "").trim();
+    const postName = normalizeAuthorName(String(post.authorName || ""));
+    const myName = normalizeAuthorName(String(nickname || ""));
+    // Prefer UID match; for legacy/migrated accounts also allow nickname match
+    // so users can still manage older own posts.
+    return (
+      (!!postUid && !!meUid && postUid === meUid) ||
+      (!!postName &&
+        !!myName &&
+        (postName === myName || postName.includes(myName) || myName.includes(postName)))
+    );
+  };
 
   const markPostAsReadLocal = (postId: string) => {
     setUnreadByPostId((prev) => {
@@ -246,7 +269,7 @@ export default function CommunityScreen() {
   useEffect(() => {
     if (!uid || !posts.length) return;
     const target = localeCode;
-    const toTranslate = posts.filter(
+    const toTranslateText = posts.filter(
       (p) =>
         p.authorUid &&
         p.authorUid !== uid &&
@@ -254,48 +277,73 @@ export default function CommunityScreen() {
         String(p.journalText).trim().length > 0 &&
         !translatedPostById[p.id]
     );
-    if (!toTranslate.length) return;
+    const toTranslateQuestion = posts.filter(
+      (p) =>
+        p.authorUid &&
+        p.authorUid !== uid &&
+        !!p.question &&
+        String(p.question).trim().length > 0 &&
+        !translatedQuestionById[p.id]
+    );
+    if (!toTranslateText.length && !toTranslateQuestion.length) return;
 
     const run = async () => {
-      const updates: Record<string, string> = {};
-      for (const post of toTranslate) {
+      const translateWithFallback = async (input: string) => {
+        let translated = "";
+        try {
+          const res = await fetch("https://libretranslate.de/translate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              q: input,
+              source: "auto",
+              target,
+              format: "text",
+            }),
+          });
+          const data = await res.json();
+          translated = String(data?.translatedText || "").trim();
+        } catch {}
+
+        if (!translated) {
+          const fallbackUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(
+            target
+          )}&dt=t&q=${encodeURIComponent(input)}`;
+          const fallbackRes = await fetch(fallbackUrl);
+          const fallbackData = await fallbackRes.json();
+          const chunks = Array.isArray(fallbackData?.[0]) ? fallbackData[0] : [];
+          translated = chunks.map((chunk: any) => String(chunk?.[0] || "")).join("").trim();
+        }
+        return translated;
+      };
+
+      const textUpdates: Record<string, string> = {};
+      for (const post of toTranslateText) {
         const text = String(post.journalText || "").trim();
         try {
-          let translated = "";
-          try {
-            const res = await fetch("https://libretranslate.de/translate", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                q: text,
-                source: "auto",
-                target,
-                format: "text",
-              }),
-            });
-            const data = await res.json();
-            translated = String(data?.translatedText || "").trim();
-          } catch {}
-
-          if (!translated) {
-            const fallbackUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(
-              target
-            )}&dt=t&q=${encodeURIComponent(text)}`;
-            const fallbackRes = await fetch(fallbackUrl);
-            const fallbackData = await fallbackRes.json();
-            const chunks = Array.isArray(fallbackData?.[0]) ? fallbackData[0] : [];
-            translated = chunks.map((chunk: any) => String(chunk?.[0] || "")).join("").trim();
-          }
-
-          if (translated) updates[post.id] = translated;
+          const translated = await translateWithFallback(text);
+          if (translated) textUpdates[post.id] = translated;
         } catch {}
       }
-      if (Object.keys(updates).length) {
-        setTranslatedPostById((prev) => ({ ...prev, ...updates }));
+
+      const questionUpdates: Record<string, string> = {};
+      for (const post of toTranslateQuestion) {
+        const text = String(post.question || "").trim();
+        try {
+          const translated = await translateWithFallback(text);
+          if (translated) questionUpdates[post.id] = translated;
+        } catch {}
+      }
+
+      if (Object.keys(textUpdates).length) {
+        setTranslatedPostById((prev) => ({ ...prev, ...textUpdates }));
+      }
+      if (Object.keys(questionUpdates).length) {
+        setTranslatedQuestionById((prev) => ({ ...prev, ...questionUpdates }));
       }
     };
     run().catch(() => {});
-  }, [posts, uid, localeCode, translatedPostById]);
+  }, [posts, uid, localeCode, translatedPostById, translatedQuestionById]);
 
   const getCardImage = (inputCardId?: string) => {
     if (!inputCardId) return null;
@@ -309,16 +357,26 @@ export default function CommunityScreen() {
       {
         text: i18n.t("buttons.delete"),
         style: "destructive",
-        onPress: () => deleteDoc(doc(db, "posts", postId)),
+        onPress: async () => {
+          try {
+            await deleteDoc(doc(db, "posts", postId));
+          } catch (err: any) {
+            const code = String(err?.code || "");
+            if (code.includes("permission-denied")) {
+              Alert.alert(
+                "Info",
+                "Dieser alte Post kann serverseitig nicht geloescht werden (Legacy-Besitzrechte in Firestore)."
+              );
+            } else {
+              Alert.alert("Error", "Post konnte nicht geloescht werden.");
+            }
+          }
+        },
       },
     ]);
   };
 
-  const tryDeletePost = (post: CommunityPost, isOwn: boolean) => {
-    if (!isOwn) {
-      Alert.alert("Info", i18n.t("community.delete_only_own"));
-      return;
-    }
+  const tryDeletePost = (post: CommunityPost) => {
     deletePost(post.id);
   };
 
@@ -557,9 +615,7 @@ export default function CommunityScreen() {
           keyboardShouldPersistTaps="handled"
         >
           {posts.map((post) => {
-            const isOwn =
-              (!!post.authorUid && post.authorUid === uid) ||
-              (!post.authorUid && !!nickname && post.authorName === nickname);
+            const isOwn = isOwnPost(post);
             const image = getCardImage(post.cardId);
             return (
               <View
@@ -583,7 +639,20 @@ export default function CommunityScreen() {
                 {image ? (
                   <Image source={image} style={styles.cardImage} resizeMode="contain" />
                 ) : null}
-                {post.question ? <Text style={styles.postQuestion}>{post.question}</Text> : null}
+                {post.question ? (
+                  <>
+                    <Text style={styles.postQuestion}>
+                      {(!isOwn && translatedQuestionById[post.id]) || post.question}
+                    </Text>
+                    {!isOwn &&
+                    translatedQuestionById[post.id] &&
+                    translatedQuestionById[post.id] !== post.question ? (
+                      <Text style={styles.postOriginalText}>
+                        {i18n.t("community.post_original_prefix")} {post.question}
+                      </Text>
+                    ) : null}
+                  </>
+                ) : null}
                 {post.journalText ? (
                   <>
                     <Text style={styles.postText}>
@@ -658,7 +727,7 @@ export default function CommunityScreen() {
                       <Text style={styles.privateReplyHint}>{i18n.t("community.private_reply_hint")}</Text>
                     </View>
                   ) : null}
-                  <Pressable style={styles.deleteBtn} onPress={() => tryDeletePost(post, isOwn)}>
+                  <Pressable style={styles.deleteBtn} onPress={() => tryDeletePost(post)}>
                     <Text style={styles.deleteBtnText}>🗑️ {i18n.t("buttons.delete")}</Text>
                   </Pressable>
                 </View>

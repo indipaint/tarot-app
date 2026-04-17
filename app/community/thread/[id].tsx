@@ -349,11 +349,9 @@ export default function PrivateThreadScreen() {
         <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>
           {messages.map((msg) => {
             const isOwn = msg.senderUid === uid;
-            const isIncoming = !isOwn;
             const translated = translatedByMsgId[msg.id];
             const showOriginal = !!showOriginalByMsgId[msg.id];
-            const displayText =
-              isIncoming && translated && !showOriginal ? translated : msg.text || "";
+            const displayText = translated && !showOriginal ? translated : msg.text || "";
             return (
               <View
                 key={msg.id}
@@ -361,34 +359,34 @@ export default function PrivateThreadScreen() {
               >
                 <View style={[styles.msgBubble, isOwn ? styles.msgBubbleOwn : styles.msgBubbleOther]}>
                   <Text style={styles.msgName}>{msg.senderName || i18n.t("thread.fallback_user")}</Text>
-                  <Text style={styles.msgText}>{displayText}</Text>
-                  {isIncoming ? (
-                    <View style={styles.msgActionsRow}>
+                  <Text selectable style={styles.msgText}>
+                    {displayText}
+                  </Text>
+                  <View style={styles.msgActionsRow}>
+                    <Pressable
+                      style={styles.msgActionBtn}
+                      onPress={() => translateMessage(msg)}
+                      disabled={!!isTranslatingByMsgId[msg.id]}
+                    >
+                      <Text style={styles.msgActionText}>
+                        {isTranslatingByMsgId[msg.id]
+                          ? i18n.t("thread.translating")
+                          : i18n.t("thread.translate")}
+                      </Text>
+                    </Pressable>
+                    {translated ? (
                       <Pressable
                         style={styles.msgActionBtn}
-                        onPress={() => translateMessage(msg)}
-                        disabled={!!isTranslatingByMsgId[msg.id]}
+                        onPress={() =>
+                          setShowOriginalByMsgId((prev) => ({ ...prev, [msg.id]: true }))
+                        }
                       >
-                        <Text style={styles.msgActionText}>
-                          {isTranslatingByMsgId[msg.id]
-                            ? i18n.t("thread.translating")
-                            : i18n.t("thread.translate")}
-                        </Text>
+                        <Text style={styles.msgActionText}>{i18n.t("thread.show_original")}</Text>
                       </Pressable>
-                      {translated ? (
-                        <Pressable
-                          style={styles.msgActionBtn}
-                          onPress={() =>
-                            setShowOriginalByMsgId((prev) => ({ ...prev, [msg.id]: true }))
-                          }
-                        >
-                          <Text style={styles.msgActionText}>{i18n.t("thread.show_original")}</Text>
-                        </Pressable>
-                      ) : null}
-                    </View>
-                  ) : null}
-                  {isIncoming && translated && !showOriginal ? (
-                    <Text style={styles.msgOriginal}>
+                    ) : null}
+                  </View>
+                  {translated && !showOriginal ? (
+                    <Text selectable style={styles.msgOriginal}>
                       {i18n.t("thread.original_prefix")} {msg.text || ""}
                     </Text>
                   ) : null}
