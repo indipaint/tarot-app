@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useMemo } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
+import { PanGestureHandler, PinchGestureHandler, State } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 // Karten laden (robust)
@@ -57,12 +58,85 @@ export default function CardById() {
   const name = card?.name ?? card?.title ?? "Unbenannt";
   const image = card?.image;
   const safeId = String(card?.id ?? idStr); // für Routes immer string
+  const [zoomValue] = useState(() => new Animated.Value(1));
+  const [pinchValue] = useState(() => new Animated.Value(1));
+  const [panX] = useState(() => new Animated.Value(0));
+  const [panY] = useState(() => new Animated.Value(0));
+  const [panEnabled, setPanEnabled] = useState(false);
+  const lastZoomRef = React.useRef(1);
+  const lastPanXRef = React.useRef(0);
+  const lastPanYRef = React.useRef(0);
+
+  const clampZoom = (value: number) => Math.max(1, Math.min(3.8, value));
+  const scale = Animated.multiply(zoomValue, pinchValue);
+  const onPinchGesture = Animated.event([{ nativeEvent: { scale: pinchValue } }], {
+    useNativeDriver: true,
+  });
+  const onPanGesture = Animated.event(
+    [{ nativeEvent: { translationX: panX, translationY: panY } }],
+    { useNativeDriver: true }
+  );
+  const onPinchStateChange = (event: any) => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      const next = clampZoom(lastZoomRef.current * Number(event.nativeEvent.scale || 1));
+      lastZoomRef.current = next;
+      zoomValue.setValue(next);
+      pinchValue.setValue(1);
+      setPanEnabled(next > 1.01);
+      if (next <= 1) {
+        lastPanXRef.current = 0;
+        lastPanYRef.current = 0;
+        panX.setOffset(0);
+        panY.setOffset(0);
+        panX.setValue(0);
+        panY.setValue(0);
+      }
+    }
+  };
+  const onPanStateChange = (event: any) => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      if (lastZoomRef.current <= 1) {
+        lastPanXRef.current = 0;
+        lastPanYRef.current = 0;
+      } else {
+        lastPanXRef.current += Number(event.nativeEvent.translationX || 0);
+        lastPanYRef.current += Number(event.nativeEvent.translationY || 0);
+      }
+      panX.setOffset(lastPanXRef.current);
+      panY.setOffset(lastPanYRef.current);
+      panX.setValue(0);
+      panY.setValue(0);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <View style={styles.container}>
         {image ? (
-          <Image source={image} style={styles.image} resizeMode="contain" />
+          <PanGestureHandler
+            enabled={panEnabled}
+            minPointers={1}
+            maxPointers={1}
+            onGestureEvent={onPanGesture}
+            onHandlerStateChange={onPanStateChange}
+          >
+            <Animated.View style={styles.imageWrap}>
+              <PinchGestureHandler
+                minPointers={2}
+                onGestureEvent={onPinchGesture}
+                onHandlerStateChange={onPinchStateChange}
+              >
+                <Animated.View
+                  style={[
+                    styles.imageWrap,
+                    { transform: [{ translateX: panX }, { translateY: panY }, { scale }] },
+                  ]}
+                >
+                  <Animated.Image source={image} style={styles.image} resizeMode="contain" />
+                </Animated.View>
+              </PinchGestureHandler>
+            </Animated.View>
+          </PanGestureHandler>
         ) : (
           <Text style={styles.err}>Kein Bild</Text>
         )}
@@ -89,6 +163,7 @@ export default function CardById() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#000" },
   container: { flex: 1, padding: 0, alignItems: "center", justifyContent: "flex-start" },
+  imageWrap: { width: "100%", flex: 1 },
   image: { width: "100%", flex: 1 },
   title: { color: "#888", marginTop: 10, fontSize: 16, letterSpacing: 1 },
   row: {

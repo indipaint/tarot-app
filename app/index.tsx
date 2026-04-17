@@ -19,6 +19,7 @@ import {
   TextInput,
   View
 } from "react-native";
+import { PanGestureHandler, PinchGestureHandler, State } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
@@ -91,6 +92,15 @@ export default function Index() {
   const [incomingIndex, setIncomingIndex] = useState<number | null>(null);
   const progress = useRef(new Animated.Value(0)).current;
   const locked = useRef(false);
+  const [cardPanEnabled, setCardPanEnabled] = useState(false);
+  const zoomValue = useRef(new Animated.Value(1)).current;
+  const pinchValue = useRef(new Animated.Value(1)).current;
+  const panX = useRef(new Animated.Value(0)).current;
+  const panY = useRef(new Animated.Value(0)).current;
+  const lastZoomRef = useRef(1);
+  const lastPanXRef = useRef(0);
+  const lastPanYRef = useRef(0);
+  const zoomActiveRef = useRef(false);
 
   const clampIndex = (i: number) => Math.max(0, Math.min(i, cards.length - 1));
 
@@ -157,6 +167,7 @@ export default function Index() {
     () => PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gs) => {
         if (locked.current) return false;
+        if (zoomActiveRef.current) return false;
         const x0 = evt.nativeEvent.pageX;
         if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
         const absDx = Math.abs(gs.dx);
@@ -165,6 +176,7 @@ export default function Index() {
       },
       onMoveShouldSetPanResponderCapture: (evt, gs) => {
         if (locked.current) return false;
+        if (zoomActiveRef.current) return false;
         const x0 = evt.nativeEvent.pageX;
         if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
         const absDx = Math.abs(gs.dx);
@@ -222,6 +234,48 @@ export default function Index() {
 
   const currentSource = (currentCard as any).image;
   const nextSource = nextCard ? (nextCard as any).image : null;
+  const cardScale = Animated.multiply(zoomValue, pinchValue);
+  const onCardPinchGesture = Animated.event([{ nativeEvent: { scale: pinchValue } }], {
+    useNativeDriver: true,
+  });
+  const onCardPanGesture = Animated.event(
+    [{ nativeEvent: { translationX: panX, translationY: panY } }],
+    { useNativeDriver: true }
+  );
+  const onCardPinchStateChange = (event: any) => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      const next = Math.max(1, Math.min(3.8, lastZoomRef.current * Number(event.nativeEvent.scale || 1)));
+      lastZoomRef.current = next;
+      zoomValue.setValue(next);
+      pinchValue.setValue(1);
+      const active = next > 1.01;
+      zoomActiveRef.current = active;
+      setCardPanEnabled(active);
+      if (!active) {
+        lastPanXRef.current = 0;
+        lastPanYRef.current = 0;
+        panX.setOffset(0);
+        panY.setOffset(0);
+        panX.setValue(0);
+        panY.setValue(0);
+      }
+    }
+  };
+  const onCardPanStateChange = (event: any) => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      if (!zoomActiveRef.current) {
+        lastPanXRef.current = 0;
+        lastPanYRef.current = 0;
+      } else {
+        lastPanXRef.current += Number(event.nativeEvent.translationX || 0);
+        lastPanYRef.current += Number(event.nativeEvent.translationY || 0);
+      }
+      panX.setOffset(lastPanXRef.current);
+      panY.setOffset(lastPanYRef.current);
+      panX.setValue(0);
+      panY.setValue(0);
+    }
+  };
 
   const saveJournalEntry = async () => {
     const entry = {
@@ -312,18 +366,41 @@ export default function Index() {
 
           {/* IMAGE BOX */}
           <View style={styles.imageBox}>
-            {nextSource ? (
-              <Animated.Image
-                source={nextSource}
-                style={[styles.imageAbs, { opacity: incomingOpacity }]}
-                resizeMode="contain"
-              />
-            ) : null}
-            <Animated.Image
-              source={currentSource}
-              style={[styles.imageAbs, { opacity: outgoingOpacity }]}
-              resizeMode="contain"
-            />
+            <PanGestureHandler
+              enabled={cardPanEnabled}
+              minPointers={1}
+              maxPointers={1}
+              onGestureEvent={onCardPanGesture}
+              onHandlerStateChange={onCardPanStateChange}
+            >
+              <Animated.View style={styles.imageAbs}>
+                <PinchGestureHandler
+                  minPointers={2}
+                  onGestureEvent={onCardPinchGesture}
+                  onHandlerStateChange={onCardPinchStateChange}
+                >
+                  <Animated.View
+                    style={[
+                      styles.imageAbs,
+                      { transform: [{ translateX: panX }, { translateY: panY }, { scale: cardScale }] },
+                    ]}
+                  >
+                    {nextSource ? (
+                      <Animated.Image
+                        source={nextSource}
+                        style={[styles.imageAbs, { opacity: incomingOpacity }]}
+                        resizeMode="contain"
+                      />
+                    ) : null}
+                    <Animated.Image
+                      source={currentSource}
+                      style={[styles.imageAbs, { opacity: outgoingOpacity }]}
+                      resizeMode="contain"
+                    />
+                  </Animated.View>
+                </PinchGestureHandler>
+              </Animated.View>
+            </PanGestureHandler>
             {(questionOverlayOpen || activeQuestion !== null) && (
               <BlurView
                 intensity={10}
@@ -372,7 +449,7 @@ export default function Index() {
                 disabled={sharingToCommunity}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
-                <Text style={styles.closeBtnText}>🃏 {i18n.t("buttons.share_community")}</Text>
+                <Text style={styles.closeBtnText}>{i18n.t("buttons.share_community")}</Text>
               </Pressable>
               <Pressable
                 onPress={() => router.push("/community" as any)}
