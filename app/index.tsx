@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
+import { Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
@@ -8,6 +9,7 @@ import {
   Animated,
   BackHandler,
   Dimensions,
+  Easing,
   Image,
   KeyboardAvoidingView,
   PanResponder,
@@ -28,13 +30,15 @@ import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n from "../src/i18n";
 
+const AnimatedExpoImage = Animated.createAnimatedComponent(ExpoImage);
+
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
 const EDGE_WIDTH = 18;
 const SWIPE_DISTANCE = 70;
 const SWIPE_VELOCITY = 0.35;
 const BUTTON_BAR_H = 76;
-const RITUAL_FADE_MS = 4000;
+const RITUAL_FADE_MS = Platform.OS === "ios" ? 1200 : 4000;
 const WELCOME_SCALE = 1.12;
 const WELCOME_TRANSLATE_Y = -177;
 const WELCOME_BTN_MARGIN_TOP = -266;
@@ -102,6 +106,20 @@ export default function Index() {
   const lastPanYRef = useRef(0);
   const zoomActiveRef = useRef(false);
 
+  const resetCardZoomPan = () => {
+    lastZoomRef.current = 1;
+    lastPanXRef.current = 0;
+    lastPanYRef.current = 0;
+    zoomActiveRef.current = false;
+    setCardPanEnabled(false);
+    zoomValue.setValue(1);
+    pinchValue.setValue(1);
+    panX.setOffset(0);
+    panY.setOffset(0);
+    panX.setValue(0);
+    panY.setValue(0);
+  };
+
   const clampIndex = (i: number) => Math.max(0, Math.min(i, cards.length - 1));
 
   const startRitualTo = (targetIndex: number) => {
@@ -109,6 +127,7 @@ export default function Index() {
     if (!cards.length) return;
     const nextIndex = clampIndex(targetIndex);
     if (nextIndex === index) return;
+    resetCardZoomPan();
     locked.current = true;
     setIncomingIndex(nextIndex);
     progress.stopAnimation();
@@ -116,6 +135,7 @@ export default function Index() {
     Animated.timing(progress, {
       toValue: 1,
       duration: RITUAL_FADE_MS,
+      easing: Platform.OS === "ios" ? Easing.out(Easing.cubic) : Easing.inOut(Easing.quad),
       useNativeDriver: true,
     }).start(({ finished }) => {
       if (!finished) {
@@ -375,7 +395,6 @@ export default function Index() {
             >
               <Animated.View style={styles.imageAbs}>
                 <PinchGestureHandler
-                  minPointers={2}
                   onGestureEvent={onCardPinchGesture}
                   onHandlerStateChange={onCardPinchStateChange}
                 >
@@ -384,18 +403,25 @@ export default function Index() {
                       styles.imageAbs,
                       { transform: [{ translateX: panX }, { translateY: panY }, { scale: cardScale }] },
                     ]}
+                    needsOffscreenAlphaCompositing={Platform.OS === "ios"}
                   >
                     {nextSource ? (
-                      <Animated.Image
+                      <ExpoImage
                         source={nextSource}
-                        style={[styles.imageAbs, { opacity: incomingOpacity }]}
-                        resizeMode="contain"
+                        style={styles.imageAbs}
+                        contentFit="contain"
+                        cachePolicy="memory-disk"
+                        recyclingKey={nextId ? `card-${nextId}` : "card-incoming"}
+                        transition={0}
                       />
                     ) : null}
-                    <Animated.Image
+                    <AnimatedExpoImage
                       source={currentSource}
                       style={[styles.imageAbs, { opacity: outgoingOpacity }]}
-                      resizeMode="contain"
+                      contentFit="contain"
+                      cachePolicy="memory-disk"
+                      recyclingKey={`card-${currentId}`}
+                      transition={0}
                     />
                   </Animated.View>
                 </PinchGestureHandler>
