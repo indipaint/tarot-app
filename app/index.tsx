@@ -1,8 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Asset } from "expo-asset";
 import { BlurView } from "expo-blur";
 import { Image as ExpoImage } from "expo-image";
-import * as ImageManipulator from "expo-image-manipulator";
 import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
 import { StatusBar } from "expo-status-bar";
@@ -26,6 +24,7 @@ import {
 } from "react-native";
 import { PanGestureHandler, PinchGestureHandler, State } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { captureRef } from "react-native-view-shot";
 import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
 import { getRandomQuestion } from "../src/data/questions";
@@ -76,7 +75,9 @@ export default function Index() {
   const [journalUnlocked, setJournalUnlocked] = useState(false);
   const [pinModalOpen, setPinModalOpen] = useState(false);
   const [sharingToCommunity, setSharingToCommunity] = useState(false);
+  const [shareWatermarkVisible, setShareWatermarkVisible] = useState(false);
   const lastShareAtRef = useRef(0);
+  const imageBoxCaptureRef = useRef<View | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -354,32 +355,29 @@ export default function Index() {
       await Share.share({ message: baseMessage });
       return;
     }
+    if (!currentSource) {
+      await Share.share({ message: baseMessage });
+      return;
+    }
+
     try {
-      if (!currentSource) {
+      setShareWatermarkVisible(true);
+
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      });
+
+      if (!imageBoxCaptureRef.current) {
         await Share.share({ message: baseMessage });
         return;
       }
 
-      let inputUri: string | undefined;
-      if (typeof currentSource === "number") {
-        const asset = Asset.fromModule(currentSource);
-        await asset.downloadAsync();
-        inputUri = asset.localUri ?? asset.uri ?? undefined;
-      } else {
-        const resolved = Image.resolveAssetSource(currentSource as any);
-        inputUri = resolved?.uri ?? undefined;
-      }
-
-      if (!inputUri) {
-        await Share.share({ message: baseMessage });
-        return;
-      }
-
-      const { uri: fileUri } = await ImageManipulator.manipulateAsync(
-        inputUri,
-        [],
-        { compress: 0.92, format: ImageManipulator.SaveFormat.JPEG }
-      );
+      const fileUri = await captureRef(imageBoxCaptureRef.current, {
+        format: "jpg",
+        quality: 0.92,
+        result: "tmpfile",
+        useRenderInContext: Platform.OS === "ios",
+      });
 
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(fileUri, {
@@ -391,6 +389,8 @@ export default function Index() {
       }
     } catch {
       // fall through
+    } finally {
+      setShareWatermarkVisible(false);
     }
 
     await Share.share({ message: baseMessage });
@@ -436,7 +436,7 @@ export default function Index() {
         <View style={styles.swipeArea} {...panResponder.panHandlers}>
 
           {/* IMAGE BOX */}
-          <View style={styles.imageBox}>
+          <View style={styles.imageBox} ref={imageBoxCaptureRef} collapsable={false}>
             <PanGestureHandler
               enabled={cardPanEnabled}
               minPointers={1}
@@ -487,6 +487,9 @@ export default function Index() {
                 pointerEvents="none"
               />
             )}
+            {shareWatermarkVisible ? (
+              <Text style={styles.shareImageWatermark}>ENDYIA  TAROT  APP</Text>
+            ) : null}
           </View>
 
           {/* FRAGE TEXT */}
@@ -891,5 +894,16 @@ const styles = StyleSheet.create({
   journalNavBtnText: {
     fontSize: 16,
     opacity: 0.6,
+  },
+  shareImageWatermark: {
+    position: "absolute",
+    left: "10%",
+    bottom: 10,
+    fontSize: 15,
+    letterSpacing: 1.2,
+    color: "rgba(255,255,255,1)",
+    textShadowColor: "rgba(0,0,1)",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 12,
   },
 });
