@@ -1,7 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Asset } from "expo-asset";
 import { BlurView } from "expo-blur";
 import { Image as ExpoImage } from "expo-image";
+import * as ImageManipulator from "expo-image-manipulator";
 import { useRouter } from "expo-router";
+import * as Sharing from "expo-sharing";
 import { StatusBar } from "expo-status-bar";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -345,6 +348,54 @@ export default function Index() {
     }
   };
 
+  const shareCurrentCard = async () => {
+    const baseMessage = `🃏 ${currentName}${activeQuestion ? `\n\n${activeQuestion}` : ""}`;
+    if (Platform.OS === "web") {
+      await Share.share({ message: baseMessage });
+      return;
+    }
+    try {
+      if (!currentSource) {
+        await Share.share({ message: baseMessage });
+        return;
+      }
+
+      let inputUri: string | undefined;
+      if (typeof currentSource === "number") {
+        const asset = Asset.fromModule(currentSource);
+        await asset.downloadAsync();
+        inputUri = asset.localUri ?? asset.uri ?? undefined;
+      } else {
+        const resolved = Image.resolveAssetSource(currentSource as any);
+        inputUri = resolved?.uri ?? undefined;
+      }
+
+      if (!inputUri) {
+        await Share.share({ message: baseMessage });
+        return;
+      }
+
+      const { uri: fileUri } = await ImageManipulator.manipulateAsync(
+        inputUri,
+        [],
+        { compress: 0.92, format: ImageManipulator.SaveFormat.JPEG }
+      );
+
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(fileUri, {
+          mimeType: "image/jpeg",
+          UTI: Platform.OS === "ios" ? "public.jpeg" : undefined,
+          dialogTitle: currentName,
+        });
+        return;
+      }
+    } catch {
+      // fall through
+    }
+
+    await Share.share({ message: baseMessage });
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
@@ -463,9 +514,7 @@ export default function Index() {
                 <Text style={styles.closeBtnText}>✍️ {i18n.t("buttons.journal")}</Text>
               </Pressable>
               <Pressable
-                onPress={() => Share.share({
-                  message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
-                })}
+                onPress={shareCurrentCard}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
                 <Text style={styles.closeBtnText}>↗️ {i18n.t("buttons.share")}</Text>
@@ -531,9 +580,7 @@ export default function Index() {
             </Pressable>
             <Pressable
               style={styles.journalNavBtn}
-              onPress={() => Share.share({
-                message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
-              })}
+              onPress={shareCurrentCard}
             >
               <Text style={styles.journalNavBtnText}>↗️</Text>
             </Pressable>

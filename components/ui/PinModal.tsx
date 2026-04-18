@@ -182,8 +182,9 @@ const styles = StyleSheet.create({
     borderColor: "#555",
   },
   btnText: {
-    color: "#ddd",
+    color: "#fff",
     fontSize: 13,
+    fontWeight: "600",
   },
   btnCancel: {
     backgroundColor: "#111",
@@ -195,7 +196,8 @@ const styles = StyleSheet.create({
     borderColor: "#2a2a2a",
   },
   btnCancelText: {
-    color: "#444",
+    color: "#fff",
     fontSize: 13,
+    fontWeight: "600",
   },
 });
