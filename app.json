@@ -15,6 +15,7 @@
     },
     "android": {
       "package": "com.indipaint.tarotapp",
+      "googleServicesFile": "./google-services.json",
       "backgroundColor": "#000000",
       "softwareKeyboardLayoutMode": "pan",
       "splash": {

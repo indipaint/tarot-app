@@ -36,6 +36,7 @@ import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n, { getLocale, subscribeLocale } from "../src/i18n";
 import { getLegalUrls } from "../src/legal";
+import { registerDevicePushToken } from "../src/pushNotifications";
 
 type PostType = "card" | "journal";
 type CommunityPost = {
@@ -124,7 +125,7 @@ export default function CommunityScreen() {
       const saved = await AsyncStorage.getItem("app_lang");
       if (saved) setLocaleCode(normalizeLang(saved));
     })();
-    const unsubscribe = subscribeLocale((lang) => {
+    const unsubscribe = subscribeLocale((lang: string) => {
       setLocaleCode(normalizeLang(lang));
     });
     return unsubscribe;
@@ -134,6 +135,7 @@ export default function CommunityScreen() {
     (async () => {
       try {
         const authUid = await ensureCommunityAuth();
+        await registerDevicePushToken(authUid);
         setUid(authUid);
 
         const [privacyV2, privacyLegacy, termsAccepted] = await Promise.all([
@@ -500,7 +502,6 @@ export default function CommunityScreen() {
             return bMs - aMs;
           });
           const bestId = merged[0].id;
-          console.log("BEST_THREAD_ID:", bestId);
           router.push(`/community/thread/${bestId}` as any);
           return;
         }
@@ -510,7 +511,6 @@ export default function CommunityScreen() {
 
       const [userA, userB] = [uid, targetUid].sort();
       const threadId = buildThreadId(userA, userB, post.id);
-      console.log("THREAD_ID:", threadId);
       const threadRef = doc(db, "threads", threadId);
       const existing = await getDoc(threadRef);
       if (!existing.exists()) {

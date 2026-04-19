@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { User, onAuthStateChanged, signInAnonymously } from "firebase/auth";
+import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import { auth } from "./firebase";
 
 /** Stellt eine Firebase-Anonymous-Session her; UID = community_uid (für Firestore Rules). */
@@ -25,13 +25,13 @@ export async function ensureCommunityAuth(): Promise<string> {
     };
 
     const timeoutId = setTimeout(finish, 2500);
-    unsub = onAuthStateChanged(auth, (user) => {
+    unsub = onAuthStateChanged(auth, (user: any) => {
       if (user) finish();
     });
   });
 
   if (auth.currentUser) {
-    const uid = auth.currentUser.uid;
+    const uid = (auth.currentUser as any).uid;
     await AsyncStorage.setItem("community_uid", uid);
     return uid;
   }

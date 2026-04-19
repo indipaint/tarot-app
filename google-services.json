@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "735998127433",
+    "project_id": "endyia-tarot",
+    "storage_bucket": "endyia-tarot.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735998127433:android:70ca22a0810420a966be98",
+        "android_client_info": {
+          "package_name": "com.indipaint.tarotapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp6hFLyBMYdF8qr5MEa_tcJVe1QE9SAyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
