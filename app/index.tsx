@@ -1,8 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
-import { Image as ExpoImage } from "expo-image";
 import { useRouter } from "expo-router";
-import * as Sharing from "expo-sharing";
 import { StatusBar } from "expo-status-bar";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -10,7 +8,6 @@ import {
   Animated,
   BackHandler,
   Dimensions,
-  Easing,
   Image,
   KeyboardAvoidingView,
   PanResponder,
@@ -22,9 +19,7 @@ import {
   TextInput,
   View
 } from "react-native";
-import { PanGestureHandler, PinchGestureHandler, State } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { captureRef } from "react-native-view-shot";
 import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
 import { getRandomQuestion } from "../src/data/questions";
@@ -32,15 +27,13 @@ import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n from "../src/i18n";
 
-const AnimatedExpoImage = Animated.createAnimatedComponent(ExpoImage);
-
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
 const EDGE_WIDTH = 18;
 const SWIPE_DISTANCE = 70;
 const SWIPE_VELOCITY = 0.35;
 const BUTTON_BAR_H = 76;
-const RITUAL_FADE_MS = Platform.OS === "ios" ? 1200 : 4000;
+const RITUAL_FADE_MS = 4000;
 const WELCOME_SCALE = 1.12;
 const WELCOME_TRANSLATE_Y = -177;
 const WELCOME_BTN_MARGIN_TOP = -266;
@@ -75,9 +68,7 @@ export default function Index() {
   const [journalUnlocked, setJournalUnlocked] = useState(false);
   const [pinModalOpen, setPinModalOpen] = useState(false);
   const [sharingToCommunity, setSharingToCommunity] = useState(false);
-  const [shareWatermarkVisible, setShareWatermarkVisible] = useState(false);
   const lastShareAtRef = useRef(0);
-  const imageBoxCaptureRef = useRef<View | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -100,29 +91,6 @@ export default function Index() {
   const [incomingIndex, setIncomingIndex] = useState<number | null>(null);
   const progress = useRef(new Animated.Value(0)).current;
   const locked = useRef(false);
-  const [cardPanEnabled, setCardPanEnabled] = useState(false);
-  const zoomValue = useRef(new Animated.Value(1)).current;
-  const pinchValue = useRef(new Animated.Value(1)).current;
-  const panX = useRef(new Animated.Value(0)).current;
-  const panY = useRef(new Animated.Value(0)).current;
-  const lastZoomRef = useRef(1);
-  const lastPanXRef = useRef(0);
-  const lastPanYRef = useRef(0);
-  const zoomActiveRef = useRef(false);
-
-  const resetCardZoomPan = () => {
-    lastZoomRef.current = 1;
-    lastPanXRef.current = 0;
-    lastPanYRef.current = 0;
-    zoomActiveRef.current = false;
-    setCardPanEnabled(false);
-    zoomValue.setValue(1);
-    pinchValue.setValue(1);
-    panX.setOffset(0);
-    panY.setOffset(0);
-    panX.setValue(0);
-    panY.setValue(0);
-  };
 
   const clampIndex = (i: number) => Math.max(0, Math.min(i, cards.length - 1));
 
@@ -131,7 +99,6 @@ export default function Index() {
     if (!cards.length) return;
     const nextIndex = clampIndex(targetIndex);
     if (nextIndex === index) return;
-    resetCardZoomPan();
     locked.current = true;
     setIncomingIndex(nextIndex);
     progress.stopAnimation();
@@ -139,7 +106,6 @@ export default function Index() {
     Animated.timing(progress, {
       toValue: 1,
       duration: RITUAL_FADE_MS,
-      easing: Platform.OS === "ios" ? Easing.out(Easing.cubic) : Easing.inOut(Easing.quad),
       useNativeDriver: true,
     }).start(({ finished }) => {
       if (!finished) {
@@ -191,7 +157,6 @@ export default function Index() {
     () => PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gs) => {
         if (locked.current) return false;
-        if (zoomActiveRef.current) return false;
         const x0 = evt.nativeEvent.pageX;
         if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
         const absDx = Math.abs(gs.dx);
@@ -200,7 +165,6 @@ export default function Index() {
       },
       onMoveShouldSetPanResponderCapture: (evt, gs) => {
         if (locked.current) return false;
-        if (zoomActiveRef.current) return false;
         const x0 = evt.nativeEvent.pageX;
         if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
         const absDx = Math.abs(gs.dx);
@@ -258,48 +222,6 @@ export default function Index() {
 
   const currentSource = (currentCard as any).image;
   const nextSource = nextCard ? (nextCard as any).image : null;
-  const cardScale = Animated.multiply(zoomValue, pinchValue);
-  const onCardPinchGesture = Animated.event([{ nativeEvent: { scale: pinchValue } }], {
-    useNativeDriver: true,
-  });
-  const onCardPanGesture = Animated.event(
-    [{ nativeEvent: { translationX: panX, translationY: panY } }],
-    { useNativeDriver: true }
-  );
-  const onCardPinchStateChange = (event: any) => {
-    if (event.nativeEvent.oldState === State.ACTIVE) {
-      const next = Math.max(1, Math.min(3.8, lastZoomRef.current * Number(event.nativeEvent.scale || 1)));
-      lastZoomRef.current = next;
-      zoomValue.setValue(next);
-      pinchValue.setValue(1);
-      const active = next > 1.01;
-      zoomActiveRef.current = active;
-      setCardPanEnabled(active);
-      if (!active) {
-        lastPanXRef.current = 0;
-        lastPanYRef.current = 0;
-        panX.setOffset(0);
-        panY.setOffset(0);
-        panX.setValue(0);
-        panY.setValue(0);
-      }
-    }
-  };
-  const onCardPanStateChange = (event: any) => {
-    if (event.nativeEvent.oldState === State.ACTIVE) {
-      if (!zoomActiveRef.current) {
-        lastPanXRef.current = 0;
-        lastPanYRef.current = 0;
-      } else {
-        lastPanXRef.current += Number(event.nativeEvent.translationX || 0);
-        lastPanYRef.current += Number(event.nativeEvent.translationY || 0);
-      }
-      panX.setOffset(lastPanXRef.current);
-      panY.setOffset(lastPanYRef.current);
-      panX.setValue(0);
-      panY.setValue(0);
-    }
-  };
 
   const saveJournalEntry = async () => {
     const entry = {
@@ -349,53 +271,6 @@ export default function Index() {
     }
   };
 
-  const shareCurrentCard = async () => {
-    const baseMessage = `🃏 ${currentName}${activeQuestion ? `\n\n${activeQuestion}` : ""}`;
-    if (Platform.OS === "web") {
-      await Share.share({ message: baseMessage });
-      return;
-    }
-    if (!currentSource) {
-      await Share.share({ message: baseMessage });
-      return;
-    }
-
-    try {
-      setShareWatermarkVisible(true);
-
-      await new Promise<void>((resolve) => {
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-      });
-
-      if (!imageBoxCaptureRef.current) {
-        await Share.share({ message: baseMessage });
-        return;
-      }
-
-      const fileUri = await captureRef(imageBoxCaptureRef.current, {
-        format: "jpg",
-        quality: 0.92,
-        result: "tmpfile",
-        useRenderInContext: Platform.OS === "ios",
-      });
-
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(fileUri, {
-          mimeType: "image/jpeg",
-          UTI: Platform.OS === "ios" ? "public.jpeg" : undefined,
-          dialogTitle: currentName,
-        });
-        return;
-      }
-    } catch {
-      // fall through
-    } finally {
-      setShareWatermarkVisible(false);
-    }
-
-    await Share.share({ message: baseMessage });
-  };
-
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
@@ -436,48 +311,19 @@ export default function Index() {
         <View style={styles.swipeArea} {...panResponder.panHandlers}>
 
           {/* IMAGE BOX */}
-          <View style={styles.imageBox} ref={imageBoxCaptureRef} collapsable={false}>
-            <PanGestureHandler
-              enabled={cardPanEnabled}
-              minPointers={1}
-              maxPointers={1}
-              onGestureEvent={onCardPanGesture}
-              onHandlerStateChange={onCardPanStateChange}
-            >
-              <Animated.View style={styles.imageAbs}>
-                <PinchGestureHandler
-                  onGestureEvent={onCardPinchGesture}
-                  onHandlerStateChange={onCardPinchStateChange}
-                >
-                  <Animated.View
-                    style={[
-                      styles.imageAbs,
-                      { transform: [{ translateX: panX }, { translateY: panY }, { scale: cardScale }] },
-                    ]}
-                    needsOffscreenAlphaCompositing={Platform.OS === "ios"}
-                  >
-                    {nextSource ? (
-                      <ExpoImage
-                        source={nextSource}
-                        style={styles.imageAbs}
-                        contentFit="contain"
-                        cachePolicy="memory-disk"
-                        recyclingKey={nextId ? `card-${nextId}` : "card-incoming"}
-                        transition={0}
-                      />
-                    ) : null}
-                    <AnimatedExpoImage
-                      source={currentSource}
-                      style={[styles.imageAbs, { opacity: outgoingOpacity }]}
-                      contentFit="contain"
-                      cachePolicy="memory-disk"
-                      recyclingKey={`card-${currentId}`}
-                      transition={0}
-                    />
-                  </Animated.View>
-                </PinchGestureHandler>
-              </Animated.View>
-            </PanGestureHandler>
+          <View style={styles.imageBox}>
+            {nextSource ? (
+              <Animated.Image
+                source={nextSource}
+                style={[styles.imageAbs, { opacity: incomingOpacity }]}
+                resizeMode="contain"
+              />
+            ) : null}
+            <Animated.Image
+              source={currentSource}
+              style={[styles.imageAbs, { opacity: outgoingOpacity }]}
+              resizeMode="contain"
+            />
             {(questionOverlayOpen || activeQuestion !== null) && (
               <BlurView
                 intensity={10}
@@ -487,9 +333,6 @@ export default function Index() {
                 pointerEvents="none"
               />
             )}
-            {shareWatermarkVisible ? (
-              <Text style={styles.shareImageWatermark}>ENDYIA  TAROT  APP</Text>
-            ) : null}
           </View>
 
           {/* FRAGE TEXT */}
@@ -517,7 +360,9 @@ export default function Index() {
                 <Text style={styles.closeBtnText}>✍️ {i18n.t("buttons.journal")}</Text>
               </Pressable>
               <Pressable
-                onPress={shareCurrentCard}
+                onPress={() => Share.share({
+                  message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
+                })}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
                 <Text style={styles.closeBtnText}>↗️ {i18n.t("buttons.share")}</Text>
@@ -527,7 +372,7 @@ export default function Index() {
                 disabled={sharingToCommunity}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
-                <Text style={styles.closeBtnText}>{i18n.t("buttons.share_community")}</Text>
+                <Text style={styles.closeBtnText}>🃏 {i18n.t("buttons.share_community")}</Text>
               </Pressable>
               <Pressable
                 onPress={() => router.push("/community" as any)}
@@ -583,7 +428,9 @@ export default function Index() {
             </Pressable>
             <Pressable
               style={styles.journalNavBtn}
-              onPress={shareCurrentCard}
+              onPress={() => Share.share({
+                message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
+              })}
             >
               <Text style={styles.journalNavBtnText}>↗️</Text>
             </Pressable>
@@ -894,16 +741,5 @@ const styles = StyleSheet.create({
   journalNavBtnText: {
     fontSize: 16,
     opacity: 0.6,
-  },
-  shareImageWatermark: {
-    position: "absolute",
-    left: "10%",
-    bottom: 10,
-    fontSize: 15,
-    letterSpacing: 1.2,
-    color: "rgba(255,255,255,1)",
-    textShadowColor: "rgba(0,0,1)",
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 12,
   },
 });

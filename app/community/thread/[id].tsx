@@ -12,6 +12,8 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  setDoc,
+  increment,
   updateDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -30,6 +32,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ensureCommunityAuth } from "../../../src/ensureCommunityAuth";
 import { db } from "../../../src/firebase";
 import i18n, { getLocale, subscribeLocale } from "../../../src/i18n";
+import { sendPushToUser } from "../../../src/pushNotifications";
 
 type ThreadMessage = {
   id: string;
@@ -57,6 +60,7 @@ export default function PrivateThreadScreen() {
   const threadId = String(params.id || "");
   const localeCode = normalizeLang(getLocale() || i18n.locale);
   const privacyConsentKey = `community_privacy_accepted_v2_${localeCode}`;
+  const communityAcceptedTermsKey = "community_accepted_terms";
 
   const [uid, setUid] = useState("");
   const [nickname, setNickname] = useState("");
@@ -84,13 +88,18 @@ export default function PrivateThreadScreen() {
 
   useEffect(() => {
     (async () => {
-      const [acceptedV2, acceptedLegacy] = await Promise.all([
+      const [acceptedV2, acceptedLegacy, termsAccepted] = await Promise.all([
         AsyncStorage.getItem(privacyConsentKey),
         AsyncStorage.getItem("community_privacy_accepted"),
+        AsyncStorage.getItem(communityAcceptedTermsKey),
       ]);
-      if (acceptedV2 !== "1" && acceptedLegacy !== "1") {
+      const accepted = acceptedV2 === "1" || acceptedLegacy === "1" || termsAccepted === "1";
+      if (!accepted) {
         router.replace("/community" as any);
         return;
+      }
+      if (accepted && termsAccepted !== "1") {
+        AsyncStorage.setItem(communityAcceptedTermsKey, "1").catch(() => {});
       }
       const storedUid = await ensureCommunityAuth();
       const storedNickname =
@@ -150,6 +159,15 @@ export default function PrivateThreadScreen() {
     return unsub;
   }, [threadId, allowed]);
 
+  useEffect(() => {
+    if (!uid) return;
+    setDoc(
+      doc(db, "community_users", uid),
+      { uid, unreadCount: 0, updatedAt: serverTimestamp() },
+      { merge: true }
+    ).catch(() => {});
+  }, [uid, threadId]);
+
   const translateMessage = async (msg: ThreadMessage) => {
     if (!msg.id || !msg.text || !msg.text.trim()) return;
     if (translatedByMsgId[msg.id]) {
@@ -206,10 +224,27 @@ export default function PrivateThreadScreen() {
   };
 
   const send = async () => {
-    if (!text.trim() || !threadId || !uid || !allowed || blocked) return;
+    if (!text.trim()) return;
+    if (!threadId) {
+      Alert.alert("Error", "Thread id is missing.");
+      return;
+    }
+    if (!uid) {
+      Alert.alert("Error", "Not signed in yet. Please wait a moment.");
+      return;
+    }
+    if (!allowed) {
+      Alert.alert("Error", "No access to this thread.");
+      return;
+    }
+    if (blocked) {
+      Alert.alert("Info", i18n.t("thread.blocked_info"));
+      return;
+    }
+    const messageText = text.trim();
     try {
       await addDoc(collection(db, "threads", threadId, "messages"), {
-        text: text.trim(),
+        text: messageText,
         senderUid: uid,
         senderName: nickname,
         createdAt: serverTimestamp(),
@@ -219,8 +254,24 @@ export default function PrivateThreadScreen() {
         lastMessageSenderUid: uid,
       }).catch(() => {});
       setText("");
-    } catch {
-      Alert.alert("Error", "Message could not be sent.");
+      if (peerUid) {
+        void setDoc(
+          doc(db, "community_users", peerUid),
+          { uid: peerUid, unreadCount: increment(1), updatedAt: serverTimestamp() },
+          { merge: true }
+        ).catch(() => {});
+        void sendPushToUser(peerUid, {
+          title: nickname || "New message",
+          body: messageText,
+          data: { threadId, kind: "community_thread" },
+        }).catch(() => {});
+      }
+    } catch (error: any) {
+      const message =
+        typeof error?.message === "string" && error.message.trim()
+          ? error.message
+          : "Message could not be sent.";
+      Alert.alert("Error", message);
     }
   };
 

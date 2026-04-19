@@ -67,6 +67,7 @@ export default function CommunityScreen() {
   };
   const [localeCode, setLocaleCode] = useState(() => normalizeLang(getLocale()));
   const privacyConsentKey = `community_privacy_accepted_v2_${localeCode}`;
+  const communityAcceptedTermsKey = "community_accepted_terms";
   const legalUrls = getLegalUrls(localeCode);
 
   const [uid, setUid] = useState("");
@@ -135,24 +136,83 @@ export default function CommunityScreen() {
         const authUid = await ensureCommunityAuth();
         setUid(authUid);
 
-        const [privacyV2, privacyLegacy] = await Promise.all([
+        const [privacyV2, privacyLegacy, termsAccepted] = await Promise.all([
           AsyncStorage.getItem(privacyConsentKey),
           AsyncStorage.getItem("community_privacy_accepted"),
+          AsyncStorage.getItem(communityAcceptedTermsKey),
         ]);
-        setPrivacyAccepted(privacyV2 === "1" || privacyLegacy === "1");
+        const accepted = privacyV2 === "1" || privacyLegacy === "1" || termsAccepted === "1";
+        setPrivacyAccepted(accepted);
+        if (accepted && termsAccepted !== "1") {
+          AsyncStorage.setItem(communityAcceptedTermsKey, "1").catch(() => {});
+        }
 
         const storedNickname = await AsyncStorage.getItem("community_nickname");
         if (storedNickname && storedNickname.trim().length > 1) {
           setNickname(storedNickname.trim());
           setNicknameSet(true);
         }
-      } catch {
-        setBootError("community_boot_error");
+      } catch (err: any) {
+        const msg =
+          typeof err?.message === "string" && err.message.trim()
+            ? err.message.trim()
+            : "community_boot_error";
+        setBootError(msg);
       } finally {
         setBootReady(true);
       }
     })();
   }, [privacyConsentKey]);
+
+  const retryBoot = () => {
+    setBootReady(false);
+    setBootError(null);
+    (async () => {
+      try {
+        const authUid = await ensureCommunityAuth();
+        setUid(authUid);
+
+        const [privacyV2, privacyLegacy, termsAccepted] = await Promise.all([
+          AsyncStorage.getItem(privacyConsentKey),
+          AsyncStorage.getItem("community_privacy_accepted"),
+          AsyncStorage.getItem(communityAcceptedTermsKey),
+        ]);
+        const accepted = privacyV2 === "1" || privacyLegacy === "1" || termsAccepted === "1";
+        setPrivacyAccepted(accepted);
+        if (accepted && termsAccepted !== "1") {
+          AsyncStorage.setItem(communityAcceptedTermsKey, "1").catch(() => {});
+        }
+
+        const storedNickname = await AsyncStorage.getItem("community_nickname");
+        if (storedNickname && storedNickname.trim().length > 1) {
+          setNickname(storedNickname.trim());
+          setNicknameSet(true);
+        }
+      } catch (err: any) {
+        const msg =
+          typeof err?.message === "string" && err.message.trim()
+            ? err.message.trim()
+            : "community_boot_error";
+        setBootError(msg);
+      } finally {
+        setBootReady(true);
+      }
+    })();
+  };
+
+  useEffect(() => {
+    if (!uid || !nicknameSet || !nickname.trim()) return;
+    setDoc(
+      doc(db, "community_users", uid),
+      {
+        uid,
+        nickname: nickname.trim(),
+        nicknameKey: normalizeAuthorName(nickname),
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    ).catch(() => {});
+  }, [uid, nicknameSet, nickname]);
 
   useEffect(() => {
     if (!nicknameSet) return;
@@ -382,15 +442,75 @@ export default function CommunityScreen() {
 
   const openPrivateThread = async (post: CommunityPost) => {
     if (!uid || !post.id) return;
-    if (!post.authorUid) {
-      Alert.alert("Info", i18n.t("community.private_unavailable"));
-      return;
-    }
-    if (post.authorUid === uid) return;
 
     try {
-      const [userA, userB] = [uid, post.authorUid].sort();
+      const postAuthorUid = String(post.authorUid || "").trim();
+      let targetUid = postAuthorUid;
+      const authorNameKey = normalizeAuthorName(String(post.authorName || ""));
+      if (authorNameKey) {
+        const byNameSnap = await getDocs(
+          query(collection(db, "community_users"), where("nicknameKey", "==", authorNameKey), limit(5))
+        ).catch(() => null);
+        const candidates = (byNameSnap?.docs || [])
+          .map((d) => String((d.data() as any)?.uid || d.id || "").trim())
+          .filter((id) => !!id && id !== uid);
+        if (candidates.length === 1) {
+          // If nickname resolves uniquely, prefer the resolved uid (handles anonymous uid rotation).
+          targetUid = candidates[0];
+        } else if (candidates.length > 1) {
+          // Prefer the post's author uid if it still matches a resolved profile; otherwise keep post uid.
+          if (postAuthorUid && candidates.includes(postAuthorUid)) {
+            targetUid = postAuthorUid;
+          }
+        }
+      }
+
+      if (!targetUid) {
+        Alert.alert("Info", i18n.t("community.private_unavailable"));
+        return;
+      }
+      if (targetUid === uid) return;
+
+      // If anonymous UIDs rotated, an older thread may already exist for this post.
+      // Prefer an existing thread for this post that includes the current user.
+      try {
+        const qA = query(
+          collection(db, "threads"),
+          where("basedOnPostId", "==", post.id),
+          where("userA", "==", uid),
+          limit(20)
+        );
+        const qB = query(
+          collection(db, "threads"),
+          where("basedOnPostId", "==", post.id),
+          where("userB", "==", uid),
+          limit(20)
+        );
+        const [snapA, snapB] = await Promise.all([getDocs(qA), getDocs(qB)]);
+        const seen = new Set<string>();
+        const merged = [...snapA.docs, ...snapB.docs].filter((d) => {
+          if (seen.has(d.id)) return false;
+          seen.add(d.id);
+          return true;
+        });
+        if (merged.length) {
+          merged.sort((a, b) => {
+            const aMs = Number((a.data() as any)?.lastMessageAt?.toMillis?.() || 0);
+            const bMs = Number((b.data() as any)?.lastMessageAt?.toMillis?.() || 0);
+            return bMs - aMs;
+          });
+          const bestId = merged[0].id;
+          console.log("BEST_THREAD_ID:", bestId);
+          router.push(`/community/thread/${bestId}` as any);
+          return;
+        }
+      } catch {
+        // fall through to deterministic thread id
+      }
+
+      const [userA, userB] = [uid, targetUid].sort();
       const threadId = buildThreadId(userA, userB, post.id);
+      console.log("THREAD_ID:", threadId);
       const threadRef = doc(db, "threads", threadId);
       const existing = await getDoc(threadRef);
       if (!existing.exists()) {
@@ -494,6 +614,7 @@ export default function CommunityScreen() {
     await AsyncStorage.setItem(privacyConsentKey, "1");
     // Keep compatibility for existing users/screens still reading the legacy key.
     await AsyncStorage.setItem("community_privacy_accepted", "1");
+    await AsyncStorage.setItem(communityAcceptedTermsKey, "1");
     setPrivacyAccepted(true);
   };
 
@@ -502,7 +623,7 @@ export default function CommunityScreen() {
       <SafeAreaView style={styles.nickSafe} edges={["top", "bottom"]}>
         <StatusBar style="light" />
         <View style={styles.nickContainer}>
-          <Text style={styles.bootText}>…</Text>
+          <Text style={styles.bootText}>Loading Community…</Text>
         </View>
       </SafeAreaView>
     );
@@ -513,7 +634,11 @@ export default function CommunityScreen() {
       <SafeAreaView style={styles.nickSafe} edges={["top", "bottom"]}>
         <StatusBar style="light" />
         <View style={styles.nickContainer}>
-          <Text style={styles.nickSubtitle}>Community unavailable right now.</Text>
+          <Text style={styles.nickTitle}>Community unavailable</Text>
+          <Text style={styles.nickSubtitle}>{bootError}</Text>
+          <Pressable style={styles.nickBtn} onPress={retryBoot}>
+            <Text style={styles.nickBtnText}>Retry</Text>
+          </Pressable>
           <Pressable style={styles.backBtnNick} onPress={() => router.back()}>
             <Text style={styles.backBtnText}>← {i18n.t("buttons.back")}</Text>
           </Pressable>
@@ -746,7 +871,7 @@ const styles = StyleSheet.create({
   nickContainer: { flex: 1, justifyContent: "flex-start", alignItems: "center", padding: 20, gap: 20 },
   nickTitle: { color: "#fff", fontSize: 28, textAlign: "center", letterSpacing: 2, marginBottom: 2 },
   nickSubtitle: { color: "#fcfbfb", fontSize: 15, textAlign: "center", marginBottom: 10 },
-  bootText: { color: "#666", fontSize: 14 },
+  bootText: { color: "#cfdcff", fontSize: 14 },
   privacyScroll: { padding: 20, paddingBottom: 40, gap: 14 },
   privacyTitle: {
     color: "#fff",
