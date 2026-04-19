@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
@@ -68,8 +68,30 @@ export default function Index() {
   const [journalUnlocked, setJournalUnlocked] = useState(false);
   const [pinModalOpen, setPinModalOpen] = useState(false);
   const [sharingToCommunity, setSharingToCommunity] = useState(false);
+  const [communityUnreadBadge, setCommunityUnreadBadge] = useState(0);
   const lastShareAtRef = useRef(0);
   const router = useRouter();
+
+  useEffect(() => {
+    let unsub: (() => void) | undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const authUid = await ensureCommunityAuth();
+        if (cancelled || !authUid) return;
+        unsub = onSnapshot(doc(db, "community_users", authUid), (snap) => {
+          const n = Number(snap.data()?.unreadCount ?? 0);
+          setCommunityUnreadBadge(Number.isFinite(n) && n > 0 ? Math.floor(n) : 0);
+        });
+      } catch {
+        setCommunityUnreadBadge(0);
+      }
+    })();
+    return () => {
+      cancelled = true;
+      unsub?.();
+    };
+  }, []);
 
   useEffect(() => {
     const sub = BackHandler.addEventListener("hardwareBackPress", () => {
@@ -414,6 +436,22 @@ export default function Index() {
         <View style={styles.questionBar}>
           <View style={{ flexDirection: "row", gap: 10, alignItems: "center", width: "100%" }}>
             <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
+            <View style={styles.communityNavWrap}>
+              <Pressable
+                style={styles.journalNavBtn}
+                accessibilityLabel={i18n.t("buttons.messenger")}
+                onPress={() => router.push("/community" as any)}
+              >
+                <Text style={styles.journalNavBtnText}>💬</Text>
+              </Pressable>
+              {communityUnreadBadge > 0 ? (
+                <View style={styles.communityBadge} pointerEvents="none">
+                  <Text style={styles.communityBadgeText}>
+                    {communityUnreadBadge > 99 ? "99+" : String(communityUnreadBadge)}
+                  </Text>
+                </View>
+              ) : null}
+            </View>
             <Pressable
               style={styles.journalNavBtn}
               onPress={() => {
@@ -737,6 +775,37 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     backgroundColor: "#000",
+  },
+  communityNavWrap: {
+    position: "relative",
+    flexShrink: 1,
+  },
+  communityBadge: {
+    position: "absolute",
+    top: -8,
+    right: -8,
+    minWidth: 27,
+    height: 27,
+    paddingHorizontal: 6,
+    borderRadius: 14,
+    backgroundColor: "#c62828",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#000",
+  },
+  communityBadgeText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "800",
+    textAlign: "center",
+    textAlignVertical: "center",
+    lineHeight: 15,
+    marginTop: Platform.OS === "ios" ? -1 : 0,
+    ...Platform.select({
+      android: { includeFontPadding: false },
+      default: {},
+    }),
   },
   journalNavBtnText: {
     fontSize: 16,
