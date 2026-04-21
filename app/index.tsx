@@ -424,10 +424,10 @@ export default function Index() {
 
         {/* DEUTUNG + ZIEH */}
         <View style={styles.buttonBar}>
-          <Pressable style={styles.btn} onPress={() => router.push(`/meaning/${currentId}` as any)}>
+          <Pressable style={[styles.btn, styles.meaningBtn]} onPress={() => router.push(`/meaning/${currentId}` as any)}>
             <Text style={styles.btnText} numberOfLines={1} adjustsFontSizeToFit>{i18n.t("buttons.meaning")}</Text>
           </Pressable>
-          <Pressable style={styles.btn} onPress={drawUnique}>
+          <Pressable style={[styles.btn, styles.drawBtn]} onPress={drawUnique}>
             <Text style={styles.btnText} numberOfLines={1} adjustsFontSizeToFit>{i18n.t("buttons.draw")}</Text>
           </Pressable>
         </View>
@@ -438,7 +438,7 @@ export default function Index() {
             <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
             <View style={styles.communityNavWrap}>
               <Pressable
-                style={styles.journalNavBtn}
+                style={styles.chatNavBtn}
                 accessibilityLabel={i18n.t("buttons.messenger")}
                 onPress={() => router.push("/community" as any)}
               >
@@ -627,34 +627,41 @@ const styles = StyleSheet.create({
   },
   buttonBar: {
     position: "absolute",
-    left: 0,
-    right: 0,
-    gap: 10,
+    left: 20,
+    right: 20,
+    gap: 8,
     bottom: 125,
     height: 55,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
-    paddingHorizontal: 40,
+    paddingHorizontal: 0,
     zIndex: 999,
     elevation: 999,
   },
   questionBar: {
     position: "absolute",
-    left: 40,
-    right: 41,
+    left: 20,
+    right: 20,
     bottom: 60,
     zIndex: 999,
     elevation: 999,
   },
   btn: {
-    flex: 1,
     borderWidth: 1,
     borderColor: "#666",
     paddingVertical: 6,
     paddingHorizontal: 15,
     borderRadius: 6,
     backgroundColor: "#000",
+  },
+  meaningBtn: {
+    flex: 1,
+    marginRight: 0,
+  },
+  drawBtn: {
+    width: 92,
+    marginLeft: 0,
   },
   btnText: { color: "#888", fontSize: 13, letterSpacing: 1, textAlign: "center" },
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
@@ -773,12 +780,22 @@ const styles = StyleSheet.create({
     borderColor: "#666",
     borderRadius: 6,
     paddingVertical: 6,
-    paddingHorizontal: 12,
+    minWidth: 46,
+    alignItems: "center",
+    backgroundColor: "#000",
+  },
+  chatNavBtn: {
+    borderWidth: 1,
+    borderColor: "#666",
+    borderRadius: 6,
+    paddingVertical: 6,
+    minWidth: 54,
+    alignItems: "center",
     backgroundColor: "#000",
   },
   communityNavWrap: {
     position: "relative",
-    flexShrink: 1,
+    flexShrink: 0,
   },
   communityBadge: {
     position: "absolute",

@@ -50,6 +50,14 @@ type CommunityPost = {
   lastReplyThreadId?: string;
 };
 
+type PrivateThreadPreview = {
+  id: string;
+  basedOnPostId?: string;
+  otherUid: string;
+  lastMessageAtMs: number;
+  unread: boolean;
+};
+
 const buildThreadId = (userA: string, userB: string, postId: string) =>
   `${userA}__${userB}__${postId}`;
 
@@ -86,6 +94,7 @@ export default function CommunityScreen() {
   const [translatedPostById, setTranslatedPostById] = useState<Record<string, string>>({});
   const [translatedQuestionById, setTranslatedQuestionById] = useState<Record<string, string>>({});
   const [unreadRefreshTick, setUnreadRefreshTick] = useState(0);
+  const [privateThreads, setPrivateThreads] = useState<PrivateThreadPreview[]>([]);
 
   const normalizeAuthorName = (value: string) =>
     String(value || "")
@@ -255,17 +264,33 @@ export default function CommunityScreen() {
 
       const nextByPost: Record<string, number> = {};
       let total = 0;
+      const previews: PrivateThreadPreview[] = [];
       for (const threadDoc of merged) {
         const data = threadDoc.data() as any;
         const postId = String(data?.basedOnPostId || "");
         const lastSender = String(data?.lastMessageSenderUid || "");
         const lastMs = Number(data?.lastMessageAt?.toMillis?.() || 0);
         const seenMs = seenMap[`thread_last_seen_${threadDoc.id}`] || 0;
-        if (postId && lastSender && lastSender !== uid && lastMs > seenMs) {
+        const userA = String(data?.userA || "");
+        const userB = String(data?.userB || "");
+        const otherUid = userA === uid ? userB : userA;
+        const unread = !!(lastSender && lastSender !== uid && lastMs > seenMs);
+        if (otherUid) {
+          previews.push({
+            id: threadDoc.id,
+            basedOnPostId: postId || undefined,
+            otherUid,
+            lastMessageAtMs: lastMs,
+            unread,
+          });
+        }
+        if (postId && unread) {
           nextByPost[postId] = (nextByPost[postId] || 0) + 1;
           total += 1;
         }
       }
+      previews.sort((a, b) => b.lastMessageAtMs - a.lastMessageAtMs);
+      setPrivateThreads(previews.slice(0, 8));
       setUnreadByPostId(nextByPost);
       setTotalUnreadThreads(total);
     };
@@ -311,17 +336,33 @@ export default function CommunityScreen() {
       for (const [key, val] of storedSeen) seenMap[key] = Number(val || 0);
       const nextByPost: Record<string, number> = {};
       let total = 0;
+      const previews: PrivateThreadPreview[] = [];
       for (const threadDoc of merged) {
         const data = threadDoc.data() as any;
         const postId = String(data?.basedOnPostId || "");
         const lastSender = String(data?.lastMessageSenderUid || "");
         const lastMs = Number(data?.lastMessageAt?.toMillis?.() || 0);
         const seenMs = seenMap[`thread_last_seen_${threadDoc.id}`] || 0;
-        if (postId && lastSender && lastSender !== uid && lastMs > seenMs) {
+        const userA = String(data?.userA || "");
+        const userB = String(data?.userB || "");
+        const otherUid = userA === uid ? userB : userA;
+        const unread = !!(lastSender && lastSender !== uid && lastMs > seenMs);
+        if (otherUid) {
+          previews.push({
+            id: threadDoc.id,
+            basedOnPostId: postId || undefined,
+            otherUid,
+            lastMessageAtMs: lastMs,
+            unread,
+          });
+        }
+        if (postId && unread) {
           nextByPost[postId] = (nextByPost[postId] || 0) + 1;
           total += 1;
         }
       }
+      previews.sort((a, b) => b.lastMessageAtMs - a.lastMessageAtMs);
+      setPrivateThreads(previews.slice(0, 8));
       setUnreadByPostId(nextByPost);
       setTotalUnreadThreads(total);
     };
@@ -467,12 +508,6 @@ export default function CommunityScreen() {
         }
       }
 
-      if (!targetUid) {
-        Alert.alert("Info", i18n.t("community.private_unavailable"));
-        return;
-      }
-      if (targetUid === uid) return;
-
       // If anonymous UIDs rotated, an older thread may already exist for this post.
       // Prefer an existing thread for this post that includes the current user.
       try {
@@ -507,6 +542,15 @@ export default function CommunityScreen() {
         }
       } catch {
         // fall through to deterministic thread id
+      }
+
+      if (!targetUid) {
+        Alert.alert("Info", i18n.t("community.private_unavailable"));
+        return;
+      }
+      if (targetUid === uid) {
+        Alert.alert("Info", i18n.t("community.private_unavailable"));
+        return;
       }
 
       const [userA, userB] = [uid, targetUid].sort();
@@ -739,6 +783,35 @@ export default function CommunityScreen() {
           contentContainerStyle={styles.feedContent}
           keyboardShouldPersistTaps="handled"
         >
+          {privateThreads.length ? (
+            <View style={styles.threadSection}>
+              <Text style={styles.threadSectionTitle}>Letzte private Chats</Text>
+              {privateThreads.map((thread) => {
+                const relatedPost = posts.find((p) => p.id === thread.basedOnPostId);
+                const labelBase =
+                  relatedPost?.authorName ||
+                  relatedPost?.question ||
+                  relatedPost?.journalText ||
+                  thread.otherUid;
+                const label = String(labelBase || thread.otherUid).slice(0, 44);
+                return (
+                  <Pressable
+                    key={thread.id}
+                    style={styles.threadRow}
+                    onPress={() => router.push(`/community/thread/${thread.id}` as any)}
+                  >
+                    <Text style={styles.threadRowText} numberOfLines={1}>
+                      {label}
+                    </Text>
+                    <View style={styles.threadMetaWrap}>
+                      {thread.unread ? <Text style={styles.threadUnreadDot}>●</Text> : null}
+                      <Text style={styles.threadOpenText}>Öffnen</Text>
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </View>
+          ) : null}
           {posts.map((post) => {
             const isOwn = isOwnPost(post);
             const image = getCardImage(post.cardId);
@@ -942,6 +1015,31 @@ const styles = StyleSheet.create({
   header: { flex: 1, color: "#fff", fontSize: 12, textAlign: "center", paddingVertical: 12, letterSpacing: 1 },
   feed: { flex: 1 },
   feedContent: { padding: 14, gap: 12 },
+  threadSection: {
+    borderWidth: 1,
+    borderColor: "#2f3a52",
+    borderRadius: 10,
+    backgroundColor: "#101826",
+    padding: 10,
+    gap: 8,
+  },
+  threadSectionTitle: { color: "#cfd7ff", fontSize: 11, letterSpacing: 0.8 },
+  threadRow: {
+    borderWidth: 1,
+    borderColor: "#3d4863",
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    backgroundColor: "#111c2d",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+  threadRowText: { color: "#d8def0", fontSize: 12, flex: 1 },
+  threadMetaWrap: { flexDirection: "row", alignItems: "center", gap: 6 },
+  threadUnreadDot: { color: "#ff6b6b", fontSize: 12, marginTop: -1 },
+  threadOpenText: { color: "#9fb0cc", fontSize: 11 },
   postRow: { width: "100%", flexDirection: "row" },
   postRowOwn: { justifyContent: "flex-end" },
   postRowOther: { justifyContent: "flex-start" },

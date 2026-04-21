@@ -18,13 +18,18 @@ export default function QuestionButton({ onPress }: Props) {
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 5,
-    flex: 1,
+    // Main width control for the bottom "Frage" button.
+    // flexGrow keeps it broad across phones, while min/max protects tiny/huge screens.
+    flexGrow: 2.1,
+    flexShrink: 1,
+    minWidth: 130,
+    maxWidth: 320,
     borderRadius: 3,
     backgroundColor: "rgba(4, 0, 0, 0.6)",
     alignItems: "center",
     paddingHorizontal: 1,
     borderWidth: 1,
-borderColor: "#666",
+    borderColor: "#666",
   },
   text: {
     color: "#7d7b7b",
