@@ -1,10 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Asset } from "expo-asset";
+import * as Sharing from "expo-sharing";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
-import React, { useCallback, useState } from "react";
-import { Alert, Animated, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useCallback, useMemo, useState } from "react";
+import { Alert, Animated, Image, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from "react-native";
 import { PanGestureHandler, PinchGestureHandler, State } from "react-native-gesture-handler";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { captureRef } from "react-native-view-shot";
 import i18n from "../src/i18n";
 
 type JournalEntry = {
@@ -18,13 +21,35 @@ type JournalEntry = {
   note: string;
 };
 
+function getCards(): any[] {
+  const mod = require("../src/data/cards");
+  const data = mod?.default ?? mod?.cards ?? mod;
+  return Array.isArray(data) ? data : [];
+}
+
+function buildJournalShareMessage(entry: JournalEntry): string {
+  const cardTitle = String(entry.cardTitle || "").trim();
+  const cardId = String(entry.cardId || "").trim();
+  const question = String(entry.question || "").trim();
+  const note = String(entry.note || "").trim();
+  const cardLine = cardId ? `${cardTitle} (${cardId})` : cardTitle;
+
+  return [
+    `🃏 ${cardLine || "Karte"}`,
+    question ? `\n❓ ${question}` : "",
+    note ? `\n📝 ${note}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
 export default function JournalScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const cards = useMemo(() => getCards(), []);
+  const entryCardRefs = React.useRef<Record<string, View | null>>({});
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editText, setEditText] = useState("");
   const [zoomValue] = useState(() => new Animated.Value(1));
   const [pinchValue] = useState(() => new Animated.Value(1));
   const [panX] = useState(() => new Animated.Value(0));
@@ -103,14 +128,60 @@ export default function JournalScreen() {
     );
   };
 
-  const saveEdit = async (id: string) => {
-    const updated = entries.map((e) =>
-      e.id === id ? { ...e, note: editText } : e
-    );
-    setEntries(updated);
-    await AsyncStorage.setItem("journal_entries", JSON.stringify(updated));
-    setEditingId(null);
-    setEditText("");
+  const updateEntryNote = (id: string, note: string) => {
+    setEntries((prev) => {
+      const updated = prev.map((e) => (e.id === id ? { ...e, note } : e));
+      AsyncStorage.setItem("journal_entries", JSON.stringify(updated)).catch(() => {});
+      return updated;
+    });
+  };
+
+  const getCardImageSource = (cardId: string): any | undefined => {
+    const card = cards.find((c: any) => String(c?.id) === String(cardId));
+    return card?.image;
+  };
+
+  const getCardShareUri = async (cardId: string): Promise<string | undefined> => {
+    const source = getCardImageSource(cardId);
+    if (!source) return undefined;
+    try {
+      const asset = Asset.fromModule(source);
+      await asset.downloadAsync();
+      return asset.localUri || asset.uri;
+    } catch {
+      const resolved = Image.resolveAssetSource(source);
+      return resolved?.uri;
+    }
+  };
+
+  const shareEntryWithCard = async (entry: JournalEntry) => {
+    const cardRef = entryCardRefs.current[entry.id];
+    if (cardRef) {
+      try {
+        const combinedUri = await captureRef(cardRef, {
+          format: "jpg",
+          quality: 0.95,
+          result: "tmpfile",
+          width: 1080,
+          height: 1350,
+        });
+        await Sharing.shareAsync(combinedUri, {
+          dialogTitle: entry.cardTitle || "Tarot",
+        });
+        return;
+      } catch {
+        // fallback below
+      }
+    }
+
+    const imageUri = await getCardShareUri(entry.cardId);
+    if (imageUri) {
+      await Sharing.shareAsync(imageUri, {
+        dialogTitle: entry.cardTitle || "Tarot",
+      });
+      return;
+    }
+    await Share.share({ message: buildJournalShareMessage(entry) });
   };
 
   return (
@@ -151,43 +222,34 @@ export default function JournalScreen() {
                     <Text style={styles.empty}>{i18n.t("journal_screen.empty")}</Text>
                   ) : (
                     entries.map((entry) => (
-                      <View key={entry.id} style={styles.card}>
+                      <View
+                        key={entry.id}
+                        ref={(node) => {
+                          entryCardRefs.current[entry.id] = node;
+                        }}
+                        collapsable={false}
+                        style={styles.card}
+                      >
                         <View style={styles.cardHeader}>
                           <Text style={styles.cardTitle}>{entry.cardTitle}</Text>
                           <Text style={styles.cardDate}>{entry.date} · {entry.time}</Text>
                         </View>
+                        {getCardImageSource(entry.cardId) ? (
+                          <Image source={getCardImageSource(entry.cardId)} style={styles.shareCardImage} resizeMode="cover" />
+                        ) : null}
                         {entry.question ? (
                           <Text style={styles.cardQuestion}>{entry.question}</Text>
                         ) : null}
 
-                        {editingId === entry.id ? (
-                          <View style={styles.editWrap}>
-                            <TextInput
-                              style={styles.editInput}
-                              value={editText}
-                              onChangeText={setEditText}
-                              multiline
-                              autoFocus
-                              textAlignVertical="top"
-                            />
-                            <View style={styles.editBtnRow}>
-                              <Pressable
-                                style={styles.cardBtn}
-                                onPress={() => saveEdit(entry.id)}
-                              >
-                                <Text style={styles.cardBtnText}>💾 {i18n.t("buttons.save")}</Text>
-                              </Pressable>
-                              <Pressable
-                                style={styles.cardBtn}
-                                onPress={() => { setEditingId(null); setEditText(""); }}
-                              >
-                                <Text style={styles.cardBtnText}>✕ {i18n.t("buttons.cancel")}</Text>
-                              </Pressable>
-                            </View>
-                          </View>
-                        ) : (
-                          <Text style={styles.cardNote}>{entry.note}</Text>
-                        )}
+                        <TextInput
+                          style={styles.cardNoteInput}
+                          value={entry.note}
+                          onChangeText={(value) => updateEntryNote(entry.id, value)}
+                          multiline
+                          textAlignVertical="top"
+                          placeholder="..."
+                          placeholderTextColor="#666"
+                        />
 
                         <View style={styles.cardActions}>
                           <Pressable
@@ -201,23 +263,6 @@ export default function JournalScreen() {
                             onPress={() => router.push(`/card/${entry.cardId}` as any)}
                           >
                             <Text style={styles.cardBtnText}>🃏 {i18n.t("buttons.view_card")}</Text>
-                          </Pressable>
-                          <Pressable
-                            style={styles.cardBtn}
-                            onPress={() => {
-                              setEditingId(entry.id);
-                              setEditText(entry.note);
-                            }}
-                          >
-                            <Text style={styles.cardBtnText}>✏️ {i18n.t("buttons.edit")}</Text>
-                          </Pressable>
-                          <Pressable
-                            style={styles.cardBtn}
-                            onPress={() => Share.share({
-                              message: `🃏 ${entry.cardTitle}\n\n${entry.question}\n\n${entry.note}`,
-                            })}
-                          >
-                            <Text style={styles.cardBtnText}>↗️ {i18n.t("buttons.share")}</Text>
                           </Pressable>
                           <Pressable
                             style={styles.deleteBtn}
@@ -258,6 +303,7 @@ const styles = StyleSheet.create({
   empty: { color: "#555", textAlign: "center", marginTop: 60, fontSize: 15 },
   card: {
     backgroundColor: "#1a1a1a", borderRadius: 12,
+    width: "100%",
     padding: 16, gap: 6, borderWidth: 1, borderColor: "#333",
   },
   cardHeader: {
@@ -267,14 +313,24 @@ const styles = StyleSheet.create({
   cardTitle: { color: "#aaa", fontSize: 16, fontWeight: "600", letterSpacing: 1 },
   cardDate: { color: "#777", fontSize: 13 },
   cardQuestion: { color: "#999", fontSize: 14, fontStyle: "italic", marginBottom: 4 },
-  cardNote: { color: "#ddd", fontSize: 17, lineHeight: 24 },
-  editWrap: { gap: 8 },
-  editInput: {
-    backgroundColor: "#222", color: "#fff", borderRadius: 8,
-    padding: 10, fontSize: 14, borderWidth: 1, borderColor: "#444",
-    minHeight: 80, textAlignVertical: "top",
+  shareCardImage: {
+    width: 90,
+    height: 144,
+    borderRadius: 8,
+    marginBottom: 6,
   },
-  editBtnRow: { flexDirection: "row", gap: 8 },
+  cardNoteInput: {
+    backgroundColor: "#222",
+    color: "#ddd",
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 17,
+    lineHeight: 24,
+    borderWidth: 1,
+    borderColor: "#444",
+    minHeight: 90,
+    textAlignVertical: "top",
+  },
   cardActions: { flexDirection: "column", gap: 8, marginTop: 8 },
   cardBtn: {
     borderWidth: 1, borderColor: "#444", borderRadius: 6,

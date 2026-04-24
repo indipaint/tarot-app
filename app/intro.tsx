@@ -3,12 +3,13 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const INTRO_DONE_ONCE_KEY = "__intro_done_once";
 
 export default function Intro() {
   const router = useRouter();
   const videoRef = useRef<Video>(null);
-
-  const [ready, setReady] = useState(false);
 
   // Schwarzer Curtain gegen White-Flash
   const curtain = useRef(new Animated.Value(0)).current;
@@ -22,11 +23,6 @@ export default function Intro() {
       shouldDuckAndroid: true,
     }).catch(() => {});
   }, []);
-
-  useEffect(() => {
-    if (!ready) return;
-    videoRef.current?.playAsync().catch(() => {});
-  }, [ready]);
 
   const startCurtainAndNavigate = () => {
     if (curtainStarted.current) return;
@@ -42,6 +38,7 @@ export default function Intro() {
     }).start(() => {
       if (navigated.current) return;
       navigated.current = true;
+      AsyncStorage.setItem(INTRO_DONE_ONCE_KEY, "1").catch(() => {});
       requestAnimationFrame(() => router.replace("/"));
     });
   };
@@ -55,10 +52,9 @@ export default function Intro() {
         source={require("../assets/images/intro/intro.mp4")}
         style={styles.video}
         resizeMode={ResizeMode.COVER}
-        shouldPlay={false}
+        shouldPlay
         isLooping={false}
         progressUpdateIntervalMillis={100}
-        onReadyForDisplay={() => setReady(true)}
         onPlaybackStatusUpdate={(status) => {
           if (!status.isLoaded) return;
 

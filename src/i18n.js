@@ -62,6 +62,10 @@ const translations = {
       post_type_journal: "📖 Tagebuch",
       post_type_card: "🃏 Karte",
       delete_only_own: "Du kannst nur deine eigenen Beiträge löschen.",
+      last_private_chats: "Letzte private Chats",
+      last_private_chats_empty:
+        "Noch keine auf diesem Gerät. Schreib jemandem unter einem Beitrag „Privat antworten“ — dann erscheint der Chat hier.",
+      thread_list_open: "Öffnen",
     },
     thread: {
       fallback_user: "User",
@@ -86,6 +90,10 @@ const translations = {
       delete_chat: "Chat löschen",
       delete_chat_title: "Chat löschen?",
       delete_chat_body: "Diesen privaten Chat inklusive Nachrichten komplett löschen?",
+      delete_chat_error_title: "Chat konnte nicht gelöscht werden",
+      block_sync_warning_title: "Blockliste nur auf diesem Gerät",
+      block_sync_warning_body:
+        "Die Cloud konnte deine Blockliste nicht speichern (Firestore-Berechtigung). Block wirkt hier, aber der andere kann dir ggf. noch schreiben, bis in den Firebase Rules Schreiben von blockedUids auf community_users erlaubt ist und andere Geräte die Liste lesen dürfen.",
     },
     cards: {
       "00": "Der Narr", "01": "Der Magier", "02": "Die Hohepriesterin",
@@ -179,6 +187,10 @@ const translations = {
       post_type_journal: "📖 Journal",
       post_type_card: "🃏 Card",
       delete_only_own: "You can only delete your own posts.",
+      last_private_chats: "Recent private chats",
+      last_private_chats_empty:
+        "None on this device yet. Use “Private reply” on someone’s post — the chat will show up here.",
+      thread_list_open: "Open",
     },
     thread: {
       fallback_user: "User",
@@ -203,6 +215,10 @@ const translations = {
       delete_chat: "Delete chat",
       delete_chat_title: "Delete chat?",
       delete_chat_body: "Delete this private chat including all messages?",
+      delete_chat_error_title: "Could not delete chat",
+      block_sync_warning_title: "Block list not saved to cloud",
+      block_sync_warning_body:
+        "Your block could not be written to Firestore (permission). It still applies on this device. To stop the other person across devices, allow users to write blockedUids on their own community_users document in Firebase rules, and allow authenticated reads of that field for send checks.",
     },
     cards: {
       "00": "The Fool", "01": "The Magician", "02": "The High Priestess",
@@ -296,6 +312,10 @@ const translations = {
       post_type_journal: "📖 Journal",
       post_type_card: "🃏 Carte",
       delete_only_own: "Tu peux supprimer uniquement tes propres posts.",
+      last_private_chats: "Derniers chats privés",
+      last_private_chats_empty:
+        "Aucun sur cet appareil. Utilise « Réponse privée » sous un post — le chat apparaîtra ici.",
+      thread_list_open: "Ouvrir",
     },
     thread: {
       fallback_user: "Utilisateur",
@@ -320,6 +340,10 @@ const translations = {
       delete_chat: "Supprimer le chat",
       delete_chat_title: "Supprimer le chat ?",
       delete_chat_body: "Supprimer ce chat prive et tous les messages ?",
+      delete_chat_error_title: "Suppression du chat impossible",
+      block_sync_warning_title: "Blocage local seulement",
+      block_sync_warning_body:
+        "La liste de blocage n'a pas pu être enregistrée dans Firestore (droits). Elle s'applique sur cet appareil. Pour bloquer partout, vérifie les règles Firebase (blockedUids sur community_users).",
     },
     cards: {
       "00": "Le Fou", "01": "Le Magicien", "02": "La Grande Prêtresse",
@@ -413,6 +437,10 @@ const translations = {
       post_type_journal: "📖 Diario",
       post_type_card: "🃏 Carta",
       delete_only_own: "Solo puedes eliminar tus propias publicaciones.",
+      last_private_chats: "Últimos chats privados",
+      last_private_chats_empty:
+        "Ninguno en este dispositivo. Usa «Respuesta privada» en una publicación — el chat aparecerá aquí.",
+      thread_list_open: "Abrir",
     },
     thread: {
       fallback_user: "Usuario",
@@ -437,6 +465,10 @@ const translations = {
       delete_chat: "Eliminar chat",
       delete_chat_title: "¿Eliminar chat?",
       delete_chat_body: "¿Eliminar este chat privado con todos los mensajes?",
+      delete_chat_error_title: "No se pudo eliminar el chat",
+      block_sync_warning_title: "Bloqueo solo en este dispositivo",
+      block_sync_warning_body:
+        "No se pudo guardar la lista de bloqueo en Firestore (permisos). Sigue activa aquí. Revisa las reglas de Firebase (blockedUids en community_users).",
     },
     cards: {
       "00": "El Loco", "01": "El Mago", "02": "La Sacerdotisa",
@@ -530,6 +562,10 @@ const translations = {
       post_type_journal: "📖 Diário",
       post_type_card: "🃏 Carta",
       delete_only_own: "So podes apagar as tuas proprias publicacoes.",
+      last_private_chats: "Últimos chats privados",
+      last_private_chats_empty:
+        "Nenhum neste dispositivo. Usa «Resposta privada» num post — o chat aparece aqui.",
+      thread_list_open: "Abrir",
     },
     thread: {
       fallback_user: "Utilizador",
@@ -554,6 +590,10 @@ const translations = {
       delete_chat: "Eliminar chat",
       delete_chat_title: "Eliminar chat?",
       delete_chat_body: "Eliminar este chat privado com todas as mensagens?",
+      delete_chat_error_title: "Nao foi possivel apagar o chat",
+      block_sync_warning_title: "Bloqueio so neste dispositivo",
+      block_sync_warning_body:
+        "A lista de bloqueio nao foi guardada no Firestore (permissoes). Continua valida aqui. Verifica as regras (blockedUids em community_users).",
     },
     cards: {
       "00": "O Louco", "01": "O Mago", "02": "A Sacerdotisa",

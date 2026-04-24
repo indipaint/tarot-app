@@ -33,10 +33,11 @@ export default function LanguageGate() {
     })();
   }, []);
 
-const choose = async (lang: "de" | "en" | "fr" | "es" | "pt") => {
+const choose = (lang: "de" | "en" | "fr" | "es" | "pt") => {
+    // iOS: sofortige Navigation, Locale/Storage asynchron nachziehen.
+    router.replace("/intro");
     setLocale(lang);
-    await AsyncStorage.setItem("app_lang", lang);
-    go(lang);
+    AsyncStorage.setItem("app_lang", lang).catch(() => {});
   };
 
   // ✅ Sichtbarer Loading Screen

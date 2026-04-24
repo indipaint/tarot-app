@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BlurView } from "expo-blur";
 import { useRouter } from "expo-router";
@@ -37,6 +38,8 @@ const RITUAL_FADE_MS = 4000;
 const WELCOME_SCALE = 1.12;
 const WELCOME_TRANSLATE_Y = -177;
 const WELCOME_BTN_MARGIN_TOP = -266;
+const INTRO_DONE_ONCE_KEY = "__intro_done_once";
+let redirectedToLanguageThisSession = false;
 
 function getCards(): any[] {
   const mod = require("../src/data/cards");
@@ -68,23 +71,41 @@ export default function Index() {
   const [journalUnlocked, setJournalUnlocked] = useState(false);
   const [pinModalOpen, setPinModalOpen] = useState(false);
   const [sharingToCommunity, setSharingToCommunity] = useState(false);
-  const [communityUnreadBadge, setCommunityUnreadBadge] = useState(0);
   const lastShareAtRef = useRef(0);
   const router = useRouter();
+  const [communityChatUnread, setCommunityChatUnread] = useState(0);
 
   useEffect(() => {
-    let unsub: (() => void) | undefined;
+    let cancelled = false;
+    (async () => {
+      const introDone = await AsyncStorage.getItem(INTRO_DONE_ONCE_KEY);
+      if (cancelled) return;
+      if (introDone === "1") {
+        await AsyncStorage.removeItem(INTRO_DONE_ONCE_KEY);
+        return;
+      }
+      if (!redirectedToLanguageThisSession) {
+        redirectedToLanguageThisSession = true;
+        router.replace("/language" as any);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
+
+  useEffect(() => {
+    let unsub: (() => void) | null = null;
     let cancelled = false;
     (async () => {
       try {
         const authUid = await ensureCommunityAuth();
         if (cancelled || !authUid) return;
         unsub = onSnapshot(doc(db, "community_users", authUid), (snap) => {
-          const n = Number(snap.data()?.unreadCount ?? 0);
-          setCommunityUnreadBadge(Number.isFinite(n) && n > 0 ? Math.floor(n) : 0);
+          setCommunityChatUnread(Math.max(0, Number(snap.data()?.unreadCount || 0)));
         });
       } catch {
-        setCommunityUnreadBadge(0);
+        setCommunityChatUnread(0);
       }
     })();
     return () => {
@@ -121,6 +142,13 @@ export default function Index() {
     if (!cards.length) return;
     const nextIndex = clampIndex(targetIndex);
     if (nextIndex === index) return;
+
+    // iOS fallback: avoid stuttering animation and switch cards instantly.
+    if (Platform.OS === "ios") {
+      setIndex(nextIndex);
+      return;
+    }
+
     locked.current = true;
     setIncomingIndex(nextIndex);
     progress.stopAnimation();
@@ -394,13 +422,7 @@ export default function Index() {
                 disabled={sharingToCommunity}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
-                <Text style={styles.closeBtnText}>🃏 {i18n.t("buttons.share_community")}</Text>
-              </Pressable>
-              <Pressable
-                onPress={() => router.push("/community" as any)}
-                style={[styles.closeBtn, { marginTop: 10 }]}
-              >
-                <Text style={styles.closeBtnText}>{i18n.t("buttons.messenger")}</Text>
+                <Text style={styles.closeBtnText}>{i18n.t("buttons.share_community")}</Text>
               </Pressable>
             </View>
           ) : null}
@@ -427,6 +449,13 @@ export default function Index() {
           <Pressable style={[styles.btn, styles.meaningBtn]} onPress={() => router.push(`/meaning/${currentId}` as any)}>
             <Text style={styles.btnText} numberOfLines={1} adjustsFontSizeToFit>{i18n.t("buttons.meaning")}</Text>
           </Pressable>
+          <Pressable
+            style={[styles.btn, styles.communityBtn]}
+            accessibilityLabel={i18n.t("community.center_title")}
+            onPress={() => router.push("/community" as any)}
+          >
+           <MaterialCommunityIcons name="earth" size={31} color="rgba(204, 203, 203, 0.6)" />
+          </Pressable>
           <Pressable style={[styles.btn, styles.drawBtn]} onPress={drawUnique}>
             <Text style={styles.btnText} numberOfLines={1} adjustsFontSizeToFit>{i18n.t("buttons.draw")}</Text>
           </Pressable>
@@ -436,18 +465,20 @@ export default function Index() {
         <View style={styles.questionBar}>
           <View style={{ flexDirection: "row", gap: 10, alignItems: "center", width: "100%" }}>
             <QuestionButton onPress={() => setQuestionOverlayOpen(true)} />
-            <View style={styles.communityNavWrap}>
+            <View style={styles.journalNavBtnWrap}>
               <Pressable
-                style={styles.chatNavBtn}
+                style={styles.journalNavBtn}
                 accessibilityLabel={i18n.t("buttons.messenger")}
-                onPress={() => router.push("/community" as any)}
+                onPress={() =>
+                  router.push({ pathname: "/community", params: { view: "chats" } } as any)
+                }
               >
                 <Text style={styles.journalNavBtnText}>💬</Text>
               </Pressable>
-              {communityUnreadBadge > 0 ? (
-                <View style={styles.communityBadge} pointerEvents="none">
-                  <Text style={styles.communityBadgeText}>
-                    {communityUnreadBadge > 99 ? "99+" : String(communityUnreadBadge)}
+              {communityChatUnread > 0 ? (
+                <View style={styles.chatUnreadBadge} accessibilityLabel={String(communityChatUnread)}>
+                  <Text style={styles.chatUnreadBadgeText}>
+                    {communityChatUnread > 99 ? "99+" : String(communityChatUnread)}
                   </Text>
                 </View>
               ) : null}
@@ -663,6 +694,16 @@ const styles = StyleSheet.create({
     width: 92,
     marginLeft: 0,
   },
+  communityBtn: {
+    width: 33,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 0,
+  },
+  communityBtnText: {
+    fontSize: 18,
+    color: "#b5b5b5",
+  },
   btnText: { color: "#888", fontSize: 13, letterSpacing: 1, textAlign: "center" },
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
   errorTitle: { color: "#fff", fontSize: 16, marginBottom: 10, textAlign: "center" },
@@ -775,6 +816,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#111",
     marginTop: -22,
   },
+  journalNavBtnWrap: {
+    position: "relative",
+  },
   journalNavBtn: {
     borderWidth: 1,
     borderColor: "#666",
@@ -784,23 +828,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#000",
   },
-  chatNavBtn: {
-    borderWidth: 1,
-    borderColor: "#666",
-    borderRadius: 6,
-    paddingVertical: 6,
-    minWidth: 54,
-    alignItems: "center",
-    backgroundColor: "#000",
-  },
-  communityNavWrap: {
-    position: "relative",
-    flexShrink: 0,
-  },
-  communityBadge: {
+  chatUnreadBadge: {
     position: "absolute",
-    top: -8,
-    right: -8,
+    right: -4,
+    top: -6,
     minWidth: 27,
     height: 27,
     paddingHorizontal: 6,
@@ -811,16 +842,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#000",
   },
-  communityBadgeText: {
+  chatUnreadBadgeText: {
     color: "#fff",
-    fontSize: 15,
-    fontWeight: "800",
+    fontSize: 10,
+    fontWeight: "700",
     textAlign: "center",
+    lineHeight: 11,
     textAlignVertical: "center",
-    lineHeight: 15,
-    marginTop: Platform.OS === "ios" ? -1 : 0,
     ...Platform.select({
-      android: { includeFontPadding: false },
+      android: { includeFontPadding: false, marginTop: -1 },
       default: {},
     }),
   },

@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
   collection,
@@ -36,6 +36,7 @@ import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n, { getLocale, subscribeLocale } from "../src/i18n";
 import { getLegalUrls } from "../src/legal";
+import { purgeCommunityThread } from "../src/purgeCommunityThread";
 import { registerDevicePushToken } from "../src/pushNotifications";
 
 type PostType = "card" | "journal";
@@ -61,6 +62,63 @@ type PrivateThreadPreview = {
 const buildThreadId = (userA: string, userB: string, postId: string) =>
   `${userA}__${userB}__${postId}`;
 
+/** All private threads for this post where the given uid is a participant (may be several ids). */
+async function listThreadIdsForPost(postId: string, uid: string): Promise<string[]> {
+  const me = String(uid || "").trim();
+  const pid = String(postId || "").trim();
+  if (!me || !pid) return [];
+  const qA = query(
+    collection(db, "threads"),
+    where("basedOnPostId", "==", pid),
+    where("userA", "==", me),
+    limit(30)
+  );
+  const qB = query(
+    collection(db, "threads"),
+    where("basedOnPostId", "==", pid),
+    where("userB", "==", me),
+    limit(30)
+  );
+  const [snapA, snapB] = await Promise.all([getDocs(qA), getDocs(qB)]);
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const d of [...snapA.docs, ...snapB.docs]) {
+    if (seen.has(d.id)) continue;
+    seen.add(d.id);
+    out.push(d.id);
+  }
+  return out;
+}
+
+/** UIDs blocked by the current user (local + Firestore), for unread / delivery UX. */
+async function loadMergedBlockedUids(meUid: string): Promise<Set<string>> {
+  const out = new Set<string>();
+  if (!meUid) return out;
+  try {
+    const raw = await AsyncStorage.getItem("blocked_uids");
+    const list = raw ? JSON.parse(raw) : [];
+    if (Array.isArray(list)) {
+      for (const x of list) {
+        if (typeof x === "string" && x.trim()) out.add(x.trim());
+      }
+    }
+  } catch {
+    /* ignore */
+  }
+  try {
+    const meSnap = await getDoc(doc(db, "community_users", meUid));
+    const arr = meSnap.data()?.blockedUids;
+    if (Array.isArray(arr)) {
+      for (const x of arr) {
+        if (typeof x === "string" && x.trim()) out.add(x.trim());
+      }
+    }
+  } catch {
+    /* ignore */
+  }
+  return out;
+}
+
 function getCards(): any[] {
   const mod = require("../src/data/cards");
   const data = mod?.default ?? mod?.cards ?? mod;
@@ -69,6 +127,8 @@ function getCards(): any[] {
 
 export default function CommunityScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ view?: string }>();
+  const chatsOnly = String(params?.view || "").toLowerCase() === "chats";
   const cards = useMemo(() => getCards(), []);
   const normalizeLang = (value?: string) => {
     const lang = String(value || "").toLowerCase().split("-")[0];
@@ -251,6 +311,7 @@ export default function CommunityScreen() {
         return true;
       });
       if (!merged.length) {
+        setPrivateThreads([]);
         setUnreadByPostId({});
         setTotalUnreadThreads(0);
         return;
@@ -265,6 +326,7 @@ export default function CommunityScreen() {
       const nextByPost: Record<string, number> = {};
       let total = 0;
       const previews: PrivateThreadPreview[] = [];
+      const blockedPeers = await loadMergedBlockedUids(uid);
       for (const threadDoc of merged) {
         const data = threadDoc.data() as any;
         const postId = String(data?.basedOnPostId || "");
@@ -274,7 +336,8 @@ export default function CommunityScreen() {
         const userA = String(data?.userA || "");
         const userB = String(data?.userB || "");
         const otherUid = userA === uid ? userB : userA;
-        const unread = !!(lastSender && lastSender !== uid && lastMs > seenMs);
+        const unreadRaw = !!(lastSender && lastSender !== uid && lastMs > seenMs);
+        const unread = unreadRaw && !blockedPeers.has(otherUid);
         if (otherUid) {
           previews.push({
             id: threadDoc.id,
@@ -337,6 +400,7 @@ export default function CommunityScreen() {
       const nextByPost: Record<string, number> = {};
       let total = 0;
       const previews: PrivateThreadPreview[] = [];
+      const blockedPeers = await loadMergedBlockedUids(uid);
       for (const threadDoc of merged) {
         const data = threadDoc.data() as any;
         const postId = String(data?.basedOnPostId || "");
@@ -346,7 +410,8 @@ export default function CommunityScreen() {
         const userA = String(data?.userA || "");
         const userB = String(data?.userB || "");
         const otherUid = userA === uid ? userB : userA;
-        const unread = !!(lastSender && lastSender !== uid && lastMs > seenMs);
+        const unreadRaw = !!(lastSender && lastSender !== uid && lastMs > seenMs);
+        const unread = unreadRaw && !blockedPeers.has(otherUid);
         if (otherUid) {
           previews.push({
             id: threadDoc.id,
@@ -462,6 +527,14 @@ export default function CommunityScreen() {
         style: "destructive",
         onPress: async () => {
           try {
+            const threadIds = await listThreadIdsForPost(postId, uid);
+            for (const tid of threadIds) {
+              try {
+                await purgeCommunityThread(tid);
+              } catch {
+                // Thread cleanup is best-effort (rules may differ from post delete).
+              }
+            }
             await deleteDoc(doc(db, "posts", postId));
           } catch (err: any) {
             const code = String(err?.code || "");
@@ -481,6 +554,27 @@ export default function CommunityScreen() {
 
   const tryDeletePost = (post: CommunityPost) => {
     deletePost(post.id);
+  };
+
+  const confirmDeleteThreadRow = (threadId: string) => {
+    Alert.alert(i18n.t("thread.delete_chat_title"), i18n.t("thread.delete_chat_body"), [
+      { text: i18n.t("buttons.cancel"), style: "cancel" },
+      {
+        text: i18n.t("buttons.delete"),
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await purgeCommunityThread(threadId);
+          } catch (e: any) {
+            const msg =
+              typeof e?.message === "string" && e.message.trim()
+                ? e.message.trim()
+                : String(e?.code || "unknown");
+            Alert.alert(i18n.t("thread.delete_chat_error_title"), msg);
+          }
+        },
+      },
+    ]);
   };
 
   const openPrivateThread = async (post: CommunityPost) => {
@@ -771,10 +865,20 @@ export default function CommunityScreen() {
           <Pressable style={styles.backBtn} onPress={() => router.back()}>
             <Text style={styles.backBtnText}>← {i18n.t("buttons.back")}</Text>
           </Pressable>
-          <Text style={styles.header}>
-            {i18n.t("community.center_title")}
-            {totalUnreadThreads > 0 ? `  🔴${totalUnreadThreads}` : ""}
-          </Text>
+          {chatsOnly ? (
+            <View style={styles.chatHeaderInline}>
+              <Text style={styles.chatHeaderGlobe}>🌍</Text>
+              <Text style={styles.chatHeaderTitle} numberOfLines={1}>
+                Endyia Chat
+                {totalUnreadThreads > 0 ? `  🔴${totalUnreadThreads}` : ""}
+              </Text>
+            </View>
+          ) : (
+            <Text style={styles.header}>
+              {i18n.t("community.center_title")}
+              {totalUnreadThreads > 0 ? `  🔴${totalUnreadThreads}` : ""}
+            </Text>
+          )}
           <View style={styles.backBtnPlaceholder} />
         </View>
 
@@ -783,36 +887,45 @@ export default function CommunityScreen() {
           contentContainerStyle={styles.feedContent}
           keyboardShouldPersistTaps="handled"
         >
-          {privateThreads.length ? (
+          {chatsOnly ? (
             <View style={styles.threadSection}>
-              <Text style={styles.threadSectionTitle}>Letzte private Chats</Text>
-              {privateThreads.map((thread) => {
-                const relatedPost = posts.find((p) => p.id === thread.basedOnPostId);
-                const labelBase =
-                  relatedPost?.authorName ||
-                  relatedPost?.question ||
-                  relatedPost?.journalText ||
-                  thread.otherUid;
-                const label = String(labelBase || thread.otherUid).slice(0, 44);
-                return (
-                  <Pressable
-                    key={thread.id}
-                    style={styles.threadRow}
-                    onPress={() => router.push(`/community/thread/${thread.id}` as any)}
-                  >
-                    <Text style={styles.threadRowText} numberOfLines={1}>
-                      {label}
-                    </Text>
-                    <View style={styles.threadMetaWrap}>
-                      {thread.unread ? <Text style={styles.threadUnreadDot}>●</Text> : null}
-                      <Text style={styles.threadOpenText}>Öffnen</Text>
+              <Text style={styles.threadSectionTitle}>{i18n.t("community.last_private_chats")}</Text>
+              {privateThreads.length ? (
+                privateThreads.map((thread) => {
+                  const relatedPost = posts.find((p) => p.id === thread.basedOnPostId);
+                  const thumb = getCardImage(relatedPost?.cardId);
+                  const labelBase =
+                    relatedPost?.authorName ||
+                    relatedPost?.question ||
+                    relatedPost?.journalText ||
+                    thread.otherUid;
+                  const label = String(labelBase || thread.otherUid).slice(0, 44);
+                  return (
+                    <View key={thread.id} style={styles.threadRowOuter}>
+                      <Pressable
+                        style={styles.threadRowMain}
+                        onPress={() => router.push(`/community/thread/${thread.id}` as any)}
+                      >
+                        {thumb ? <Image source={thumb} style={styles.threadThumb} resizeMode="contain" /> : null}
+                        <View style={styles.threadRowLabelWrap}>
+                          <Text style={styles.threadRowText} numberOfLines={1}>
+                            {label}
+                          </Text>
+                        </View>
+                        <View style={styles.threadMetaWrap}>
+                          {thread.unread ? <Text style={styles.threadUnreadDot}>●</Text> : null}
+                        </View>
+                      </Pressable>
                     </View>
-                  </Pressable>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <Text style={styles.threadSectionEmpty}>{i18n.t("community.last_private_chats_empty")}</Text>
+              )}
             </View>
           ) : null}
-          {posts.map((post) => {
+          {!chatsOnly
+            ? posts.map((post) => {
             const isOwn = isOwnPost(post);
             const image = getCardImage(post.cardId);
             return (
@@ -853,7 +966,12 @@ export default function CommunityScreen() {
                 ) : null}
                 {post.journalText ? (
                   <>
-                    <Text style={styles.postText}>
+                    <Text
+                      style={[
+                        styles.postText,
+                        isOwn ? styles.postTextOwnHighlight : styles.postTextOtherHighlight,
+                      ]}
+                    >
                       {(!isOwn && translatedPostById[post.id]) || post.journalText}
                     </Text>
                     {!isOwn &&
@@ -932,7 +1050,8 @@ export default function CommunityScreen() {
                 </View>
               </View>
             );
-          })}
+          })
+            : null}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -1013,6 +1132,23 @@ const styles = StyleSheet.create({
   backBtnText: { color: "#aaa", fontSize: 10 },
   backBtnPlaceholder: { width: 60 },
   header: { flex: 1, color: "#fff", fontSize: 12, textAlign: "center", paddingVertical: 12, letterSpacing: 1 },
+  chatHeaderInline: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+    minWidth: 0,
+    paddingHorizontal: 4,
+  },
+  chatHeaderGlobe: { fontSize: 14 },
+  chatHeaderTitle: {
+    color: "#fff",
+    fontSize: 11,
+    letterSpacing: 0.4,
+    textAlign: "center",
+    flexShrink: 1,
+  },
   feed: { flex: 1 },
   feedContent: { padding: 14, gap: 12 },
   threadSection: {
@@ -1024,22 +1160,39 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   threadSectionTitle: { color: "#cfd7ff", fontSize: 11, letterSpacing: 0.8 },
-  threadRow: {
+  threadSectionEmpty: { color: "#7a869e", fontSize: 12, lineHeight: 17 },
+  threadRowOuter: {
     borderWidth: 1,
     borderColor: "#3d4863",
     borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
     backgroundColor: "#111c2d",
+    flexDirection: "row",
+    alignItems: "stretch",
+    overflow: "hidden",
+  },
+  threadRowMain: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: 10,
+    paddingVertical: 8,
+    paddingLeft: 10,
+    paddingRight: 4,
+    minWidth: 0,
   },
+  threadThumb: {
+    width: 72,
+    height: 120,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#3d4863",
+    backgroundColor: "#0c121d",
+  },
+  threadRowLabelWrap: { flex: 1, minWidth: 0 },
   threadRowText: { color: "#d8def0", fontSize: 12, flex: 1 },
   threadMetaWrap: { flexDirection: "row", alignItems: "center", gap: 6 },
   threadUnreadDot: { color: "#ff6b6b", fontSize: 12, marginTop: -1 },
-  threadOpenText: { color: "#9fb0cc", fontSize: 11 },
   postRow: { width: "100%", flexDirection: "row" },
   postRowOwn: { justifyContent: "flex-end" },
   postRowOther: { justifyContent: "flex-start" },
@@ -1066,6 +1219,22 @@ const styles = StyleSheet.create({
   postType: { color: "#8fa0bf", fontSize: 10 },
   postQuestion: { color: "#dedede", fontSize: 13, lineHeight: 18 },
   postText: { color: "#c0c0c0", fontSize: 13, lineHeight: 20 },
+  postTextOwnHighlight: {
+    alignSelf: "flex-start",
+    backgroundColor: "#203a58",
+    color: "#d7e8ff",
+    borderRadius: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  postTextOtherHighlight: {
+    alignSelf: "flex-start",
+    backgroundColor: "#6b3d21",
+    color: "#f4ddc6",
+    borderRadius: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
   postOriginalText: { color: "#7f7f7f", fontSize: 10, lineHeight: 14, fontStyle: "italic" },
   cardImage: { width: 100, height: 165, borderRadius: 8, marginTop: 4 },
   row: { gap: 8, marginTop: 8 },

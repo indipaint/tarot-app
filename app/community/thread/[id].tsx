@@ -3,11 +3,12 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
   getDoc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -16,7 +17,7 @@ import {
   increment,
   updateDoc,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -31,6 +32,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ensureCommunityAuth } from "../../../src/ensureCommunityAuth";
 import { db } from "../../../src/firebase";
+import { purgeCommunityThread } from "../../../src/purgeCommunityThread";
 import i18n, { getLocale, subscribeLocale } from "../../../src/i18n";
 import { sendPushToUser } from "../../../src/pushNotifications";
 
@@ -74,6 +76,31 @@ export default function PrivateThreadScreen() {
   const [showOriginalByMsgId, setShowOriginalByMsgId] = useState<Record<string, boolean>>({});
   const [isTranslatingByMsgId, setIsTranslatingByMsgId] = useState<Record<string, boolean>>({});
   const [preferredLang, setPreferredLang] = useState(() => normalizeLang(getLocale()));
+  const listRef = useRef<ScrollView | null>(null);
+  const didInitialScrollRef = useRef(false);
+  const wasAtBottomRef = useRef(true);
+  const visibleCountRef = useRef(0);
+
+  const clearUnreadCount = async () => {
+    if (!uid) return;
+    try {
+      await updateDoc(doc(db, "community_users", uid), {
+        unreadCount: 0,
+        updatedAt: serverTimestamp(),
+      });
+    } catch {
+      await setDoc(
+        doc(db, "community_users", uid),
+        { uid, unreadCount: 0, updatedAt: serverTimestamp() },
+        { merge: true }
+      ).catch(() => {});
+    }
+  };
+
+  const visibleMessages = useMemo(() => {
+    if (!blocked || !peerUid) return messages;
+    return messages.filter((m) => m.senderUid !== peerUid);
+  }, [blocked, peerUid, messages]);
 
   useEffect(() => {
     (async () => {
@@ -119,12 +146,57 @@ export default function PrivateThreadScreen() {
       if (canAccess && data) {
         const other = data.userA === uid ? data.userB || "" : data.userA || "";
         setPeerUid(other);
-        const blockedRaw = await AsyncStorage.getItem("blocked_uids");
-        const blockedList: string[] = blockedRaw ? JSON.parse(blockedRaw) : [];
-        setBlocked(!!other && blockedList.includes(other));
+        let localList: string[] = [];
+        try {
+          const blockedRaw = await AsyncStorage.getItem("blocked_uids");
+          localList = blockedRaw ? JSON.parse(blockedRaw) : [];
+          if (!Array.isArray(localList)) localList = [];
+        } catch {
+          localList = [];
+        }
+        let remoteList: string[] = [];
+        let profileReadOk = false;
+        try {
+          const meSnap = await getDoc(doc(db, "community_users", uid));
+          profileReadOk = true;
+          const raw = meSnap.data()?.blockedUids;
+          if (Array.isArray(raw)) {
+            remoteList = raw.filter((x: unknown) => typeof x === "string") as string[];
+          }
+          if (
+            other &&
+            localList.includes(other) &&
+            !remoteList.includes(other)
+          ) {
+            try {
+              await setDoc(
+                doc(db, "community_users", uid),
+                { uid, blockedUids: arrayUnion(other), updatedAt: serverTimestamp() },
+                { merge: true }
+              );
+              remoteList = [...remoteList, other];
+            } catch {
+              // Write denied: UI still uses local block; sender check needs cloud list.
+            }
+          }
+        } catch {
+          // Firestore rules may omit read; local list still applies.
+        }
+        if (!profileReadOk) {
+          remoteList = [];
+        }
+        const merged = new Set([...localList, ...remoteList]);
+        setBlocked(!!other && merged.has(other));
       }
     })();
   }, [threadId, uid]);
+
+  useEffect(() => {
+    // Beim Öffnen eines Threads einmal unten starten (neueste Nachricht sichtbar).
+    didInitialScrollRef.current = false;
+    wasAtBottomRef.current = true;
+    visibleCountRef.current = 0;
+  }, [threadId]);
 
   useEffect(() => {
     if (!threadId || !allowed) return;
@@ -155,18 +227,16 @@ export default function PrivateThreadScreen() {
       const last = snap.docs[snap.docs.length - 1];
       const fallbackMs = Number((last?.data() as any)?.createdAt?.toMillis?.() || Date.now());
       markSeenFromThread(fallbackMs).catch(() => {});
+      clearUnreadCount().catch(() => {});
     });
     return unsub;
-  }, [threadId, allowed]);
+  }, [threadId, allowed, uid]);
 
+  // Nur lesen, wenn Thread-ID gültig und Zugriff bestätigt — sonst unreadCount fälschlich auf 0 (z. B. kurz threadId leer).
   useEffect(() => {
-    if (!uid) return;
-    setDoc(
-      doc(db, "community_users", uid),
-      { uid, unreadCount: 0, updatedAt: serverTimestamp() },
-      { merge: true }
-    ).catch(() => {});
-  }, [uid, threadId]);
+    if (!uid || !threadId || !allowed) return;
+    clearUnreadCount().catch(() => {});
+  }, [uid, threadId, allowed]);
 
   const translateMessage = async (msg: ThreadMessage) => {
     if (!msg.id || !msg.text || !msg.text.trim()) return;
@@ -241,6 +311,16 @@ export default function PrivateThreadScreen() {
       Alert.alert("Info", i18n.t("thread.blocked_info"));
       return;
     }
+    let suppressDeliveryToPeer = false;
+    if (peerUid) {
+      try {
+        const peerSnap = await getDoc(doc(db, "community_users", peerUid));
+        const peerBlocks = peerSnap.data()?.blockedUids;
+        suppressDeliveryToPeer = Array.isArray(peerBlocks) && peerBlocks.includes(uid);
+      } catch {
+        suppressDeliveryToPeer = false;
+      }
+    }
     const messageText = text.trim();
     try {
       await addDoc(collection(db, "threads", threadId, "messages"), {
@@ -254,7 +334,9 @@ export default function PrivateThreadScreen() {
         lastMessageSenderUid: uid,
       }).catch(() => {});
       setText("");
-      if (peerUid) {
+      // Wenn der Empfänger uns blockiert hat: Nachricht bleibt in Firebase (Absender sieht sie normal),
+      // aber kein Push und kein unreadCount — Empfänger-UI blendet sie ohnehin aus.
+      if (peerUid && !suppressDeliveryToPeer) {
         void setDoc(
           doc(db, "community_users", peerUid),
           { uid: peerUid, unreadCount: increment(1), updatedAt: serverTimestamp() },
@@ -276,23 +358,47 @@ export default function PrivateThreadScreen() {
   };
 
   const blockUser = async () => {
-    if (!peerUid) return;
+    if (!peerUid || !uid) return;
     const blockedRaw = await AsyncStorage.getItem("blocked_uids");
     const blockedList: string[] = blockedRaw ? JSON.parse(blockedRaw) : [];
     if (!blockedList.includes(peerUid)) {
       blockedList.push(peerUid);
       await AsyncStorage.setItem("blocked_uids", JSON.stringify(blockedList));
     }
+    try {
+      await setDoc(
+        doc(db, "community_users", uid),
+        { uid, blockedUids: arrayUnion(peerUid), updatedAt: serverTimestamp() },
+        { merge: true }
+      );
+    } catch (e: any) {
+      const code = String(e?.code || "");
+      if (code.includes("permission")) {
+        Alert.alert(
+          i18n.t("thread.block_sync_warning_title"),
+          i18n.t("thread.block_sync_warning_body")
+        );
+      }
+    }
     setBlocked(true);
     setMenuOpen(false);
   };
 
   const unblockUser = async () => {
-    if (!peerUid) return;
+    if (!peerUid || !uid) return;
     const blockedRaw = await AsyncStorage.getItem("blocked_uids");
     const blockedList: string[] = blockedRaw ? JSON.parse(blockedRaw) : [];
     const nextList = blockedList.filter((x) => x !== peerUid);
     await AsyncStorage.setItem("blocked_uids", JSON.stringify(nextList));
+    try {
+      await setDoc(
+        doc(db, "community_users", uid),
+        { uid, blockedUids: arrayRemove(peerUid), updatedAt: serverTimestamp() },
+        { merge: true }
+      );
+    } catch {
+      // Local unblock still applies for this device.
+    }
     setBlocked(false);
     setMenuOpen(false);
   };
@@ -331,15 +437,12 @@ export default function PrivateThreadScreen() {
         style: "destructive",
         onPress: async () => {
           try {
-            const msgSnap = await getDocs(collection(db, "threads", threadId, "messages"));
-            await Promise.all(
-              msgSnap.docs.map((d) => deleteDoc(doc(db, "threads", threadId, "messages", d.id)))
-            );
-            await deleteDoc(doc(db, "threads", threadId));
-            await AsyncStorage.removeItem(`thread_last_seen_${threadId}`);
+            await purgeCommunityThread(threadId);
             router.replace("/community" as any);
-          } catch {
-            Alert.alert("Error", "Chat could not be deleted.");
+          } catch (e: any) {
+            const code = String(e?.code || "");
+            const msg = typeof e?.message === "string" && e.message.trim() ? e.message.trim() : code || "unknown";
+            Alert.alert(i18n.t("thread.delete_chat_error_title"), msg);
           }
         },
       },
@@ -397,8 +500,42 @@ export default function PrivateThreadScreen() {
           </View>
         ) : null}
 
-        <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>
-          {messages.map((msg) => {
+        <ScrollView
+          ref={listRef}
+          style={styles.list}
+          contentContainerStyle={styles.listContent}
+          onScroll={(e) => {
+            const y = e.nativeEvent.contentOffset.y;
+            const vh = e.nativeEvent.layoutMeasurement.height;
+            const ch = e.nativeEvent.contentSize.height;
+            const distanceToBottom = ch - (y + vh);
+            wasAtBottomRef.current = distanceToBottom <= 28;
+          }}
+          scrollEventThrottle={16}
+          onContentSizeChange={() => {
+            const hasMessages = visibleMessages.length > 0;
+            const prevCount = visibleCountRef.current;
+            const hasNewMessage = visibleMessages.length > prevCount;
+            visibleCountRef.current = visibleMessages.length;
+
+            if (!hasMessages) return;
+
+            if (!didInitialScrollRef.current) {
+              didInitialScrollRef.current = true;
+              requestAnimationFrame(() => {
+                listRef.current?.scrollToEnd({ animated: false });
+              });
+              return;
+            }
+
+            if (hasNewMessage && wasAtBottomRef.current) {
+              requestAnimationFrame(() => {
+                listRef.current?.scrollToEnd({ animated: true });
+              });
+            }
+          }}
+        >
+          {visibleMessages.map((msg) => {
             const isOwn = msg.senderUid === uid;
             const translated = translatedByMsgId[msg.id];
             const showOriginal = !!showOriginalByMsgId[msg.id];
