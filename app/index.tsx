@@ -1,7 +1,10 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Asset } from "expo-asset";
 import { BlurView } from "expo-blur";
+import * as ImageManipulator from "expo-image-manipulator";
 import { useRouter } from "expo-router";
+import * as Sharing from "expo-sharing";
 import { StatusBar } from "expo-status-bar";
 import { addDoc, collection, doc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -61,6 +64,14 @@ function toRoman(n: number) {
     while (x >= v) { res += s; x -= v; }
   }
   return res;
+}
+
+function buildCardQuestionShareMessage(cardName: string, question: string | null): string {
+  const name = String(cardName || "").trim();
+  const q = String(question ?? "").trim();
+  const header = name ? `🃏 ${name} aus Endyia Tarot App` : "🃏 aus Endyia Tarot App";
+  if (!q) return header;
+  return `${header}\n\n${q}`;
 }
 
 export default function Index() {
@@ -321,6 +332,41 @@ export default function Index() {
     }
   };
 
+  const shareQuestionText = async () => {
+    const message = buildCardQuestionShareMessage(currentName, activeQuestion);
+    await Share.share({
+      message,
+      title: "Frage teilen",
+    });
+  };
+
+  const shareCurrentCardImage = async () => {
+    try {
+      const asset = Asset.fromModule(currentSource);
+      await asset.downloadAsync();
+      const imageUri = asset.localUri || asset.uri;
+      if (imageUri && (await Sharing.isAvailableAsync())) {
+        const exported = await ImageManipulator.manipulateAsync(
+          imageUri,
+          [],
+          { compress: 1, format: ImageManipulator.SaveFormat.PNG }
+        );
+        await Sharing.shareAsync(exported.uri, {
+          dialogTitle: currentName || "Tarot",
+          mimeType: "image/png",
+          UTI: "public.png",
+        });
+        return;
+      }
+    } catch {
+      // Fallback below keeps share working when image export fails.
+    }
+    await Share.share({
+      message: `🃏 ${currentName}`,
+      title: "Karte teilen",
+    });
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
@@ -410,12 +456,10 @@ export default function Index() {
                 <Text style={styles.closeBtnText}>✍️ {i18n.t("buttons.journal")}</Text>
               </Pressable>
               <Pressable
-                onPress={() => Share.share({
-                  message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
-                })}
+                onPress={shareQuestionText}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
-                <Text style={styles.closeBtnText}>↗️ {i18n.t("buttons.share")}</Text>
+                <Text style={styles.closeBtnText}>↗️ Frage teilen</Text>
               </Pressable>
               <Pressable
                 onPress={shareToCommunity}
@@ -497,9 +541,8 @@ export default function Index() {
             </Pressable>
             <Pressable
               style={styles.journalNavBtn}
-              onPress={() => Share.share({
-                message: `🃏 ${currentName}\n\n${activeQuestion ?? ""}`,
-              })}
+              accessibilityLabel="Karte teilen"
+              onPress={shareCurrentCardImage}
             >
               <Text style={styles.journalNavBtnText}>↗️</Text>
             </Pressable>

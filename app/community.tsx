@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -49,6 +48,7 @@ type CommunityPost = {
   question?: string;
   journalText?: string;
   lastReplyThreadId?: string;
+  createdAt?: any;
 };
 
 type PrivateThreadPreview = {
@@ -155,6 +155,8 @@ export default function CommunityScreen() {
   const [translatedQuestionById, setTranslatedQuestionById] = useState<Record<string, string>>({});
   const [unreadRefreshTick, setUnreadRefreshTick] = useState(0);
   const [privateThreads, setPrivateThreads] = useState<PrivateThreadPreview[]>([]);
+  const [seenPostIds, setSeenPostIds] = useState<Record<string, number>>({});
+  const seenPostsStorageKey = uid ? `community_seen_posts_${uid}` : "community_seen_posts";
 
   const normalizeAuthorName = (value: string) =>
     String(value || "")
@@ -176,6 +178,15 @@ export default function CommunityScreen() {
         !!myName &&
         (postName === myName || postName.includes(myName) || myName.includes(postName)))
     );
+  };
+
+  const getPostCreatedAtMs = (post: CommunityPost): number => {
+    const raw: any = post?.createdAt;
+    const fromMillis = Number(raw?.toMillis?.() || 0);
+    if (fromMillis > 0) return fromMillis;
+    const sec = Number(raw?.seconds || 0);
+    if (sec > 0) return sec * 1000;
+    return 0;
   };
 
   const markPostAsReadLocal = (postId: string) => {
@@ -299,6 +310,38 @@ export default function CommunityScreen() {
   }, [nicknameSet]);
 
   useEffect(() => {
+    if (!uid) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const stored = await AsyncStorage.getItem(seenPostsStorageKey);
+        if (cancelled) return;
+        const parsed = stored ? JSON.parse(stored) : {};
+        setSeenPostIds(parsed && typeof parsed === "object" ? parsed : {});
+      } catch {
+        if (!cancelled) setSeenPostIds({});
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [uid, seenPostsStorageKey]);
+
+  const markFeedPostAsSeen = (post: CommunityPost) => {
+    const postId = String(post.id || "").trim();
+    if (!postId || isOwnPost(post)) return;
+    const createdAtMs = getPostCreatedAtMs(post);
+    setSeenPostIds((prev) => {
+      const previousSeen = Number(prev[postId] || 0);
+      const nextSeen = Math.max(previousSeen, createdAtMs || Date.now());
+      if (previousSeen >= nextSeen) return prev;
+      const next = { ...prev, [postId]: nextSeen };
+      AsyncStorage.setItem(seenPostsStorageKey, JSON.stringify(next)).catch(() => {});
+      return next;
+    });
+  };
+
+  useEffect(() => {
     if (!uid || !nicknameSet) return;
     let docsA: any[] = [];
     let docsB: any[] = [];
@@ -374,12 +417,9 @@ export default function CommunityScreen() {
     };
   }, [uid, nicknameSet]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setUnreadRefreshTick((x) => x + 1);
-      return () => {};
-    }, [])
-  );
+  useEffect(() => {
+    setUnreadRefreshTick((x) => x + 1);
+  }, []);
 
   useEffect(() => {
     if (!uid || !nicknameSet) return;
@@ -927,16 +967,27 @@ export default function CommunityScreen() {
           {!chatsOnly
             ? posts.map((post) => {
             const isOwn = isOwnPost(post);
+            const postCreatedAtMs = getPostCreatedAtMs(post);
+            const seenAtMs = Number(seenPostIds[post.id] || 0);
+            const isNewFeedPost = !isOwn && postCreatedAtMs > 0 && postCreatedAtMs > seenAtMs;
             const image = getCardImage(post.cardId);
             return (
               <View
                 key={post.id}
                 style={[styles.postRow, isOwn ? styles.postRowOwn : styles.postRowOther]}
               >
-                <View style={[styles.postCard, isOwn ? styles.postCardOwn : styles.postCardOther]}>
+                <Pressable
+                  style={[styles.postCard, isOwn ? styles.postCardOwn : styles.postCardOther]}
+                  onPress={() => markFeedPostAsSeen(post)}
+                >
                 {(unreadByPostId[post.id] || 0) > 0 ? (
                   <View style={styles.postUnreadPill}>
                     <Text style={styles.postUnreadPillText}>● {unreadByPostId[post.id]}</Text>
+                  </View>
+                ) : null}
+                {isNewFeedPost ? (
+                  <View style={styles.postNewPill}>
+                    <Text style={styles.postNewPillText}>● NEU</Text>
                   </View>
                 ) : null}
                 <Text style={styles.postAuthor}>
@@ -1047,7 +1098,7 @@ export default function CommunityScreen() {
                     <Text style={styles.deleteBtnText}>🗑️ {i18n.t("buttons.delete")}</Text>
                   </Pressable>
                 </View>
-                </View>
+                </Pressable>
               </View>
             );
           })
@@ -1213,6 +1264,14 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   postUnreadPillText: { color: "#fff", fontSize: 10, fontWeight: "700" },
+  postNewPill: {
+    alignSelf: "flex-end",
+    backgroundColor: "#d10000",
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  postNewPillText: { color: "#fff", fontSize: 10, fontWeight: "700" },
   postCardOwn: { backgroundColor: "#152136", borderColor: "#3b4b66" },
   postCardOther: { backgroundColor: "#111", borderColor: "#303030" },
   postAuthor: { color: "#cfd7ff", fontSize: 11, letterSpacing: 1 },
