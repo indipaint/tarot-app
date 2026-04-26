@@ -4,11 +4,12 @@ import * as Sharing from "expo-sharing";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
-import { Alert, Animated, Image, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Animated, Image, Linking, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from "react-native";
 import { PanGestureHandler, PinchGestureHandler, State } from "react-native-gesture-handler";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { captureRef } from "react-native-view-shot";
 import i18n from "../src/i18n";
+import { getLegalUrls } from "../src/legal";
 
 type JournalEntry = {
   id: string;
@@ -43,6 +44,75 @@ function buildJournalShareMessage(entry: JournalEntry): string {
     .join("\n");
 }
 
+function normalizeLang(value?: string): "de" | "en" | "fr" | "es" | "pt" {
+  const lang = String(value || "").toLowerCase().split("-")[0];
+  if (lang === "en" || lang === "fr" || lang === "es" || lang === "pt") return lang;
+  return "de";
+}
+
+const COACH_CONSENT_COPY = {
+  de: {
+    title: "Live Coach Hinweis",
+    line1: "ENDYIA Coach dient der persönlichen Reflexion.",
+    line2: "Er ersetzt keine medizinische, psychologische, juristische oder finanzielle Beratung.",
+    line3: "Antworten werden automatisiert generiert und können unvollständig oder unzutreffend sein.",
+    line4: "ENDYIA Coach übernimmt keine Gewähr für Richtigkeit oder Vollständigkeit.",
+    line5: "Bei entsprechenden Anliegen wende dich bitte an qualifizierte Fachpersonen.",
+    checkbox: "Ich habe verstanden und stimme zu.",
+    terms: "Nutzungsbedingungen öffnen",
+    cancel: "Abbrechen",
+    confirm: "Ich stimme zu",
+  },
+  en: {
+    title: "Live Coach notice",
+    line1: "ENDYIA Coach is intended for personal reflection.",
+    line2: "It does not replace medical, psychological, legal, or financial advice.",
+    line3: "Responses are generated automatically and may be incomplete or inaccurate.",
+    line4: "ENDYIA Coach makes no guarantees regarding accuracy or completeness.",
+    line5: "For such matters, please consult qualified professionals.",
+    checkbox: "I understand and agree.",
+    terms: "Open terms of use",
+    cancel: "Cancel",
+    confirm: "I agree",
+  },
+  fr: {
+    title: "Information Live Coach",
+    line1: "ENDYIA Coach est destiné à la réflexion personnelle.",
+    line2: "Il ne remplace pas un avis médical, psychologique, juridique ou financier.",
+    line3: "Les réponses sont générées automatiquement et peuvent être incomplètes ou inexactes.",
+    line4: "ENDYIA Coach ne garantit pas l'exactitude ni l'exhaustivité.",
+    line5: "Pour ces sujets, veuillez consulter des professionnels qualifiés.",
+    checkbox: "J'ai compris et j'accepte.",
+    terms: "Ouvrir les conditions d'utilisation",
+    cancel: "Annuler",
+    confirm: "J'accepte",
+  },
+  es: {
+    title: "Aviso Live Coach",
+    line1: "ENDYIA Coach está destinado a la reflexión personal.",
+    line2: "No sustituye asesoramiento médico, psicológico, legal o financiero.",
+    line3: "Las respuestas se generan automáticamente y pueden ser incompletas o inexactas.",
+    line4: "ENDYIA Coach no garantiza la exactitud ni la integridad.",
+    line5: "Para estos temas, consulta a profesionales cualificados.",
+    checkbox: "He entendido y acepto.",
+    terms: "Abrir términos de uso",
+    cancel: "Cancelar",
+    confirm: "Acepto",
+  },
+  pt: {
+    title: "Aviso Live Coach",
+    line1: "ENDYIA Coach destina-se à reflexão pessoal.",
+    line2: "Nao substitui aconselhamento médico, psicológico, jurídico ou financeiro.",
+    line3: "As respostas são geradas automaticamente e podem ser incompletas ou imprecisas.",
+    line4: "ENDYIA Coach nao garante a exatidão ou integridade.",
+    line5: "Para estes assuntos, consulta profissionais qualificados.",
+    checkbox: "Compreendo e aceito.",
+    terms: "Abrir termos de uso",
+    cancel: "Cancelar",
+    confirm: "Aceito",
+  },
+} as const;
+
 export default function JournalScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -55,9 +125,16 @@ export default function JournalScreen() {
   const [panX] = useState(() => new Animated.Value(0));
   const [panY] = useState(() => new Animated.Value(0));
   const [panEnabled, setPanEnabled] = useState(false);
+  const [coachConsentOpen, setCoachConsentOpen] = useState(false);
+  const [coachConsentChecked, setCoachConsentChecked] = useState(false);
+  const [pendingLiveChatEntryId, setPendingLiveChatEntryId] = useState<string | null>(null);
   const lastZoomRef = React.useRef(1);
   const lastPanXRef = React.useRef(0);
   const lastPanYRef = React.useRef(0);
+  const localeCode = normalizeLang(i18n.locale);
+  const coachCopy = COACH_CONSENT_COPY[localeCode];
+  const coachTermsKey = `coach_terms_v1_${localeCode}`;
+  const legalUrls = getLegalUrls(localeCode);
 
   const clampZoom = (value: number) => Math.max(0.9, Math.min(1.6, value));
   const scale = Animated.multiply(zoomValue, pinchValue);
@@ -184,6 +261,43 @@ export default function JournalScreen() {
     await Share.share({ message: buildJournalShareMessage(entry) });
   };
 
+  const openTerms = async () => {
+    const target = String(legalUrls.terms || "").trim();
+    try {
+      if (!/^https?:\/\//i.test(target)) throw new Error("invalid_url");
+      const canOpen = await Linking.canOpenURL(target);
+      if (!canOpen) throw new Error("cannot_open");
+      await Linking.openURL(target);
+    } catch {
+      Alert.alert("Info", target || "URL invalid");
+    }
+  };
+
+  const openLiveChatWithConsent = async (entryId: string) => {
+    const accepted = await AsyncStorage.getItem(coachTermsKey);
+    if (accepted === "accepted") {
+      router.push({ pathname: "/live-chat", params: { entryId } } as any);
+      return;
+    }
+    setPendingLiveChatEntryId(entryId);
+    setCoachConsentChecked(false);
+    setCoachConsentOpen(true);
+  };
+
+  const acceptCoachConsent = async () => {
+    if (!coachConsentChecked) {
+      Alert.alert("Info", coachCopy.checkbox);
+      return;
+    }
+    await AsyncStorage.setItem(coachTermsKey, "accepted");
+    setCoachConsentOpen(false);
+    const entryId = pendingLiveChatEntryId;
+    setPendingLiveChatEntryId(null);
+    if (entryId) {
+      router.push({ pathname: "/live-chat", params: { entryId } } as any);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
       <View style={styles.container}>
@@ -254,7 +368,7 @@ export default function JournalScreen() {
                         <View style={styles.cardActions}>
                           <Pressable
                             style={styles.cardBtn}
-                            onPress={() => router.push({ pathname: "/live-chat", params: { entryId: entry.id } } as any)}
+                            onPress={() => openLiveChatWithConsent(entry.id)}
                           >
                             <Text style={styles.cardBtnText}>💬 Live Chat</Text>
                           </Pressable>
@@ -285,6 +399,47 @@ export default function JournalScreen() {
             <Text style={styles.bottomBtnText}>{i18n.t("buttons.back")}</Text>
           </Pressable>
         </View>
+
+        {coachConsentOpen ? (
+          <View style={styles.consentOverlay}>
+            <View style={styles.consentCard}>
+              <Text style={styles.consentTitle}>{coachCopy.title}</Text>
+              <Text style={styles.consentBody}>{coachCopy.line1}</Text>
+              <Text style={styles.consentBody}>{coachCopy.line2}</Text>
+              <Text style={styles.consentBody}>{coachCopy.line3}</Text>
+              <Text style={styles.consentBody}>{coachCopy.line4}</Text>
+              <Text style={styles.consentBody}>{coachCopy.line5}</Text>
+
+              <Pressable style={styles.consentTermsBtn} onPress={openTerms}>
+                <Text style={styles.consentTermsText}>{coachCopy.terms}</Text>
+              </Pressable>
+
+              <Pressable
+                style={styles.consentCheckboxRow}
+                onPress={() => setCoachConsentChecked((v) => !v)}
+              >
+                <Text style={styles.consentCheckbox}>{coachConsentChecked ? "☑" : "☐"}</Text>
+                <Text style={styles.consentCheckboxLabel}>{coachCopy.checkbox}</Text>
+              </Pressable>
+
+              <View style={styles.consentActions}>
+                <Pressable
+                  style={styles.consentActionBtn}
+                  onPress={() => {
+                    setCoachConsentOpen(false);
+                    setPendingLiveChatEntryId(null);
+                    setCoachConsentChecked(false);
+                  }}
+                >
+                  <Text style={styles.consentActionText}>{coachCopy.cancel}</Text>
+                </Pressable>
+                <Pressable style={styles.consentActionBtn} onPress={acceptCoachConsent}>
+                  <Text style={styles.consentActionText}>{coachCopy.confirm}</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -351,4 +506,38 @@ const styles = StyleSheet.create({
     paddingVertical: 2, paddingHorizontal: 10, backgroundColor: "#1a1a1a",
   },
   bottomBtnText: { color: "#777", fontSize: 10, letterSpacing: 1 },
+  consentOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.82)",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 18,
+    zIndex: 10000,
+  },
+  consentCard: {
+    width: "100%",
+    backgroundColor: "#161616",
+    borderWidth: 1,
+    borderColor: "#3a3a3a",
+    borderRadius: 12,
+    padding: 14,
+    gap: 8,
+  },
+  consentTitle: { color: "#fff", fontSize: 16, fontWeight: "700", marginBottom: 2 },
+  consentBody: { color: "#d2d2d2", fontSize: 13, lineHeight: 18 },
+  consentTermsBtn: { alignSelf: "flex-start", marginTop: 4 },
+  consentTermsText: { color: "#8fa6ff", fontSize: 13, textDecorationLine: "underline" },
+  consentCheckboxRow: { flexDirection: "row", alignItems: "flex-start", gap: 8, marginTop: 4 },
+  consentCheckbox: { color: "#d8d8d8", fontSize: 16, marginTop: 1 },
+  consentCheckboxLabel: { color: "#d8d8d8", fontSize: 13, lineHeight: 18, flex: 1 },
+  consentActions: { flexDirection: "row", justifyContent: "flex-end", gap: 10, marginTop: 6 },
+  consentActionBtn: {
+    borderWidth: 1,
+    borderColor: "#4a4a4a",
+    borderRadius: 6,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    backgroundColor: "#202020",
+  },
+  consentActionText: { color: "#cfcfcf", fontSize: 12 },
 });

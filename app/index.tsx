@@ -336,7 +336,7 @@ export default function Index() {
     const message = buildCardQuestionShareMessage(currentName, activeQuestion);
     await Share.share({
       message,
-      title: "Frage teilen",
+      title: i18n.t("buttons.share_question"),
     });
   };
 
@@ -363,7 +363,7 @@ export default function Index() {
     }
     await Share.share({
       message: `🃏 ${currentName}`,
-      title: "Karte teilen",
+      title: i18n.t("buttons.share_card"),
     });
   };
 
@@ -459,7 +459,7 @@ export default function Index() {
                 onPress={shareQuestionText}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
-                <Text style={styles.closeBtnText}>↗️ Frage teilen</Text>
+                <Text style={styles.closeBtnText}>↗️ {i18n.t("buttons.share_question")}</Text>
               </Pressable>
               <Pressable
                 onPress={shareToCommunity}
@@ -541,7 +541,7 @@ export default function Index() {
             </Pressable>
             <Pressable
               style={styles.journalNavBtn}
-              accessibilityLabel="Karte teilen"
+              accessibilityLabel={i18n.t("buttons.share_card")}
               onPress={shareCurrentCardImage}
             >
               <Text style={styles.journalNavBtnText}>↗️</Text>
@@ -645,7 +645,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 18,
     right: 18,
-    bottom: 300,
+    bottom: 380,
     alignItems: "center",
   },
   questionBtnRow: {
