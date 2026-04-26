@@ -401,7 +401,12 @@ export default function JournalScreen() {
         </View>
 
         {coachConsentOpen ? (
-          <View style={styles.consentOverlay}>
+          <View style={[styles.consentOverlay, { paddingTop: insets.top + 56 }]}>
+            <ScrollView
+              style={styles.consentScroll}
+              contentContainerStyle={styles.consentScrollContent}
+              showsVerticalScrollIndicator={true}
+            >
             <View style={styles.consentCard}>
               <Text style={styles.consentTitle}>{coachCopy.title}</Text>
               <Text style={styles.consentBody}>{coachCopy.line1}</Text>
@@ -438,6 +443,7 @@ export default function JournalScreen() {
                 </Pressable>
               </View>
             </View>
+            </ScrollView>
           </View>
         ) : null}
       </View>
@@ -510,9 +516,15 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0,0,0,0.82)",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     padding: 18,
     zIndex: 10000,
+  },
+  consentScroll: {
+    width: "100%",
+  },
+  consentScrollContent: {
+    paddingBottom: 24,
   },
   consentCard: {
     width: "100%",

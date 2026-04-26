@@ -1,9 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -30,15 +32,18 @@ type CoachMessage = {
 };
 
 const API_URL = process.env.EXPO_PUBLIC_COACH_API_URL || "";
+const chatHistoryKeyForEntry = (entryId: string) => `live_chat_history_${entryId}`;
 
 export default function LiveChatScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ entryId?: string }>();
   const entryId = String(params.entryId || "");
+  const listRef = React.useRef<ScrollView | null>(null);
 
   const [entry, setEntry] = useState<JournalEntry | null>(null);
   const [messages, setMessages] = useState<CoachMessage[]>([]);
   const [text, setText] = useState("");
+  const [inputHeight, setInputHeight] = useState(40);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
 
@@ -55,10 +60,43 @@ export default function LiveChatScreen() {
     })();
   }, [entryId]);
 
-  const intro = useMemo(() => {
-    if (!entry) return "Coach";
-    return `Coach · ${entry.cardTitle || "Tarot"}`;
-  }, [entry]);
+  useEffect(() => {
+    if (!entryId) return;
+    (async () => {
+      try {
+        const raw = await AsyncStorage.getItem(chatHistoryKeyForEntry(entryId));
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(parsed)) return;
+        const normalized: CoachMessage[] = parsed
+          .map((m: any) => ({
+            role: (m?.role === "assistant" ? "assistant" : "user") as "assistant" | "user",
+            text: String(m?.text || "").trim(),
+          }))
+          .filter((m) => !!m.text)
+          .slice(-50);
+        setMessages(normalized);
+      } catch {
+        // ignore invalid persisted history
+      }
+    })();
+  }, [entryId]);
+
+  useEffect(() => {
+    if (!entryId) return;
+    AsyncStorage.setItem(chatHistoryKeyForEntry(entryId), JSON.stringify(messages)).catch(() => {});
+  }, [entryId, messages]);
+
+  useEffect(() => {
+    const scrollToBottom = () => {
+      requestAnimationFrame(() => {
+        listRef.current?.scrollToEnd({ animated: true });
+      });
+    };
+    const showSub = Keyboard.addListener("keyboardDidShow", scrollToBottom);
+    return () => {
+      showSub.remove();
+    };
+  }, []);
 
   const send = async () => {
     const userText = text.trim();
@@ -106,6 +144,7 @@ export default function LiveChatScreen() {
       setSending(false);
     }
   };
+  const showSendButton = sending || text.trim().length > 0;
 
   if (loading) {
     return (
@@ -133,21 +172,28 @@ export default function LiveChatScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 6 : 0}
+      >
         <View style={styles.header}>
           <Pressable style={styles.backInline} onPress={() => router.back()}>
             <Text style={styles.backBtnText}>← {i18n.t("buttons.back")}</Text>
           </Pressable>
-          <Text style={styles.title}>{intro}</Text>
+          <Text style={styles.title}>Live Chat</Text>
           <View style={styles.rightPlaceholder} />
         </View>
 
-        <View style={styles.contextBox}>
-          <Text style={styles.contextTitle}>{entry.cardTitle}</Text>
-          {entry.question ? <Text style={styles.contextQuestion}>{entry.question}</Text> : null}
-        </View>
-
-        <ScrollView style={styles.list} contentContainerStyle={styles.listContent} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          ref={listRef}
+          style={styles.list}
+          contentContainerStyle={styles.listContent}
+          keyboardShouldPersistTaps="handled"
+          onContentSizeChange={() => {
+            listRef.current?.scrollToEnd({ animated: true });
+          }}
+        >
           {messages.length === 0 ? (
             <Text style={styles.empty}>Starte den Chat mit einer Frage zu deinem Eintrag.</Text>
           ) : (
@@ -161,16 +207,38 @@ export default function LiveChatScreen() {
 
         <View style={styles.inputRow}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { height: inputHeight }]}
             value={text}
             onChangeText={setText}
             placeholder="Nachricht an den Coach..."
             placeholderTextColor="#888"
             multiline
+            autoCapitalize="none"
+            autoCorrect={false}
+            spellCheck={false}
+            keyboardType={Platform.OS === "android" ? "visible-password" : "default"}
+            returnKeyType="send"
+            blurOnSubmit={false}
+            onSubmitEditing={send}
+            onContentSizeChange={(event) => {
+              const next = Math.max(40, Math.min(340, Math.ceil(event.nativeEvent.contentSize.height) + 10));
+              setInputHeight(next);
+            }}
           />
-          <Pressable style={[styles.sendBtn, sending ? styles.sendBtnDisabled : null]} onPress={send} disabled={sending}>
-            <Text style={styles.sendText}>{sending ? "..." : "Senden"}</Text>
-          </Pressable>
+          {showSendButton ? (
+            <Pressable
+              style={[styles.sendBtn, sending ? styles.sendBtnDisabled : null]}
+              onPress={send}
+              disabled={sending}
+              accessibilityLabel="Send"
+            >
+              {sending ? (
+                <Text style={styles.sendText}>...</Text>
+              ) : (
+                <MaterialCommunityIcons name="send" size={18} color="#fff" />
+              )}
+            </Pressable>
+          ) : null}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -196,17 +264,6 @@ const styles = StyleSheet.create({
   backBtnText: { color: "#aaa", fontSize: 11 },
   backInline: { paddingVertical: 4, paddingRight: 10 },
   rightPlaceholder: { width: 42 },
-  contextBox: {
-    margin: 12,
-    borderWidth: 1,
-    borderColor: "#2a2a2a",
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: "#111",
-    gap: 4,
-  },
-  contextTitle: { color: "#b9c7de", fontSize: 12 },
-  contextQuestion: { color: "#9a9a9a", fontSize: 11, fontStyle: "italic" },
   list: { flex: 1 },
   listContent: { padding: 12, gap: 8 },
   empty: { color: "#666", fontSize: 12, textAlign: "center", marginTop: 24 },
@@ -228,16 +285,23 @@ const styles = StyleSheet.create({
     color: "#fff",
     borderWidth: 1,
     borderColor: "#3a3a3a",
-    borderRadius: 8,
-    padding: 10,
-    maxHeight: 120,
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    fontSize: 12,
+    lineHeight: 16,
+    textAlignVertical: "center",
+    minHeight: 40,
+    maxHeight: 340,
   },
   sendBtn: {
+    width: 40,
+    height: 40,
     borderWidth: 1,
     borderColor: "#486fb7",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#1b3b72",
   },
   sendBtnDisabled: { opacity: 0.6 },
