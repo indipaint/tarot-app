@@ -346,6 +346,7 @@ export default function PrivateThreadScreen() {
           title: nickname || "New message",
           body: messageText,
           data: { threadId, kind: "community_thread" },
+          badge: 1,
         }).catch(() => {});
       }
     } catch (error: any) {
