@@ -3,6 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 import { PanGestureHandler, PinchGestureHandler, State } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import i18n from "../../src/i18n";
 
 // Karten laden (robust)
 function getCards(): any[] {
@@ -47,17 +48,19 @@ export default function CardById() {
   if (!card) {
     return (
       <SafeAreaView style={styles.safe} edges={[]}>
-        <Text style={styles.err}>Karte nicht gefunden (id: {idStr})</Text>
+          <Text style={styles.err}>Card not found (id: {idStr})</Text>
         <Pressable style={styles.btn} onPress={() => router.back()}>
-          <Text style={styles.btnText}>Zurück</Text>
+            <Text style={styles.btnText}>{i18n.t("buttons.back")}</Text>
         </Pressable>
       </SafeAreaView>
     );
   }
 
-  const name = card?.name ?? card?.title ?? "Unbenannt";
-  const image = card?.image;
   const safeId = String(card?.id ?? idStr); // für Routes immer string
+  const name = i18n.t(`cards.${safeId}`, {
+    defaultValue: card?.name ?? card?.title ?? "Card",
+  });
+  const image = card?.image;
   const [zoomValue] = useState(() => new Animated.Value(1));
   const [pinchValue] = useState(() => new Animated.Value(1));
   const [panX] = useState(() => new Animated.Value(0));
@@ -138,21 +141,21 @@ export default function CardById() {
             </Animated.View>
           </PanGestureHandler>
         ) : (
-          <Text style={styles.err}>Kein Bild</Text>
+          <Text style={styles.err}>No image</Text>
         )}
 
         <Text style={styles.title}>{name}</Text>
 
         <View style={styles.row}>
           <Pressable style={styles.btn} onPress={() => router.back()}>
-            <Text style={styles.btnText}>Zurück</Text>
+            <Text style={styles.btnText}>{i18n.t("buttons.back")}</Text>
           </Pressable>
 
           <Pressable
             style={styles.btn}
             onPress={() => router.push(`/meaning/${safeId}` as any)}
           >
-            <Text style={styles.btnText}>Deutung</Text>
+            <Text style={styles.btnText}>{i18n.t("buttons.meaning")}</Text>
           </Pressable>
         </View>
       </View>

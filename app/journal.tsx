@@ -36,7 +36,7 @@ function buildJournalShareMessage(entry: JournalEntry): string {
   const cardLine = cardId ? `${cardTitle} (${cardId})` : cardTitle;
 
   return [
-    `🃏 ${cardLine || "Karte"}`,
+    `🃏 ${cardLine || i18n.t("community.post_type_card", { defaultValue: "Card" })}`,
     question ? `\n❓ ${question}` : "",
     note ? `\n📝 ${note}` : "",
   ]
@@ -218,6 +218,13 @@ export default function JournalScreen() {
     return card?.image;
   };
 
+  const getLocalizedCardTitle = (entry: JournalEntry): string => {
+    const cardId = String(entry.cardId || "").trim();
+    const fallback = String(entry.cardTitle || "").trim() || "Card";
+    if (!cardId) return fallback;
+    return i18n.t(`cards.${cardId}`, { defaultValue: fallback });
+  };
+
   const getCardShareUri = async (cardId: string): Promise<string | undefined> => {
     const source = getCardImageSource(cardId);
     if (!source) return undefined;
@@ -345,7 +352,7 @@ export default function JournalScreen() {
                         style={styles.card}
                       >
                         <View style={styles.cardHeader}>
-                          <Text style={styles.cardTitle}>{entry.cardTitle}</Text>
+                          <Text style={styles.cardTitle}>{getLocalizedCardTitle(entry)}</Text>
                           <Text style={styles.cardDate}>{entry.date} · {entry.time}</Text>
                         </View>
                         {getCardImageSource(entry.cardId) ? (
