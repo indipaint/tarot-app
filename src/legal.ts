@@ -2,26 +2,27 @@
  * Store-ready Legal URLs per supported locale.
  * Falls eine Sprache fehlt, wird auf Deutsch zurückgefallen.
  */
+const LEGAL_VERSION = "20260504";
 const LEGAL_URLS: Record<string, { privacy: string; terms: string }> = {
   de: {
-    privacy: "https://indipaint.github.io/tarot-app/legal-pages/privacy.html",
-    terms: "https://indipaint.github.io/tarot-app/legal-pages/terms.html",
+    privacy: `https://indipaint.github.io/tarot-app/legal-pages/privacy.html?v=${LEGAL_VERSION}`,
+    terms: `https://indipaint.github.io/tarot-app/legal-pages/terms.html?v=${LEGAL_VERSION}`,
   },
   en: {
-    privacy: "https://indipaint.github.io/tarot-app/legal-pages/privacy-en.html",
-    terms: "https://indipaint.github.io/tarot-app/legal-pages/terms-en.html",
+    privacy: `https://indipaint.github.io/tarot-app/legal-pages/privacy-en.html?v=${LEGAL_VERSION}`,
+    terms: `https://indipaint.github.io/tarot-app/legal-pages/terms-en.html?v=${LEGAL_VERSION}`,
   },
   fr: {
-    privacy: "https://indipaint.github.io/tarot-app/legal-pages/privacy-fr.html",
-    terms: "https://indipaint.github.io/tarot-app/legal-pages/terms-fr.html",
+    privacy: `https://indipaint.github.io/tarot-app/legal-pages/privacy-fr.html?v=${LEGAL_VERSION}`,
+    terms: `https://indipaint.github.io/tarot-app/legal-pages/terms-fr.html?v=${LEGAL_VERSION}`,
   },
   es: {
-    privacy: "https://indipaint.github.io/tarot-app/legal-pages/privacy-es.html",
-    terms: "https://indipaint.github.io/tarot-app/legal-pages/terms-es.html",
+    privacy: `https://indipaint.github.io/tarot-app/legal-pages/privacy-es.html?v=${LEGAL_VERSION}`,
+    terms: `https://indipaint.github.io/tarot-app/legal-pages/terms-es.html?v=${LEGAL_VERSION}`,
   },
   pt: {
-    privacy: "https://indipaint.github.io/tarot-app/legal-pages/privacy-pt.html",
-    terms: "https://indipaint.github.io/tarot-app/legal-pages/terms-pt.html",
+    privacy: `https://indipaint.github.io/tarot-app/legal-pages/privacy-pt.html?v=${LEGAL_VERSION}`,
+    terms: `https://indipaint.github.io/tarot-app/legal-pages/terms-pt.html?v=${LEGAL_VERSION}`,
   },
 };
 

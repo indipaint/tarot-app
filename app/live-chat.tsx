@@ -82,6 +82,13 @@ const OFFLINE_COPY: Record<
     genericError: "Não foi possível carregar a resposta do coach.",
   },
 };
+const TEMP_HINT_COPY: Record<"de" | "en" | "fr" | "es" | "pt", string> = {
+  de: "ENDYIA Chat kann Fehler machen.",
+  en: "ENDYIA Chat can make mistakes.",
+  fr: "Le chat ENDYIA peut faire des erreurs.",
+  es: "El chat de ENDYIA puede cometer errores.",
+  pt: "O chat ENDYIA pode cometer erros.",
+};
 
 export default function LiveChatScreen() {
   const router = useRouter();
@@ -96,9 +103,11 @@ export default function LiveChatScreen() {
   const [inputHeight, setInputHeight] = useState(40);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [showTempHint, setShowTempHint] = useState(true);
   const flushingRef = useRef(false);
   const localeCode = normalizeLang(i18n.locale);
   const offlineCopy = OFFLINE_COPY[localeCode];
+  const tempHintText = TEMP_HINT_COPY[localeCode];
 
   useEffect(() => {
     (async () => {
@@ -264,6 +273,13 @@ export default function LiveChatScreen() {
     return () => clearInterval(t);
   }, [pendingQueue.length, flushPendingQueue]);
 
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setShowTempHint(false);
+    }, 5000);
+    return () => clearTimeout(t);
+  }, []);
+
   const send = async () => {
     const userText = text.trim();
     if (!userText || sending) return;
@@ -359,6 +375,8 @@ export default function LiveChatScreen() {
           <View style={styles.rightPlaceholder} />
         </View>
 
+        {showTempHint ? <Text style={styles.tempHint}>{tempHintText}</Text> : null}
+
         <ScrollView
           ref={listRef}
           style={styles.list}
@@ -437,6 +455,13 @@ const styles = StyleSheet.create({
   backBtnText: { color: "#aaa", fontSize: 11 },
   backInline: { paddingVertical: 4, paddingRight: 10 },
   rightPlaceholder: { width: 42 },
+  tempHint: {
+    color: "#777",
+    fontSize: 11,
+    textAlign: "center",
+    paddingTop: 6,
+    paddingHorizontal: 12,
+  },
   list: { flex: 1 },
   listContent: { padding: 12, gap: 8 },
   empty: { color: "#666", fontSize: 12, textAlign: "center", marginTop: 24 },
