@@ -767,15 +767,16 @@ export default function CommunityScreen() {
 
   const openLegalUrl = async (url: string) => {
     const target = String(url || "").trim();
+    const freshTarget = `${target}${target.includes("?") ? "&" : "?"}_open=${Date.now()}`;
     try {
       if (!/^https?:\/\//i.test(target)) {
         throw new Error("invalid_url_scheme");
       }
-      const canOpen = await Linking.canOpenURL(target);
+      const canOpen = await Linking.canOpenURL(freshTarget);
       if (!canOpen) {
         throw new Error("cannot_open_url");
       }
-      await Linking.openURL(target);
+      await Linking.openURL(freshTarget);
     } catch {
       Alert.alert(
         i18n.t("community.privacy_link_error_title"),

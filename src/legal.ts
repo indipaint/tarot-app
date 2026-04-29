@@ -2,7 +2,7 @@
  * Store-ready Legal URLs per supported locale.
  * Falls eine Sprache fehlt, wird auf Deutsch zurückgefallen.
  */
-const LEGAL_VERSION = "20260512";
+const LEGAL_VERSION = "20260516";
 const LEGAL_URLS: Record<string, { privacy: string; terms: string }> = {
   de: {
     privacy: `https://indipaint.github.io/tarot-app/legal-pages/privacy.html?v=${LEGAL_VERSION}`,

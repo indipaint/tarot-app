@@ -270,11 +270,12 @@ export default function JournalScreen() {
 
   const openTerms = async () => {
     const target = String(legalUrls.terms || "").trim();
+    const freshTarget = `${target}${target.includes("?") ? "&" : "?"}_open=${Date.now()}`;
     try {
       if (!/^https?:\/\//i.test(target)) throw new Error("invalid_url");
-      const canOpen = await Linking.canOpenURL(target);
+      const canOpen = await Linking.canOpenURL(freshTarget);
       if (!canOpen) throw new Error("cannot_open");
-      await Linking.openURL(target);
+      await Linking.openURL(freshTarget);
     } catch {
       Alert.alert("Info", target || "URL invalid");
     }
