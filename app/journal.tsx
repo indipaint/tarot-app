@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import * as Sharing from "expo-sharing";
 import { useFocusEffect } from "@react-navigation/native";
@@ -10,6 +11,7 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { captureRef } from "react-native-view-shot";
 import i18n from "../src/i18n";
 import { getLegalUrls } from "../src/legal";
+import { deleteCurrentAccountAndData } from "../src/deleteAccountAndData";
 
 type JournalEntry = {
   id: string;
@@ -113,6 +115,95 @@ const COACH_CONSENT_COPY = {
   },
 } as const;
 
+const SETTINGS_COPY: Record<
+  "de" | "en" | "fr" | "es" | "pt",
+  {
+    menuTitle: string;
+    deleteItem: string;
+    confirmTitle: string;
+    confirmBody: string;
+    continueButton: string;
+    finalTitle: string;
+    finalBody: string;
+    finalConfirm: string;
+    successTitle: string;
+    successBody: string;
+    failedTitle: string;
+    failedBody: string;
+  }
+> = {
+  de: {
+    menuTitle: "Einstellungen",
+    deleteItem: "Gesamtes Konto & alle Daten dauerhaft löschen",
+    confirmTitle: "Bist du sicher?",
+    confirmBody: "Alle deine Reflexionen und Tagebucheinträge werden unwiderruflich gelöscht.",
+    continueButton: "Weiter",
+    finalTitle: "Finale Bestätigung",
+    finalBody: "Diese Aktion kann nicht rückgängig gemacht werden.",
+    finalConfirm: "Ja, endgültig löschen",
+    successTitle: "Konto gelöscht",
+    successBody: "Dein Konto und alle Daten wurden gelöscht.",
+    failedTitle: "Löschen fehlgeschlagen",
+    failedBody: "Bitte versuche es erneut.",
+  },
+  en: {
+    menuTitle: "Settings",
+    deleteItem: "Permanently delete entire account & all data",
+    confirmTitle: "Are you sure?",
+    confirmBody: "All your reflections and journal entries will be permanently deleted.",
+    continueButton: "Continue",
+    finalTitle: "Final confirmation",
+    finalBody: "This action cannot be undone.",
+    finalConfirm: "Yes, delete permanently",
+    successTitle: "Account deleted",
+    successBody: "Your account and all data were deleted.",
+    failedTitle: "Deletion failed",
+    failedBody: "Please try again.",
+  },
+  fr: {
+    menuTitle: "Paramètres",
+    deleteItem: "Supprimer définitivement le compte et toutes les données",
+    confirmTitle: "Êtes-vous sûr(e) ?",
+    confirmBody: "Toutes vos réflexions et entrées du journal seront supprimées de façon irréversible.",
+    continueButton: "Continuer",
+    finalTitle: "Confirmation finale",
+    finalBody: "Cette action est irréversible.",
+    finalConfirm: "Oui, supprimer définitivement",
+    successTitle: "Compte supprimé",
+    successBody: "Votre compte et toutes les données ont été supprimés.",
+    failedTitle: "Échec de la suppression",
+    failedBody: "Veuillez réessayer.",
+  },
+  es: {
+    menuTitle: "Ajustes",
+    deleteItem: "Eliminar permanentemente toda la cuenta y los datos",
+    confirmTitle: "¿Estás seguro/a?",
+    confirmBody: "Todas tus reflexiones y entradas del diario se eliminarán de forma irreversible.",
+    continueButton: "Continuar",
+    finalTitle: "Confirmación final",
+    finalBody: "Esta acción no se puede deshacer.",
+    finalConfirm: "Sí, eliminar permanentemente",
+    successTitle: "Cuenta eliminada",
+    successBody: "Tu cuenta y todos los datos se eliminaron.",
+    failedTitle: "Error al eliminar",
+    failedBody: "Por favor, inténtalo de nuevo.",
+  },
+  pt: {
+    menuTitle: "Definições",
+    deleteItem: "Eliminar permanentemente a conta e todos os dados",
+    confirmTitle: "Tens a certeza?",
+    confirmBody: "Todas as tuas reflexões e entradas do diário serão eliminadas de forma irreversível.",
+    continueButton: "Continuar",
+    finalTitle: "Confirmação final",
+    finalBody: "Esta ação não pode ser desfeita.",
+    finalConfirm: "Sim, eliminar permanentemente",
+    successTitle: "Conta eliminada",
+    successBody: "A tua conta e todos os dados foram eliminados.",
+    failedTitle: "Falha ao eliminar",
+    failedBody: "Tenta novamente.",
+  },
+};
+
 export default function JournalScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -128,11 +219,14 @@ export default function JournalScreen() {
   const [coachConsentOpen, setCoachConsentOpen] = useState(false);
   const [coachConsentChecked, setCoachConsentChecked] = useState(false);
   const [pendingLiveChatEntryId, setPendingLiveChatEntryId] = useState<string | null>(null);
+  const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
   const lastZoomRef = React.useRef(1);
   const lastPanXRef = React.useRef(0);
   const lastPanYRef = React.useRef(0);
   const localeCode = normalizeLang(i18n.locale);
   const coachCopy = COACH_CONSENT_COPY[localeCode];
+  const settingsCopy = SETTINGS_COPY[localeCode];
   const coachTermsKey = `coach_terms_v1_${localeCode}`;
   const legalUrls = getLegalUrls(localeCode);
 
@@ -306,10 +400,69 @@ export default function JournalScreen() {
     }
   };
 
+  const requestDeleteAllData = () => {
+    setSettingsMenuOpen(false);
+    if (deletingAccount) return;
+    Alert.alert(
+      settingsCopy.confirmTitle,
+      settingsCopy.confirmBody,
+      [
+        { text: i18n.t("buttons.cancel"), style: "cancel" },
+        {
+          text: settingsCopy.continueButton,
+          style: "destructive",
+          onPress: () => {
+            Alert.alert(settingsCopy.finalTitle, settingsCopy.finalBody, [
+              { text: i18n.t("buttons.cancel"), style: "cancel" },
+              {
+                text: settingsCopy.finalConfirm,
+                style: "destructive",
+                onPress: async () => {
+                  try {
+                    setDeletingAccount(true);
+                    await deleteCurrentAccountAndData();
+                    Alert.alert(settingsCopy.successTitle, settingsCopy.successBody);
+                    router.replace("/language" as any);
+                  } catch (e: any) {
+                    const msg = String(e?.message || "").trim();
+                    Alert.alert(settingsCopy.failedTitle, msg || settingsCopy.failedBody);
+                  } finally {
+                    setDeletingAccount(false);
+                  }
+                },
+              },
+            ]);
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
       <View style={styles.container}>
-        <Text style={styles.header}>✍️ {i18n.t("buttons.journal")}</Text>
+        <View style={styles.headerRow}>
+          <View style={styles.headerSpacer} />
+          <Text style={styles.header}>✍️ {i18n.t("buttons.journal")}</Text>
+          <Pressable
+            style={styles.settingsMenuBtn}
+            onPress={() => setSettingsMenuOpen((v) => !v)}
+            disabled={deletingAccount}
+          >
+            <MaterialCommunityIcons name="menu" size={20} color="#8f8f8f" />
+          </Pressable>
+        </View>
+        {settingsMenuOpen ? (
+          <>
+            <Pressable style={styles.settingsBackdrop} onPress={() => setSettingsMenuOpen(false)} />
+            <View style={styles.settingsMenuCard}>
+              <Text style={styles.settingsMenuTitle}>{settingsCopy.menuTitle}</Text>
+              <Pressable style={styles.settingsMenuDangerItem} onPress={requestDeleteAllData}>
+                <Text style={styles.settingsMenuDangerText}>{settingsCopy.deleteItem}</Text>
+              </Pressable>
+            </View>
+          </>
+        ) : null}
 
         <PanGestureHandler
           enabled={panEnabled}
@@ -379,6 +532,12 @@ export default function JournalScreen() {
                             onPress={() => openLiveChatWithConsent(entry.id)}
                           >
                             <Text style={styles.cardBtnText}>💬 Live Chat</Text>
+                          </Pressable>
+                          <Pressable
+                            style={styles.cardBtn}
+                            onPress={() => shareEntryWithCard(entry)}
+                          >
+                            <Text style={styles.cardBtnText}>📤 {i18n.t("buttons.share")}</Text>
                           </Pressable>
                           <Pressable
                             style={styles.cardBtn}
@@ -462,10 +621,59 @@ export default function JournalScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#0a0a0a" },
   container: { flex: 1, backgroundColor: "#0a0a0a" },
-  header: {
-    color: "#fff", fontSize: 24, textAlign: "center",
-    paddingVertical: 16, letterSpacing: 1,
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 12,
+    paddingTop: 6,
   },
+  headerSpacer: { width: 32, height: 32 },
+  header: {
+    flex: 1,
+    color: "#fff",
+    fontSize: 24,
+    textAlign: "center",
+    paddingVertical: 16,
+    letterSpacing: 1,
+  },
+  settingsMenuBtn: {
+    width: 32,
+    height: 32,
+    borderWidth: 1,
+    borderColor: "#242424",
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#111",
+  },
+  settingsBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 20,
+  },
+  settingsMenuCard: {
+    position: "absolute",
+    top: 56,
+    right: 12,
+    width: 270,
+    borderWidth: 1,
+    borderColor: "#3c3c3c",
+    borderRadius: 10,
+    backgroundColor: "#141414",
+    padding: 10,
+    gap: 8,
+    zIndex: 30,
+  },
+  settingsMenuTitle: { color: "#d7d7d7", fontSize: 12, letterSpacing: 0.4 },
+  settingsMenuDangerItem: {
+    borderWidth: 1,
+    borderColor: "#7a2f2f",
+    borderRadius: 8,
+    backgroundColor: "#2c1414",
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+  },
+  settingsMenuDangerText: { color: "#ff7f7f", fontSize: 12, lineHeight: 16 },
   scroll: { flex: 1 },
   zoomWrap: { flex: 1 },
   scrollContent: { padding: 16, gap: 12 },

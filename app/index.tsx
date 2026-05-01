@@ -8,6 +8,7 @@ import * as Sharing from "expo-sharing";
 import { StatusBar } from "expo-status-bar";
 import { addDoc, collection, doc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { captureRef } from "react-native-view-shot";
 import {
   Animated,
   BackHandler,
@@ -83,6 +84,7 @@ export default function Index() {
   const [pinModalOpen, setPinModalOpen] = useState(false);
   const [sharingToCommunity, setSharingToCommunity] = useState(false);
   const lastShareAtRef = useRef(0);
+  const questionShareRef = useRef<View | null>(null);
   const router = useRouter();
   const [communityChatUnread, setCommunityChatUnread] = useState(0);
 
@@ -340,18 +342,51 @@ export default function Index() {
     });
   };
 
+  const getCurrentCardImageUri = async (): Promise<string | null> => {
+    const asset = Asset.fromModule(currentSource);
+    await asset.downloadAsync();
+    const imageUri = asset.localUri || asset.uri;
+    if (!imageUri) return null;
+    const exported = await ImageManipulator.manipulateAsync(
+      imageUri,
+      [],
+      { compress: 1, format: ImageManipulator.SaveFormat.PNG }
+    );
+    return exported.uri || null;
+  };
+
+  const shareQuestionWithCard = async () => {
+    try {
+      if (questionShareRef.current && (await Sharing.isAvailableAsync())) {
+        const capturedUri = await captureRef(questionShareRef.current, {
+          format: "jpg",
+          quality: 0.95,
+          result: "tmpfile",
+          width: 1080,
+          height: 1920,
+        });
+        await Sharing.shareAsync(capturedUri, {
+          dialogTitle: i18n.t("buttons.share_question"),
+          mimeType: "image/jpeg",
+          UTI: "public.jpeg",
+        });
+        return;
+      }
+    } catch {
+      // Fallback below keeps sharing available if image export/url share fails.
+    }
+    const message = buildCardQuestionShareMessage(currentName, activeQuestion);
+    await Share.share({
+      message,
+      title: i18n.t("buttons.share_question"),
+    });
+  };
+
   const shareCurrentCardImage = async () => {
     try {
-      const asset = Asset.fromModule(currentSource);
-      await asset.downloadAsync();
-      const imageUri = asset.localUri || asset.uri;
+      const imageUri = await getCurrentCardImageUri();
       if (imageUri && (await Sharing.isAvailableAsync())) {
-        const exported = await ImageManipulator.manipulateAsync(
-          imageUri,
-          [],
-          { compress: 1, format: ImageManipulator.SaveFormat.PNG }
-        );
-        await Sharing.shareAsync(exported.uri, {
+        await Sharing.shareAsync(imageUri, {
           dialogTitle: currentName || "Tarot",
           mimeType: "image/png",
           UTI: "public.png",
@@ -456,7 +491,7 @@ export default function Index() {
                 <Text style={styles.closeBtnText}>✍️ {i18n.t("buttons.journal")}</Text>
               </Pressable>
               <Pressable
-                onPress={shareQuestionText}
+                onPress={shareQuestionWithCard}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
                 <Text style={styles.closeBtnText}>↗️ {i18n.t("buttons.share_question")}</Text>
@@ -634,6 +669,24 @@ export default function Index() {
             </View>
           </KeyboardAvoidingView>
         )}
+
+        {/* Hidden export frame for clean question+card sharing */}
+        <View style={styles.shareCaptureHiddenWrap} pointerEvents="none">
+          <View
+            ref={(node) => {
+              questionShareRef.current = node;
+            }}
+            collapsable={false}
+            style={styles.shareCaptureCard}
+          >
+            <Image source={currentSource} style={styles.shareCaptureImage} resizeMode="contain" />
+            {activeQuestion ? (
+              <Text style={styles.shareCaptureQuestion}>{activeQuestion}</Text>
+            ) : (
+              <Text style={styles.shareCaptureQuestionMuted}>ENDYIA Tarot</Text>
+            )}
+          </View>
+        </View>
 
       </View>
     </SafeAreaView>
@@ -900,5 +953,39 @@ const styles = StyleSheet.create({
   journalNavBtnText: {
     fontSize: 16,
     opacity: 0.6,
+  },
+  shareCaptureHiddenWrap: {
+    position: "absolute",
+    left: -9999,
+    top: -9999,
+    width: 1080,
+    height: 1920,
+  },
+  shareCaptureCard: {
+    width: 1080,
+    height: 1920,
+    backgroundColor: "#060606",
+    alignItems: "center",
+    paddingHorizontal: 84,
+    paddingTop: 110,
+    paddingBottom: 130,
+  },
+  shareCaptureImage: {
+    width: "100%",
+    height: 1470,
+  },
+  shareCaptureQuestion: {
+    marginTop: 26,
+    color: "#fff",
+    fontSize: 44,
+    lineHeight: 58,
+    textAlign: "center",
+  },
+  shareCaptureQuestionMuted: {
+    marginTop: 30,
+    color: "#a0a0a0",
+    fontSize: 30,
+    letterSpacing: 1.2,
+    textAlign: "center",
   },
 });
