@@ -208,7 +208,7 @@ export default function JournalScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const cards = useMemo(() => getCards(), []);
-  const entryCardRefs = React.useRef<Record<string, View | null>>({});
+  const shareExportRefs = React.useRef<Record<string, View | null>>({});
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [zoomValue] = useState(() => new Animated.Value(1));
@@ -333,15 +333,15 @@ export default function JournalScreen() {
   };
 
   const shareEntryWithCard = async (entry: JournalEntry) => {
-    const cardRef = entryCardRefs.current[entry.id];
-    if (cardRef) {
+    const exportRef = shareExportRefs.current[entry.id];
+    if (exportRef) {
       try {
-        const combinedUri = await captureRef(cardRef, {
+        const combinedUri = await captureRef(exportRef, {
           format: "jpg",
           quality: 0.95,
           result: "tmpfile",
           width: 1080,
-          height: 1350,
+          height: 1920,
         });
         await Sharing.shareAsync(combinedUri, {
           dialogTitle: entry.cardTitle || "Tarot",
@@ -497,14 +497,7 @@ export default function JournalScreen() {
                     <Text style={styles.empty}>{i18n.t("journal_screen.empty")}</Text>
                   ) : (
                     entries.map((entry) => (
-                      <View
-                        key={entry.id}
-                        ref={(node) => {
-                          entryCardRefs.current[entry.id] = node;
-                        }}
-                        collapsable={false}
-                        style={styles.card}
-                      >
+                      <View key={entry.id} style={styles.card}>
                         <View style={styles.cardHeader}>
                           <Text style={styles.cardTitle}>{getLocalizedCardTitle(entry)}</Text>
                           <Text style={styles.cardDate}>{entry.date} · {entry.time}</Text>
@@ -551,6 +544,32 @@ export default function JournalScreen() {
                           >
                             <Text style={styles.deleteBtnText}>🗑️ {i18n.t("buttons.delete")}</Text>
                           </Pressable>
+                        </View>
+                        <View style={styles.shareCaptureHiddenWrap} pointerEvents="none">
+                          <View
+                            ref={(node) => {
+                              shareExportRefs.current[entry.id] = node;
+                            }}
+                            collapsable={false}
+                            style={styles.shareCaptureCard}
+                          >
+                            <Text style={styles.shareCaptureTitle}>Endyia Tarot App</Text>
+                            {getCardImageSource(entry.cardId) ? (
+                              <Image
+                                source={getCardImageSource(entry.cardId)}
+                                style={styles.shareCaptureImage}
+                                resizeMode="contain"
+                              />
+                            ) : (
+                              <View style={styles.shareCaptureImageFallback} />
+                            )}
+                            {entry.question ? (
+                              <Text style={styles.shareCaptureQuestion}>{entry.question}</Text>
+                            ) : null}
+                            {entry.note ? (
+                              <Text style={styles.shareCaptureNote}>{entry.note}</Text>
+                            ) : null}
+                          </View>
                         </View>
                       </View>
                     ))
@@ -768,4 +787,48 @@ const styles = StyleSheet.create({
     backgroundColor: "#202020",
   },
   consentActionText: { color: "#cfcfcf", fontSize: 12 },
+  shareCaptureHiddenWrap: {
+    position: "absolute",
+    left: -9999,
+    top: -9999,
+    width: 1080,
+    height: 1920,
+  },
+  shareCaptureCard: {
+    width: 1080,
+    height: 1920,
+    backgroundColor: "#060606",
+    alignItems: "center",
+    paddingHorizontal: 84,
+    paddingTop: 110,
+    paddingBottom: 100,
+  },
+  shareCaptureTitle: {
+    color: "#d7d7d7",
+    fontSize: 40,
+    letterSpacing: 1.2,
+    marginBottom: 18,
+  },
+  shareCaptureImage: {
+    width: "100%",
+    height: 1160,
+  },
+  shareCaptureImageFallback: {
+    width: "100%",
+    height: 1160,
+  },
+  shareCaptureQuestion: {
+    marginTop: 18,
+    color: "#fff",
+    fontSize: 36,
+    lineHeight: 48,
+    textAlign: "center",
+  },
+  shareCaptureNote: {
+    marginTop: 18,
+    color: "#d0d0d0",
+    fontSize: 30,
+    lineHeight: 42,
+    textAlign: "center",
+  },
 });

@@ -679,6 +679,7 @@ export default function Index() {
             collapsable={false}
             style={styles.shareCaptureCard}
           >
+            <Text style={styles.shareCaptureTitle}>Endyia Tarot App</Text>
             <Image source={currentSource} style={styles.shareCaptureImage} resizeMode="contain" />
             {activeQuestion ? (
               <Text style={styles.shareCaptureQuestion}>{activeQuestion}</Text>
@@ -970,9 +971,15 @@ const styles = StyleSheet.create({
     paddingTop: 110,
     paddingBottom: 130,
   },
+  shareCaptureTitle: {
+    color: "#d7d7d7",
+    fontSize: 40,
+    letterSpacing: 1.2,
+    marginBottom: 18,
+  },
   shareCaptureImage: {
     width: "100%",
-    height: 1470,
+    height: 1410,
   },
   shareCaptureQuestion: {
     marginTop: 26,
