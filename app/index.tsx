@@ -8,7 +8,6 @@ import * as Sharing from "expo-sharing";
 import { StatusBar } from "expo-status-bar";
 import { addDoc, collection, doc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { captureRef } from "react-native-view-shot";
 import {
   Animated,
   BackHandler,
@@ -25,6 +24,7 @@ import {
   View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { captureRef } from "react-native-view-shot";
 import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
 import { getRandomQuestion } from "../src/data/questions";
@@ -83,28 +83,16 @@ export default function Index() {
   const [journalUnlocked, setJournalUnlocked] = useState(false);
   const [pinModalOpen, setPinModalOpen] = useState(false);
   const [sharingToCommunity, setSharingToCommunity] = useState(false);
+  const [openingCommunity, setOpeningCommunity] = useState(false);
   const lastShareAtRef = useRef(0);
   const questionShareRef = useRef<View | null>(null);
   const router = useRouter();
   const [communityChatUnread, setCommunityChatUnread] = useState(0);
+  const isQuestionModeActive = activeQuestion !== null;
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const introDone = await AsyncStorage.getItem(INTRO_DONE_ONCE_KEY);
-      if (cancelled) return;
-      if (introDone === "1") {
-        await AsyncStorage.removeItem(INTRO_DONE_ONCE_KEY);
-        return;
-      }
-      if (!redirectedToLanguageThisSession) {
-        redirectedToLanguageThisSession = true;
-        router.replace("/language" as any);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
+    // Temporarily disable intro/language redirect during development.
+    return;
   }, [router]);
 
   useEffect(() => {
@@ -143,7 +131,7 @@ export default function Index() {
   }, []);
 
   const [index, setIndex] = useState(0);
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
   const [incomingIndex, setIncomingIndex] = useState<number | null>(null);
   const progress = useRef(new Animated.Value(0)).current;
   const locked = useRef(false);
@@ -191,6 +179,7 @@ export default function Index() {
 
   const deckRef = useRef<number[]>([]);
   const deckPosRef = useRef(0);
+  const initialCardChosenRef = useRef(false);
 
   const shuffleInPlace = (arr: number[]) => {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -216,9 +205,20 @@ export default function Index() {
     startRitualTo(nextIdx);
   };
 
+  useEffect(() => {
+    if (!cards.length) return;
+    if (initialCardChosenRef.current) return;
+    initialCardChosenRef.current = true;
+
+    const randomIndex = cards.length > 1 ? Math.floor(Math.random() * cards.length) : 0;
+    setIndex(randomIndex);
+    rebuildDeck(randomIndex);
+  }, [cards.length]);
+
   const panResponder = useMemo(
     () => PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gs) => {
+        if (isQuestionModeActive) return false;
         if (locked.current) return false;
         const x0 = evt.nativeEvent.pageX;
         if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
@@ -227,6 +227,7 @@ export default function Index() {
         return absDx > 8 && absDx > absDy + 6;
       },
       onMoveShouldSetPanResponderCapture: (evt, gs) => {
+        if (isQuestionModeActive) return false;
         if (locked.current) return false;
         const x0 = evt.nativeEvent.pageX;
         if (x0 <= EDGE_WIDTH || x0 >= SCREEN_W - EDGE_WIDTH) return false;
@@ -235,6 +236,7 @@ export default function Index() {
         return absDx > 8 && absDx > absDy + 6;
       },
       onPanResponderRelease: (_e, gs) => {
+        if (isQuestionModeActive) return;
         if (locked.current) return;
         const swipeLeft = gs.dx < -SWIPE_DISTANCE || gs.vx < -SWIPE_VELOCITY;
         const swipeRight = gs.dx > SWIPE_DISTANCE || gs.vx > SWIPE_VELOCITY;
@@ -242,7 +244,7 @@ export default function Index() {
         else if (swipeRight) prev();
       },
     }),
-    [cards.length, index]
+    [cards.length, index, isQuestionModeActive]
   );
 
   const currentCard = cards[index];
@@ -266,9 +268,9 @@ export default function Index() {
   const displayPrefix = (card: any) => {
     const id = String(card?.id ?? "");
     if (/^\d+$/.test(id)) return toRoman(Number(id));
-    if (id.startsWith("W")) return id.slice(1);
     return "";
   };
+  const formatCardTitle = (prefix: string, name: string) => (prefix ? `${prefix} · ${name}` : name);
 
   const currentPrefix = displayPrefix(currentCard);
   const nextPrefix = nextCard ? displayPrefix(nextCard) : "";
@@ -402,6 +404,18 @@ export default function Index() {
     });
   };
 
+  const openCommunity = () => {
+    if (openingCommunity) return;
+    setOpeningCommunity(true);
+    requestAnimationFrame(() => {
+      try {
+        router.push("/community" as any);
+      } finally {
+        setTimeout(() => setOpeningCommunity(false), 350);
+      }
+    });
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
@@ -471,18 +485,6 @@ export default function Index() {
             <View style={styles.questionOnCardWrap}>
               <Text style={styles.questionOnCardText}>{activeQuestion}</Text>
               <View style={styles.questionBtnRow}>
-                <Pressable
-                  onPress={() => {
-                    setActiveQuestion(null);
-                    setQuestionOverlayOpen(true);
-                  }}
-                  style={styles.closeBtn}
-                >
-                  <Text style={styles.closeBtnText}>✦ {i18n.t("buttons.question")}</Text>
-                </Pressable>
-                <Pressable onPress={() => setActiveQuestion(null)} style={styles.closeBtn}>
-                  <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
-                </Pressable>
               </View>
               <Pressable
                 onPress={() => setJournalOpen(true)}
@@ -503,6 +505,18 @@ export default function Index() {
               >
                 <Text style={styles.closeBtnText}>{i18n.t("buttons.share_community")}</Text>
               </Pressable>
+              <Pressable
+                onPress={() => {
+                  setActiveQuestion(null);
+                  setQuestionOverlayOpen(true);
+                }}
+                style={[styles.closeBtn, { marginTop: 10 }]}
+              >
+                <Text style={styles.closeBtnText}>✦ neue Frage</Text>
+              </Pressable>
+              <Pressable onPress={() => setActiveQuestion(null)} style={[styles.closeBtn, { marginTop: 10 }]}>
+                <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
+              </Pressable>
             </View>
           ) : null}
 
@@ -510,14 +524,14 @@ export default function Index() {
           <View style={styles.titleWrap}>
             {nextCard ? (
               <Animated.Text style={[styles.title, { opacity: incomingOpacity }]} numberOfLines={2}>
-                {nextPrefix} · {nextName}
+                {formatCardTitle(nextPrefix, nextName)}
               </Animated.Text>
             ) : null}
             <Animated.Text
               style={[styles.title, { opacity: outgoingOpacity, position: "absolute" }]}
               numberOfLines={2}
             >
-              {currentPrefix} · {currentName}
+              {formatCardTitle(currentPrefix, currentName)}
             </Animated.Text>
           </View>
 
@@ -531,11 +545,20 @@ export default function Index() {
           <Pressable
             style={[styles.btn, styles.communityBtn]}
             accessibilityLabel={i18n.t("community.center_title")}
-            onPress={() => router.push("/community" as any)}
+            hitSlop={10}
+            onPress={openCommunity}
           >
            <MaterialCommunityIcons name="earth" size={31} color="rgba(204, 203, 203, 0.6)" />
           </Pressable>
-          <Pressable style={[styles.btn, styles.drawBtn]} onPress={drawUnique}>
+          <Pressable
+            style={[
+              styles.btn,
+              styles.drawBtn,
+              isQuestionModeActive ? styles.btnDisabled : null,
+            ]}
+            onPress={drawUnique}
+            disabled={isQuestionModeActive}
+          >
             <Text style={styles.btnText} numberOfLines={1} adjustsFontSizeToFit>{i18n.t("buttons.draw")}</Text>
           </Pressable>
         </View>
@@ -699,7 +722,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 18,
     right: 18,
-    bottom: 380,
+    bottom: 260,
     alignItems: "center",
   },
   questionBtnRow: {
@@ -709,8 +732,8 @@ const styles = StyleSheet.create({
   },
   questionOnCardText: {
     color: "#fff",
-    fontSize: 20,
-    lineHeight: 26,
+    fontSize: 18,
+    lineHeight: 24,
     textAlign: "center",
     textShadowColor: "#000",
     textShadowOffset: { width: 0, height: 0 },
@@ -791,6 +814,9 @@ const styles = StyleSheet.create({
     width: 92,
     marginLeft: 0,
   },
+  btnDisabled: {
+    opacity: 0.4,
+  },
   communityBtn: {
     width: 33,
     alignItems: "center",
@@ -853,15 +879,16 @@ const styles = StyleSheet.create({
   welcomeBtnText: { color: "#eaeaff", letterSpacing: 1.4, fontWeight: "700" },
   closeBtn: {
     marginTop: 20,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
     borderRadius: 6,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.5)",
+    backgroundColor: "rgba(0,0,0,0.28)",
   },
   closeBtnText: {
     color: "#dbd6d6",
-    fontSize: 12,
+    fontSize: 15,
     textAlign: "center",
   },
   journalOverlay: {

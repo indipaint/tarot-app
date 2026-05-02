@@ -61,6 +61,22 @@ type PrivateThreadPreview = {
   unread: boolean;
 };
 
+function withTimeout<T>(promise: Promise<T>, ms: number, timeoutCode: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(timeoutCode)), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      }
+    );
+  });
+}
+
 const SETTINGS_COPY: Record<
   "de" | "en" | "fr" | "es" | "pt",
   {
@@ -308,8 +324,9 @@ export default function CommunityScreen() {
   useEffect(() => {
     (async () => {
       try {
-        const authUid = await ensureCommunityAuth();
-        await registerDevicePushToken(authUid);
+        const authUid = await withTimeout(ensureCommunityAuth(), 12000, "community_auth_timeout");
+        // Push registration is non-critical for opening the screen.
+        registerDevicePushToken(authUid).catch(() => {});
         setUid(authUid);
 
         const [privacyV2, privacyLegacy, termsAccepted] = await Promise.all([
@@ -345,7 +362,7 @@ export default function CommunityScreen() {
     setBootError(null);
     (async () => {
       try {
-        const authUid = await ensureCommunityAuth();
+        const authUid = await withTimeout(ensureCommunityAuth(), 12000, "community_auth_timeout");
         setUid(authUid);
 
         const [privacyV2, privacyLegacy, termsAccepted] = await Promise.all([
