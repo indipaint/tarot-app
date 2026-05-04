@@ -229,7 +229,6 @@ export default function JournalScreen() {
   const settingsCopy = SETTINGS_COPY[localeCode];
   const coachTermsKey = `coach_terms_v1_${localeCode}`;
   const legalUrls = getLegalUrls(localeCode);
-
   const clampZoom = (value: number) => Math.max(0.9, Math.min(1.6, value));
   const scale = Animated.multiply(zoomValue, pinchValue);
   const onPinchGesture = Animated.event([{ nativeEvent: { scale: pinchValue } }], {

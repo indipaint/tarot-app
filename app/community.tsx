@@ -876,8 +876,8 @@ export default function CommunityScreen() {
     }
   };
 
-  const openLegalUrl = async (url: string) => {
-    const target = String(url || "").trim();
+  const openLegalUrl = async (kind: "privacy" | "terms") => {
+    const target = String(legalUrls[kind] || "").trim();
     const freshTarget = `${target}${target.includes("?") ? "&" : "?"}_open=${Date.now()}`;
     try {
       if (!/^https?:\/\//i.test(target)) {
@@ -986,10 +986,10 @@ export default function CommunityScreen() {
           <Text style={styles.privacyTitle}>{i18n.t("community.privacy_title")}</Text>
           <Text style={styles.privacyBody}>{i18n.t("community.privacy_intro")}</Text>
           <Text style={styles.privacySafetyNote}>{i18n.t("community.privacy_safety_note")}</Text>
-          <Pressable style={styles.privacyLinkBtn} onPress={() => openLegalUrl(legalUrls.privacy)}>
+          <Pressable style={styles.privacyLinkBtn} onPress={() => openLegalUrl("privacy")}>
             <Text style={styles.privacyLinkText}>{i18n.t("community.privacy_link_privacy")}</Text>
           </Pressable>
-          <Pressable style={styles.privacyLinkBtn} onPress={() => openLegalUrl(legalUrls.terms)}>
+          <Pressable style={styles.privacyLinkBtn} onPress={() => openLegalUrl("terms")}>
             <Text style={styles.privacyLinkText}>{i18n.t("community.privacy_link_terms")}</Text>
           </Pressable>
           <Pressable
