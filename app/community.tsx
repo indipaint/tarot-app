@@ -50,6 +50,7 @@ type CommunityPost = {
   id: string;
   authorUid?: string;
   authorName?: string;
+  lang?: string;
   type?: PostType;
   cardId?: string;
   question?: string;
@@ -268,6 +269,7 @@ export default function CommunityScreen() {
   const [totalUnreadThreads, setTotalUnreadThreads] = useState(0);
   const [translatedPostById, setTranslatedPostById] = useState<Record<string, string>>({});
   const [translatedQuestionById, setTranslatedQuestionById] = useState<Record<string, string>>({});
+  const [showOriginalById, setShowOriginalById] = useState<Record<string, boolean>>({});
   const [unreadRefreshTick, setUnreadRefreshTick] = useState(0);
   const [privateThreads, setPrivateThreads] = useState<PrivateThreadPreview[]>([]);
   const [seenPostIds, setSeenPostIds] = useState<Record<string, number>>({});
@@ -595,20 +597,22 @@ export default function CommunityScreen() {
   }, [unreadRefreshTick, uid, nicknameSet]);
 
   useEffect(() => {
+    // Translations are locale-dependent; reset cache when app language changes.
+    setTranslatedPostById({});
+    setTranslatedQuestionById({});
+  }, [localeCode]);
+
+  useEffect(() => {
     if (!uid || !posts.length) return;
     const target = localeCode;
     const toTranslateText = posts.filter(
       (p) =>
-        p.authorUid &&
-        p.authorUid !== uid &&
         !!p.journalText &&
         String(p.journalText).trim().length > 0 &&
         !translatedPostById[p.id]
     );
     const toTranslateQuestion = posts.filter(
       (p) =>
-        p.authorUid &&
-        p.authorUid !== uid &&
         !!p.question &&
         String(p.question).trim().length > 0 &&
         !translatedQuestionById[p.id]
@@ -1404,14 +1408,26 @@ export default function CommunityScreen() {
                 {post.question ? (
                   <>
                     <Text style={styles.postQuestion}>
-                      {(!isOwn && translatedQuestionById[post.id]) || post.question}
+                      {translatedQuestionById[post.id] || post.question}
                     </Text>
-                    {!isOwn &&
-                    translatedQuestionById[post.id] &&
+                    {translatedQuestionById[post.id] &&
                     translatedQuestionById[post.id] !== post.question ? (
-                      <Text style={styles.postOriginalText}>
-                        {i18n.t("community.post_original_prefix")} {post.question}
-                      </Text>
+                      <>
+                        <Pressable
+                          onPress={() =>
+                            setShowOriginalById((prev) => ({ ...prev, [post.id]: !prev[post.id] }))
+                          }
+                        >
+                          <Text style={styles.postToggleOriginalText}>
+                            {showOriginalById[post.id] ? "Original ausblenden" : "Original anzeigen"}
+                          </Text>
+                        </Pressable>
+                        {showOriginalById[post.id] ? (
+                          <Text style={styles.postOriginalText}>
+                            {i18n.t("community.post_original_prefix")} {post.question}
+                          </Text>
+                        ) : null}
+                      </>
                     ) : null}
                   </>
                 ) : null}
@@ -1423,14 +1439,26 @@ export default function CommunityScreen() {
                         isOwn ? styles.postTextOwnHighlight : styles.postTextOtherHighlight,
                       ]}
                     >
-                      {(!isOwn && translatedPostById[post.id]) || post.journalText}
+                      {translatedPostById[post.id] || post.journalText}
                     </Text>
-                    {!isOwn &&
-                    translatedPostById[post.id] &&
+                    {translatedPostById[post.id] &&
                     translatedPostById[post.id] !== post.journalText ? (
-                      <Text style={styles.postOriginalText}>
-                        {i18n.t("community.post_original_prefix")} {post.journalText}
-                      </Text>
+                      <>
+                        <Pressable
+                          onPress={() =>
+                            setShowOriginalById((prev) => ({ ...prev, [post.id]: !prev[post.id] }))
+                          }
+                        >
+                          <Text style={styles.postToggleOriginalText}>
+                            {showOriginalById[post.id] ? "Original ausblenden" : "Original anzeigen"}
+                          </Text>
+                        </Pressable>
+                        {showOriginalById[post.id] ? (
+                          <Text style={styles.postOriginalText}>
+                            {i18n.t("community.post_original_prefix")} {post.journalText}
+                          </Text>
+                        ) : null}
+                      </>
                     ) : null}
                   </>
                 ) : null}
@@ -1743,6 +1771,7 @@ const styles = StyleSheet.create({
   postType: { color: "#8fa0bf", fontSize: 10 },
   postQuestion: { color: "#dedede", fontSize: 13, lineHeight: 18 },
   postText: { color: "#c0c0c0", fontSize: 13, lineHeight: 20 },
+  postToggleOriginalText: { color: "#8a96b1", fontSize: 10, lineHeight: 14, textDecorationLine: "underline" },
   postTextOwnHighlight: {
     alignSelf: "flex-start",
     backgroundColor: "#203a58",
