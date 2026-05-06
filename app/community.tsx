@@ -25,6 +25,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Linking,
+  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -270,6 +271,7 @@ export default function CommunityScreen() {
   const [seenPostIds, setSeenPostIds] = useState<Record<string, number>>({});
   const [blockedUidsLocal, setBlockedUidsLocal] = useState<Set<string>>(new Set());
   const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
+  const [dailyCardMenuOpen, setDailyCardMenuOpen] = useState(false);
   const [deletingAccount, setDeletingAccount] = useState(false);
   const seenPostsStorageKey = uid ? `community_seen_posts_${uid}` : "community_seen_posts";
 
@@ -1081,8 +1083,8 @@ export default function CommunityScreen() {
   };
 
   const requestDeleteAllData = () => {
-    setSettingsMenuOpen(false);
     if (deletingAccount) return;
+    setSettingsMenuOpen(false);
     Alert.alert(
       settingsCopy.confirmTitle,
       settingsCopy.confirmBody,
@@ -1243,32 +1245,70 @@ export default function CommunityScreen() {
           )}
           <Pressable
             style={styles.settingsMenuBtn}
-            onPress={() => setSettingsMenuOpen((v) => !v)}
+            onPress={() => {
+              const next = !settingsMenuOpen;
+              setSettingsMenuOpen(next);
+              if (!next) setDailyCardMenuOpen(false);
+            }}
             disabled={deletingAccount}
           >
             <MaterialCommunityIcons name="menu" size={20} color="#8f8f8f" />
           </Pressable>
         </View>
-        {settingsMenuOpen ? (
-          <>
-            <Pressable style={styles.settingsBackdrop} onPress={() => setSettingsMenuOpen(false)} />
-            <View style={styles.settingsMenuCard}>
-              <Text style={styles.settingsMenuTitle}>{settingsCopy.menuTitle}</Text>
-              <Pressable style={styles.settingsMenuActionItem} onPress={openHeaderReportFlow}>
-                <Text style={styles.settingsMenuActionText}>{i18n.t("thread.report")}</Text>
-              </Pressable>
-              <Pressable style={styles.settingsMenuActionItem} onPress={openHeaderBlockFlow}>
-                <Text style={styles.settingsMenuActionText}>
-                  {blockedUidsLocal.size > 0 ? i18n.t("thread.unblock") : i18n.t("thread.block")}
-                </Text>
-              </Pressable>
-              <DailyCardMenuBlock locale={dailyMenuLocale} onClose={() => setSettingsMenuOpen(false)} />
-              <Pressable style={styles.settingsMenuDangerItem} onPress={requestDeleteAllData}>
-                <Text style={styles.settingsMenuDangerText}>{settingsCopy.deleteItem}</Text>
-              </Pressable>
+        <Modal
+          visible={settingsMenuOpen}
+          transparent
+          animationType="fade"
+          onRequestClose={() => {
+            setSettingsMenuOpen(false);
+            setDailyCardMenuOpen(false);
+          }}
+        >
+          <KeyboardAvoidingView
+            style={styles.settingsModalRoot}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <Pressable
+              style={styles.settingsBackdrop}
+              onPress={() => {
+                setSettingsMenuOpen(false);
+                setDailyCardMenuOpen(false);
+              }}
+            />
+            <View style={styles.settingsMenuCard} onStartShouldSetResponder={() => true}>
+              <ScrollView
+                style={styles.settingsMenuScroll}
+                contentContainerStyle={styles.settingsMenuScrollContent}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+              >
+                <Text style={styles.settingsMenuTitle}>{settingsCopy.menuTitle}</Text>
+                <Pressable
+                  style={styles.settingsMenuActionItem}
+                  onPress={() => setDailyCardMenuOpen((v) => !v)}
+                >
+                  <Text style={styles.settingsMenuActionText}>
+                    Tageskarte {dailyCardMenuOpen ? "▴" : "▾"}
+                  </Text>
+                </Pressable>
+                {dailyCardMenuOpen ? (
+                  <DailyCardMenuBlock locale={dailyMenuLocale} onClose={() => setSettingsMenuOpen(false)} />
+                ) : null}
+                <Pressable style={styles.settingsMenuActionItem} onPress={openHeaderReportFlow}>
+                  <Text style={styles.settingsMenuActionText}>{i18n.t("thread.report")}</Text>
+                </Pressable>
+                <Pressable style={styles.settingsMenuActionItem} onPress={openHeaderBlockFlow}>
+                  <Text style={styles.settingsMenuActionText}>
+                    {blockedUidsLocal.size > 0 ? i18n.t("thread.unblock") : i18n.t("thread.block")}
+                  </Text>
+                </Pressable>
+                <Pressable style={styles.settingsMenuDangerItem} onPress={requestDeleteAllData}>
+                  <Text style={styles.settingsMenuDangerText}>{settingsCopy.deleteItem}</Text>
+                </Pressable>
+              </ScrollView>
             </View>
-          </>
-        ) : null}
+          </KeyboardAvoidingView>
+        </Modal>
 
         <ScrollView
           style={styles.feed}
@@ -1448,12 +1488,6 @@ export default function CommunityScreen() {
                         <Pressable style={styles.replyBtn} onPress={() => replyOrOpenPrivate(post)}>
                           <Text style={styles.replyBtnText}>{i18n.t("community.private_reply")}</Text>
                         </Pressable>
-                        <Pressable style={styles.replyBtnGhost} onPress={() => openReportPostFlow(post)}>
-                          <Text style={styles.replyBtnText}>{i18n.t("thread.report")}</Text>
-                        </Pressable>
-                        <Pressable style={styles.deleteBtn} onPress={() => openBlockAuthorFlow(post)}>
-                          <Text style={styles.deleteBtnText}>{i18n.t("thread.block")}</Text>
-                        </Pressable>
                       </View>
                       <Text style={styles.privateReplyHint}>{i18n.t("community.private_reply_hint")}</Text>
                     </View>
@@ -1559,6 +1593,9 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     zIndex: 20,
   },
+  settingsModalRoot: {
+    flex: 1,
+  },
   settingsMenuCard: {
     position: "absolute",
     top: 52,
@@ -1571,6 +1608,12 @@ const styles = StyleSheet.create({
     padding: 10,
     gap: 8,
     zIndex: 30,
+  },
+  settingsMenuScroll: {
+    maxHeight: 520,
+  },
+  settingsMenuScrollContent: {
+    gap: 8,
   },
   settingsMenuTitle: { color: "#d7d7d7", fontSize: 12, letterSpacing: 0.4 },
   settingsMenuActionItem: {
@@ -1729,7 +1772,7 @@ const styles = StyleSheet.create({
     minHeight: 44,
     textAlignVertical: "top",
   },
-  replyActions: { flexDirection: "row", gap: 8 },
+  replyActions: { flexDirection: "row", gap: 8, flexWrap: "wrap" },
   privateReplyHint: { color: "#6f6f6f", fontSize: 10, lineHeight: 14 },
   replyBtn: {
     borderWidth: 1,

@@ -248,7 +248,7 @@ export default function DailyCardMenuBlock({ locale, onClose }: Props) {
 
 const styles = StyleSheet.create({
   block: { gap: 8 },
-  section: { color: "#c7d5ff", fontSize: 11, fontWeight: "600", marginBottom: 2 },
+  section: { color: "#c7d5ff", fontSize: 11, lineHeight: 13, fontWeight: "600", marginBottom: 1 },
   webHint: { color: "#888", fontSize: 10 },
   row: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   label: { color: "#ccc", fontSize: 11, flex: 1, paddingRight: 8 },

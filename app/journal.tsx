@@ -62,6 +62,14 @@ function getDailyEntryLabel(locale: "de" | "en" | "fr" | "es" | "pt"): string {
   return "Tageskarteneintrag";
 }
 
+function getJournalEmptyHint(locale: "de" | "en" | "fr" | "es" | "pt"): string {
+  if (locale === "en") return "Create entries from a card question on the home screen.";
+  if (locale === "fr") return "Crée des entrées à partir d'une question de carte sur l'écran principal.";
+  if (locale === "es") return "Crea entradas desde una pregunta de carta en la pantalla principal.";
+  if (locale === "pt") return "Cria entradas a partir de uma pergunta da carta no ecrã principal.";
+  return "Du hast die Moeglichkeit deinen ersten Eintrag in das Tagebuch zu schreiben indem du auf der Hauptkartenseite auf den Button \" Frage \"klickst.";
+}
+
 const COACH_CONSENT_COPY = {
   de: {
     title: "Live Coach Hinweis",
@@ -505,7 +513,10 @@ export default function JournalScreen() {
                   {loading ? (
                     <Text style={styles.empty}>{i18n.t("journal_screen.empty")}</Text>
                   ) : entries.length === 0 ? (
-                    <Text style={styles.empty}>{i18n.t("journal_screen.empty")}</Text>
+                    <View style={styles.emptyWrap}>
+                      <Text style={styles.empty}>{i18n.t("journal_screen.empty")}</Text>
+                      <Text style={styles.emptyHint}>{getJournalEmptyHint(localeCode)}</Text>
+                    </View>
                   ) : (
                     entries.map((entry) => (
                       <View key={entry.id} style={styles.card}>
@@ -667,6 +678,7 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     color: "#fff",
+    opacity: 0.75,
     fontSize: 24,
     textAlign: "center",
     paddingVertical: 16,
@@ -712,7 +724,9 @@ const styles = StyleSheet.create({
   scroll: { flex: 1 },
   zoomWrap: { flex: 1 },
   scrollContent: { padding: 16, gap: 12 },
-  empty: { color: "#555", textAlign: "center", marginTop: 60, fontSize: 15 },
+  emptyWrap: { marginTop: 60, alignItems: "center", paddingHorizontal: 18, gap: 8 },
+  empty: { color: "#555", textAlign: "center", fontSize: 15 },
+  emptyHint: { color: "#7a7a7a", textAlign: "center", fontSize: 12, lineHeight: 18 },
   card: {
     backgroundColor: "#1a1a1a", borderRadius: 12,
     width: "100%",

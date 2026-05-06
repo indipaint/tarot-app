@@ -27,8 +27,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { captureRef } from "react-native-view-shot";
 import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
-import { getRandomQuestion } from "../src/data/questions";
 import { DAILY_CARD_PENDING_DRAW_KEY } from "../src/dailyCardNotifications";
+import { getRandomQuestion } from "../src/data/questions";
 import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n from "../src/i18n";
@@ -777,7 +777,7 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 0,
     fontSize: 17,
-    lineHeight: 20,
+    lineHeight: 12,
     color: "#888",
     letterSpacing: 1,
     textAlign: "center",
