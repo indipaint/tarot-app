@@ -66,7 +66,7 @@ function getJournalEmptyHint(locale: "de" | "en" | "fr" | "es" | "pt"): string {
   if (locale === "en") return "Create entries from a card question on the home screen.";
   if (locale === "fr") return "Crée des entrées à partir d'une question de carte sur l'écran principal.";
   if (locale === "es") return "Crea entradas desde una pregunta de carta en la pantalla principal.";
-  if (locale === "pt") return "Cria entradas a partir de uma pergunta da carta no ecrã principal.";
+  if (locale === "pt") return "Você pode escrever sua primeira entrada no diário clicando no botão “Pergunta” na página principal do mapa.";
   return "Du hast die Moeglichkeit deinen ersten Eintrag in das Tagebuch zu schreiben indem du auf der Hauptkartenseite auf den Button \" Frage \"klickst.";
 }
 

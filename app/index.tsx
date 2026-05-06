@@ -31,7 +31,7 @@ import { DAILY_CARD_PENDING_DRAW_KEY } from "../src/dailyCardNotifications";
 import { getRandomQuestion } from "../src/data/questions";
 import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
-import i18n from "../src/i18n";
+import i18n, { getLocale, subscribeLocale } from "../src/i18n";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
@@ -85,11 +85,16 @@ export default function Index() {
   const [pinModalOpen, setPinModalOpen] = useState(false);
   const [sharingToCommunity, setSharingToCommunity] = useState(false);
   const [openingCommunity, setOpeningCommunity] = useState(false);
+  const [locale, setLocaleState] = useState(getLocale());
   const lastShareAtRef = useRef(0);
   const questionShareRef = useRef<View | null>(null);
   const router = useRouter();
   const [communityChatUnread, setCommunityChatUnread] = useState(0);
   const isQuestionModeActive = activeQuestion !== null;
+
+  useEffect(() => {
+    return subscribeLocale((lang: string) => setLocaleState(lang));
+  }, []);
 
   useEffect(() => {
     // Temporarily disable intro/language redirect during development.
@@ -518,7 +523,9 @@ export default function Index() {
                 }}
                 style={[styles.closeBtn, { marginTop: 10 }]}
               >
-                <Text style={styles.closeBtnText}>✦ neue Frage</Text>
+                <Text style={styles.closeBtnText}>
+                  ✦ {String(locale || "").toLowerCase().startsWith("pt") ? "nova pergunta" : i18n.t("buttons.question")}
+                </Text>
               </Pressable>
               <Pressable onPress={() => setActiveQuestion(null)} style={[styles.closeBtn, { marginTop: 10 }]}>
                 <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>

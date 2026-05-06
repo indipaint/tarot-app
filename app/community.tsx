@@ -36,6 +36,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DailyCardMenuBlock from "../components/DailyCardMenuBlock";
+import { DAILY_CARD_UI } from "../src/dailyCardNotifications";
 import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n, { getLocale, subscribeLocale } from "../src/i18n";
@@ -247,6 +248,7 @@ export default function CommunityScreen() {
   };
   const [localeCode, setLocaleCode] = useState(() => normalizeLang(getLocale()));
   const dailyMenuLocale = localeCode as "de" | "en" | "fr" | "es" | "pt";
+  const dailyCardLabel = DAILY_CARD_UI[dailyMenuLocale].sectionTitle;
   const settingsCopy = SETTINGS_COPY[localeCode as "de" | "en" | "fr" | "es" | "pt"];
   const privacyConsentKey = `community_privacy_accepted_v2_${localeCode}`;
   const communityAcceptedTermsKey = "community_accepted_terms";
@@ -1288,7 +1290,7 @@ export default function CommunityScreen() {
                   onPress={() => setDailyCardMenuOpen((v) => !v)}
                 >
                   <Text style={styles.settingsMenuActionText}>
-                    Tageskarte {dailyCardMenuOpen ? "▴" : "▾"}
+                    {dailyCardLabel} {dailyCardMenuOpen ? "▴" : "▾"}
                   </Text>
                 </Pressable>
                 {dailyCardMenuOpen ? (
