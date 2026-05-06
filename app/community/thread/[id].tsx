@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -14,7 +15,6 @@ import {
   query,
   serverTimestamp,
   setDoc,
-  increment,
   updateDoc,
 } from "firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -31,10 +31,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ensureCommunityAuth } from "../../../src/ensureCommunityAuth";
+import { auth } from "../../../src/firebase";
 import { db } from "../../../src/firebase";
 import { purgeCommunityThread } from "../../../src/purgeCommunityThread";
 import i18n, { getLocale, subscribeLocale } from "../../../src/i18n";
-import { sendPushToUser } from "../../../src/pushNotifications";
 
 type ThreadMessage = {
   id: string;
@@ -55,6 +55,9 @@ const LANGUAGE_FOR_PROVIDER: Record<string, string> = {
   es: "es",
   pt: "pt",
 };
+const SECURE_SEND_URL =
+  process.env.EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL ||
+  "https://europe-west1-endyia-tarot.cloudfunctions.net/sendThreadMessage";
 
 export default function PrivateThreadScreen() {
   const router = useRouter();
@@ -311,44 +314,36 @@ export default function PrivateThreadScreen() {
       Alert.alert("Info", i18n.t("thread.blocked_info"));
       return;
     }
-    let suppressDeliveryToPeer = false;
-    if (peerUid) {
-      try {
-        const peerSnap = await getDoc(doc(db, "community_users", peerUid));
-        const peerBlocks = peerSnap.data()?.blockedUids;
-        suppressDeliveryToPeer = Array.isArray(peerBlocks) && peerBlocks.includes(uid);
-      } catch {
-        suppressDeliveryToPeer = false;
-      }
-    }
     const messageText = text.trim();
     try {
-      await addDoc(collection(db, "threads", threadId, "messages"), {
-        text: messageText,
-        senderUid: uid,
-        senderName: nickname,
-        createdAt: serverTimestamp(),
-      });
-      await updateDoc(doc(db, "threads", threadId), {
-        lastMessageAt: serverTimestamp(),
-        lastMessageSenderUid: uid,
-      }).catch(() => {});
-      setText("");
-      // Wenn der Empfänger uns blockiert hat: Nachricht bleibt in Firebase (Absender sieht sie normal),
-      // aber kein Push und kein unreadCount — Empfänger-UI blendet sie ohnehin aus.
-      if (peerUid && !suppressDeliveryToPeer) {
-        void setDoc(
-          doc(db, "community_users", peerUid),
-          { uid: peerUid, unreadCount: increment(1), updatedAt: serverTimestamp() },
-          { merge: true }
-        ).catch(() => {});
-        void sendPushToUser(peerUid, {
-          title: nickname || "New message",
-          body: messageText,
-          data: { threadId, kind: "community_thread" },
-          badge: 1,
-        }).catch(() => {});
+      const idToken = await auth.currentUser?.getIdToken();
+      if (!idToken) {
+        Alert.alert("Error", "Authentication token missing.");
+        return;
       }
+      const res = await fetch(SECURE_SEND_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          threadId,
+          text: messageText,
+          senderName: nickname,
+          appOwnership: (Constants as any)?.appOwnership || null,
+        }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const code = String(payload?.error || "");
+        if (code === "blocked_by_peer") {
+          Alert.alert("Info", i18n.t("thread.blocked_info"));
+          return;
+        }
+        throw new Error(code || `http_${res.status}`);
+      }
+      setText("");
     } catch (error: any) {
       const message =
         typeof error?.message === "string" && error.message.trim()

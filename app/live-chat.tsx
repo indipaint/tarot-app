@@ -16,6 +16,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import DailyCardMenuBlock from "../components/DailyCardMenuBlock";
 import i18n from "../src/i18n";
 import { deleteCurrentAccountAndData } from "../src/deleteAccountAndData";
 
@@ -515,6 +516,7 @@ export default function LiveChatScreen() {
             <Pressable style={styles.settingsBackdrop} onPress={() => setSettingsMenuOpen(false)} />
             <View style={styles.settingsMenuCard}>
               <Text style={styles.settingsMenuTitle}>{settingsCopy.menuTitle}</Text>
+              <DailyCardMenuBlock locale={localeCode} onClose={() => setSettingsMenuOpen(false)} />
               <Pressable style={styles.settingsMenuDangerItem} onPress={requestDeleteAllData}>
                 <Text style={styles.settingsMenuDangerText}>{settingsCopy.deleteItem}</Text>
               </Pressable>

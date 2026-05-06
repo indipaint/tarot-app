@@ -28,6 +28,7 @@ import { captureRef } from "react-native-view-shot";
 import PinModal from "../components/ui/PinModal";
 import QuestionButton from "../components/ui/QuestionButton";
 import { getRandomQuestion } from "../src/data/questions";
+import { DAILY_CARD_PENDING_DRAW_KEY } from "../src/dailyCardNotifications";
 import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n from "../src/i18n";
@@ -289,6 +290,7 @@ export default function Index() {
   const nextSource = nextCard ? (nextCard as any).image : null;
 
   const saveJournalEntry = async () => {
+    const isDailyCardPending = (await AsyncStorage.getItem(DAILY_CARD_PENDING_DRAW_KEY)) === "1";
     const entry = {
       id: Date.now().toString(),
       date: new Date().toLocaleDateString(),
@@ -296,6 +298,7 @@ export default function Index() {
       cardId: currentId,
       cardTitle: currentName,
       lang: i18n.locale,
+      entryType: isDailyCardPending ? "daily_card" : "manual",
       question: activeQuestion ?? "",
       note: journalNote,
     };
@@ -303,6 +306,9 @@ export default function Index() {
     const entries = existing ? JSON.parse(existing) : [];
     entries.unshift(entry);
     await AsyncStorage.setItem("journal_entries", JSON.stringify(entries));
+    if (isDailyCardPending) {
+      await AsyncStorage.removeItem(DAILY_CARD_PENDING_DRAW_KEY);
+    }
     setJournalNote("");
     setJournalOpen(false);
     setActiveQuestion(null);

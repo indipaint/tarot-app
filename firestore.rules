@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwn(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isThreadParticipant(threadData) {
+      return isSignedIn() &&
+        (threadData.userA == request.auth.uid || threadData.userB == request.auth.uid);
+    }
+
+    match /community_users/{uid} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isOwn(uid);
+    }
+
+    match /reports/{reportId} {
+      allow create: if isSignedIn() &&
+        request.resource.data.reporterUid == request.auth.uid;
+      allow read, update, delete: if false;
+    }
+
+    match /posts/{postId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() &&
+        request.resource.data.authorUid == request.auth.uid;
+      allow update, delete: if isSignedIn() &&
+        resource.data.authorUid == request.auth.uid;
+    }
+
+    match /threads/{threadId} {
+      allow read: if isThreadParticipant(resource.data);
+      allow create: if isSignedIn() &&
+        (request.resource.data.userA == request.auth.uid ||
+         request.resource.data.userB == request.auth.uid);
+      allow update, delete: if isThreadParticipant(resource.data);
+
+      match /messages/{messageId} {
+        allow read: if isThreadParticipant(
+          get(/databases/$(database)/documents/threads/$(threadId)).data
+        );
+        allow create: if isThreadParticipant(
+          get(/databases/$(database)/documents/threads/$(threadId)).data
+        ) && request.resource.data.senderUid == request.auth.uid;
+        allow delete: if isSignedIn() && resource.data.senderUid == request.auth.uid;
+        allow update: if false;
+      }
+    }
+  }
+}

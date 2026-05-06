@@ -1,7 +1,13 @@
 const { onRequest } = require("firebase-functions/v2/https");
 const { defineSecret } = require("firebase-functions/params");
+const admin = require("firebase-admin");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 
 const openaiApiKey = defineSecret("OPENAI_API_KEY");
+
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -371,6 +377,115 @@ exports.coachChat = onRequest(
       }
 
       res.status(200).json({ reply });
+    } catch (error) {
+      res.status(500).json({ error: "internal_error", detail: String(error || "") });
+    }
+  }
+);
+
+exports.sendThreadMessage = onRequest(
+  {
+    region: "europe-west1",
+    maxInstances: 20,
+    timeoutSeconds: 20,
+    cors: true,
+  },
+  async (req, res) => {
+    Object.entries(corsHeaders).forEach(([k, v]) => res.setHeader(k, v));
+    if (req.method === "OPTIONS") {
+      res.status(204).send("");
+      return;
+    }
+    if (req.method !== "POST") {
+      res.status(405).json({ error: "method_not_allowed" });
+      return;
+    }
+
+    try {
+      const authHeader = String(req.headers.authorization || "");
+      const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : "";
+      if (!token) {
+        res.status(401).json({ error: "missing_auth_token" });
+        return;
+      }
+
+      const decoded = await admin.auth().verifyIdToken(token);
+      const uid = String(decoded.uid || "").trim();
+      if (!uid) {
+        res.status(401).json({ error: "invalid_auth_token" });
+        return;
+      }
+
+      const threadId = sanitizeText(req.body?.threadId, 180);
+      const text = sanitizeText(req.body?.text, 1200);
+      const senderName = sanitizeText(req.body?.senderName, 120);
+
+      if (!threadId || !text) {
+        res.status(400).json({ error: "invalid_payload" });
+        return;
+      }
+
+      const db = getFirestore();
+      const threadRef = db.collection("threads").doc(threadId);
+      const threadSnap = await threadRef.get();
+      if (!threadSnap.exists) {
+        res.status(404).json({ error: "thread_not_found" });
+        return;
+      }
+
+      const thread = threadSnap.data() || {};
+      const userA = String(thread.userA || "");
+      const userB = String(thread.userB || "");
+      const isParticipant = uid === userA || uid === userB;
+      if (!isParticipant) {
+        res.status(403).json({ error: "no_thread_access" });
+        return;
+      }
+
+      const peerUid = uid === userA ? userB : userA;
+      if (!peerUid) {
+        res.status(400).json({ error: "invalid_thread_users" });
+        return;
+      }
+
+      const peerProfile = await db.collection("community_users").doc(peerUid).get();
+      const peerBlockedUids = Array.isArray(peerProfile.data()?.blockedUids)
+        ? peerProfile.data().blockedUids
+        : [];
+      if (peerBlockedUids.includes(uid)) {
+        res.status(403).json({ error: "blocked_by_peer" });
+        return;
+      }
+
+      const now = FieldValue.serverTimestamp();
+      const msgRef = await db.collection("threads").doc(threadId).collection("messages").add({
+        text,
+        senderUid: uid,
+        senderName: senderName || "User",
+        createdAt: now,
+      });
+
+      await threadRef.set(
+        {
+          lastMessageAt: now,
+          lastMessageSenderUid: uid,
+        },
+        { merge: true }
+      );
+
+      await db
+        .collection("community_users")
+        .doc(peerUid)
+        .set(
+          {
+            uid: peerUid,
+            unreadCount: FieldValue.increment(1),
+            updatedAt: now,
+          },
+          { merge: true }
+        );
+
+      res.status(200).json({ ok: true, messageId: msgRef.id });
     } catch (error) {
       res.status(500).json({ error: "internal_error", detail: String(error || "") });
     }

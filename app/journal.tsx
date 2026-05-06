@@ -9,6 +9,7 @@ import { Alert, Animated, Image, Linking, Pressable, ScrollView, Share, StyleShe
 import { PanGestureHandler, PinchGestureHandler, State } from "react-native-gesture-handler";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { captureRef } from "react-native-view-shot";
+import DailyCardMenuBlock from "../components/DailyCardMenuBlock";
 import i18n from "../src/i18n";
 import { getLegalUrls } from "../src/legal";
 import { deleteCurrentAccountAndData } from "../src/deleteAccountAndData";
@@ -20,6 +21,7 @@ type JournalEntry = {
   cardId: string;
   cardTitle: string;
   lang: string;
+  entryType?: "daily_card" | "manual";
   question: string;
   note: string;
 };
@@ -50,6 +52,14 @@ function normalizeLang(value?: string): "de" | "en" | "fr" | "es" | "pt" {
   const lang = String(value || "").toLowerCase().split("-")[0];
   if (lang === "en" || lang === "fr" || lang === "es" || lang === "pt") return lang;
   return "de";
+}
+
+function getDailyEntryLabel(locale: "de" | "en" | "fr" | "es" | "pt"): string {
+  if (locale === "en") return "Daily card entry";
+  if (locale === "fr") return "Entrée carte du jour";
+  if (locale === "es") return "Entrada carta del dia";
+  if (locale === "pt") return "Entrada carta do dia";
+  return "Tageskarteneintrag";
 }
 
 const COACH_CONSENT_COPY = {
@@ -229,6 +239,7 @@ export default function JournalScreen() {
   const settingsCopy = SETTINGS_COPY[localeCode];
   const coachTermsKey = `coach_terms_v1_${localeCode}`;
   const legalUrls = getLegalUrls(localeCode);
+  const dailyEntryLabel = getDailyEntryLabel(localeCode);
   const clampZoom = (value: number) => Math.max(0.9, Math.min(1.6, value));
   const scale = Animated.multiply(zoomValue, pinchValue);
   const onPinchGesture = Animated.event([{ nativeEvent: { scale: pinchValue } }], {
@@ -456,6 +467,7 @@ export default function JournalScreen() {
             <Pressable style={styles.settingsBackdrop} onPress={() => setSettingsMenuOpen(false)} />
             <View style={styles.settingsMenuCard}>
               <Text style={styles.settingsMenuTitle}>{settingsCopy.menuTitle}</Text>
+              <DailyCardMenuBlock locale={localeCode} onClose={() => setSettingsMenuOpen(false)} />
               <Pressable style={styles.settingsMenuDangerItem} onPress={requestDeleteAllData}>
                 <Text style={styles.settingsMenuDangerText}>{settingsCopy.deleteItem}</Text>
               </Pressable>
@@ -498,7 +510,12 @@ export default function JournalScreen() {
                     entries.map((entry) => (
                       <View key={entry.id} style={styles.card}>
                         <View style={styles.cardHeader}>
-                          <Text style={styles.cardTitle}>{getLocalizedCardTitle(entry)}</Text>
+                          <View>
+                            <Text style={styles.cardTitle}>{getLocalizedCardTitle(entry)}</Text>
+                            {entry.entryType === "daily_card" ? (
+                              <Text style={styles.dailyEntryLabel}>{dailyEntryLabel}</Text>
+                            ) : null}
+                          </View>
                           <Text style={styles.cardDate}>{entry.date} · {entry.time}</Text>
                         </View>
                         {getCardImageSource(entry.cardId) ? (
@@ -706,6 +723,7 @@ const styles = StyleSheet.create({
     alignItems: "center", marginBottom: 4,
   },
   cardTitle: { color: "#aaa", fontSize: 16, fontWeight: "600", letterSpacing: 1 },
+  dailyEntryLabel: { color: "#6f8fd4", fontSize: 11, marginTop: 2 },
   cardDate: { color: "#777", fontSize: 13 },
   cardQuestion: { color: "#999", fontSize: 14, fontStyle: "italic", marginBottom: 4 },
   shareCardImage: {

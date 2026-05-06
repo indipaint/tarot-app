@@ -3,6 +3,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
+  addDoc,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -32,6 +34,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import DailyCardMenuBlock from "../components/DailyCardMenuBlock";
 import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n, { getLocale, subscribeLocale } from "../src/i18n";
@@ -242,6 +245,7 @@ export default function CommunityScreen() {
     return ["de", "en", "fr", "es", "pt"].includes(lang) ? lang : "de";
   };
   const [localeCode, setLocaleCode] = useState(() => normalizeLang(getLocale()));
+  const dailyMenuLocale = localeCode as "de" | "en" | "fr" | "es" | "pt";
   const settingsCopy = SETTINGS_COPY[localeCode as "de" | "en" | "fr" | "es" | "pt"];
   const privacyConsentKey = `community_privacy_accepted_v2_${localeCode}`;
   const communityAcceptedTermsKey = "community_accepted_terms";
@@ -264,6 +268,7 @@ export default function CommunityScreen() {
   const [unreadRefreshTick, setUnreadRefreshTick] = useState(0);
   const [privateThreads, setPrivateThreads] = useState<PrivateThreadPreview[]>([]);
   const [seenPostIds, setSeenPostIds] = useState<Record<string, number>>({});
+  const [blockedUidsLocal, setBlockedUidsLocal] = useState<Set<string>>(new Set());
   const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
   const [deletingAccount, setDeletingAccount] = useState(false);
   const seenPostsStorageKey = uid ? `community_seen_posts_${uid}` : "community_seen_posts";
@@ -664,6 +669,18 @@ export default function CommunityScreen() {
     run().catch(() => {});
   }, [posts, uid, localeCode, translatedPostById, translatedQuestionById]);
 
+  useEffect(() => {
+    if (!uid) return;
+    let cancelled = false;
+    (async () => {
+      const merged = await loadMergedBlockedUids(uid);
+      if (!cancelled) setBlockedUidsLocal(new Set(merged));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [uid]);
+
   const getCardImage = (inputCardId?: string) => {
     if (!inputCardId) return null;
     const card = cards.find((c: any) => String(c?.id) === String(inputCardId));
@@ -860,6 +877,161 @@ export default function CommunityScreen() {
   };
 
   const replyOrOpenPrivate = async (post: CommunityPost) => openPrivateThread(post);
+
+  const reportThreadPeer = async (threadId: string, otherUid: string) => {
+    if (!uid || !threadId || !otherUid) return;
+    try {
+      await addDoc(collection(db, "reports"), {
+        type: "private_thread_user_report",
+        reporterUid: uid,
+        reportedUid: otherUid,
+        threadId,
+        createdAt: serverTimestamp(),
+      });
+      Alert.alert(i18n.t("thread.report_success_title"), i18n.t("thread.report_success_body"));
+    } catch {
+      Alert.alert("Error", i18n.t("community.safety_report_error"));
+    }
+  };
+
+  const blockUserByUid = async (targetUid: string) => {
+    if (!uid || !targetUid || targetUid === uid) return;
+    try {
+      const raw = await AsyncStorage.getItem("blocked_uids");
+      const list = raw ? JSON.parse(raw) : [];
+      const next = Array.isArray(list) ? [...list] : [];
+      if (!next.includes(targetUid)) next.push(targetUid);
+      await AsyncStorage.setItem("blocked_uids", JSON.stringify(next));
+      setBlockedUidsLocal(new Set(next));
+      await setDoc(
+        doc(db, "community_users", uid),
+        { uid, blockedUids: arrayUnion(targetUid), updatedAt: serverTimestamp() },
+        { merge: true }
+      ).catch(() => {});
+    } catch {
+      Alert.alert("Error", i18n.t("community.safety_block_error"));
+    }
+  };
+
+  const unblockUserByUid = async (targetUid: string) => {
+    if (!uid || !targetUid || targetUid === uid) return;
+    try {
+      const raw = await AsyncStorage.getItem("blocked_uids");
+      const list = raw ? JSON.parse(raw) : [];
+      const next = (Array.isArray(list) ? list : []).filter((x: string) => x !== targetUid);
+      await AsyncStorage.setItem("blocked_uids", JSON.stringify(next));
+      setBlockedUidsLocal(new Set(next));
+      await setDoc(
+        doc(db, "community_users", uid),
+        { uid, blockedUids: arrayRemove(targetUid), updatedAt: serverTimestamp() },
+        { merge: true }
+      ).catch(() => {});
+    } catch {
+      Alert.alert("Error", i18n.t("community.safety_unblock_error"));
+    }
+  };
+
+  const openThreadSafetyMenu = (threadId: string, otherUid: string) => {
+    const isBlocked = blockedUidsLocal.has(otherUid);
+    Alert.alert(
+      i18n.t("community.center_title"),
+      i18n.t("community.safety_menu_title"),
+      [
+        { text: i18n.t("thread.report"), onPress: () => reportThreadPeer(threadId, otherUid) },
+        isBlocked
+          ? { text: i18n.t("thread.unblock"), onPress: () => unblockUserByUid(otherUid) }
+          : { text: i18n.t("thread.block"), style: "destructive", onPress: () => blockUserByUid(otherUid) },
+        { text: i18n.t("buttons.cancel"), style: "cancel" },
+      ]
+    );
+  };
+
+  const openHeaderReportFlow = () => {
+    const target = privateThreads.find((t) => !!t.otherUid);
+    if (!target) {
+      Alert.alert("Info", i18n.t("community.safety_no_chat_report"));
+      return;
+    }
+    void reportThreadPeer(target.id, target.otherUid);
+    setSettingsMenuOpen(false);
+  };
+
+  const openHeaderBlockFlow = () => {
+    const target = privateThreads.find((t) => !!t.otherUid);
+    if (!target) {
+      Alert.alert("Info", i18n.t("community.safety_no_chat_block"));
+      return;
+    }
+    const isBlocked = blockedUidsLocal.has(target.otherUid);
+    if (isBlocked) {
+      void unblockUserByUid(target.otherUid);
+    } else {
+      void blockUserByUid(target.otherUid);
+    }
+    setSettingsMenuOpen(false);
+  };
+
+  const reportPost = async (post: CommunityPost, reason: string) => {
+    if (!uid || !post.id) return;
+    try {
+      await addDoc(collection(db, "reports"), {
+        type: "community_post_report",
+        reason,
+        reporterUid: uid,
+        reportedUid: String(post.authorUid || "").trim(),
+        reportedName: String(post.authorName || "").trim(),
+        postId: post.id,
+        createdAt: serverTimestamp(),
+      });
+      Alert.alert(i18n.t("thread.report_success_title"), i18n.t("thread.report_success_body"));
+    } catch {
+      Alert.alert("Error", i18n.t("community.safety_report_error"));
+    }
+  };
+
+  const openReportPostFlow = (post: CommunityPost) => {
+    Alert.alert(
+      i18n.t("thread.report"),
+      i18n.t("community.safety_reason_title"),
+      [
+        { text: i18n.t("community.report_reason_spam"), onPress: () => reportPost(post, "spam") },
+        { text: i18n.t("community.report_reason_harassment"), onPress: () => reportPost(post, "harassment") },
+        { text: i18n.t("community.report_reason_other"), onPress: () => reportPost(post, "other") },
+        { text: i18n.t("buttons.cancel"), style: "cancel" },
+      ]
+    );
+  };
+
+  const blockAuthorFromPost = async (post: CommunityPost) => {
+    const targetUid = String(post.authorUid || "").trim();
+    if (!uid || !targetUid || targetUid === uid) return;
+    try {
+      const raw = await AsyncStorage.getItem("blocked_uids");
+      const list = raw ? JSON.parse(raw) : [];
+      const next = Array.isArray(list) ? [...list] : [];
+      if (!next.includes(targetUid)) next.push(targetUid);
+      await AsyncStorage.setItem("blocked_uids", JSON.stringify(next));
+      setBlockedUidsLocal(new Set(next));
+      await setDoc(
+        doc(db, "community_users", uid),
+        { uid, blockedUids: arrayUnion(targetUid), updatedAt: serverTimestamp() },
+        { merge: true }
+      ).catch(() => {});
+    } catch {
+      Alert.alert("Error", i18n.t("community.safety_block_error"));
+    }
+  };
+
+  const openBlockAuthorFlow = (post: CommunityPost) => {
+    Alert.alert(
+      i18n.t("thread.block"),
+      i18n.t("community.safety_block_confirm"),
+      [
+        { text: i18n.t("buttons.cancel"), style: "cancel" },
+        { text: i18n.t("thread.block"), style: "destructive", onPress: () => blockAuthorFromPost(post) },
+      ]
+    );
+  };
 
   const saveOwnThoughts = async (post: CommunityPost) => {
     if (!post.id) return;
@@ -1082,6 +1254,15 @@ export default function CommunityScreen() {
             <Pressable style={styles.settingsBackdrop} onPress={() => setSettingsMenuOpen(false)} />
             <View style={styles.settingsMenuCard}>
               <Text style={styles.settingsMenuTitle}>{settingsCopy.menuTitle}</Text>
+              <Pressable style={styles.settingsMenuActionItem} onPress={openHeaderReportFlow}>
+                <Text style={styles.settingsMenuActionText}>{i18n.t("thread.report")}</Text>
+              </Pressable>
+              <Pressable style={styles.settingsMenuActionItem} onPress={openHeaderBlockFlow}>
+                <Text style={styles.settingsMenuActionText}>
+                  {blockedUidsLocal.size > 0 ? i18n.t("thread.unblock") : i18n.t("thread.block")}
+                </Text>
+              </Pressable>
+              <DailyCardMenuBlock locale={dailyMenuLocale} onClose={() => setSettingsMenuOpen(false)} />
               <Pressable style={styles.settingsMenuDangerItem} onPress={requestDeleteAllData}>
                 <Text style={styles.settingsMenuDangerText}>{settingsCopy.deleteItem}</Text>
               </Pressable>
@@ -1121,6 +1302,9 @@ export default function CommunityScreen() {
                         </View>
                         <View style={styles.threadMetaWrap}>
                           {thread.unread ? <Text style={styles.threadUnreadDot}>●</Text> : null}
+                          <Pressable onPress={() => openThreadSafetyMenu(thread.id, thread.otherUid)} style={styles.threadMenuBtn}>
+                            <Text style={styles.threadMenuBtnText}>⋮</Text>
+                          </Pressable>
                         </View>
                       </Pressable>
                     </View>
@@ -1132,7 +1316,14 @@ export default function CommunityScreen() {
             </View>
           ) : null}
           {!chatsOnly
-            ? posts.map((post) => {
+            ? posts
+                .filter((post) => {
+                  const authorUid = String(post.authorUid || "").trim();
+                  if (!authorUid) return true;
+                  if (authorUid === uid) return true;
+                  return !blockedUidsLocal.has(authorUid);
+                })
+                .map((post) => {
             const isOwn = isOwnPost(post);
             const postCreatedAtMs = getPostCreatedAtMs(post);
             const seenAtMs = Number(seenPostIds[post.id] || 0);
@@ -1257,6 +1448,12 @@ export default function CommunityScreen() {
                         <Pressable style={styles.replyBtn} onPress={() => replyOrOpenPrivate(post)}>
                           <Text style={styles.replyBtnText}>{i18n.t("community.private_reply")}</Text>
                         </Pressable>
+                        <Pressable style={styles.replyBtnGhost} onPress={() => openReportPostFlow(post)}>
+                          <Text style={styles.replyBtnText}>{i18n.t("thread.report")}</Text>
+                        </Pressable>
+                        <Pressable style={styles.deleteBtn} onPress={() => openBlockAuthorFlow(post)}>
+                          <Text style={styles.deleteBtnText}>{i18n.t("thread.block")}</Text>
+                        </Pressable>
                       </View>
                       <Text style={styles.privateReplyHint}>{i18n.t("community.private_reply_hint")}</Text>
                     </View>
@@ -1376,6 +1573,15 @@ const styles = StyleSheet.create({
     zIndex: 30,
   },
   settingsMenuTitle: { color: "#d7d7d7", fontSize: 12, letterSpacing: 0.4 },
+  settingsMenuActionItem: {
+    borderWidth: 1,
+    borderColor: "#3e4761",
+    borderRadius: 8,
+    backgroundColor: "#172034",
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+  },
+  settingsMenuActionText: { color: "#cfd7ff", fontSize: 12, lineHeight: 16 },
   settingsMenuDangerItem: {
     borderWidth: 1,
     borderColor: "#7a2f2f",
@@ -1447,6 +1653,17 @@ const styles = StyleSheet.create({
   threadRowText: { color: "#d8def0", fontSize: 12, flex: 1 },
   threadMetaWrap: { flexDirection: "row", alignItems: "center", gap: 6 },
   threadUnreadDot: { color: "#ff6b6b", fontSize: 12, marginTop: -1 },
+  threadMenuBtn: {
+    width: 24,
+    height: 24,
+    borderWidth: 1,
+    borderColor: "#374158",
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#0f1828",
+  },
+  threadMenuBtnText: { color: "#9fb0cc", fontSize: 13, lineHeight: 14 },
   postRow: { width: "100%", flexDirection: "row" },
   postRowOwn: { justifyContent: "flex-end" },
   postRowOther: { justifyContent: "flex-start" },
