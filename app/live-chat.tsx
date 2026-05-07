@@ -46,7 +46,8 @@ type PendingCoachRequest = {
   createdAt: number;
 };
 
-const API_URL = process.env.EXPO_PUBLIC_COACH_API_URL || "";
+const DEFAULT_COACH_URL = "https://europe-west1-endyia-tarot.cloudfunctions.net/coachChat";
+const API_URL = process.env.EXPO_PUBLIC_COACH_API_URL || DEFAULT_COACH_URL;
 const chatHistoryKeyForEntry = (entryId: string) => `live_chat_history_${entryId}`;
 const pendingQueueKeyForEntry = (entryId: string) => `live_chat_queue_${entryId}`;
 const normalizeLang = (value?: string): "de" | "en" | "fr" | "es" | "pt" => {
@@ -315,7 +316,7 @@ export default function LiveChatScreen() {
   };
 
   const flushPendingQueue = useCallback(async () => {
-    if (!pendingQueue.length || flushingRef.current || !API_URL) return;
+    if (!pendingQueue.length || flushingRef.current) return;
     flushingRef.current = true;
     try {
       let queue = [...pendingQueue];
@@ -378,13 +379,6 @@ export default function LiveChatScreen() {
     if (!userText || sending) return;
     if (!entry) {
       Alert.alert("Info", "Kein Tagebuch-Eintrag gefunden.");
-      return;
-    }
-    if (!API_URL) {
-      Alert.alert(
-        "Live Chat nicht konfiguriert",
-        "Setze EXPO_PUBLIC_COACH_API_URL auf deinen sicheren Backend-Endpoint."
-      );
       return;
     }
 

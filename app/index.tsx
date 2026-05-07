@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Asset } from "expo-asset";
 import { BlurView } from "expo-blur";
 import * as ImageManipulator from "expo-image-manipulator";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
 import { StatusBar } from "expo-status-bar";
 import { addDoc, collection, doc, onSnapshot, serverTimestamp } from "firebase/firestore";
@@ -43,7 +43,8 @@ const RITUAL_FADE_MS = 4000;
 const WELCOME_SCALE = 1.12;
 const WELCOME_TRANSLATE_Y = -177;
 const WELCOME_BTN_MARGIN_TOP = -266;
-const INTRO_DONE_ONCE_KEY = "__intro_done_once";
+/** After first successful „Zieh eine Karte“ on the welcome overlay, hide it on future launches. */
+const WELCOME_OVERLAY_DONE_KEY = "tarot_welcome_overlay_done_v2";
 let redirectedToLanguageThisSession = false;
 
 function getCards(): any[] {
@@ -89,6 +90,8 @@ export default function Index() {
   const lastShareAtRef = useRef(0);
   const questionShareRef = useRef<View | null>(null);
   const router = useRouter();
+  const searchParams = useLocalSearchParams<{ firstDraw?: string }>();
+  const firstDrawParam = String(searchParams.firstDraw || "");
   const [communityChatUnread, setCommunityChatUnread] = useState(0);
   const isQuestionModeActive = activeQuestion !== null;
 
@@ -220,6 +223,34 @@ export default function Index() {
     setIndex(randomIndex);
     rebuildDeck(randomIndex);
   }, [cards.length]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const done = await AsyncStorage.getItem(WELCOME_OVERLAY_DONE_KEY);
+        if (cancelled) return;
+        if (done !== "1") setShowWelcome(true);
+      } catch {
+        if (!cancelled) setShowWelcome(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (firstDrawParam !== "1") return;
+    setShowWelcome(true);
+    requestAnimationFrame(() => {
+      try {
+        router.setParams({ firstDraw: undefined } as any);
+      } catch {
+        /* ignore */
+      }
+    });
+  }, [firstDrawParam, router]);
 
   const panResponder = useMemo(
     () => PanResponder.create({
@@ -455,6 +486,10 @@ export default function Index() {
                 } else {
                   rebuildDeck(index);
                 }
+                AsyncStorage.multiSet([
+                  [WELCOME_OVERLAY_DONE_KEY, "1"],
+                  ["tarot_welcome_overlay_done", "1"],
+                ]).catch(() => {});
                 setShowWelcome(false);
               }}
             >
@@ -495,41 +530,33 @@ export default function Index() {
           {activeQuestion ? (
             <View style={styles.questionOnCardWrap}>
               <Text style={styles.questionOnCardText}>{activeQuestion}</Text>
-              <View style={styles.questionBtnRow}>
+              <View style={styles.questionActionsWrap}>
+                <Pressable onPress={() => setJournalOpen(true)} style={styles.closeBtn}>
+                  <Text style={styles.closeBtnText}>✍️ {i18n.t("buttons.journal")}</Text>
+                </Pressable>
+                <Pressable onPress={shareQuestionWithCard} style={styles.closeBtn}>
+                  <Text style={styles.closeBtnText}>↗️ {i18n.t("buttons.share_question")}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={shareToCommunity}
+                  disabled={sharingToCommunity}
+                  style={styles.closeBtn}
+                >
+                  <Text style={styles.closeBtnText}>{i18n.t("buttons.share_community")}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    setActiveQuestion(null);
+                    setQuestionOverlayOpen(true);
+                  }}
+                  style={styles.closeBtn}
+                >
+                  <Text style={styles.closeBtnText}>✦ {i18n.t("buttons.new_question")}</Text>
+                </Pressable>
+                <Pressable onPress={() => setActiveQuestion(null)} style={styles.closeBtn}>
+                  <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
+                </Pressable>
               </View>
-              <Pressable
-                onPress={() => setJournalOpen(true)}
-                style={[styles.closeBtn, { marginTop: 10 }]}
-              >
-                <Text style={styles.closeBtnText}>✍️ {i18n.t("buttons.journal")}</Text>
-              </Pressable>
-              <Pressable
-                onPress={shareQuestionWithCard}
-                style={[styles.closeBtn, { marginTop: 10 }]}
-              >
-                <Text style={styles.closeBtnText}>↗️ {i18n.t("buttons.share_question")}</Text>
-              </Pressable>
-              <Pressable
-                onPress={shareToCommunity}
-                disabled={sharingToCommunity}
-                style={[styles.closeBtn, { marginTop: 10 }]}
-              >
-                <Text style={styles.closeBtnText}>{i18n.t("buttons.share_community")}</Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  setActiveQuestion(null);
-                  setQuestionOverlayOpen(true);
-                }}
-                style={[styles.closeBtn, { marginTop: 10 }]}
-              >
-                <Text style={styles.closeBtnText}>
-                  ✦ {String(locale || "").toLowerCase().startsWith("pt") ? "nova pergunta" : i18n.t("buttons.question")}
-                </Text>
-              </Pressable>
-              <Pressable onPress={() => setActiveQuestion(null)} style={[styles.closeBtn, { marginTop: 10 }]}>
-                <Text style={styles.closeBtnText}>✕ {i18n.t("buttons.close")}</Text>
-              </Pressable>
             </View>
           ) : null}
 
@@ -738,10 +765,11 @@ const styles = StyleSheet.create({
     bottom: 260,
     alignItems: "center",
   },
-  questionBtnRow: {
-    flexDirection: "row",
-    gap: 10,
+  questionActionsWrap: {
     marginTop: 20,
+    width: "100%",
+    gap: 10,
+    alignItems: "stretch",
   },
   questionOnCardText: {
     color: "#fff",
@@ -891,7 +919,7 @@ const styles = StyleSheet.create({
   },
   welcomeBtnText: { color: "#eaeaff", letterSpacing: 1.4, fontWeight: "700" },
   closeBtn: {
-    marginTop: 20,
+    marginTop: 0,
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 6,

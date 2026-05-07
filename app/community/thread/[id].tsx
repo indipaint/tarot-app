@@ -59,6 +59,40 @@ const SECURE_SEND_URL =
   process.env.EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL ||
   "https://europe-west1-endyia-tarot.cloudfunctions.net/sendThreadMessage";
 
+/** Same format as `buildThreadId` in community.tsx: sortedUidA__sortedUidB__postId (postId may contain "__"). */
+function parseDeterministicThreadId(threadId: string): {
+  userA: string;
+  userB: string;
+  postId: string;
+} | null {
+  const parts = String(threadId || "").split("__");
+  if (parts.length < 3) return null;
+  const userA = String(parts[0] || "").trim();
+  const userB = String(parts[1] || "").trim();
+  const postId = parts.slice(2).join("__").trim();
+  if (!userA || !userB || !postId) return null;
+  return { userA, userB, postId };
+}
+
+async function ensureThreadDocExists(threadId: string, uid: string): Promise<void> {
+  const snap = await getDoc(doc(db, "threads", threadId));
+  if (snap.exists()) return;
+  const parsed = parseDeterministicThreadId(threadId);
+  if (!parsed) return;
+  const { userA, userB, postId } = parsed;
+  if (uid !== userA && uid !== userB) return;
+  await setDoc(
+    doc(db, "threads", threadId),
+    {
+      userA,
+      userB,
+      basedOnPostId: postId,
+      createdAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
+}
+
 export default function PrivateThreadScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ id?: string }>();
@@ -140,9 +174,22 @@ export default function PrivateThreadScreen() {
   }, [privacyConsentKey]);
 
   useEffect(() => {
-    if (!threadId || !uid) return;
+    if (!threadId || !uid) {
+      setAllowed(false);
+      setPeerUid("");
+      setBlocked(false);
+      setMessages([]);
+      return;
+    }
+    // Avoid stale access/messages from a previous thread while the new thread loads (prevents send → 404).
+    setAllowed(false);
+    setPeerUid("");
+    setBlocked(false);
+    setMessages([]);
+    let cancelled = false;
     (async () => {
       const threadSnap = await getDoc(doc(db, "threads", threadId));
+      if (cancelled) return;
       const data = threadSnap.data() as { userA?: string; userB?: string } | undefined;
       const canAccess = !!data && (data.userA === uid || data.userB === uid);
       setAllowed(canAccess);
@@ -192,6 +239,9 @@ export default function PrivateThreadScreen() {
         setBlocked(!!other && merged.has(other));
       }
     })();
+    return () => {
+      cancelled = true;
+    };
   }, [threadId, uid]);
 
   useEffect(() => {
@@ -316,29 +366,44 @@ export default function PrivateThreadScreen() {
     }
     const messageText = text.trim();
     try {
-      const idToken = await auth.currentUser?.getIdToken();
+      const idToken = await auth.currentUser?.getIdToken(true);
       if (!idToken) {
         Alert.alert("Error", "Authentication token missing.");
         return;
       }
-      const res = await fetch(SECURE_SEND_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({
-          threadId,
-          text: messageText,
-          senderName: nickname,
-          appOwnership: (Constants as any)?.appOwnership || null,
-        }),
-      });
-      const payload = await res.json().catch(() => ({}));
+      const postOnce = async () => {
+        const res = await fetch(SECURE_SEND_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            threadId,
+            text: messageText,
+            senderName: nickname,
+            appOwnership: (Constants as any)?.appOwnership || null,
+          }),
+        });
+        const payload = await res.json().catch(() => ({}));
+        return { res, payload };
+      };
+      let { res, payload } = await postOnce();
+      if (!res.ok && (res.status === 404 || String(payload?.error || "") === "thread_not_found")) {
+        await ensureThreadDocExists(threadId, uid);
+        ({ res, payload } = await postOnce());
+      }
       if (!res.ok) {
         const code = String(payload?.error || "");
         if (code === "blocked_by_peer") {
           Alert.alert("Info", i18n.t("thread.blocked_info"));
+          return;
+        }
+        if (res.status === 404 || code === "thread_not_found") {
+          Alert.alert(
+            i18n.t("thread.send_failed_title"),
+            i18n.t("thread.send_thread_not_found_body")
+          );
           return;
         }
         throw new Error(code || `http_${res.status}`);

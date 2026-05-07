@@ -8,6 +8,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import i18n from "../src/i18n";
 
 const INTRO_DONE_ONCE_KEY = "__intro_done_once";
+/** Must match app/index.tsx WELCOME_OVERLAY_DONE_KEY */
+const WELCOME_OVERLAY_DONE_V2 = "tarot_welcome_overlay_done_v2";
 const AGE_VERIFIED_KEY = "age_verified_v1";
 const AGE_DENIED_KEY = "age_denied_v1";
 const AGE_GATE_COPY: Record<
@@ -226,8 +228,17 @@ export default function Intro() {
     }).start(() => {
       if (navigated.current) return;
       navigated.current = true;
-      AsyncStorage.setItem(INTRO_DONE_ONCE_KEY, "1").catch(() => {});
-      requestAnimationFrame(() => router.replace("/"));
+      void (async () => {
+        await AsyncStorage.setItem(INTRO_DONE_ONCE_KEY, "1").catch(() => {});
+        const welcomeDone = await AsyncStorage.getItem(WELCOME_OVERLAY_DONE_V2);
+        requestAnimationFrame(() => {
+          if (welcomeDone !== "1") {
+            router.replace({ pathname: "/", params: { firstDraw: "1" } } as any);
+          } else {
+            router.replace("/" as any);
+          }
+        });
+      })();
     });
   };
 

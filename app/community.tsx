@@ -834,6 +834,11 @@ export default function CommunityScreen() {
           basedOnPostId: post.id,
           createdAt: serverTimestamp(),
         });
+        const verify = await getDoc(threadRef);
+        if (!verify.exists()) {
+          Alert.alert("Error", "Private thread could not be opened.");
+          return;
+        }
       }
       router.push(`/community/thread/${threadId}` as any);
     } catch {

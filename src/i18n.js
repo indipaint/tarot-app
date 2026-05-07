@@ -6,7 +6,7 @@ const translations = {
     app: { welcome: "Willkommen zur Tarot App" },
     buttons: {
       meaning: "Deutung", draw: "Zieh", draw_welcome: "ZIEH EINE KARTE",
-      back: "Zurück", question: "Frage", soft: "Sanft", deep: "Tief",
+      back: "Zurück", question: "Frage", new_question: "Neue Frage", soft: "Sanft", deep: "Tief",
       existential: "Existenziell", close: "schliessen", save: "Speichern",
       delete: "Löschen", view_card: "Karte ansehen", share: "Teilen",
       cancel: "Abbrechen", confirm_delete: "Wirklich löschen?", journal: "Tagebuch",
@@ -107,6 +107,9 @@ const translations = {
       block_sync_warning_title: "Blockliste nur auf diesem Gerät",
       block_sync_warning_body:
         "Die Cloud konnte deine Blockliste nicht speichern (Firestore-Berechtigung). Block wirkt hier, aber der andere kann dir ggf. noch schreiben, bis in den Firebase Rules Schreiben von blockedUids auf community_users erlaubt ist und andere Geräte die Liste lesen dürfen.",
+      send_failed_title: "Senden fehlgeschlagen",
+      send_thread_not_found_body:
+        "Der Server hat diesen Chat nicht gefunden. Bitte zurück, Chat erneut öffnen, nochmal senden. Wenn es bleibt: Firebase-Function sendThreadMessage deployen und EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL prüfen.",
     },
     cards: {
       "00": "Der Narr", "01": "Der Magier", "02": "Die Hohepriesterin",
@@ -144,7 +147,7 @@ const translations = {
     app: { welcome: "Welcome to Tarot App" },
     buttons: {
       meaning: "Meaning", draw: "Draw", draw_welcome: "DRAW A CARD",
-      back: "Back", question: "Question", soft: "Gentle", deep: "Deep",
+      back: "Back", question: "Question", new_question: "New question", soft: "Gentle", deep: "Deep",
       existential: "Existential", close: "close", save: "Save",
       delete: "Delete", view_card: "View card", share: "Share",
       cancel: "Cancel", confirm_delete: "Really delete?", journal: "Journal",
@@ -245,6 +248,9 @@ const translations = {
       block_sync_warning_title: "Block list not saved to cloud",
       block_sync_warning_body:
         "Your block could not be written to Firestore (permission). It still applies on this device. To stop the other person across devices, allow users to write blockedUids on their own community_users document in Firebase rules, and allow authenticated reads of that field for send checks.",
+      send_failed_title: "Could not send",
+      send_thread_not_found_body:
+        "The server could not find this chat. Go back, open the chat again, then try sending. If this keeps happening, deploy the sendThreadMessage cloud function and check EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL.",
     },
     cards: {
       "00": "The Fool", "01": "The Magician", "02": "The High Priestess",
@@ -282,7 +288,7 @@ const translations = {
     app: { welcome: "Bienvenue dans l'application Tarot" },
     buttons: {
       meaning: "Signification", draw: "Tirer", draw_welcome: "TIRER UNE CARTE",
-      back: "Retour", question: "Question", soft: "Douce", deep: "Profond",
+      back: "Retour", question: "Question", new_question: "Nouvelle question", soft: "Douce", deep: "Profond",
       existential: "Existentiel", close: "fermer", save: "Enregistrer",
       delete: "Supprimer", view_card: "Voir la carte", share: "Partager",
       cancel: "Annuler", confirm_delete: "Vraiment supprimer?", journal: "Journal",
@@ -383,6 +389,9 @@ const translations = {
       block_sync_warning_title: "Blocage local seulement",
       block_sync_warning_body:
         "La liste de blocage n'a pas pu être enregistrée dans Firestore (droits). Elle s'applique sur cet appareil. Pour bloquer partout, vérifie les règles Firebase (blockedUids sur community_users).",
+      send_failed_title: "Envoi impossible",
+      send_thread_not_found_body:
+        "Le serveur n'a pas trouvé ce chat. Reviens en arrière, rouvre le chat, puis réessaie. Si ça continue, vérifie le déploiement de sendThreadMessage et l'URL EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL.",
     },
     cards: {
       "00": "Le Fou", "01": "Le Magicien", "02": "La Grande Prêtresse",
@@ -420,7 +429,7 @@ const translations = {
     app: { welcome: "Bienvenido a la App de Tarot" },
     buttons: {
       meaning: "Interpretación", draw: "Sacar", draw_welcome: "SACA UNA CARTA",
-      back: "Volver", question: "Pregunta", soft: "Suave", deep: "Profundo",
+      back: "Volver", question: "Pregunta", new_question: "Nueva pregunta", soft: "Suave", deep: "Profundo",
       existential: "Existencial", close: "cerrar", save: "Guardar",
       delete: "Eliminar", view_card: "Ver carta", share: "Compartir",
       cancel: "Cancelar", confirm_delete: "¿Realmente eliminar?", journal: "Diario",
@@ -521,6 +530,9 @@ const translations = {
       block_sync_warning_title: "Bloqueo solo en este dispositivo",
       block_sync_warning_body:
         "No se pudo guardar la lista de bloqueo en Firestore (permisos). Sigue activa aquí. Revisa las reglas de Firebase (blockedUids en community_users).",
+      send_failed_title: "No se pudo enviar",
+      send_thread_not_found_body:
+        "El servidor no encontró este chat. Vuelve atrás, abre el chat otra vez e inténtalo. Si sigue pasando, despliega la función sendThreadMessage y revisa EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL.",
     },
     cards: {
       "00": "El Loco", "01": "El Mago", "02": "La Sacerdotisa",
@@ -558,7 +570,7 @@ const translations = {
     app: { welcome: "Bem-vindo ao App de Tarot" },
     buttons: {
       meaning: "Significado", draw: "Tirar", draw_welcome: "TIRAR UMA CARTA",
-      back: "Voltar", question: "Pergunta", soft: "Suave", deep: "Profundo",
+      back: "Voltar", question: "Pergunta", new_question: "Nova pergunta", soft: "Suave", deep: "Profundo",
       existential: "Existencial", close: "fechar", save: "Guardar",
       delete: "Apagar", view_card: "Ver carta", share: "Partilhar",
       cancel: "Cancelar", confirm_delete: "Realmente apagar?", journal: "Diário",
@@ -659,6 +671,9 @@ const translations = {
       block_sync_warning_title: "Bloqueio so neste dispositivo",
       block_sync_warning_body:
         "A lista de bloqueio nao foi guardada no Firestore (permissoes). Continua valida aqui. Verifica as regras (blockedUids em community_users).",
+      send_failed_title: "Envio falhou",
+      send_thread_not_found_body:
+        "O servidor não encontrou este chat. Volta atrás, abre o chat outra vez e tenta enviar. Se continuar, faz deploy da função sendThreadMessage e verifica EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL.",
     },
     cards: {
       "00": "O Louco", "01": "O Mago", "02": "A Sacerdotisa",
