@@ -80,8 +80,14 @@ export default function MeaningByIdScreen() {
           ]}
           showsVerticalScrollIndicator={false}
         >
-          {meaning?.title ? <Text style={styles.title}>{meaning.title}</Text> : null}
-          <Text style={styles.body}>{text}</Text>
+          {meaning?.title ? (
+            <Text style={styles.title} selectable>
+              {meaning.title}
+            </Text>
+          ) : null}
+          <Text style={styles.body} selectable>
+            {text}
+          </Text>
         </ScrollView>
 
         <View style={[styles.bottomBar, { paddingBottom: Math.max(0, insets.bottom - 40) }]}>
