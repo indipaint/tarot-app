@@ -6,6 +6,7 @@ import { Animated, BackHandler, Platform, Pressable, ScrollView, StyleSheet, Tex
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import i18n from "../src/i18n";
+import { setPendingWelcomeFromIntro } from "../src/pendingWelcomeFromIntro";
 
 const INTRO_DONE_ONCE_KEY = "__intro_done_once";
 /** Must match app/index.tsx WELCOME_OVERLAY_DONE_KEY */
@@ -229,15 +230,10 @@ export default function Intro() {
       if (navigated.current) return;
       navigated.current = true;
       void (async () => {
-        await AsyncStorage.setItem(INTRO_DONE_ONCE_KEY, "1").catch(() => {});
         const welcomeDone = await AsyncStorage.getItem(WELCOME_OVERLAY_DONE_V2);
-        requestAnimationFrame(() => {
-          if (welcomeDone !== "1") {
-            router.replace({ pathname: "/", params: { firstDraw: "1" } } as any);
-          } else {
-            router.replace("/" as any);
-          }
-        });
+        setPendingWelcomeFromIntro(welcomeDone !== "1");
+        await AsyncStorage.setItem(INTRO_DONE_ONCE_KEY, "1").catch(() => {});
+        router.replace("/" as any);
       })();
     });
   };

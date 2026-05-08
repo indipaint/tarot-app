@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Asset } from "expo-asset";
 import { BlurView } from "expo-blur";
 import * as ImageManipulator from "expo-image-manipulator";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
 import { StatusBar } from "expo-status-bar";
 import { addDoc, collection, doc, onSnapshot, serverTimestamp } from "firebase/firestore";
@@ -45,6 +45,9 @@ const WELCOME_TRANSLATE_Y = -177;
 const WELCOME_BTN_MARGIN_TOP = -266;
 /** After first successful „Zieh eine Karte“ on the welcome overlay, hide it on future launches. */
 const WELCOME_OVERLAY_DONE_KEY = "tarot_welcome_overlay_done_v2";
+/** Written together with v2 in welcome onPress; treat either as „done“. */
+const WELCOME_OVERLAY_DONE_LEGACY_KEY = "tarot_welcome_overlay_done";
+
 let redirectedToLanguageThisSession = false;
 
 function getCards(): any[] {
@@ -90,8 +93,6 @@ export default function Index() {
   const lastShareAtRef = useRef(0);
   const questionShareRef = useRef<View | null>(null);
   const router = useRouter();
-  const searchParams = useLocalSearchParams<{ firstDraw?: string }>();
-  const firstDrawParam = String(searchParams.firstDraw || "");
   const [communityChatUnread, setCommunityChatUnread] = useState(0);
   const isQuestionModeActive = activeQuestion !== null;
 
@@ -140,7 +141,7 @@ export default function Index() {
   }, []);
 
   const [index, setIndex] = useState(0);
-  const [showWelcome, setShowWelcome] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
   const [incomingIndex, setIncomingIndex] = useState<number | null>(null);
   const progress = useRef(new Animated.Value(0)).current;
   const locked = useRef(false);
@@ -223,34 +224,6 @@ export default function Index() {
     setIndex(randomIndex);
     rebuildDeck(randomIndex);
   }, [cards.length]);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const done = await AsyncStorage.getItem(WELCOME_OVERLAY_DONE_KEY);
-        if (cancelled) return;
-        if (done !== "1") setShowWelcome(true);
-      } catch {
-        if (!cancelled) setShowWelcome(true);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (firstDrawParam !== "1") return;
-    setShowWelcome(true);
-    requestAnimationFrame(() => {
-      try {
-        router.setParams({ firstDraw: undefined } as any);
-      } catch {
-        /* ignore */
-      }
-    });
-  }, [firstDrawParam, router]);
 
   const panResponder = useMemo(
     () => PanResponder.create({
@@ -462,41 +435,6 @@ export default function Index() {
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <StatusBar hidden />
       <View style={styles.container}>
-
-        {/* WELCOME OVERLAY */}
-        {showWelcome ? (
-          <View style={styles.welcomeOverlay}>
-            <Image
-              source={require("../assets/images/cards/Rueckseite.jpg")}
-              style={{
-                width: "100%",
-                height: "100%",
-                transform: [{ scale: WELCOME_SCALE }, { translateY: WELCOME_TRANSLATE_Y }],
-              }}
-              resizeMode="contain"
-            />
-            <Pressable
-              style={[styles.welcomeBtn, { marginTop: WELCOME_BTN_MARGIN_TOP }]}
-              onPress={() => {
-                if (cards.length > 1) {
-                  let r = index;
-                  while (r === index) r = Math.floor(Math.random() * cards.length);
-                  setIndex(r);
-                  rebuildDeck(r);
-                } else {
-                  rebuildDeck(index);
-                }
-                AsyncStorage.multiSet([
-                  [WELCOME_OVERLAY_DONE_KEY, "1"],
-                  ["tarot_welcome_overlay_done", "1"],
-                ]).catch(() => {});
-                setShowWelcome(false);
-              }}
-            >
-              <Text style={styles.welcomeBtnText}>{i18n.t("buttons.draw_welcome")}</Text>
-            </Pressable>
-          </View>
-        ) : null}
 
         {/* SWIPE AREA */}
         <View style={styles.swipeArea} {...panResponder.panHandlers}>
@@ -751,6 +689,41 @@ export default function Index() {
             )}
           </View>
         </View>
+
+        {/* WELCOME OVERLAY */}
+        {showWelcome ? (
+          <View style={styles.welcomeOverlay}>
+            <Image
+              source={require("../assets/images/cards/Rueckseite.jpg")}
+              style={{
+                width: "100%",
+                height: "100%",
+                transform: [{ scale: WELCOME_SCALE }, { translateY: WELCOME_TRANSLATE_Y }],
+              }}
+              resizeMode="contain"
+            />
+            <Pressable
+              style={[styles.welcomeBtn, { marginTop: WELCOME_BTN_MARGIN_TOP }]}
+              onPress={() => {
+                if (cards.length > 1) {
+                  let r = index;
+                  while (r === index) r = Math.floor(Math.random() * cards.length);
+                  setIndex(r);
+                  rebuildDeck(r);
+                } else {
+                  rebuildDeck(index);
+                }
+                AsyncStorage.multiSet([
+                  [WELCOME_OVERLAY_DONE_KEY, "1"],
+                  ["tarot_welcome_overlay_done", "1"],
+                ]).catch(() => {});
+                setShowWelcome(false);
+              }}
+            >
+              <Text style={styles.welcomeBtnText}>{i18n.t("buttons.draw_welcome")}</Text>
+            </Pressable>
+          </View>
+        ) : null}
 
       </View>
     </SafeAreaView>
