@@ -1,5 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -38,13 +38,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import DailyCardMenuBlock from "../components/DailyCardMenuBlock";
 import { DAILY_CARD_UI } from "../src/dailyCardNotifications";
+import { deleteCurrentAccountAndData } from "../src/deleteAccountAndData";
 import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import i18n, { getLocale, subscribeLocale } from "../src/i18n";
 import { getLegalUrls } from "../src/legal";
 import { purgeCommunityThread } from "../src/purgeCommunityThread";
 import { registerDevicePushToken } from "../src/pushNotifications";
-import { deleteCurrentAccountAndData } from "../src/deleteAccountAndData";
 
 type PostType = "card" | "journal";
 type CommunityPost = {
@@ -715,10 +715,12 @@ export default function CommunityScreen() {
             await deleteDoc(doc(db, "posts", postId));
           } catch (err: any) {
             const code = String(err?.code || "");
+            console.log("Löschfehler Details:", err); // Hilft uns beim Debuggen im Terminal
+            
             if (code.includes("permission-denied")) {
               Alert.alert(
-                i18n.t("common.info_title"),
-                "Dieser alte Post kann serverseitig nicht geloescht werden (Legacy-Besitzrechte in Firestore)."
+                "Berechtigung fehlt",
+                "Firebase verweigert das Löschen. Entweder bist du nicht der Autor oder die Regeln blockieren dich."
               );
             } else {
               Alert.alert(i18n.t("common.error_title"), i18n.t("community.post_delete_failed"));
@@ -1437,12 +1439,12 @@ export default function CommunityScreen() {
                     ) : null}
                   </>
                 ) : null}
-                {post.journalText ? (
+                {!isOwn && post.journalText ? (
                   <>
                     <Text
                       style={[
                         styles.postText,
-                        isOwn ? styles.postTextOwnHighlight : styles.postTextOtherHighlight,
+                        styles.postTextOtherHighlight,
                       ]}
                     >
                       {translatedPostById[post.id] || post.journalText}
