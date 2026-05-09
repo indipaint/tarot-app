@@ -776,7 +776,7 @@ const styles = StyleSheet.create({
   },
   titleWrap: {
     marginTop: -1,
-    height: 44,
+    height: Platform.select({ ios: 48, default: 44 }),
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
@@ -785,7 +785,7 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 0,
     fontSize: 17,
-    lineHeight: 12,
+    lineHeight: Platform.select({ ios: 20, default: 12 }),
     color: "#888",
     letterSpacing: 1,
     textAlign: "center",
@@ -795,7 +795,7 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     gap: 8,
-    bottom: 125,
+    bottom: Platform.select({ ios: 108, default: 125 }),
     height: 55,
     flexDirection: "row",
     justifyContent: "flex-start",

@@ -4,6 +4,7 @@ import { I18n } from "i18n-js";
 const translations = {
   de: {
     app: { welcome: "Willkommen zur Tarot App" },
+    common: { error_title: "Fehler", info_title: "Info" },
     buttons: {
       meaning: "Deutung", draw: "Zieh", draw_welcome: "ZIEH EINE KARTE",
       back: "Zurück", question: "Frage", new_question: "Neue Frage", soft: "Sanft", deep: "Tief",
@@ -32,6 +33,9 @@ const translations = {
       placeholder: "Dein Nickname...", btn: "✓ Los gehts",
       message_placeholder: "Nachricht...",
       center_title: "🌍 Community",
+      loading: "Community wird geladen…",
+      unavailable: "Community nicht verfügbar",
+      retry: "Erneut versuchen",
       delete_title: "Löschen?",
       delete_post_confirm: "Post wirklich löschen?",
       unknown_author: "Unbekannt",
@@ -44,6 +48,7 @@ const translations = {
       private_view_replies: "Antworten ansehen",
       private_reply_hint: "Öffnet den privaten Chat. Dort kannst du schreiben.",
       private_unavailable: "Privater Chat ist für diesen älteren Beitrag nicht verfügbar.",
+      private_open_failed: "Privater Chat konnte nicht geoeffnet werden.",
       private_no_reply_yet: "Noch keine privaten Antworten zu diesem Beitrag.",
       private_send_confirm_title: "An wen senden?",
       private_send_confirm_body: "Empfänger: %{name}\n\nNachricht jetzt privat senden?",
@@ -76,6 +81,8 @@ const translations = {
       safety_report_error: "Meldung konnte nicht gesendet werden.",
       safety_block_error: "Nutzer konnte nicht blockiert werden.",
       safety_unblock_error: "Blockierung konnte nicht aufgehoben werden.",
+      post_delete_failed: "Post konnte nicht geloescht werden.",
+      post_update_failed: "Post konnte nicht aktualisiert werden.",
       report_reason_spam: "Spam",
       report_reason_harassment: "Belästigung",
       report_reason_other: "Sonstiges",
@@ -108,6 +115,13 @@ const translations = {
       block_sync_warning_body:
         "Die Cloud konnte deine Blockliste nicht speichern (Firestore-Berechtigung). Block wirkt hier, aber der andere kann dir ggf. noch schreiben, bis in den Firebase Rules Schreiben von blockedUids auf community_users erlaubt ist und andere Geräte die Liste lesen dürfen.",
       send_failed_title: "Senden fehlgeschlagen",
+      thread_id_missing: "Thread-ID fehlt.",
+      not_signed_in_yet: "Noch nicht angemeldet. Bitte kurz warten.",
+      auth_token_missing: "Authentifizierungs-Token fehlt.",
+      send_generic_failed_body: "Nachricht konnte nicht gesendet werden.",
+      send_no_access_body: "Kein Zugriff auf diesen Chat. Bitte zurückgehen, Chat neu öffnen und erneut senden.",
+      send_auth_retry_body: "Anmeldung war nicht mehr gueltig. Bitte kurz erneut versuchen.",
+      send_server_error_body: "Serverfehler beim Senden. Bitte in einigen Sekunden erneut versuchen.",
       send_thread_not_found_body:
         "Der Server hat diesen Chat nicht gefunden. Bitte zurück, Chat erneut öffnen, nochmal senden. Wenn es bleibt: Firebase-Function sendThreadMessage deployen und EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL prüfen.",
     },
@@ -145,6 +159,7 @@ const translations = {
 
   en: {
     app: { welcome: "Welcome to Tarot App" },
+    common: { error_title: "Error", info_title: "Info" },
     buttons: {
       meaning: "Meaning", draw: "Draw", draw_welcome: "DRAW A CARD",
       back: "Back", question: "Question", new_question: "New question", soft: "Gentle", deep: "Deep",
@@ -173,6 +188,9 @@ const translations = {
       placeholder: "Your nickname...", btn: "✓ Let's go",
       message_placeholder: "Message...",
       center_title: "🌍 Community",
+      loading: "Loading Community…",
+      unavailable: "Community unavailable",
+      retry: "Retry",
       delete_title: "Delete?",
       delete_post_confirm: "Delete this post?",
       unknown_author: "Unknown",
@@ -185,6 +203,7 @@ const translations = {
       private_view_replies: "View replies",
       private_reply_hint: "Opens the private chat where you can write.",
       private_unavailable: "Private chat is unavailable for this legacy post.",
+      private_open_failed: "Private thread could not be opened.",
       private_no_reply_yet: "No private replies for this post yet.",
       private_send_confirm_title: "Send to whom?",
       private_send_confirm_body: "Recipient: %{name}\n\nSend this private message now?",
@@ -217,6 +236,8 @@ const translations = {
       safety_report_error: "Report could not be submitted.",
       safety_block_error: "User could not be blocked.",
       safety_unblock_error: "User could not be unblocked.",
+      post_delete_failed: "Post could not be deleted.",
+      post_update_failed: "Post could not be updated.",
       report_reason_spam: "Spam",
       report_reason_harassment: "Harassment",
       report_reason_other: "Other",
@@ -249,6 +270,13 @@ const translations = {
       block_sync_warning_body:
         "Your block could not be written to Firestore (permission). It still applies on this device. To stop the other person across devices, allow users to write blockedUids on their own community_users document in Firebase rules, and allow authenticated reads of that field for send checks.",
       send_failed_title: "Could not send",
+      thread_id_missing: "Thread id is missing.",
+      not_signed_in_yet: "Not signed in yet. Please wait a moment.",
+      auth_token_missing: "Authentication token missing.",
+      send_generic_failed_body: "Message could not be sent.",
+      send_no_access_body: "No access to this chat. Go back, reopen the chat, and try sending again.",
+      send_auth_retry_body: "Your sign-in session expired. Please try sending again.",
+      send_server_error_body: "Server error while sending. Please try again in a few seconds.",
       send_thread_not_found_body:
         "The server could not find this chat. Go back, open the chat again, then try sending. If this keeps happening, deploy the sendThreadMessage cloud function and check EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL.",
     },
@@ -286,6 +314,7 @@ const translations = {
 
   fr: {
     app: { welcome: "Bienvenue dans l'application Tarot" },
+    common: { error_title: "Erreur", info_title: "Info" },
     buttons: {
       meaning: "Signification", draw: "Tirer", draw_welcome: "TIRER UNE CARTE",
       back: "Retour", question: "Question", new_question: "Nouvelle question", soft: "Douce", deep: "Profond",
@@ -314,6 +343,9 @@ const translations = {
       placeholder: "Ton pseudo...", btn: "✓ C'est parti",
       message_placeholder: "Message...",
       center_title: "🌍 Community",
+      loading: "Chargement de la communauté…",
+      unavailable: "Communauté indisponible",
+      retry: "Réessayer",
       delete_title: "Supprimer ?",
       delete_post_confirm: "Supprimer ce post ?",
       unknown_author: "Inconnu",
@@ -358,6 +390,8 @@ const translations = {
       safety_report_error: "Le signalement n'a pas pu être envoyé.",
       safety_block_error: "L'utilisateur n'a pas pu être bloqué.",
       safety_unblock_error: "Le déblocage a échoué.",
+      post_delete_failed: "Impossible de supprimer le post.",
+      post_update_failed: "Impossible de mettre à jour le post.",
       report_reason_spam: "Spam",
       report_reason_harassment: "Harcèlement",
       report_reason_other: "Autre",
@@ -390,6 +424,13 @@ const translations = {
       block_sync_warning_body:
         "La liste de blocage n'a pas pu être enregistrée dans Firestore (droits). Elle s'applique sur cet appareil. Pour bloquer partout, vérifie les règles Firebase (blockedUids sur community_users).",
       send_failed_title: "Envoi impossible",
+      thread_id_missing: "L'identifiant du fil est manquant.",
+      not_signed_in_yet: "Pas encore connecté. Veuillez patienter.",
+      auth_token_missing: "Token d'authentification manquant.",
+      send_generic_failed_body: "Le message n'a pas pu être envoyé.",
+      send_no_access_body: "Pas d'accès à ce chat. Reviens en arrière, rouvre le chat et réessaie.",
+      send_auth_retry_body: "La session a expiré. Réessaie d'envoyer.",
+      send_server_error_body: "Erreur serveur lors de l'envoi. Réessaie dans quelques secondes.",
       send_thread_not_found_body:
         "Le serveur n'a pas trouvé ce chat. Reviens en arrière, rouvre le chat, puis réessaie. Si ça continue, vérifie le déploiement de sendThreadMessage et l'URL EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL.",
     },
@@ -427,6 +468,7 @@ const translations = {
 
   es: {
     app: { welcome: "Bienvenido a la App de Tarot" },
+    common: { error_title: "Error", info_title: "Info" },
     buttons: {
       meaning: "Interpretación", draw: "Sacar", draw_welcome: "SACA UNA CARTA",
       back: "Volver", question: "Pregunta", new_question: "Nueva pregunta", soft: "Suave", deep: "Profundo",
@@ -455,6 +497,9 @@ const translations = {
       placeholder: "Tu apodo...", btn: "✓ Vamos",
       message_placeholder: "Mensaje...",
       center_title: "🌍 Community",
+      loading: "Cargando comunidad…",
+      unavailable: "Comunidad no disponible",
+      retry: "Reintentar",
       delete_title: "¿Eliminar?",
       delete_post_confirm: "¿Eliminar esta publicación?",
       unknown_author: "Desconocido",
@@ -467,6 +512,7 @@ const translations = {
       private_view_replies: "Ver respuestas",
       private_reply_hint: "Abre el chat privado para escribir tu respuesta.",
       private_unavailable: "El chat privado no está disponible para esta publicación antigua.",
+      private_open_failed: "No se pudo abrir el chat privado.",
       private_no_reply_yet: "Aun no hay respuestas privadas para esta publicacion.",
       private_send_confirm_title: "¿Enviar a quién?",
       private_send_confirm_body: "Destinatario: %{name}\n\n¿Enviar este mensaje privado ahora?",
@@ -499,6 +545,8 @@ const translations = {
       safety_report_error: "No se pudo enviar el reporte.",
       safety_block_error: "No se pudo bloquear al usuario.",
       safety_unblock_error: "No se pudo desbloquear al usuario.",
+      post_delete_failed: "No se pudo eliminar el post.",
+      post_update_failed: "No se pudo actualizar el post.",
       report_reason_spam: "Spam",
       report_reason_harassment: "Acoso",
       report_reason_other: "Otro",
@@ -531,6 +579,13 @@ const translations = {
       block_sync_warning_body:
         "No se pudo guardar la lista de bloqueo en Firestore (permisos). Sigue activa aquí. Revisa las reglas de Firebase (blockedUids en community_users).",
       send_failed_title: "No se pudo enviar",
+      thread_id_missing: "Falta el ID del hilo.",
+      not_signed_in_yet: "Aún no has iniciado sesión. Espera un momento.",
+      auth_token_missing: "Falta el token de autenticación.",
+      send_generic_failed_body: "No se pudo enviar el mensaje.",
+      send_no_access_body: "Sin acceso a este chat. Vuelve atrás, abre el chat y reintenta.",
+      send_auth_retry_body: "La sesión expiró. Intenta enviar de nuevo.",
+      send_server_error_body: "Error del servidor al enviar. Inténtalo en unos segundos.",
       send_thread_not_found_body:
         "El servidor no encontró este chat. Vuelve atrás, abre el chat otra vez e inténtalo. Si sigue pasando, despliega la función sendThreadMessage y revisa EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL.",
     },
@@ -568,6 +623,7 @@ const translations = {
 
   pt: {
     app: { welcome: "Bem-vindo ao App de Tarot" },
+    common: { error_title: "Erro", info_title: "Info" },
     buttons: {
       meaning: "Significado", draw: "Tirar", draw_welcome: "TIRAR UMA CARTA",
       back: "Voltar", question: "Pergunta", new_question: "Nova pergunta", soft: "Suave", deep: "Profundo",
@@ -596,6 +652,9 @@ const translations = {
       placeholder: "O teu nickname...", btn: "✓ Vamos lá",
       message_placeholder: "Mensagem...",
       center_title: "🌍 Community",
+      loading: "A carregar a comunidade…",
+      unavailable: "Comunidade indisponível",
+      retry: "Tentar novamente",
       delete_title: "Apagar?",
       delete_post_confirm: "Apagar esta publicação?",
       unknown_author: "Desconhecido",
@@ -608,6 +667,7 @@ const translations = {
       private_view_replies: "Ver respostas",
       private_reply_hint: "Abre o chat privado para escrever a tua resposta.",
       private_unavailable: "O chat privado nao esta disponivel para esta publicacao antiga.",
+      private_open_failed: "Nao foi possivel abrir o chat privado.",
       private_no_reply_yet: "Ainda nao existem respostas privadas para esta publicacao.",
       private_send_confirm_title: "Enviar para quem?",
       private_send_confirm_body: "Destinatario: %{name}\n\nEnviar esta mensagem privada agora?",
@@ -640,6 +700,8 @@ const translations = {
       safety_report_error: "Não foi possível enviar a denúncia.",
       safety_block_error: "Não foi possível bloquear o utilizador.",
       safety_unblock_error: "Não foi possível desbloquear o utilizador.",
+      post_delete_failed: "Nao foi possivel eliminar o post.",
+      post_update_failed: "Nao foi possivel atualizar o post.",
       report_reason_spam: "Spam",
       report_reason_harassment: "Assédio",
       report_reason_other: "Outro",
@@ -672,6 +734,13 @@ const translations = {
       block_sync_warning_body:
         "A lista de bloqueio nao foi guardada no Firestore (permissoes). Continua valida aqui. Verifica as regras (blockedUids em community_users).",
       send_failed_title: "Envio falhou",
+      thread_id_missing: "Falta o ID da conversa.",
+      not_signed_in_yet: "Ainda nao iniciaste sessao. Aguarda um momento.",
+      auth_token_missing: "Falta o token de autenticacao.",
+      send_generic_failed_body: "Nao foi possivel enviar a mensagem.",
+      send_no_access_body: "Sem acesso a este chat. Volta atras, reabre o chat e tenta enviar novamente.",
+      send_auth_retry_body: "A sessao expirou. Tenta enviar novamente.",
+      send_server_error_body: "Erro no servidor ao enviar. Tenta de novo em alguns segundos.",
       send_thread_not_found_body:
         "O servidor não encontrou este chat. Volta atrás, abre o chat outra vez e tenta enviar. Se continuar, faz deploy da função sendThreadMessage e verifica EXPO_PUBLIC_SEND_THREAD_MESSAGE_URL.",
     },

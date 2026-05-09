@@ -144,7 +144,7 @@ export default function PrivateThreadScreen() {
       const saved = await AsyncStorage.getItem("app_lang");
       if (saved) setPreferredLang(normalizeLang(saved));
     })();
-    const unsubscribe = subscribeLocale((lang) => {
+    const unsubscribe = subscribeLocale((lang: string) => {
       setPreferredLang(normalizeLang(lang));
     });
     return unsubscribe;
@@ -166,8 +166,9 @@ export default function PrivateThreadScreen() {
         AsyncStorage.setItem(communityAcceptedTermsKey, "1").catch(() => {});
       }
       const storedUid = await ensureCommunityAuth();
-      const storedNickname =
-        (await AsyncStorage.getItem("community_nickname")) || i18n.t("thread.fallback_user");
+      const storedNickname = String(
+        (await AsyncStorage.getItem("community_nickname")) || i18n.t("thread.fallback_user")
+      );
       setUid(storedUid);
       setNickname(storedNickname);
     })();
@@ -349,34 +350,63 @@ export default function PrivateThreadScreen() {
   const send = async () => {
     if (!text.trim()) return;
     if (!threadId) {
-      Alert.alert("Error", "Thread id is missing.");
+      Alert.alert(i18n.t("common.error_title"), i18n.t("thread.thread_id_missing"));
       return;
     }
     if (!uid) {
-      Alert.alert("Error", "Not signed in yet. Please wait a moment.");
+      Alert.alert(i18n.t("common.error_title"), i18n.t("thread.not_signed_in_yet"));
       return;
     }
     if (!allowed) {
-      Alert.alert("Error", "No access to this thread.");
+      Alert.alert(i18n.t("common.error_title"), i18n.t("thread.no_access"));
       return;
     }
     if (blocked) {
-      Alert.alert("Info", i18n.t("thread.blocked_info"));
+      Alert.alert(i18n.t("common.info_title"), i18n.t("thread.blocked_info"));
       return;
     }
     const messageText = text.trim();
+    const sendViaClientFallback = async () => {
+      const threadRef = doc(db, "threads", threadId);
+      const threadSnap = await getDoc(threadRef);
+      if (!threadSnap.exists()) {
+        await ensureThreadDocExists(threadId, uid);
+      }
+      const verifySnap = await getDoc(threadRef);
+      const threadData = verifySnap.data() as { userA?: string; userB?: string } | undefined;
+      const hasAccess = !!threadData && (threadData.userA === uid || threadData.userB === uid);
+      if (!hasAccess) {
+        throw new Error("no_thread_access");
+      }
+      const now = serverTimestamp();
+      await addDoc(collection(db, "threads", threadId, "messages"), {
+        text: messageText,
+        senderUid: uid,
+        senderName: nickname || i18n.t("thread.fallback_user"),
+        createdAt: now,
+      });
+      await setDoc(
+        threadRef,
+        {
+          lastMessageAt: now,
+          lastMessageSenderUid: uid,
+        },
+        { merge: true }
+      );
+    };
     try {
-      const idToken = await auth.currentUser?.getIdToken(true);
+      await ensureCommunityAuth();
+      let idToken = await auth.currentUser?.getIdToken(true);
       if (!idToken) {
-        Alert.alert("Error", "Authentication token missing.");
+        Alert.alert(i18n.t("common.error_title"), i18n.t("thread.auth_token_missing"));
         return;
       }
-      const postOnce = async () => {
+      const postOnce = async (tokenForRequest: string) => {
         const res = await fetch(SECURE_SEND_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${idToken}`,
+            Authorization: `Bearer ${tokenForRequest}`,
           },
           body: JSON.stringify({
             threadId,
@@ -388,15 +418,27 @@ export default function PrivateThreadScreen() {
         const payload = await res.json().catch(() => ({}));
         return { res, payload };
       };
-      let { res, payload } = await postOnce();
+      let { res, payload } = await postOnce(idToken);
+      let code = String(payload?.error || "");
+      if (!res.ok && (code === "missing_auth_token" || code === "invalid_auth_token")) {
+        // Session could be stale; refresh auth and retry once.
+        await ensureCommunityAuth();
+        idToken = await auth.currentUser?.getIdToken(true);
+        if (!idToken) {
+          Alert.alert(i18n.t("common.error_title"), i18n.t("thread.auth_token_missing"));
+          return;
+        }
+        ({ res, payload } = await postOnce(idToken));
+        code = String(payload?.error || "");
+      }
       if (!res.ok && (res.status === 404 || String(payload?.error || "") === "thread_not_found")) {
         await ensureThreadDocExists(threadId, uid);
-        ({ res, payload } = await postOnce());
+        ({ res, payload } = await postOnce(idToken));
+        code = String(payload?.error || "");
       }
       if (!res.ok) {
-        const code = String(payload?.error || "");
         if (code === "blocked_by_peer") {
-          Alert.alert("Info", i18n.t("thread.blocked_info"));
+          Alert.alert(i18n.t("common.info_title"), i18n.t("thread.blocked_info"));
           return;
         }
         if (res.status === 404 || code === "thread_not_found") {
@@ -406,15 +448,44 @@ export default function PrivateThreadScreen() {
           );
           return;
         }
+        if (code === "no_thread_access") {
+          Alert.alert(i18n.t("thread.send_failed_title"), i18n.t("thread.send_no_access_body"));
+          return;
+        }
+        if (code === "missing_auth_token" || code === "invalid_auth_token") {
+          try {
+            await sendViaClientFallback();
+            setText("");
+            return;
+          } catch {
+            Alert.alert(i18n.t("thread.send_failed_title"), i18n.t("thread.send_auth_retry_body"));
+            return;
+          }
+        }
+        if (code === "internal_error") {
+          try {
+            await sendViaClientFallback();
+            setText("");
+            return;
+          } catch {
+            Alert.alert(i18n.t("thread.send_failed_title"), i18n.t("thread.send_server_error_body"));
+            return;
+          }
+        }
         throw new Error(code || `http_${res.status}`);
       }
       setText("");
     } catch (error: any) {
-      const message =
-        typeof error?.message === "string" && error.message.trim()
-          ? error.message
-          : "Message could not be sent.";
-      Alert.alert("Error", message);
+      try {
+        await sendViaClientFallback();
+        setText("");
+      } catch {
+        const message =
+          typeof error?.message === "string" && error.message.trim()
+            ? error.message
+            : i18n.t("thread.send_generic_failed_body");
+        Alert.alert(i18n.t("common.error_title"), message);
+      }
     }
   };
 

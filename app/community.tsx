@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
   addDoc,
+  arrayRemove,
   arrayUnion,
   collection,
   deleteDoc,
@@ -716,11 +717,11 @@ export default function CommunityScreen() {
             const code = String(err?.code || "");
             if (code.includes("permission-denied")) {
               Alert.alert(
-                "Info",
+                i18n.t("common.info_title"),
                 "Dieser alte Post kann serverseitig nicht geloescht werden (Legacy-Besitzrechte in Firestore)."
               );
             } else {
-              Alert.alert("Error", "Post konnte nicht geloescht werden.");
+              Alert.alert(i18n.t("common.error_title"), i18n.t("community.post_delete_failed"));
             }
           }
         },
@@ -815,11 +816,11 @@ export default function CommunityScreen() {
       }
 
       if (!targetUid) {
-        Alert.alert("Info", i18n.t("community.private_unavailable"));
+        Alert.alert(i18n.t("common.info_title"), i18n.t("community.private_unavailable"));
         return;
       }
       if (targetUid === uid) {
-        Alert.alert("Info", i18n.t("community.private_unavailable"));
+        Alert.alert(i18n.t("common.info_title"), i18n.t("community.private_unavailable"));
         return;
       }
 
@@ -836,13 +837,13 @@ export default function CommunityScreen() {
         });
         const verify = await getDoc(threadRef);
         if (!verify.exists()) {
-          Alert.alert("Error", "Private thread could not be opened.");
+          Alert.alert(i18n.t("common.error_title"), i18n.t("community.private_open_failed"));
           return;
         }
       }
       router.push(`/community/thread/${threadId}` as any);
     } catch {
-      Alert.alert("Error", "Private thread could not be opened.");
+      Alert.alert(i18n.t("common.error_title"), i18n.t("community.private_open_failed"));
     }
   };
 
@@ -874,7 +875,7 @@ export default function CommunityScreen() {
         return true;
       });
       if (!merged.length) {
-        Alert.alert("Info", i18n.t("community.private_no_reply_yet"));
+        Alert.alert(i18n.t("common.info_title"), i18n.t("community.private_no_reply_yet"));
         return;
       }
       merged.sort((a, b) => {
@@ -885,7 +886,7 @@ export default function CommunityScreen() {
       markPostAsReadLocal(post.id);
       router.push(`/community/thread/${merged[0].id}` as any);
     } catch {
-      Alert.alert("Error", "Private thread could not be opened.");
+      Alert.alert(i18n.t("common.error_title"), i18n.t("community.private_open_failed"));
     }
   };
 
@@ -903,7 +904,7 @@ export default function CommunityScreen() {
       });
       Alert.alert(i18n.t("thread.report_success_title"), i18n.t("thread.report_success_body"));
     } catch {
-      Alert.alert("Error", i18n.t("community.safety_report_error"));
+      Alert.alert(i18n.t("common.error_title"), i18n.t("community.safety_report_error"));
     }
   };
 
@@ -922,7 +923,7 @@ export default function CommunityScreen() {
         { merge: true }
       ).catch(() => {});
     } catch {
-      Alert.alert("Error", i18n.t("community.safety_block_error"));
+      Alert.alert(i18n.t("common.error_title"), i18n.t("community.safety_block_error"));
     }
   };
 
@@ -940,7 +941,7 @@ export default function CommunityScreen() {
         { merge: true }
       ).catch(() => {});
     } catch {
-      Alert.alert("Error", i18n.t("community.safety_unblock_error"));
+      Alert.alert(i18n.t("common.error_title"), i18n.t("community.safety_unblock_error"));
     }
   };
 
@@ -962,7 +963,7 @@ export default function CommunityScreen() {
   const openHeaderReportFlow = () => {
     const target = privateThreads.find((t) => !!t.otherUid);
     if (!target) {
-      Alert.alert("Info", i18n.t("community.safety_no_chat_report"));
+      Alert.alert(i18n.t("common.info_title"), i18n.t("community.safety_no_chat_report"));
       return;
     }
     void reportThreadPeer(target.id, target.otherUid);
@@ -972,7 +973,7 @@ export default function CommunityScreen() {
   const openHeaderBlockFlow = () => {
     const target = privateThreads.find((t) => !!t.otherUid);
     if (!target) {
-      Alert.alert("Info", i18n.t("community.safety_no_chat_block"));
+      Alert.alert(i18n.t("common.info_title"), i18n.t("community.safety_no_chat_block"));
       return;
     }
     const isBlocked = blockedUidsLocal.has(target.otherUid);
@@ -998,7 +999,7 @@ export default function CommunityScreen() {
       });
       Alert.alert(i18n.t("thread.report_success_title"), i18n.t("thread.report_success_body"));
     } catch {
-      Alert.alert("Error", i18n.t("community.safety_report_error"));
+      Alert.alert(i18n.t("common.error_title"), i18n.t("community.safety_report_error"));
     }
   };
 
@@ -1031,7 +1032,7 @@ export default function CommunityScreen() {
         { merge: true }
       ).catch(() => {});
     } catch {
-      Alert.alert("Error", i18n.t("community.safety_block_error"));
+      Alert.alert(i18n.t("common.error_title"), i18n.t("community.safety_block_error"));
     }
   };
 
@@ -1057,7 +1058,7 @@ export default function CommunityScreen() {
         return next;
       });
     } catch {
-      Alert.alert("Error", "Post could not be updated.");
+      Alert.alert(i18n.t("common.error_title"), i18n.t("community.post_update_failed"));
     }
   };
 

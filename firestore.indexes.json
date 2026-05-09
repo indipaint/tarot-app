@@ -1,0 +1,21 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "threads",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "basedOnPostId", "order": "ASCENDING" },
+        { "fieldPath": "userA", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "threads",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "basedOnPostId", "order": "ASCENDING" },
+        { "fieldPath": "userB", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

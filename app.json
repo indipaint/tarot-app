@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Tarot App",
+    "name": "Endyia Tarot",
     "slug": "tarot-app",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,6 +22,13 @@
         "image": "./assets/splash.png",
         "resizeMode": "cover",
         "backgroundColor": "#000000"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.indipaint.tarotapp",
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "extra": {
