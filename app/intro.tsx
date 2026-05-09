@@ -197,24 +197,6 @@ export default function Intro() {
     });
   };
 
-  const resetAgeGateDebug = async () => {
-    await AsyncStorage.multiRemove([AGE_VERIFIED_KEY, AGE_DENIED_KEY, INTRO_DONE_ONCE_KEY]);
-    curtainStarted.current = false;
-    navigated.current = false;
-    ageGateOpacity.stopAnimation();
-    ageGateOpacity.setValue(1);
-    ageThanksOpacity.stopAnimation();
-    ageThanksOpacity.setValue(0);
-    setAgeCheckReady(true);
-    setAgeVerified(false);
-    setAgeTransitioning(false);
-    setAgeDenied(false);
-    setShowBlockedModal(false);
-    setShowIosCloseHint(false);
-    setIsAdultChecked(false);
-    setIsResidenceChecked(false);
-  };
-
   const startCurtainAndNavigate = () => {
     if (curtainStarted.current) return;
     curtainStarted.current = true;
@@ -305,11 +287,6 @@ export default function Intro() {
             >
               <Text style={styles.ageGateBtnText}>{ageCopy.deny}</Text>
             </Pressable>
-            {__DEV__ ? (
-              <Pressable style={[styles.ageGateBtn, styles.debugResetBtn]} onPress={resetAgeGateDebug}>
-                <Text style={styles.debugResetBtnText}>AgeGate Reset (Dev)</Text>
-              </Pressable>
-            ) : null}
           </Animated.View>
           <Animated.View
             pointerEvents="none"
@@ -389,11 +366,6 @@ export default function Intro() {
         pointerEvents="none"
         style={[styles.curtain, { opacity: curtain }]}
       />
-      {__DEV__ ? (
-        <Pressable style={styles.devFloatingReset} onPress={resetAgeGateDebug}>
-          <Text style={styles.debugResetBtnText}>AgeGate Reset (Dev)</Text>
-        </Pressable>
-      ) : null}
     </View>
   );
 }
@@ -449,19 +421,6 @@ const styles = StyleSheet.create({
   ageGateBtnDisabled: { opacity: 0.45 },
   ageGateDenyBtn: { borderColor: "#6a2f2f", backgroundColor: "#3a1c1c" },
   ageGateBtnText: { color: "#f2f2f2", fontSize: 13, fontWeight: "600" },
-  debugResetBtn: { borderColor: "#3f566f", backgroundColor: "#1d2a37" },
-  debugResetBtnText: { color: "#d6e4f2", fontSize: 12, fontWeight: "600" },
-  devFloatingReset: {
-    position: "absolute",
-    right: 12,
-    top: 52,
-    borderWidth: 1,
-    borderColor: "#3f566f",
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    backgroundColor: "rgba(29,42,55,0.9)",
-  },
   ageGateBlocked: { color: "#ffb2b2", fontSize: 12, textAlign: "center", lineHeight: 17 },
   ageThanksOverlay: {
     position: "absolute",

@@ -101,9 +101,42 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    // Temporarily disable intro/language redirect during development.
-    return;
+  let cancelled = false;
+  let rafId: number | null = null;
+
+  (async () => {
+    const [introDone, appLang] = await Promise.all([
+      AsyncStorage.getItem("__intro_done_once"),
+      AsyncStorage.getItem("app_lang"),
+    ]);
+
+    if (cancelled) return;
+    if (introDone === "1" && appLang) return;
+    if (redirectedToLanguageThisSession) return;
+
+    rafId = requestAnimationFrame(() => {
+      if (cancelled) return;
+      if (redirectedToLanguageThisSession) return;
+
+      redirectedToLanguageThisSession = true;
+
+      try {
+        router.replace("/language" as any);
+      } catch {
+        redirectedToLanguageThisSession = false;
+      }
+    });
+  })().catch(() => {});
+
+  return () => {
+    cancelled = true;
+    if (rafId !== null) cancelAnimationFrame(rafId);
+  };
   }, [router]);
+
+  useEffect(() => {
+    return subscribeLocale((lang: string) => setLocaleState(lang));
+  }, []);
 
   useEffect(() => {
     let unsub: (() => void) | null = null;
@@ -154,7 +187,6 @@ export default function Index() {
     const nextIndex = clampIndex(targetIndex);
     if (nextIndex === index) return;
 
-    // iOS fallback: avoid stuttering animation and switch cards instantly.
     if (Platform.OS === "ios") {
       setIndex(nextIndex);
       return;
