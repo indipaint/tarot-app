@@ -86,6 +86,10 @@ const translations = {
       report_reason_spam: "Spam",
       report_reason_harassment: "Belästigung",
       report_reason_other: "Sonstiges",
+      community: {
+  welcome_title: "Mitmachen ist ganz einfach! ✨",
+  welcome_text: "Hier siehst du die Impulse der anderen. Wenn du eine eigene Frage mit der Community teilen magst: Ziehe einfach im Hauptbereich eine Karte und nutze dort den Button „Frage“. Andere können dir dann privat antworten und dich bei deiner Reflexion begleiten."
+},
     },
     thread: {
       fallback_user: "User",
@@ -154,7 +158,8 @@ const translations = {
       "P10": "Zehn der Münzen", "P11": "Bube der Münzen", "P12": "Ritter der Münzen",
       "P13": "Königin der Münzen", "P14": "König der Münzen",
     },
-    tarot: { major: { "0": { title: "Der Narr" }, "1": { title: "Der Magier" }, "2": { title: "Die Hohepriesterin" } } },
+    tarot: { major: { "0": { title: "Der Narr" }, "1": { title: "Der Magier" }, "2": { title: "Die Hohepriesterin" } } },welcome_title: "Mitmachen ist ganz einfach! ✨",
+    welcome_text: "Hier siehst du die Impulse der anderen. Wenn du eine eigene Frage teilen magst: Ziehe einfach im Hauptbereich eine Karte und nutze den Button „Frage“. Andere können dir dann privat antworten.",
   },
 
   en: {
@@ -240,7 +245,10 @@ const translations = {
       post_update_failed: "Post could not be updated.",
       report_reason_spam: "Spam",
       report_reason_harassment: "Harassment",
-      report_reason_other: "Other",
+      report_reason_other: "Other",// ... vorheriger Eintrag
+    share_community: "🌐 Share in Community", // <-- Hier muss ein KOMMA sein!
+    welcome_title: "Joining in is easy! ✨",
+    welcome_text: "Here you see others' impulses. To share your own question: Draw a card in the main area and use the \"Question\" button. Others can then reply to you privately and accompany you in your reflection."
     },
     thread: {
       fallback_user: "User",
@@ -394,7 +402,8 @@ const translations = {
       post_update_failed: "Impossible de mettre à jour le post.",
       report_reason_spam: "Spam",
       report_reason_harassment: "Harcèlement",
-      report_reason_other: "Autre",
+      report_reason_other: "Autre",welcome_title: "Participer est très simple ! ✨",
+      welcome_text: "Voici les impulsions des autres. Pour partager votre question : Tirez une carte et utilisez le bouton \"Question\". Les autres pourront vous répondre en privé.",
     },
     thread: {
       fallback_user: "Utilisateur",
@@ -550,6 +559,10 @@ const translations = {
       report_reason_spam: "Spam",
       report_reason_harassment: "Acoso",
       report_reason_other: "Otro",
+      community: {
+  welcome_title: "¡Participar es muy fácil! ✨",
+  welcome_text: "Aquí ves los impulsos de otros. Para compartir tu propia pregunta: Saca una carta en el área principal y pulsa el botón \"Pregunta\". Otros podrán responderte por privado."
+},
     },
     thread: {
       fallback_user: "Usuario",
@@ -705,6 +718,8 @@ const translations = {
       report_reason_spam: "Spam",
       report_reason_harassment: "Assédio",
       report_reason_other: "Outro",
+      welcome_title: "Participar é muito fácil! ✨",
+      welcome_text: "Aqui você vê os impulsos de outros. Para compartilhar sua própria pergunta: Tire uma carta e use o botão \"Pergunta\". Outros poderão responder privadamente.",
     },
     thread: {
       fallback_user: "Utilizador",

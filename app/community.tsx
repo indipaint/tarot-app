@@ -1369,6 +1369,26 @@ export default function CommunityScreen() {
               )}
             </View>
           ) : null}
+          {!posts.some(p => isOwnPost(p)) && (
+            <View style={{
+              backgroundColor: '#1c1c1e', 
+              paddingVertical: 12,       
+              paddingHorizontal: 16,     
+              borderRadius: 12,          
+              marginBottom: 15, 
+              marginTop: -25,            
+              marginHorizontal: 10,      
+              borderWidth: 1,            
+              borderColor: '#333',
+            }}>
+              <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold', marginBottom: 2 }}>
+                {i18n.t('community.welcome_title')}
+              </Text>
+              <Text style={{ color: '#ccc', fontSize: 13, lineHeight: 18 }}>
+                {i18n.t('community.welcome_text')}
+              </Text>
+            </View>
+          )}
           {!chatsOnly
             ? posts
                 .filter((post) => {

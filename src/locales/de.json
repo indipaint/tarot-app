@@ -7,5 +7,9 @@
       "00": { "title": "Der Narr" },
       "01": { "title": "Der Magier" }
     }
+  },
+  "community": {
+    "welcome_title": "Mitmachen ist ganz einfach! ✨",
+    "welcome_text": "Hier siehst du die Impulse der anderen. Wenn du eine eigene Frage mit der Community teilen magst: Ziehe einfach im Hauptbereich eine Karte und nutze dort den Button „Frage“. Andere können dir dann privat antworten und dich bei deiner Reflexion begleiten."
   }
 }
