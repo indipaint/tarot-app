@@ -492,7 +492,6 @@ export default function JournalScreen() {
         >
           <Animated.View style={styles.zoomWrap}>
             <PinchGestureHandler
-              minPointers={2}
               onGestureEvent={onPinchGesture}
               onHandlerStateChange={onPinchStateChange}
             >

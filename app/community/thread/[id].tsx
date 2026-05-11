@@ -395,7 +395,6 @@ export default function PrivateThreadScreen() {
       );
     };
     try {
-      await ensureCommunityAuth();
       let idToken = await auth.currentUser?.getIdToken(true);
       if (!idToken) {
         Alert.alert(i18n.t("common.error_title"), i18n.t("thread.auth_token_missing"));
@@ -449,8 +448,14 @@ export default function PrivateThreadScreen() {
           return;
         }
         if (code === "no_thread_access") {
-          Alert.alert(i18n.t("thread.send_failed_title"), i18n.t("thread.send_no_access_body"));
-          return;
+          try {
+            await sendViaClientFallback();
+            setText("");
+            return;
+          } catch {
+            Alert.alert(i18n.t("thread.send_failed_title"), i18n.t("thread.send_no_access_body"));
+            return;
+          }
         }
         if (code === "missing_auth_token" || code === "invalid_auth_token") {
           try {

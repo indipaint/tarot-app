@@ -69,9 +69,9 @@ const translations = {
       post_type_journal: "📖 Tagebuch",
       post_type_card: "🃏 Karte",
       delete_only_own: "Du kannst nur deine eigenen Beiträge löschen.",
-      last_private_chats: "Letzte private Chats",
+      last_private_chats: "Willkommen im Endyia Chat",
       last_private_chats_empty:
-        "Noch keine auf diesem Gerät. Schreib jemandem unter einem Beitrag „Privat antworten“ — dann erscheint der Chat hier.",
+        "es ist ganz leicht, Du kannst deine ersten Chats starten wenn du auf der vorherigen Seite den FRAGEN Button drückst, von dort kommst du über,,in Community teilen,,ueber,,privat Antworten,,in diesen Chatbereich",
       thread_list_open: "Öffnen",
       safety_menu_title: "Sicherheit",
       safety_reason_title: "Grund",
