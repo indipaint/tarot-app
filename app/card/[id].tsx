@@ -125,7 +125,6 @@ export default function CardById() {
           >
             <Animated.View style={styles.imageWrap}>
               <PinchGestureHandler
-                minPointers={2}
                 onGestureEvent={onPinchGesture}
                 onHandlerStateChange={onPinchStateChange}
               >
