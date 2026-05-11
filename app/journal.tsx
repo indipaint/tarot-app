@@ -1,18 +1,18 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Asset } from "expo-asset";
-import * as Sharing from "expo-sharing";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { Asset } from "expo-asset";
 import { useRouter } from "expo-router";
+import * as Sharing from "expo-sharing";
 import React, { useCallback, useMemo, useState } from "react";
 import { Alert, Animated, Image, Linking, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from "react-native";
 import { PanGestureHandler, PinchGestureHandler, State } from "react-native-gesture-handler";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { captureRef } from "react-native-view-shot";
 import DailyCardMenuBlock from "../components/DailyCardMenuBlock";
+import { deleteCurrentAccountAndData } from "../src/deleteAccountAndData";
 import i18n from "../src/i18n";
 import { getLegalUrls } from "../src/legal";
-import { deleteCurrentAccountAndData } from "../src/deleteAccountAndData";
 
 type JournalEntry = {
   id: string;
@@ -509,7 +509,7 @@ export default function JournalScreen() {
                   ]}
                   showsVerticalScrollIndicator={false}
                 >
-                  {loading ? (
+                    {loading ? (
                     <Text style={styles.empty}>{i18n.t("journal_screen.empty")}</Text>
                   ) : entries.length === 0 ? (
                     <View style={styles.emptyWrap}>
@@ -522,11 +522,13 @@ export default function JournalScreen() {
                         <View style={styles.cardHeader}>
                           <View>
                             <Text style={styles.cardTitle}>{getLocalizedCardTitle(entry)}</Text>
+
                             {entry.entryType === "daily_card" ? (
                               <Text style={styles.dailyEntryLabel}>{dailyEntryLabel}</Text>
                             ) : null}
+
+                            <Text style={styles.cardDate}>{entry.date}</Text>
                           </View>
-                          <Text style={styles.cardDate}>{entry.date} · {entry.time}</Text>
                         </View>
                         {getCardImageSource(entry.cardId) ? (
                           <Image source={getCardImageSource(entry.cardId)} style={styles.shareCardImage} resizeMode="cover" />
@@ -735,9 +737,9 @@ const styles = StyleSheet.create({
     flexDirection: "row", justifyContent: "space-between",
     alignItems: "center", marginBottom: 4,
   },
-  cardTitle: { color: "#aaa", fontSize: 16, fontWeight: "600", letterSpacing: 1 },
+  cardTitle: { color: "#aaa", fontSize: 14, fontWeight: "600", letterSpacing: 1 },
   dailyEntryLabel: { color: "#6f8fd4", fontSize: 11, marginTop: 2 },
-  cardDate: { color: "#777", fontSize: 13 },
+  cardDate: { color: "#777", fontSize: 12 },
   cardQuestion: { color: "#999", fontSize: 14, fontStyle: "italic", marginBottom: 4 },
   shareCardImage: {
     width: 90,

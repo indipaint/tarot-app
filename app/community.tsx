@@ -1550,9 +1550,11 @@ export default function CommunityScreen() {
                       <Text style={styles.privateReplyHint}>{i18n.t("community.private_reply_hint")}</Text>
                     </View>
                   ) : null}
-                  <Pressable style={styles.deleteBtn} onPress={() => tryDeletePost(post)}>
-                    <Text style={styles.deleteBtnText}>🗑️ {i18n.t("buttons.delete")}</Text>
-                  </Pressable>
+                  {isOwn ? (
+  <Pressable style={styles.deleteBtn} onPress={() => tryDeletePost(post)}>
+    <Text style={styles.deleteBtnText}>🗑️ {i18n.t("buttons.delete")}</Text>
+  </Pressable>
+) : null}
                 </View>
                 </Pressable>
               </View>
