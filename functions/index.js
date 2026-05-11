@@ -484,7 +484,39 @@ exports.sendThreadMessage = onRequest(
           },
           { merge: true }
         );
-
+        try {
+          const peerSnap = await db.collection("community_users").doc(peerUid).get();
+  
+          const tokens = Array.isArray(peerSnap.data()?.expoPushTokens)
+            ? peerSnap.data().expoPushTokens
+            : [];
+  
+          if (tokens.length > 0) {
+            const messages = tokens.map((to) => ({
+              to,
+              sound: "default",
+              title: senderName || "Neue Nachricht",
+              body: text,
+              badge: 1,
+              priority: "high",
+              data: {
+                threadId,
+              },
+            }));
+  
+            await fetch("https://exp.host/--/api/v2/push/send", {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Accept-encoding": "gzip, deflate",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(messages),
+            });
+          }
+        } catch (pushError) {
+          console.log("push send failed", pushError);
+        }
       res.status(200).json({ ok: true, messageId: msgRef.id });
     } catch (error) {
       res.status(500).json({ error: "internal_error", detail: String(error || "") });
