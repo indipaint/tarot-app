@@ -231,7 +231,7 @@ const translations = {
       delete_only_own: "You can only delete your own posts.",
       last_private_chats: "Recent private chats",
       last_private_chats_empty:
-        "None on this device yet. Use “Private reply” on someone’s post — the chat will show up here.",
+       "It’s very easy. You can start your first chats by pressing the QUESTION button on the previous page. From there, use “Share in Community” and then “Private Reply” to enter this chat area.",
       thread_list_open: "Open",
       safety_menu_title: "Safety",
       safety_reason_title: "Reason",
@@ -388,7 +388,7 @@ const translations = {
       delete_only_own: "Tu peux supprimer uniquement tes propres posts.",
       last_private_chats: "Derniers chats privés",
       last_private_chats_empty:
-        "Aucun sur cet appareil. Utilise « Réponse privée » sous un post — le chat apparaîtra ici.",
+       "C’est très simple. Tu peux démarrer tes premiers chats en appuyant sur le bouton QUESTION sur la page précédente. De là, utilise « Partager dans la communauté », puis « Répondre en privé » pour accéder à cet espace de chat.",
       thread_list_open: "Ouvrir",
       safety_menu_title: "Sécurité",
       safety_reason_title: "Motif",
@@ -544,7 +544,7 @@ const translations = {
       delete_only_own: "Solo puedes eliminar tus propias publicaciones.",
       last_private_chats: "Últimos chats privados",
       last_private_chats_empty:
-        "Ninguno en este dispositivo. Usa «Respuesta privada» en una publicación — el chat aparecerá aquí.",
+         "Es muy fácil. Puedes iniciar tus primeros chats pulsando el botón PREGUNTA en la página anterior. Desde allí, usa « Compartir en la comunidad » y luego « Responder en privado » para entrar en esta zona de chat.",
       thread_list_open: "Abrir",
       safety_menu_title: "Seguridad",
       safety_reason_title: "Motivo",
@@ -703,7 +703,7 @@ const translations = {
       delete_only_own: "So podes apagar as tuas proprias publicacoes.",
       last_private_chats: "Últimos chats privados",
       last_private_chats_empty:
-        "Nenhum neste dispositivo. Usa «Resposta privada» num post — o chat aparece aqui.",
+         "É muito fácil. Podes iniciar os teus primeiros chats ao pressionar o botão PERGUNTA na página anterior. A partir daí, usa « Partilhar na Comunidade » e depois « Responder em privado » para entrares nesta área de chat.", 
       thread_list_open: "Abrir",
       safety_menu_title: "Segurança",
       safety_reason_title: "Motivo",
