@@ -490,6 +490,7 @@ exports.sendThreadMessage = onRequest(
           const tokens = Array.isArray(peerSnap.data()?.expoPushTokens)
             ? peerSnap.data().expoPushTokens
             : [];
+            const nextBadge = Number(peerSnap.data()?.unreadCount || 0);
   
           if (tokens.length > 0) {
             const messages = tokens.map((to) => ({
@@ -497,7 +498,7 @@ exports.sendThreadMessage = onRequest(
               sound: "default",
               title: senderName || "Neue Nachricht",
               body: text,
-              badge: 1,
+              badge: Math.max(1, nextBadge),
               priority: "high",
               data: {
                 threadId,
