@@ -2,6 +2,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Asset } from "expo-asset";
 import { BlurView } from "expo-blur";
+import * as FileSystem from "expo-file-system/legacy";
 import * as ImageManipulator from "expo-image-manipulator";
 import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
@@ -401,7 +402,16 @@ export default function Index() {
       [],
       { compress: 1, format: ImageManipulator.SaveFormat.PNG }
     );
-    return exported.uri || null;
+    const targetPath =
+  FileSystem.cacheDirectory +
+  `shared-card-${Date.now()}.png`;
+
+await FileSystem.copyAsync({
+  from: exported.uri,
+  to: targetPath,
+});
+
+return targetPath;
   };
 
   const shareQuestionWithCard = async () => {

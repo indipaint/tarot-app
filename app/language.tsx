@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { setLocale } from "../src/i18n";
-const FORCE_LANGUAGE_SCREEN = true;
+const FORCE_LANGUAGE_SCREEN = false;
 
 export default function LanguageGate() {
   const router = useRouter();

@@ -32,6 +32,19 @@ if (Notifications) {
     }),
   });
 }
+const CHAT_CHANNEL_ID = "chat-messages";
+
+async function ensureChatNotificationChannel(): Promise<void> {
+  if (Platform.OS !== "android" || !Notifications) return;
+
+  await Notifications.setNotificationChannelAsync(CHAT_CHANNEL_ID, {
+    name: "Chat-Nachrichten",
+    importance: Notifications.AndroidImportance.HIGH,
+    vibrationPattern: [0, 250, 250, 250],
+    sound: "default",
+    showBadge: true,
+  });
+}
 
 function getProjectId(): string | undefined {
   const easProjectId = (Constants as any)?.easConfig?.projectId;
@@ -43,7 +56,7 @@ export async function registerDevicePushToken(uid: string): Promise<string | nul
   if (!uid || !Device.isDevice) return null;
   if (shouldAvoidExpoNotificationsModule) return null;
   if (!Notifications) return null;
-
+await ensureChatNotificationChannel();
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
   if (existingStatus !== "granted") {

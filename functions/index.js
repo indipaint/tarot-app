@@ -496,6 +496,7 @@ exports.sendThreadMessage = onRequest(
             const messages = tokens.map((to) => ({
               to,
               sound: "default",
+              channelId: "chat-messages",
               title: senderName || "Neue Nachricht",
               body: text,
               badge: Math.max(1, nextBadge),

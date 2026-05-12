@@ -892,7 +892,10 @@ export default function CommunityScreen() {
     }
   };
 
-  const replyOrOpenPrivate = async (post: CommunityPost) => openPrivateThread(post);
+  const replyOrOpenPrivate = async (post: CommunityPost) => {
+  markFeedPostAsSeen(post);
+  openPrivateThread(post);
+};
 
   const reportThreadPeer = async (threadId: string, otherUid: string) => {
     if (!uid || !threadId || !otherUid) return;
@@ -1414,7 +1417,7 @@ export default function CommunityScreen() {
                 >
                 {(unreadByPostId[post.id] || 0) > 0 ? (
                   <View style={styles.postUnreadPill}>
-                    <Text style={styles.postUnreadPillText}>● {unreadByPostId[post.id]}</Text>
+                    <Text style={styles.postUnreadPillText}>●</Text>
                   </View>
                 ) : null}
                 {isNewFeedPost ? (
