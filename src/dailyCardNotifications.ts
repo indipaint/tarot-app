@@ -157,7 +157,7 @@ export function ensureDailyCardNotificationHandler(): void {
       shouldShowBanner: true,
       shouldShowList: true,
       shouldPlaySound: true,
-      shouldSetBadge: false,
+      shouldSetBadge: true,
     }),
   });
 }

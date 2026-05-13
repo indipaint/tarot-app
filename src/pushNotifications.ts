@@ -34,7 +34,7 @@ if (Notifications) {
 }
 const CHAT_CHANNEL_ID = "chat-messages";
 
-async function ensureChatNotificationChannel(): Promise<void> {
+export async function ensureChatNotificationChannel(): Promise<void> {
   if (Platform.OS !== "android" || !Notifications) return;
 
   await Notifications.setNotificationChannelAsync(CHAT_CHANNEL_ID, {

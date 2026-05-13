@@ -5,18 +5,29 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "plugins": [
-      "expo-splash-screen",
-      "expo-notifications"
-    ],
+  "expo-splash-screen",
+  [
+    "expo-notifications",
+    {
+      "icon": "./assets/icon.png",
+      "color": "#ffffff",
+      "defaultChannel": "chat-messages"
+    }
+  ]
+],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#000000"
-    },
+    },"notification": {
+  "icon": "./assets/icon.png",
+  "color": "#ffffff"
+},
     "android": {
       "package": "com.indipaint.tarotapp",
       "googleServicesFile": "./google-services.json",
       "backgroundColor": "#000000",
+      "navigationBarColor": "#000000",
       "softwareKeyboardLayoutMode": "pan",
       "splash": {
         "image": "./assets/splash.png",

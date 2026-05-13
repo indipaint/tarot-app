@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Platform } from "react-native";
 import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
+import { ensureChatNotificationChannel } from "../src/pushNotifications";
 
 export default function RootLayout() {
   useEffect(() => {
@@ -15,7 +16,9 @@ export default function RootLayout() {
     const isExpoGo =
       (Constants as any)?.appOwnership === "expo" || (Constants as any)?.executionEnvironment === "storeClient";
     const canSetBadgeInThisRuntime = !(isExpoGo && Platform.OS === "android");
-
+    if (Platform.OS === "android") {
+    ensureChatNotificationChannel().catch(() => {});
+}
     (async () => {
       try {
         const uid = await ensureCommunityAuth();
