@@ -452,7 +452,7 @@ return targetPath;
         });
         return;
       }
-    } catch {
+    } catch (e) { console.error("SHARE ERROR:", e);
       // Fallback below keeps share working when image export fails.
     }
     await Share.share({
