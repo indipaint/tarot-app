@@ -449,7 +449,7 @@ export default function Index() {
           quality: 0.95,
           result: "tmpfile",
           width: 1080,
-          height: 1410,
+          height: 1680,
         });
         await Sharing.shareAsync(capturedUri, {
           dialogTitle: currentName || "Tarot",
@@ -743,7 +743,8 @@ export default function Index() {
             collapsable={false}
             style={styles.shareCaptureCardOnly}
           >
-            <Image source={currentSource} style={styles.shareCaptureCardOnlyImage} resizeMode="contain" />
+            <Image source={currentSource} style={styles.shareCaptureCardOnlyImage} resizeMode="cover" />
+            <Text style={styles.shareCaptureCardOnlyFooter}>Endyia Tarot app</Text>
           </View>
           <View
             ref={(node) => {
@@ -1077,14 +1078,23 @@ const styles = StyleSheet.create({
   },
   shareCaptureCardOnly: {
     width: 1080,
-    height: 1410,
+    height: 1680,
     backgroundColor: "#060606",
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: "hidden",
   },
   shareCaptureCardOnlyImage: {
+    width: 1080,
+    flex: 1,
+  },
+  shareCaptureCardOnlyFooter: {
+    paddingVertical: 44,
+    paddingHorizontal: 24,
+    color: "#e8e8e8",
+    fontSize: 52,
+    fontWeight: "600",
+    letterSpacing: 1.4,
+    textAlign: "center",
     width: "100%",
-    height: "100%",
   },
   shareCaptureCard: {
     width: 1080,
