@@ -1334,7 +1334,7 @@ export default function CommunityScreen() {
         >
           {chatsOnly ? (
             <View style={styles.threadSection}>
-              <Text style={styles.threadSectionTitle}>{i18n.t("community.last_private_chats")}</Text>
+
               {privateThreads.length ? (
                 privateThreads.map((thread) => {
                   const relatedPost = posts.find((p) => p.id === thread.basedOnPostId);
@@ -1372,7 +1372,7 @@ export default function CommunityScreen() {
               )}
             </View>
           ) : null}
-          {!posts.some(p => isOwnPost(p)) && (
+          {!chatsOnly && !posts.some((p) => isOwnPost(p)) && (
             <View style={{
               backgroundColor: '#1c1c1e', 
               paddingVertical: 12,       

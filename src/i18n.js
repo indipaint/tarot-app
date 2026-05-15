@@ -86,10 +86,9 @@ const translations = {
       report_reason_spam: "Spam",
       report_reason_harassment: "Belästigung",
       report_reason_other: "Sonstiges",
-      community: {
-  welcome_title: "Mitmachen ist ganz einfach! ✨",
-  welcome_text: "Hier siehst du die Impulse der anderen. Wenn du eine eigene Frage mit der Community teilen magst: Ziehe einfach im Hauptbereich eine Karte und nutze dort den Button „Frage“. Andere können dir dann privat antworten und dich bei deiner Reflexion begleiten."
-},
+      welcome_title: "Mitmachen ist ganz einfach! ✨",
+      welcome_text:
+        "Hier siehst du die Impulse der anderen. Wenn du eine eigene Frage mit der Community teilen magst: Ziehe einfach im Hauptbereich eine Karte und nutze dort den Button „Frage“. Andere können dir dann privat antworten und dich bei deiner Reflexion begleiten.",
     },
     thread: {
       fallback_user: "User",
