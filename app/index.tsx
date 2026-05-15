@@ -2,7 +2,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Asset } from "expo-asset";
 import { BlurView } from "expo-blur";
-import * as FileSystem from "expo-file-system/legacy";
 import * as ImageManipulator from "expo-image-manipulator";
 import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
@@ -93,6 +92,7 @@ export default function Index() {
   const [locale, setLocaleState] = useState(getLocale());
   const lastShareAtRef = useRef(0);
   const questionShareRef = useRef<View | null>(null);
+  const cardShareRef = useRef<View | null>(null);
   const router = useRouter();
   const [communityChatUnread, setCommunityChatUnread] = useState(0);
   const isQuestionModeActive = activeQuestion !== null;
@@ -393,25 +393,25 @@ export default function Index() {
   };
 
   const getCurrentCardImageUri = async (): Promise<string | null> => {
-    const asset = Asset.fromModule(currentSource);
-    await asset.downloadAsync();
-    const imageUri = asset.localUri || asset.uri;
-    if (!imageUri) return null;
-    const exported = await ImageManipulator.manipulateAsync(
-      imageUri,
-      [],
-      { compress: 1, format: ImageManipulator.SaveFormat.PNG }
-    );
-    const targetPath =
-  FileSystem.cacheDirectory +
-  `shared-card-${Date.now()}.png`;
-
-await FileSystem.copyAsync({
-  from: exported.uri,
-  to: targetPath,
-});
-
-return targetPath;
+    try {
+      let imageUri: string | undefined;
+      try {
+        const asset = Asset.fromModule(currentSource);
+        await asset.downloadAsync();
+        imageUri = asset.localUri || asset.uri;
+      } catch {
+        const resolved = Image.resolveAssetSource(currentSource);
+        imageUri = resolved?.uri;
+      }
+      if (!imageUri) return null;
+      const exported = await ImageManipulator.manipulateAsync(imageUri, [], {
+        compress: 0.95,
+        format: ImageManipulator.SaveFormat.JPEG,
+      });
+      return exported.uri || null;
+    } catch {
+      return null;
+    }
   };
 
   const shareQuestionWithCard = async () => {
@@ -442,19 +442,40 @@ return targetPath;
   };
 
   const shareCurrentCardImage = async () => {
+    if (cardShareRef.current) {
+      try {
+        const capturedUri = await captureRef(cardShareRef.current, {
+          format: "jpg",
+          quality: 0.95,
+          result: "tmpfile",
+          width: 1080,
+          height: 1410,
+        });
+        await Sharing.shareAsync(capturedUri, {
+          dialogTitle: currentName || "Tarot",
+          mimeType: "image/jpeg",
+          UTI: "public.jpeg",
+        });
+        return;
+      } catch (e) {
+        console.error("SHARE CAPTURE ERROR:", e);
+      }
+    }
+
     try {
       const imageUri = await getCurrentCardImageUri();
-      if (imageUri && (await Sharing.isAvailableAsync())) {
+      if (imageUri) {
         await Sharing.shareAsync(imageUri, {
           dialogTitle: currentName || "Tarot",
-          mimeType: "image/png",
-          UTI: "public.png",
+          mimeType: "image/jpeg",
+          UTI: "public.jpeg",
         });
         return;
       }
-    } catch (e) { console.error("SHARE ERROR:", e);
-      // Fallback below keeps share working when image export fails.
+    } catch (e) {
+      console.error("SHARE ERROR:", e);
     }
+
     await Share.share({
       message: `🃏 ${currentName}`,
       title: i18n.t("buttons.share_card"),
@@ -713,8 +734,17 @@ return targetPath;
           </KeyboardAvoidingView>
         )}
 
-        {/* Hidden export frame for clean question+card sharing */}
+        {/* Hidden export frames for sharing (off-screen; collapsable={false} required on Android) */}
         <View style={styles.shareCaptureHiddenWrap} pointerEvents="none">
+          <View
+            ref={(node) => {
+              cardShareRef.current = node;
+            }}
+            collapsable={false}
+            style={styles.shareCaptureCardOnly}
+          >
+            <Image source={currentSource} style={styles.shareCaptureCardOnlyImage} resizeMode="contain" />
+          </View>
           <View
             ref={(node) => {
               questionShareRef.current = node;
@@ -1044,6 +1074,17 @@ const styles = StyleSheet.create({
     top: -9999,
     width: 1080,
     height: 1920,
+  },
+  shareCaptureCardOnly: {
+    width: 1080,
+    height: 1410,
+    backgroundColor: "#060606",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  shareCaptureCardOnlyImage: {
+    width: "100%",
+    height: "100%",
   },
   shareCaptureCard: {
     width: 1080,

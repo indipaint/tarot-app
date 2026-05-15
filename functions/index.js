@@ -496,11 +496,16 @@ exports.sendThreadMessage = onRequest(
             const messages = tokens.map((to) => ({
               to,
               sound: "default",
-              channelId: "chat-messages",
               title: senderName || "Neue Nachricht",
               body: text,
               badge: Math.max(1, nextBadge),
-              priority: "high",
+              
+              // HIER EINFÜGEN (Android-spezifisch):
+              android: {
+                channelId: "chat-messages", // Muss exakt CHAT_CHANNEL_ID entsprechen
+                priority: "high",
+              },
+              
               data: {
                 threadId,
               },

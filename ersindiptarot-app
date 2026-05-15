@@ -1,0 +1,171 @@
+[33m7ec34ff[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m begruessung in communitiy und chat nur eine Box, share button funkt
+[33m5a7b499[m fix: share card image working on Android
+[33m59f4b07[m Badge endlich auf Home Icon Android
+[33m088b689[m deine nachricht
+[33mcd88e48[m Improve journal header layout and own-post delete visibility
+[33mab93979[m Enable iOS push badge counter for private messages
+[33m27e8bf1[m Enable push notification for private messages
+[33m16d5f5b[m alle Hinweise im chat in allen Sprachen
+[33m47089d2[m deine nachricht
+[33mbf4dd4f[m Anleitung im unbeutzem Chat
+[33md36332d[m feat: expo-notifications installiert für das Badgemonster
+[33md2bcb9f[m Word-Style Editor fix
+[33m1229904[m stable startflow ios android
+[33m48a12c0[m fix: Firestore Rules list permission + arrayRemove Import + i18n Keys
+[33mf39d00e[m fix: Welcome-Overlay immer sichtbar beim ersten Start,
+[33m9c4fe4d[m Meaning screen: selectable title and body text for copy
+[33m52e302b[m Messenger: sendThreadMessage robustness, welcome ritual from intro
+[33mab9b6a2[m Fix community translation reliability across language pairs.
+[33me11de5d[m Polish localization and language flow across community and card screens.
+[33m1395f21[m Improve community/journal UX and tidy daily card menu behavior.
+[33m40cba4a[m Add store-ready safety controls and daily card time format option
+[33m5ac7ada[m Legal: Datenschutz & Nutzungsbedingungen für alle Sprachen abgeschlossen
+[33mf616700[m Legal: remove DeepL footer from FR terms (match approved text only).
+[33ma050d26[m Legal: align EN terms of use with approved wording (ENDYIA TAROT, date, section 6/7 phrasing).
+[33m3a936f2[m Legal: update terms of use text for DE/EN/FR/ES/PT.
+[33mc59bd08[m Legal: update privacy pages for mobile consistency across locales.
+[33mc4cd75c[m Legal: bump LEGAL_VERSION to 20260506
+[33m75c08aa[m Legal: bump LEGAL_VERSION to 20260505 (force fresh privacy URLs in app).
+[33m617de16[m Legal: final privacy updates (FR, PT) and bump cache version for all locales.
+[33ma611c53[m Deine kurze Beschreibung der Änderung
+[33m068e9e4[m Legal: remove draft meta-text from privacy policies (all locales); bump legal cache version.
+[33ma4456ec[m Legal: publish May 2026 privacy & terms (all locales); bump legal URL cache version.
+[33m1142d6d[m Refine share export layouts for question and journal cards
+[33m9bb306b[m Fix share export and add account deletion settings flow
+[33ma3abed8[m update privacy formatting and legal link refresh behavior
+[33me02517f[m replace privacy texts with exact provided versions and bump legal cache version
+[33mfec3d7d[m set EN/FR/ES/PT terms to exact user-provided text blocks and bump legal version
+[33m2dff907[m update legal pages across locales and add live chat temporary hint
+[33m6959400[m Fix card/journal localization and complete terms sections 6-7
+[33m3671340[m Finalize live chat UX, persistence, offline queue, and coach safety updates
+[33m570402b[m Polish live chat UX and update coach prompts/consent flow
+[33m23def8e[m Update section 7 title in all languages
+[33m24e95c1[m update terms
+[33me1d27e5[m Update terms: add finance and future-disclaimer sections
+[33mf026e31[m community neu
+[33m96124b8[m Refine community chat UX and onboarding stability.
+[33mc174102[m buttons in right position
+[33m0060e81[m new chat button and badge
+[33mbd95965[m Community stable: auth persistence + threads + cross-device chat working
+[33m034e32f[m fix: community chat persistence (anon auth stable, threads restore after restart)
+[33md8b5359[m Add branded card image sharing and improve PIN modal button contrast
+[33m7066681[m Fix card sharing with image attachment
+[33mf08aa29[m restore-point: marker ohne code-aenderung
+[33m60b4888[m Restore iOS-smooth card draw: expo-image crossfade, zoom reset, shorter fade
+[33m42c97b3[m Improve community and UX flows: add live chat entrypoint, fix delete/unread/translation behavior, and implement pinch-zoom with pan reset for journal and cards
+[33m57583a8[m Fix community/chat UX: robust delete flow, translation improvements, and meaning ID matching
+[33mec55cb4[m Fix meanings route ID matching and communit
+[33m1626004[m Fix chat unread badge logic and add messenger entry + per-post delete button
+[33mc5459e4[m Stabilize community messaging and sharing flows
+[33m5e19ea7[m Add multilingual legal links and per-message translation UX
+[33mbf72f70[m Community improvements
+[33m1f14c60[m Community messenger stable with persistent uid and split bubbles
+[33md21ebcd[m Journal edit and share to community working
+[33md945e86[m Card image sharing in community chat working
+[33m318c267[m Share card to community working
+[33m7f1d09f[m Community realtime chat tested and working
+[33mcbad1bc[m Community screen working with nickname input
+[33m23a7dc8[m Community screen stable visible after routing refresh fix
+[33mb2105a9[m PinModal i18n, Journal UI improvements
+[33m08d21e8[m fix: journal i18n buttons, double share icon, loading state
+[33md4322e1[m feat: Frage Button breiter, Share Button, Journal fertig
+[33m0e66d8c[m feat: Share Button + Journal Löschen mit Bestätigung
+[33mb996b65[m feat: Journal Screen komplett – Einträge, Karte ansehen, löschen
+[33mb67a015[m feat: Journal Modal komplett – vollbild, pan keyboard, speichern funktioniert
+[33m191e80c[m Complete Portuguese questions full deck stable
+[33mb95a902[m Complete Portuguese questions translation full deck
+[33m2bd42a0[m feat: Português komplett – PT Button, i18n, languages,
+[33maf8ca03[m feat: questions_es.ts komplett – ES Fragen eingebunden
+[33mc2d3f86[m feat: meanings_es.ts komplett – ES Deutungen eingebunden
+[33mdb8604d[m feat: Spanisch komplett – i18n, language screen, questions_es
+[33m0d6830c[m Add complete French questions for all 78 tarot cards
+[33m16481d4[m feat: questions_fr.ts angelegt, FR Verknüpfung in
+[33m5102bb3[m feat: questions_en.ts komplett – alle 78 Karten
+[33md768b0d[m feat: questions_en.ts separiert, EN Verknüpfung in
+[33m5a1cb88[m Final DE questions integrated for all 78 cards
+[33m5141d59[m Fragensystem erweitert: Stäbe, Kelche, Schwerter ergänzt + UI Fragefunktion
+[33m6545008[m fix: FR/EN Deutungen, Zurück Button i18n, close Button i18n
+[33m1d8f011[m feat: weitere Frage Button + smart shuffle no repeats
+[33m17c98e8[m initial commit: tarot app with 78 cards, DE/EN/FR, smart question shuffle
+[33m50b3e1a[m fix: Der Narr/The Fool/Le Fou meaning lookup fixed for id '00' (numeric comparison)
+[33m123bd49[m Checkpoint:
+[33m1a3ce26[m feat: Fragensystem 78 Karten, Blur, Abdunklung, Close-Button
+[33mc8ff201[m Checkpoint: i18n FR/EN Buttons + Overlay stabil
+[33m0a54a0d[m Layout Feintuning: Karten, Titel und Buttons vertikal neu ausgerichtet
+[33mb2513ec[m Checkpoint: Stabiler Overlay-Stand mit funktionierenden Depth-Buttons
+[33m2c81b60[m stable: FR meanings restored + overlay blur stable
+[33m4d7be7c[m stable: blur overlay working
+[33m45fe596[m feat: QuestionButton layout
+[33mc2a5eac[m Beschreibung
+[33m30990d0[m Sprachscreen: Flaggen, Reihenfolge, orientation portrait
+[33m29fcb01[m Pentacles zu Deniers
+[33m26f3c1b[m[33m ([m[1;33mtag: [m[1;33mv1.0[m[33m)[m release:
+[33mbd6bc8c[m[33m ([m[1;33mtag: [m[1;33mv1.0-trilingual[m[33m)[m feat: FR Sprache hinzugefügt - Button, Übersetzungen, Deutungen
+[33m8ac1656[m Fix language flicker on card transition
+[33me7186af[m Stable base version - tarot app foundation
+[33mb55524e[m feat: EN meanings for Major Arcana complete
+[33me6d7e6c[m feat: EN card names and translations complete
+[33mc7b2d64[m fix: EN language switch working
+[33m96acad0[m Add FR language support and extend language type
+[33mc4e0fdf[m Add central language list
+[33m0b74cad[m Allow future languages (lang type flexible)
+[33m2a6b889[m Add dev flag to force language screen (no auto skip)
+[33ma616803[m Add language gate screen (DE/EN) + routing
+[33m215402a[m cleanup EN placeholder screen
+[33m06d72ff[m EN placeholder text: english version coming soon
+[33mf79c2ec[m sprach-gate: sprache speichern + auto skip bei start
+[33mf73097a[m sprach-gate: language screen als start, DE -> intro, EN placeholder
+[33m498c875[m checkpoint vor sprach-gate startpunkt
+[33mb65a26d[m 🔮 Major Arcana korrigiert — Narr startet bei 0, Nummerierung gefixt
+[33mb0c2451[m ✨ Tarot App komplett fertig — alle Karten & Deutungen integriert
+[33m6ce568b[m RECOVERY: tarot app stabiler stand
+[33m758fb60[m add swords cards S01-S14 and integrate into tarot deck
+[33m48c2abf[m Integrate Cups suit (C01–C14) with full meanings, assets cleaned, routing verified
+[33mefe6070[m Add full Wands meanings (W01–W14) and improve text spacing
+[33m2e5d029[m Fix card ordering, wand titles, and exclude BACK card from deck
+[33m91ce2fa[m fix: exclude welcome/backside from draw pool
+[33m168dcc8[m Fix intro white flash: android background black, hide status bar, curtain
+[33mb395be5[m Welcome Screen Feinjustierung, Bild und Button Position final
+[33m64bcb8b[m Begrüßungskarte (Rueckseite) aktualisiert
+[33mff5ab04[m Karten auf reduzierte Bilder umgestellt, Pfade bereinigt, Explore gefixt
+[33mea319cb[m Intro video added, app starts with clip before welcome screen
+[33mb38383b[m Welcome fullscreen polish + unique shuffle draw deck
+[33mad48526[m Welcome overlay + random first card (no ritual flash)
+[33m71fb8e1[m fix: meaning header number off-by-one (deutung id - 1)
+[33med4e071[m feat: ritual swipe crossfade 4s, no slide, no flicker
+[33m90f579a[m ui: meaning header fine tuning (title position + custom divider line)
+[33md98a439[m ui: meaning screen polish (bottom back button, spacing, colors)
+[33md36de11[m feat: complete Major Arcana meanings (1–22) – full texts
+[33meaa13db[m Remove unused detutungen image assets (old photographed text)
+[33m4a02ed7[m Fix card/[id] id type mismatch (string->number)
+[33m835057f[m Add image crossfade to swipe screen
+[33mc3b923f[m Move meanings to src/data and fix meaning route import
+[33mbb1889d[m Remove stray card asset 5.jpg
+[33m402e6e2[m Smooth swipe: correct direction + slide transition
+[33m2e8c34c[m UI polish: finalize card screen buttons and layout
+[33m7fe08f8[m Meaning screen polished: scroll, dual back buttons, safe layout for long tarot texts
+[33m5b97c3c[m Enable scrollable meaning screen and add long-form texts
+[33mbb0e364[m Add meaning route and meanings data with ID normalization
+[33mf80014c[m feat: random Zieh + roman numerals + stable swipe/buttons
+[33m27d404b[m ANCHOR: swipe + buttons stable
+[33m40890da[m ANCHOR: swipe + buttons stable
+[33m73fc24a[m stable: swipe + buttons solid; ready for random draw
+[33m41df3a8[m fix: swipe works and buttons clickable (panResponder scoped)
+[33m1ca2a8f[m stabil: buttons reagieren, platzhalter per state
+[33m00f6807[m Feat: deck-based draw without repetition until full cycle
+[33m78d5530[m UI: finalize button row styling and order
+[33m9145e4c[m UI: two action buttons under card (Deutung left, zieh right)
+[33mede760b[m Content: update card names (e.g. Kaiserin -> Königin)
+[33mf0263c5[m UI: title uses roman numeral derived from id (layout unchanged)
+[33m1aa14ef[m UI: remove bottom card counter
+[33m3d474c9[m[33m ([m[1;33mtag: [m[1;33mstable-ui-title-camera[m[33m)[m UI: camera-safe image, refined title position, softened text color
+[33m7d6297c[m[33m ([m[1;33mtag: [m[1;33mstable-swipe-camera-ui[m[33m)[m UI: image positioned below camera; statusbar hidden; swipe stable
+[33me316de8[m[33m ([m[1;33mtag: [m[1;33mstable-22-cards[m[33m)[m Fix: cards list complete (22) + names mapped to images
+[33m9edc1ae[m[33m ([m[1;33mtag: [m[1;33mcheckpoint-swipe-clean[m[33m)[m WIP: restore images + swipe; clean checkpoint
+[33m44aae79[m chore: optimize tarot card images for mobile (size reduction)
+[33m17918f7[m feat: add 22 numbered tarot card images
+[33m105b938[m feat: 22 card image array + prev/next nav
+[33me2edee4[m WIP: working fullscreen image view; tabs moved to _tabs_off
+[33m659ae41[m Stabil: Kartenliste klickbar, Navigation bewusst aus
+[33mc524c96[m Stabil: Kartenliste aus cards.ts, klickbar ohne Router
+[33m7a39dca[m Stabiler Start: Route / funktioniert (Web+Handy)
