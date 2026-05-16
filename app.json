@@ -27,7 +27,7 @@
       "package": "com.indipaint.tarotapp",
       "googleServicesFile": "./google-services.json",
       "backgroundColor": "#000000",
-      "navigationBarColor": "#000000",
+    
       "softwareKeyboardLayoutMode": "pan",
       "splash": {
         "image": "./assets/splash.png",
