@@ -1,5 +1,4 @@
 import Constants from "expo-constants";
-import * as NavigationBar from 'expo-navigation-bar';
 import { Stack } from "expo-router";
 import { doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect } from "react";
@@ -46,11 +45,16 @@ export default function RootLayout() {
     };
   }, []);
   useEffect(() => {
-  if (Platform.OS === 'android') {
-    NavigationBar.setBackgroundColorAsync('#000000');
-    NavigationBar.setButtonStyleAsync('light');
-  }
-}, []);
+    if (Platform.OS === 'android') {
+      try {
+        const Nav = require('expo-navigation-bar');
+        Nav.setBackgroundColorAsync('#000000');
+        Nav.setButtonStyleAsync('light');
+      } catch (e) {
+        // Ignorieren falls was schiefgeht
+      }
+    }
+  }, []);
 
   // Splash: expo-router steuert hide über renderRootComponent/router-store — kein zweites
   // preventAutoHide aus expo-splash-screen hier (Konflikt / Overlay-Risiko).
