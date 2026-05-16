@@ -2,6 +2,7 @@
   "expo": {
     "name": "Endyia Tarot",
     "slug": "tarot-app",
+    "scheme": "tarot-app",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "plugins": [
