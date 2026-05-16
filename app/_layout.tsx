@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
 import Constants from "expo-constants";
+import * as NavigationBar from 'expo-navigation-bar';
 import { Stack } from "expo-router";
 import { doc, onSnapshot } from "firebase/firestore";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import React, { useEffect } from "react";
 import { Platform } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ensureCommunityAuth } from "../src/ensureCommunityAuth";
 import { db } from "../src/firebase";
 import { ensureChatNotificationChannel } from "../src/pushNotifications";
-
 export default function RootLayout() {
   useEffect(() => {
     let unsub: (() => void) | null = null;
@@ -45,6 +45,12 @@ export default function RootLayout() {
       if (unsub) unsub();
     };
   }, []);
+  useEffect(() => {
+  if (Platform.OS === 'android') {
+    NavigationBar.setBackgroundColorAsync('#000000');
+    NavigationBar.setButtonStyleAsync('light');
+  }
+}, []);
 
   // Splash: expo-router steuert hide über renderRootComponent/router-store — kein zweites
   // preventAutoHide aus expo-splash-screen hier (Konflikt / Overlay-Risiko).
