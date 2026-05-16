@@ -3,79 +3,79 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { setLocale } from "../src/i18n";
+
 const FORCE_LANGUAGE_SCREEN = false;
 
 export default function LanguageGate() {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
 
-  const go = (lang: string) => {
-    setLocale(lang);
-    router.replace("/intro");
-  };
-
   useEffect(() => {
     (async () => {
       try {
         const saved = await AsyncStorage.getItem("app_lang");
+        
+        console.log("--- ANDROID SINGLE FLAG CHECK --- Gefundene Sprache:", saved);
+
         if (
           !FORCE_LANGUAGE_SCREEN &&
           (saved === "de" || saved === "en" || saved === "fr" || saved === "es" || saved === "pt")
         ) {
-          go(saved);
+          setLocale(saved);
+          // RADIKALE WEICHE: Sprache existiert -> User war schon mal hier -> DIREKT HAUPTSEITE!
+          router.replace("/");
           return;
         }
       } catch (e) {
         console.log("LANG CHECK ERROR:", e);
       } finally {
+        // Sicherstellen, dass der Ladebildschirm erst nach dem Check verschwindet
         setChecking(false);
       }
     })();
   }, []);
 
-const choose = (lang: "de" | "en" | "fr" | "es" | "pt") => {
-    setLocale(lang);
-    AsyncStorage.setItem("app_lang", lang).catch(() => {});
-    router.replace("/intro");
+  const choose = async (lang: "de" | "en" | "fr" | "es" | "pt") => {
+    try {
+      setLocale(lang);
+      await AsyncStorage.setItem("app_lang", lang);
+      
+      // Erster Start überhaupt: Sprache gewählt -> Ab ins Intro-Video
+      router.replace("/intro");
+    } catch (error) {
+      console.log("CHOOSE ERROR:", error);
+    }
   };
 
-  // ✅ Sichtbarer Loading Screen
+  // ✅ Unsichtbarer Loading Screen, kein Flackern mehr
   if (checking) {
-    return (
-      <View style={styles.wrap}>
-        <Text style={styles.debug}>LANGUAGE SCREEN LOADING</Text>
-      </View>
-    );
+    return <View style={styles.wrap} />;
   }
 
   // ✅ Normaler Screen
   return (
     <View style={styles.wrap}>
-      <Text style={styles.debug}>Endyia Tarot</Text>
+      <Text style={styles.title}>Endyia Tarot</Text>
 
-      
-       <Pressable style={styles.btn} onPress={() => choose("en")}>
+      <Pressable style={styles.btn} onPress={() => choose("en")}>
         <Text style={styles.btnText}>🇬🇧  english</Text>
       </Pressable>
 
-        <Pressable style={styles.btn} onPress={() => choose("fr")}>
+      <Pressable style={styles.btn} onPress={() => choose("fr")}>
         <Text style={styles.btnText}>🇫🇷  français</Text>
       </Pressable>
+      
       <Pressable style={styles.btn} onPress={() => choose("es")}>
-        
-  <Text style={styles.btnText}>🇪🇸  español</Text>
-</Pressable>
-<Pressable style={styles.btn} onPress={() => choose("pt")}>
-  <Text style={styles.btnText}>🇵🇹  português</Text>
-</Pressable>
-     
+        <Text style={styles.btnText}>🇪🇸  español</Text>
+      </Pressable>
+      
+      <Pressable style={styles.btn} onPress={() => choose("pt")}>
+        <Text style={styles.btnText}>🇵🇹  português</Text>
+      </Pressable>
+      
       <Pressable style={styles.btn} onPress={() => choose("de")}>
         <Text style={styles.btnText}>🇩🇪  deutsch</Text>
       </Pressable>
-
-      
-
-      
     </View>
   );
 }
@@ -88,20 +88,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 18,
   },
-
-  // nur Debug sichtbar
-  debug: {
-    color: "red",
-    fontSize: 22,
-    marginBottom: 20,
-  },
-
   title: {
     color: "#bbb",
-    fontSize: 18,
-    letterSpacing: 1,
+    fontSize: 22,
+    letterSpacing: 2,
+    marginBottom: 20,
   },
-
   btn: {
     borderWidth: 1,
     borderColor: "#666",
@@ -109,7 +101,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     borderRadius: 10,
   },
-
   btnText: {
     color: "#ddd",
     fontSize: 16,
